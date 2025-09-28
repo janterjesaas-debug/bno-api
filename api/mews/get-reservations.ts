@@ -1,56 +1,48 @@
-export const config = { runtime: 'nodejs18.x' };
+import type { VercelRequest, VercelResponse } from '@vercel/node';
 
-export default async function handler(req: Request) {
-  try {
-    if (req.method !== 'POST') {
-      return new Response(JSON.stringify({ error: 'Use POST' }), { status: 405 });
-    }
-
-    const { customerId, confirmationNumber, limit = 50 } = await req.json() as {
-      customerId?: string;
-      confirmationNumber?: string;
-      limit?: number;
-    };
-
-    if (!customerId && !confirmationNumber) {
-      return new Response(JSON.stringify({ error: 'Provide customerId or confirmationNumber' }), { status: 400 });
-    }
-
-    const base = process.env.MEWS_BASE_URL!;
-    const body: any = {
-      ClientToken: process.env.MEWS_CLIENT_TOKEN,
-      AccessToken: process.env.MEWS_ACCESS_TOKEN,
-      Client: process.env.MEWS_CLIENT_NAME ?? 'BNO Travel Booking 1.0.0',
-      Limitation: { Count: limit }
-    };
-
-    if (customerId) body.AccountIds = [customerId];
-    if (confirmationNumber) body.Numbers = [confirmationNumber];
-
-    const url = `${base}/api/connector/v1/reservations/getAll/2023-06-06`;
-    const r = await fetch(url, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(body)
-    });
-
-    if (!r.ok) {
-      return new Response(JSON.stringify({ error: 'Mews error', details: await r.text() }), { status: 502 });
-    }
-
-    const json = await r.json() as any;
-    const reservations = (json.Reservations ?? []).map((x: any) => ({
-      id: x.Id,
-      number: x.Number,
-      state: x.State,
-      startUtc: x.StartUtc,
-      endUtc: x.EndUtc,
-      serviceId: x.ServiceId,
-      accountId: x.AccountId
-    }));
-
-    return new Response(JSON.stringify({ reservations }), { status: 200 });
-  } catch (e: any) {
-    return new Response(JSON.stringify({ error: e?.message ?? 'Unexpected error' }), { status: 500 });
+export default async function handler(req: VercelRequest, res: VercelResponse) {
+  if (req.method !== 'POST') {
+    res.status(405).json({ error: 'Method Not Allowed', allow: ['POST'] });
+    return;
   }
+
+  const baseUrl     = process.env.MEWS_BASE_URL || 'https://api.mews.com';
+  const clientToken = process.env.MEWS_CLIENT_TOKEN;
+  const accessToken = process.env.MEWS_ACCESS_TOKEN;
+  const clientName  = process.env.MEWS_CLIENT_NAME || 'BNO Travel Booking 1.0.0';
+
+  if (!clientToken || !accessToken) {
+    res.status(500).json({ error: 'Missing MEWS credentials' });
+    return;
+  }
+
+  const { customerId, email } = (req.body || {}) as { customerId?: string; email?: string };
+
+  if (!customerId && !email) {
+    res.status(400).json({ error: 'Provide customerId or email' });
+    return;
+  }
+
+  // Stub-respons inntil vi kobler på MEWS:
+  res.status(200).json({
+    ok: true,
+    customerId,
+    email,
+    note: 'Serverless function is alive. Hook up real MEWS fetch later.',
+  });
+
+  // Eksempel (pseudo) når du har token:
+  // const r = await fetch(`${baseUrl}/api/connector/v1/reservations/getAll`, {
+  //   method: 'POST',
+  //   headers: { 'Content-Type': 'application/json' },
+  //   body: JSON.stringify({
+  //     ClientToken: clientToken,
+  //     AccessToken: accessToken,
+  //     Client: clientName,
+  //     CustomerIds: customerId ? [customerId] : undefined,
+  //     // eller filtrer på email via Customers først
+  //   }),
+  // });
+  // const data = await r.json();
+  // res.status(200).json(data);
 }

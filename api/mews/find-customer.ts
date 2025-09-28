@@ -1,47 +1,42 @@
-export const config = { runtime: 'nodejs18.x' };
+import type { VercelRequest, VercelResponse } from '@vercel/node';
 
-export default async function handler(req: Request) {
-  try {
-    if (req.method !== 'POST') {
-      return new Response(JSON.stringify({ error: 'Use POST' }), { status: 405 });
-    }
-
-    const { email, limit = 5 } = await req.json() as { email?: string; limit?: number };
-    if (!email) {
-      return new Response(JSON.stringify({ error: 'Missing email' }), { status: 400 });
-    }
-
-    const base = process.env.MEWS_BASE_URL!;
-    const body = {
-      ClientToken: process.env.MEWS_CLIENT_TOKEN,
-      AccessToken: process.env.MEWS_ACCESS_TOKEN,
-      Client: process.env.MEWS_CLIENT_NAME ?? 'BNO Travel Booking 1.0.0',
-      Emails: [email],
-      Extent: { Customers: true, Addresses: false },
-      Limitation: { Count: limit }
-    };
-
-    const r = await fetch(`${base}/api/connector/v1/customers/getAll`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(body)
-    });
-
-    if (!r.ok) {
-      return new Response(JSON.stringify({ error: 'Mews error', details: await r.text() }), { status: 502 });
-    }
-
-    const json = await r.json() as any;
-    const customers = (json.Customers ?? []).map((c: any) => ({
-      id: c.Id,
-      email: c.Email,
-      firstName: c.FirstName,
-      lastName: c.LastName,
-      number: c.Number
-    }));
-
-    return new Response(JSON.stringify({ customers }), { status: 200 });
-  } catch (e: any) {
-    return new Response(JSON.stringify({ error: e?.message ?? 'Unexpected error' }), { status: 500 });
+export default async function handler(req: VercelRequest, res: VercelResponse) {
+  if (req.method !== 'POST') {
+    res.status(405).json({ error: 'Method Not Allowed', allow: ['POST'] });
+    return;
   }
+
+  const baseUrl     = process.env.MEWS_BASE_URL || 'https://api.mews.com';
+  const clientToken = process.env.MEWS_CLIENT_TOKEN;
+  const accessToken = process.env.MEWS_ACCESS_TOKEN;
+  const clientName  = process.env.MEWS_CLIENT_NAME || 'BNO Travel Booking 1.0.0';
+
+  if (!clientToken || !accessToken) {
+    res.status(500).json({ error: 'Missing MEWS credentials' });
+    return;
+  }
+
+  const { email } = (req.body || {}) as { email?: string };
+  if (!email) {
+    res.status(400).json({ error: 'Missing email' });
+    return;
+  }
+
+  // TODO: Bytt til faktisk MEWS-endepunkt når du har tokenene klart.
+  // Denne versjonen gjør bare en "echo" slik at vi ser at API-et virker.
+  res.status(200).json({
+    ok: true,
+    email,
+    note: 'Serverless function is alive. Swap in real MEWS call when tokens are ready.',
+  });
+
+  // Eksempel på MEWS-kall (pseudo):
+  // const r = await fetch(`${baseUrl}/api/connector/v1/customers/getAll`, {
+  //   method: 'POST',
+  //   headers: { 'Content-Type': 'application/json' },
+  //   body: JSON.stringify({ ClientToken: clientToken, AccessToken: accessToken, Client: clientName, Emails: [email] }),
+  // });
+  // const data = await r.json();
+  // res.status(200).json(data);
 }
+
