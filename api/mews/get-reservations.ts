@@ -1,48 +1,36 @@
+// api/mews/get-reservations.ts
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 
+const API_BASE = process.env.MEWS_API_BASE ?? 'https://api.mews-demo.com';
+const CLIENT_TOKEN = process.env.MEWS_CLIENT_TOKEN!;
+const ACCESS_TOKEN = process.env.MEWS_ACCESS_TOKEN!;
+
 export default async function handler(req: VercelRequest, res: VercelResponse) {
-  if (req.method !== 'POST') {
-    res.status(405).json({ error: 'Method Not Allowed', allow: ['POST'] });
-    return;
+  if (!CLIENT_TOKEN || !ACCESS_TOKEN) {
+    return res.status(500).json({ error: 'Missing MEWS tokens' });
   }
 
-  const baseUrl     = process.env.MEWS_BASE_URL || 'https://api.mews.com';
-  const clientToken = process.env.MEWS_CLIENT_TOKEN;
-  const accessToken = process.env.MEWS_ACCESS_TOKEN;
-  const clientName  = process.env.MEWS_CLIENT_NAME || 'BNO Travel Booking 1.0.0';
+  try {
+    // TODO: Sett riktig Connector-endepunkt + payload iht. Mews-dok
+    const r = await fetch(`${API_BASE}/api/connector/v1/...`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+      },
+      body: JSON.stringify({
+        ClientToken: CLIENT_TOKEN,
+        AccessToken: ACCESS_TOKEN,
+        // ...resten av body fra req.body
+      }),
+    });
 
-  if (!clientToken || !accessToken) {
-    res.status(500).json({ error: 'Missing MEWS credentials' });
-    return;
+    const data = await r.json();
+    if (!r.ok) {
+      return res.status(r.status).json(data);
+    }
+    return res.status(200).json(data);
+  } catch (e: any) {
+    return res.status(500).json({ error: e?.message ?? 'Unknown error' });
   }
-
-  const { customerId, email } = (req.body || {}) as { customerId?: string; email?: string };
-
-  if (!customerId && !email) {
-    res.status(400).json({ error: 'Provide customerId or email' });
-    return;
-  }
-
-  // Stub-respons inntil vi kobler på MEWS:
-  res.status(200).json({
-    ok: true,
-    customerId,
-    email,
-    note: 'Serverless function is alive. Hook up real MEWS fetch later.',
-  });
-
-  // Eksempel (pseudo) når du har token:
-  // const r = await fetch(`${baseUrl}/api/connector/v1/reservations/getAll`, {
-  //   method: 'POST',
-  //   headers: { 'Content-Type': 'application/json' },
-  //   body: JSON.stringify({
-  //     ClientToken: clientToken,
-  //     AccessToken: accessToken,
-  //     Client: clientName,
-  //     CustomerIds: customerId ? [customerId] : undefined,
-  //     // eller filtrer på email via Customers først
-  //   }),
-  // });
-  // const data = await r.json();
-  // res.status(200).json(data);
 }
