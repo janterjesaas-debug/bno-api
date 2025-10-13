@@ -3,6 +3,7 @@
   "private": true,
   "type": "module",
   "dependencies": {
+    "dayjs": "^1.11.18",
     "undici": "^6.19.8"
   },
   "devDependencies": {
