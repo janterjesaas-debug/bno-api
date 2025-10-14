@@ -1,6 +1,6 @@
 // api/mews/raw.ts
 import type { VercelRequest, VercelResponse } from '@vercel/node';
-import { fetchMewsAvailability } from '../lib/mews';
+import { fetchMewsAvailability } from '../lib/mews.js'; // ← VIKTIG: .js i importstien
 import dayjs from 'dayjs';
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {

@@ -20,46 +20,36 @@ export function buildDistributorUrl(
   const cfg = required('MEWS_CONFIGURATION_ID');
   const start = startIso.slice(0, 10);
   const end = endIso.slice(0, 10);
-  // NB: du kan legge på flere parametre (språk/currency) ved behov
   return `${base}/${cfg}?mewsStartDate=${start}&mewsEndDate=${end}&mewsAdultCount=${adults}`;
 }
 
 /**
  * Kaller Mews Connector API → Availability for accommodation service.
- * NB: Endpoint-path kan variere i Mews-dokumentasjonen.
- * Denne bruker "services/availability" som er vanlig for Connector v1.
  */
 export async function fetchMewsAvailability(req: AvailabilityRequest) {
   const BASE = required('MEWS_BASE_URL').replace(/\/+$/, '');
   const CLIENT_TOKEN = required('MEWS_CLIENT_TOKEN');
   const ACCESS_TOKEN = required('MEWS_ACCESS_TOKEN');
   const CLIENT_NAME = process.env.MEWS_CLIENT_NAME ?? 'BNO Travel Booking 1.0.0';
-  const ENTERPRISE_ID = required('MEWS_ENTERPRISE_ID'); // TODO: du setter i Vercel
-  const SERVICE_ID = required('MEWS_SERVICE_ID');       // TODO: du setter i Vercel
+  const ENTERPRISE_ID = required('MEWS_ENTERPRISE_ID');
+  const SERVICE_ID = required('MEWS_SERVICE_ID');
 
-  // Mews bruker UTC. Vi sender ISO (uten offset).
   const body = {
     ClientToken: CLIENT_TOKEN,
     AccessToken: ACCESS_TOKEN,
     Client: CLIENT_NAME,
-    // Enterprise/Service: dette er nøkkelen for å få riktig eiendom/tjeneste
     EnterpriseId: ENTERPRISE_ID,
     ServiceIds: [SERVICE_ID],
     StartUtc: req.startUtc,
     EndUtc: req.endUtc,
-    // Guests: sendes ofte som tall; noen accounts bruker Persons/Adults i en sub–objekt
-    // Avhenger av Mews-oppsettet. Vi sender Adults som «RequestedOccupancy».
     RequestedOccupancies: [{ Adults: req.adults }],
   };
 
-  // ⛳️ ENDPOINT:
-  // Vanlig mønster i Connector er ".../availability" eller ".../rates/getAvailability".
-  // Vi bruker "/availability" her. Hvis din konto krever annet, bytt path her:
   const url = `${BASE}/availability`;
 
   const res = await fetch(url, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+    headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
     body: JSON.stringify(body),
   });
 
@@ -76,14 +66,11 @@ export async function fetchMewsAvailability(req: AvailabilityRequest) {
 
 /**
  * Mapper et «typisk» Mews Availability-svar → appens listeformat.
- * Mews-svar varierer litt per konto; juster feltnavn hvis nødvendig.
  */
 export function mapMewsToItems(
   mewsJson: any,
   distributorUrlFactory: () => string
 ) {
-  // Finn en liste over kategorier/romtyper i svaret.
-  // Vanlige feltnavn: "RoomCategories", "Categories", "Rooms", "SpaceCategories".
   const list =
     mewsJson?.RoomCategories ??
     mewsJson?.SpaceCategories ??
@@ -91,13 +78,9 @@ export function mapMewsToItems(
     mewsJson?.Rooms ??
     [];
 
-  // Hvis svaret er nøstet, sjekk gjerne mewsJson.Services[0].Categories, etc.
-  // console.debug(JSON.stringify(mewsJson, null, 2))
-
   const url = distributorUrlFactory();
 
   return list.map((x: any) => {
-    // Prøv flere feltnavn for hvert felt – Mews responses kan variere:
     const id =
       x.Id ?? x.RoomCategoryId ?? x.SpaceCategoryId ?? x.CategoryId ?? x.Code ?? x.Id;
     const name =
@@ -105,7 +88,6 @@ export function mapMewsToItems(
     const capacity =
       x.Capacity ?? x.MaximumOccupancy ?? x.MaxPersons ?? x.Occupancy ?? undefined;
 
-    // Pris: se etter "MinPrice/FromPrice/Rate/Total"
     const price =
       x.Price?.Amount ??
       x.MinPrice?.Amount ??
@@ -121,9 +103,7 @@ export function mapMewsToItems(
       x.Currency ??
       'NOK';
 
-    // Refundable kan lese fra rate-policy hvis tilgjengelig
-    const refundable =
-      x.IsRefundable ?? x.Refundable ?? x.Rate?.Refundable ?? undefined;
+    const refundable = x.IsRefundable ?? x.Refundable ?? x.Rate?.Refundable ?? undefined;
 
     return { id, name, capacity, refundable, currency, price, url };
   });

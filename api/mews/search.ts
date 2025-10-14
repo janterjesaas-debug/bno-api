@@ -6,7 +6,7 @@ import {
   fetchMewsAvailability,
   mapMewsToItems,
   required,
-} from '../lib/mews';
+} from '../lib/mews.js'; // ← VIKTIG: .js i importstien
 
 type Body = {
   start?: string; // "YYYY-MM-DD"
@@ -55,7 +55,6 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     return res.status(200).json({ items });
   } catch (err: any) {
     const msg = err?.message || String(err);
-    // Litt hjelp i feilsøk
     return res.status(502).json({ error: 'MEWS_ERROR', message: msg });
   }
 }
