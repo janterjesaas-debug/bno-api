@@ -1,33 +1,34 @@
 // api/mews/raw.ts
 
-// Viktig: bruker Node.js-runtime for å få tilgang til process.env
+// NB: Bruker Node.js-runtime for å få tilgang til process.env
 export const config = { runtime: 'nodejs' };
 
-// Fetch med timeout og feilbehandling
 async function mewsPost(endpoint: string, body: any) {
   const base = process.env.MEWS_BASE_URL;
   if (!base) throw new Error('Missing env var: MEWS_BASE_URL');
 
   const url = `${base}${endpoint.startsWith('/') ? endpoint : `/${endpoint}`}`;
-
-  const controller = new AbortController();
-  const timeout = setTimeout(() => controller.abort(), 10_000); // 10 sek timeout
+  console.log('📡 Poster til MEWS:', url);
+  console.log('📦 Body:', JSON.stringify(body, null, 2));
 
   const res = await fetch(url, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(body),
-    signal: controller.signal,
   });
 
-  clearTimeout(timeout);
+  const text = await res.text();
 
   if (!res.ok) {
-    const text = await res.text().catch(() => '');
+    console.error('❌ MEWS-feil:', res.status, text.slice(0, 300));
     throw new Error(`Mews ${res.status}: ${text}`);
   }
 
-  return res.json();
+  try {
+    return JSON.parse(text);
+  } catch (err) {
+    throw new Error(`Non-JSON response from Mews: ${text.slice(0, 300)}`);
+  }
 }
 
 export default async function handler(req: Request) {
@@ -37,7 +38,7 @@ export default async function handler(req: Request) {
     'MEWS_ACCESS_TOKEN',
     'MEWS_SERVICE_ID',
     'MEWS_CLIENT_NAME',
-    'MEWS_ENTERPRISE_ID'
+    'MEWS_ENTERPRISE_ID',
   ];
   const missing = requiredVars.filter(k => !process.env[k]);
   if (missing.length) {
@@ -47,38 +48,35 @@ export default async function handler(req: Request) {
     );
   }
 
-  // Bruker absolutt URL for å unngå "Invalid URL"-feil
-  const baseUrl = process.env.VERCEL_URL
+  let baseUrl = process.env.VERCEL_URL
     ? `https://${process.env.VERCEL_URL}`
     : 'http://localhost:3000';
-  const urlObj = new URL(req.url, baseUrl);
-
-  const start = urlObj.searchParams.get('start') || '2025-10-16';
-  const end = urlObj.searchParams.get('end') || '2025-10-18';
-  const adults = Number(urlObj.searchParams.get('adults') || 2);
-
-  const payload = {
-    ClientToken: process.env.MEWS_CLIENT_TOKEN,
-    AccessToken: process.env.MEWS_ACCESS_TOKEN,
-    Client: process.env.MEWS_CLIENT_NAME,
-    ServiceId: process.env.MEWS_SERVICE_ID,
-    EnterpriseId: process.env.MEWS_ENTERPRISE_ID,
-    FirstTimeUnitStartUtc: `${start}T22:00:00Z`,
-    LastTimeUnitStartUtc: `${end}T22:00:00Z`,
-  };
-
-  console.log('📡 Henter tilgjengelighet med:', payload);
 
   try {
-    const data = await mewsPost('/services/getAvailability', payload);
+    const fullUrl = new URL(req.url, baseUrl);
+    const params = fullUrl.searchParams;
+
+    const start = params.get('start') || '2025-10-16';
+    const end = params.get('end') || '2025-10-18';
+    const adults = Number(params.get('adults') || 2);
+
+    const data = await mewsPost('/services/getAvailability', {
+      ClientToken: process.env.MEWS_CLIENT_TOKEN,
+      AccessToken: process.env.MEWS_ACCESS_TOKEN,
+      Client: process.env.MEWS_CLIENT_NAME,
+      ServiceId: process.env.MEWS_SERVICE_ID,
+      FirstTimeUnitStartUtc: `${start}T22:00:00Z`,
+      LastTimeUnitStartUtc: `${end}T22:00:00Z`,
+    });
+
+    console.log('✅ MEWS-respons OK:', JSON.stringify(data).slice(0, 300));
+
     return new Response(JSON.stringify(data), {
       status: 200,
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 'Content-Type': 'application/json' }
     });
   } catch (err: any) {
-    return new Response(
-      JSON.stringify({ error: err.message || 'Unknown error' }),
-      { status: 502 }
-    );
+    console.error('❌ Kjøringsfeil i handler:', err);
+    return new Response(JSON.stringify({ error: err.message }), { status: 502 });
   }
 }
