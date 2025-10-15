@@ -38,9 +38,17 @@ export default async function handler(req: Request) {
     );
   }
 
-  // Fikser bug med relativ URL i Node.js-runtime
-  const fullUrl = `https://bno-api.vercel.app${req.url}`;
-  const params = new URL(fullUrl).searchParams;
+  // 💡 Her er endringen: trygg parsing av query i Node.js-runtime
+  let params: URLSearchParams;
+  try {
+    const url = new URL(req.url!, 'http://localhost');
+    params = url.searchParams;
+  } catch (err) {
+    return new Response(
+      JSON.stringify({ error: 'Failed to parse request URL', details: String(err) }),
+      { status: 400 }
+    );
+  }
 
   const start = params.get('start') || '2025-10-16';
   const end = params.get('end') || '2025-10-18';
