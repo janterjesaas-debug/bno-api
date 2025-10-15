@@ -50,6 +50,7 @@ export default async function handler(req: Request) {
       AccessToken: process.env.MEWS_ACCESS_TOKEN,
       Client: process.env.MEWS_CLIENT_NAME,
       ServiceId: process.env.MEWS_SERVICE_ID,
+      EnterpriseId: process.env.MEWS_ENTERPRISE_ID, // <- lagt til her
       FirstTimeUnitStartUtc: `${start}T22:00:00Z`,
       LastTimeUnitStartUtc: `${end}T22:00:00Z`,
     });
