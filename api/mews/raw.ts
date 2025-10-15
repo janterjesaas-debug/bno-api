@@ -1,6 +1,5 @@
 // api/mews/raw.ts
 
-// Viktig: bruker Node.js-runtime for å få tilgang til process.env
 export const config = { runtime: 'nodejs' };
 
 async function mewsPost(endpoint: string, body: any) {
@@ -29,7 +28,7 @@ export default async function handler(req: Request) {
     'MEWS_ACCESS_TOKEN',
     'MEWS_SERVICE_ID',
     'MEWS_CLIENT_NAME',
-    'MEWS_ENTERPRISE_ID' // nå kreves denne også
+    'MEWS_ENTERPRISE_ID',
   ];
   const missing = requiredVars.filter(k => !process.env[k]);
   if (missing.length) {
@@ -39,7 +38,10 @@ export default async function handler(req: Request) {
     );
   }
 
-  const params = new URL(req.url).searchParams;
+  // Fikser bug med relativ URL i Node.js-runtime
+  const fullUrl = `https://bno-api.vercel.app${req.url}`;
+  const params = new URL(fullUrl).searchParams;
+
   const start = params.get('start') || '2025-10-16';
   const end = params.get('end') || '2025-10-18';
   const adults = Number(params.get('adults') || 2);
@@ -50,14 +52,14 @@ export default async function handler(req: Request) {
       AccessToken: process.env.MEWS_ACCESS_TOKEN,
       Client: process.env.MEWS_CLIENT_NAME,
       ServiceId: process.env.MEWS_SERVICE_ID,
-      EnterpriseId: process.env.MEWS_ENTERPRISE_ID, // <- lagt til her
+      EnterpriseId: process.env.MEWS_ENTERPRISE_ID,
       FirstTimeUnitStartUtc: `${start}T22:00:00Z`,
       LastTimeUnitStartUtc: `${end}T22:00:00Z`,
     });
 
     return new Response(JSON.stringify(data), {
       status: 200,
-      headers: { 'Content-Type': 'application/json' }
+      headers: { 'Content-Type': 'application/json' },
     });
   } catch (err: any) {
     return new Response(JSON.stringify({ error: err.message }), { status: 502 });
