@@ -1,60 +1,47 @@
 // api/mews/search.ts
-import type { VercelRequest, VercelResponse } from '@vercel/node';
-import dayjs from 'dayjs';
-import {
-  buildDistributorUrl,
-  fetchMewsAvailability,
-  mapMewsToItems,
-  required,
-} from '../lib/mews.js'; // ← VIKTIG: .js i importstien
+export const config = { runtime: 'edge' };
 
-type Body = {
-  start?: string; // "YYYY-MM-DD"
-  end?: string;   // "YYYY-MM-DD"
-  adults?: number;
-  area?: string;
-  promo?: string;
-};
+import { tryMewsAvailability, mapMewsToItems, buildDistributorUrl } from '../lib/mews.js';
 
-function toUtcStart(date: string) {
-  return dayjs(date).startOf('day').toISOString();
-}
-function toUtcEnd(date: string) {
-  return dayjs(date).endOf('day').toISOString();
+function json(data: any, init?: number | ResponseInit) {
+  const initObj: ResponseInit = typeof init === 'number' ? { status: init } : (init || {});
+  return new Response(JSON.stringify(data), {
+    ...initObj,
+    headers: { 'content-type': 'application/json; charset=utf-8', ...(initObj.headers || {}) },
+  });
 }
 
-export default async function handler(req: VercelRequest, res: VercelResponse) {
-  if (req.method !== 'POST') {
-    res.setHeader('Allow', 'POST');
-    return res.status(405).json({ error: 'Method Not Allowed', allow: ['POST'] });
-  }
+type Attempt = { url: string; status?: number; statusText?: string; excerpt?: string };
+type Ok = { ok: true; mews: any; usedUrl: string; attempts?: Attempt[] };
+type Err = { ok: false; message?: string; attempts: Attempt[] };
+function isErr(x: Ok | Err): x is Err { return !x.ok; }
 
+export default async function handler(req: Request) {
   try {
-    const b: Body = (typeof req.body === 'string' ? JSON.parse(req.body) : req.body) ?? {};
-    if (!b.start || !b.end) {
-      return res.status(400).json({ error: 'Missing "start" or "end" (YYYY-MM-DD)' });
+    if (req.method !== 'POST') return json({ ok: false, error: 'METHOD_NOT_ALLOWED' }, 405);
+
+    const body = await req.json().catch(() => ({} as any));
+    const start = String(body?.start || '');
+    const end = String(body?.end || '');
+    const adults = Number(body?.adults || 2) || 2;
+
+    if (!start || !end)
+      return json({ ok: false, error: 'VALIDATION', message: 'Missing start/end' }, 400);
+
+    const startUtc = `${start}T00:00:00.000Z`;
+    const endUtc = `${end}T23:59:59.999Z`;
+
+    const res = await tryMewsAvailability({ startUtc, endUtc, adults });
+
+    if (isErr(res)) {
+      return json({ ok: false, error: 'MEWS_ERROR', message: res.message }, 502);
     }
 
-    const adults = Math.max(1, Number(b.adults ?? 2));
-    const startUtc = toUtcStart(b.start);
-    const endUtc = toUtcEnd(b.end);
+    const distributorUrl = () => buildDistributorUrl(start, end, adults);
+    const items = mapMewsToItems(res.mews, distributorUrl);
 
-    // 1) Kall Mews
-    const mewsJson = await fetchMewsAvailability({
-      startUtc,
-      endUtc,
-      adults,
-    });
-
-    // 2) Lag deeplink til Distributor for «Bestill»-knappen i appen
-    const urlFactory = () => buildDistributorUrl(startUtc, endUtc, adults);
-
-    // 3) Map til appens format
-    const items = mapMewsToItems(mewsJson, urlFactory);
-
-    return res.status(200).json({ items });
-  } catch (err: any) {
-    const msg = err?.message || String(err);
-    return res.status(502).json({ error: 'MEWS_ERROR', message: msg });
+    return json({ ok: true, items, usedUrl: res.usedUrl, distributor: distributorUrl() }, 200);
+  } catch (e: any) {
+    return json({ ok: false, error: 'SERVER_ERROR', message: e?.message || String(e) }, 500);
   }
 }
