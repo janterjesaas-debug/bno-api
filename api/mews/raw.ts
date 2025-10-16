@@ -1,82 +1,75 @@
 // api/mews/raw.ts
+import type { NextApiRequest, NextApiResponse } from 'next';
 
-// NB: Bruker Node.js-runtime for å få tilgang til process.env
 export const config = { runtime: 'nodejs' };
 
-async function mewsPost(endpoint: string, body: any) {
-  const base = process.env.MEWS_BASE_URL;
-  if (!base) throw new Error('Missing env var: MEWS_BASE_URL');
-
-  const url = `${base}${endpoint.startsWith('/') ? endpoint : `/${endpoint}`}`;
-  console.log('📡 Poster til MEWS:', url);
-  console.log('📦 Body:', JSON.stringify(body, null, 2));
-
-  const res = await fetch(url, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(body),
-  });
-
-  const text = await res.text();
-
-  if (!res.ok) {
-    console.error('❌ MEWS-feil:', res.status, text.slice(0, 300));
-    throw new Error(`Mews ${res.status}: ${text}`);
-  }
-
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   try {
-    return JSON.parse(text);
-  } catch (err) {
-    throw new Error(`Non-JSON response from Mews: ${text.slice(0, 300)}`);
-  }
-}
+    if (req.method !== 'GET') {
+      res.setHeader('Allow', 'GET');
+      return res.status(405).json({ error: 'Method Not Allowed' });
+    }
 
-export default async function handler(req: Request) {
-  const requiredVars = [
-    'MEWS_BASE_URL',
-    'MEWS_CLIENT_TOKEN',
-    'MEWS_ACCESS_TOKEN',
-    'MEWS_SERVICE_ID',
-    'MEWS_CLIENT_NAME',
-    'MEWS_ENTERPRISE_ID',
-  ];
-  const missing = requiredVars.filter(k => !process.env[k]);
-  if (missing.length) {
-    return new Response(
-      JSON.stringify({ error: `Missing required env vars: ${missing.join(', ')}` }),
-      { status: 500 }
-    );
-  }
+    const { start, end, adults } = req.query;
 
-  let baseUrl = process.env.VERCEL_URL
-    ? `https://${process.env.VERCEL_URL}`
-    : 'http://localhost:3000';
+    if (!start || !end) {
+      return res.status(400).json({ error: 'Missing required parameters: start or end' });
+    }
 
-  try {
-    const fullUrl = new URL(req.url, baseUrl);
-    const params = fullUrl.searchParams;
+    const requiredVars = [
+      'MEWS_BASE_URL',
+      'MEWS_CLIENT_TOKEN',
+      'MEWS_ACCESS_TOKEN',
+      'MEWS_SERVICE_ID',
+      'MEWS_CLIENT_NAME',
+      'MEWS_ENTERPRISE_ID'
+    ];
+    const missing = requiredVars.filter(k => !process.env[k]);
+    if (missing.length) {
+      return res.status(500).json({ error: `Missing environment variables: ${missing.join(', ')}` });
+    }
 
-    const start = params.get('start') || '2025-10-16';
-    const end = params.get('end') || '2025-10-18';
-    const adults = Number(params.get('adults') || 2);
-
-    const data = await mewsPost('/services/getAvailability', {
+    const payload = {
       ClientToken: process.env.MEWS_CLIENT_TOKEN,
       AccessToken: process.env.MEWS_ACCESS_TOKEN,
       Client: process.env.MEWS_CLIENT_NAME,
       ServiceId: process.env.MEWS_SERVICE_ID,
       FirstTimeUnitStartUtc: `${start}T22:00:00Z`,
-      LastTimeUnitStartUtc: `${end}T22:00:00Z`,
+      LastTimeUnitStartUtc: `${end}T22:00:00Z`
+    };
+
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 10000);
+
+    const url = `${process.env.MEWS_BASE_URL}/services/getAvailability`;
+    console.log('📡 Poster til MEWS:', url);
+    console.log('📦 Payload:', payload);
+
+    const fetchRes = await fetch(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+      signal: controller.signal
     });
 
-    console.log('✅ MEWS-respons OK:', JSON.stringify(data).slice(0, 300));
+    clearTimeout(timeoutId);
 
-    return new Response(JSON.stringify(data), {
-      status: 200,
-      headers: { 'Content-Type': 'application/json' }
-    });
+    if (!fetchRes.ok) {
+      const text = await fetchRes.text();
+      console.error(`❌ Mews-feil (${fetchRes.status}):`, text);
+      return res.status(fetchRes.status).json({ error: text });
+    }
+
+    const data = await fetchRes.json();
+    console.log('✅ Mews API respons OK');
+    return res.status(200).json(data);
   } catch (err: any) {
-    console.error('❌ Kjøringsfeil i handler:', err);
-    return new Response(JSON.stringify({ error: err.message }), { status: 502 });
+    if (err.name === 'AbortError') {
+      console.error('⏱️ Mews-kall timet ut');
+      return res.status(504).json({ error: 'Mews API timeout' });
+    }
+
+    console.error('💥 Uventet feil:', err);
+    return res.status(500).json({ error: 'Internal Server Error' });
   }
 }

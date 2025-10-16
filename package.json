@@ -4,10 +4,11 @@
   "type": "module",
   "dependencies": {
     "dayjs": "^1.11.18",
+    "next": "^15.5.5",
     "undici": "^6.19.8"
   },
   "devDependencies": {
-    "@types/node": "^24.5.2",
+    "@types/node": "^24.7.2",
     "@vercel/node": "^5.3.24"
   }
 }
