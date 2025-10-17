@@ -1,7 +1,8 @@
 {
   "functions": {
     "api/**/*.ts": {
-      "runtime": "@vercel/node@5"
+      "runtime": "nodejs20.x",
+      "maxDuration": 30
     }
   }
 }
