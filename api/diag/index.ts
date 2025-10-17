@@ -3,8 +3,7 @@ import type { VercelRequest, VercelResponse } from '@vercel/node';
 export default function handler(req: VercelRequest, res: VercelResponse) {
   res.status(200).json({
     ok: true,
-    debug: 'enriched-lite route is alive',
-    now: new Date().toISOString(),
-    query: req.query,
+    tip: "Du traff /api. Prøv /api/ping og /api/mews/ping også.",
+    now: new Date().toISOString()
   });
 }
