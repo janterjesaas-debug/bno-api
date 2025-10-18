@@ -1,17 +1,15 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 
 /**
- * GET /api/mews/enriched-lite?start=YYYY-MM-DD&end=YYYY-MM-DD&adults=2
+ * GET /api/mews/enriched-lite
  *
- * Påkrevde ENV:
- *  - MEWS_BASE_URL
- *  - MEWS_CLIENT_TOKEN
- *  - MEWS_ACCESS_TOKEN
- *  - MEWS_SERVICE_ID
- * Valgfrie ENV:
- *  - MEWS_ENTERPRISE_ID
- *  - MEWS_CLIENT_NAME
- *  - MEWS_TIME_OFFSET_MINUTES  <-- lokal «midnatt» i minutter øst for UTC (f.eks. 120 for UTC+2)
+ * - Henter availability for dato-range
+ * - Henter space/resource categories (best-effort)
+ * - Tidsavbrudd på eksterne kall + watchdog (20s) slik at Vercel ikke henger
+ *
+ * Viktig: Mews krever at FirstTimeUnitStartUtc/LastTimeUnitStartUtc treffer
+ * starten på TimeUnit for servicen (lokal 00:00 konvertert til UTC).
+ * Dette styres her via MEWS_TIMEUNIT_OFFSET_MINUTES (f.eks. 120 for CEST, 60 for CET).
  */
 
 type CommonBody = {
@@ -28,54 +26,65 @@ function envRequired(name: string): string {
 
 function envNumber(name: string, fallback: number): number {
   const raw = (process.env[name] ?? '').trim();
-  if (!raw) return fallback;
   const n = Number(raw);
   return Number.isFinite(n) ? n : fallback;
 }
 
-/** Lager UTC-tidspunkt for "lokal midnatt" basert på offset-minutter (øst for UTC). */
-function localMidnightUtcString(ymd: string, offsetMinutes: number): string {
-  // "ymdT00:00Z" er midnatt UTC. For å få midnatt lokal tid (UTC+offset),
-  // må vi trekke offset fra UTC-tid.
-  const base = new Date(`${ymd}T00:00:00Z`).getTime();
-  const utcMs = base - offsetMinutes * 60_000;
-  return new Date(utcMs).toISOString().replace(/\.\d{3}Z$/, 'Z');
+/** Lag "TimeUnit start" i UTC ved å flytte lokal midnatt til UTC med gitt offset (minutter). */
+function toTimeUnitUtc(dateYmd: string, offsetMinutes: number): string {
+  // dateYmd er YYYY-MM-DD (lokal kalenderdato). "Lokal 00:00" MINUS offset => UTC-tid.
+  // Eks: offset=120 (CEST) -> YYYY-MM-DDT00:00:00-02:00 == (UTC) YYYY-MM-(DD-1)T22:00:00Z
+  // Vi regner det ut eksplisitt:
+  const d = new Date(`${dateYmd}T00:00:00Z`); // start med 00:00Z
+  // flytt PLUSS offset *negativt* for å komme til UTC-starten:
+  d.setUTCMinutes(d.getUTCMinutes() - offsetMinutes);
+  return d.toISOString().replace(/\.\d{3}Z$/, 'Z'); // trim millisek
 }
 
-async function postJsonWithTimeout(url: string, body: unknown, timeoutMs: number): Promise<any> {
+async function postJsonWithTimeout(
+  url: string,
+  body: unknown,
+  timeoutMs: number
+): Promise<any> {
   const ctrl = new AbortController();
   const timer = setTimeout(() => ctrl.abort(), timeoutMs);
+
+  let res: Response;
   try {
-    const response = await fetch(url, {
+    res = await fetch(url, {
       method: 'POST',
       signal: ctrl.signal,
       headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
       body: JSON.stringify(body),
     });
-    const text = await response.text();
-    if (!response.ok) {
-      throw new Error(`${url} -> ${response.status} ${response.statusText}: ${text.slice(0, 600)}`);
-    }
-    try {
-      return JSON.parse(text);
-    } catch {
-      throw new Error(`Non-JSON response from ${url}: ${text.slice(0, 300)}`);
-    }
   } finally {
     clearTimeout(timer);
+  }
+
+  const text = await res.text();
+  if (!res.ok) {
+    // Sørg for god feildiagnose:
+    throw new Error(`${url} -> ${res.status} ${res.statusText}: ${text.slice(0, 600)}`);
+  }
+  try {
+    return JSON.parse(text);
+  } catch {
+    throw new Error(`Non-JSON from ${url}: ${text.slice(0, 300)}`);
   }
 }
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
-  // Rask sanity-sjekk
+  // Lynsjekk
   if (req.query.debug === '1') {
-    res.status(200).json({ ok: true, debug: 'enriched-lite route is alive' });
+    res.status(200).json({ ok: true, route: '/api/mews/enriched-lite', now: new Date().toISOString() });
     return;
   }
 
-  // Hard watchdog: svar uansett innen ~20s
+  // Watchdog: svar alltid innen 20 sekunder
   const watchdog = setTimeout(() => {
-    if (!res.headersSent) res.status(504).json({ ok: false, error: 'Overall timeout (20s)' });
+    if (!res.headersSent) {
+      res.status(504).json({ ok: false, error: 'Overall timeout (20s) – upstream too slow' });
+    }
   }, 20_000);
 
   try {
@@ -86,7 +95,10 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     const ENTERPRISE_ID = (process.env.MEWS_ENTERPRISE_ID ?? '').trim();
     const CLIENT_NAME = (process.env.MEWS_CLIENT_NAME ?? 'BNO Travel Booking 1.0.0').trim();
 
-    const start = String(req.query.start ?? '').trim();
+    // Viktig: bruk miljøvariabel for å treffe TimeUnit-start i UTC
+    const OFFSET_MIN = envNumber('MEWS_TIMEUNIT_OFFSET_MINUTES', 120); // 120=CEST, 60=CET
+
+    const start = String(req.query.start ?? '').trim(); // YYYY-MM-DD (lokal kalenderdato)
     const end = String(req.query.end ?? '').trim();
     const adults = Number(String(req.query.adults ?? '2')) || 2;
 
@@ -95,10 +107,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       return;
     }
 
-    // Nytt: juster til lokal «TimeUnitStartUtc» via ENV-offset
-    const offsetMin = envNumber('MEWS_TIME_OFFSET_MINUTES', 0); // 0 = fall-back til UTC-midnatt
-    const startUtc = localMidnightUtcString(start, offsetMin);
-    const endUtc   = localMidnightUtcString(end,   offsetMin);
+    const startUtc = toTimeUnitUtc(start, OFFSET_MIN);
+    const endUtc   = toTimeUnitUtc(end, OFFSET_MIN);
 
     const common: CommonBody = {
       ClientToken: CLIENT_TOKEN,
@@ -106,28 +116,44 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       Client: CLIENT_NAME,
     };
 
-    // Parallelt: availability (hard 9s) + categories (best-effort 12s)
+    // 1) Availability (9s)
     const availabilityP = postJsonWithTimeout(
       `${BASE}/services/getAvailability`,
-      { ...common, ServiceId: SERVICE_ID, FirstTimeUnitStartUtc: startUtc, LastTimeUnitStartUtc: endUtc },
+      {
+        ...common,
+        ServiceId: SERVICE_ID,
+        FirstTimeUnitStartUtc: startUtc,
+        LastTimeUnitStartUtc: endUtc,
+      },
       9_000
     );
 
+    // 2) Categories (best-effort, 12s). Prøv både space- og resource-varianter.
     const categoriesP = ENTERPRISE_ID
       ? Promise.race([
-          postJsonWithTimeout(`${BASE}/resourceCategories/getAll`, { ...common, EnterpriseId: ENTERPRISE_ID, ActiveOnly: true }, 12_000),
-          postJsonWithTimeout(`${BASE}/spaceCategories/getAll`,    { ...common, EnterpriseId: ENTERPRISE_ID, ActiveOnly: true }, 12_000),
-        ]).catch(() => ({ ResourceCategories: [] }))
-      : Promise.resolve({ ResourceCategories: [] });
+          postJsonWithTimeout(
+            `${BASE}/spaceCategories/getAll`,
+            { ...common, EnterpriseId: ENTERPRISE_ID, ActiveOnly: true },
+            12_000
+          ),
+          postJsonWithTimeout(
+            `${BASE}/resourceCategories/getAll`,
+            { ...common, EnterpriseId: ENTERPRISE_ID, ActiveOnly: true },
+            12_000
+          ),
+        ]).catch(() => ({ SpaceCategories: [], ResourceCategories: [] }))
+      : Promise.resolve({ SpaceCategories: [], ResourceCategories: [] });
 
     let availability: any;
-    let categories: any;
+    let categoriesRaw: any;
 
     try {
-      [availability, categories] = await Promise.all([availabilityP, categoriesP]);
-    } catch (err: any) {
-      const msg = err?.message || String(err);
-      if (!res.headersSent) res.status(502).json({ ok: false, error: `Availability failed: ${msg}` });
+      [availability, categoriesRaw] = await Promise.all([availabilityP, categoriesP]);
+    } catch (e: any) {
+      const msg = e?.message || String(e);
+      if (!res.headersSent) {
+        res.status(502).json({ ok: false, error: `Availability failed: ${msg}`, hint: { startUtc, endUtc, OFFSET_MIN } });
+      }
       return;
     }
 
@@ -136,19 +162,24 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       availability?.CategoryAvailabilities ?? [];
 
     const catList: Array<{ Id: string; Name?: string; Capacity?: number; Description?: string }> =
-      categories?.ResourceCategories ?? categories?.SpaceCategories ?? categories?.Categories ?? [];
+      categoriesRaw?.SpaceCategories ??
+      categoriesRaw?.ResourceCategories ??
+      categoriesRaw?.Categories ??
+      [];
 
     const catMap = new Map<string, { Name?: string; Capacity?: number; Description?: string }>();
-    for (const c of catList) if (c?.Id) catMap.set(c.Id, c);
+    for (const c of catList) {
+      if (c && c.Id) catMap.set(c.Id, c);
+    }
 
-    const enriched = CatAvail.map((row) => {
+    const categories = CatAvail.map((row) => {
       const meta = catMap.get(row.CategoryId) || {};
       return {
         categoryId: row.CategoryId,
         name: meta.Name ?? null,
         capacity: meta.Capacity ?? null,
         description: meta.Description ?? null,
-        imageUrls: null,
+        imageUrls: [] as string[], // (kan fylles på senere)
         availabilities: Array.isArray(row.Availabilities) ? row.Availabilities : [],
       };
     });
@@ -160,11 +191,15 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         end,
         adults,
         datesUtc: DatesUtc,
-        categories: enriched,
+        categories,
+        debug: { startUtc, endUtc, OFFSET_MIN },
       });
     }
   } catch (err: any) {
-    if (!res.headersSent) res.status(500).json({ ok: false, error: err?.message || String(err) });
+    const msg = err?.message || String(err);
+    if (!res.headersSent) {
+      res.status(500).json({ ok: false, error: msg });
+    }
   } finally {
     clearTimeout(watchdog);
   }
