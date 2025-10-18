@@ -2,13 +2,16 @@ import type { VercelRequest, VercelResponse } from '@vercel/node';
 
 /**
  * GET /api/mews/enriched-lite?start=YYYY-MM-DD&end=YYYY-MM-DD&adults=2
- * Miljøvariabler (i Vercel -> Project Settings -> Environment Variables):
+ *
+ * Påkrevde ENV:
  *  - MEWS_BASE_URL
  *  - MEWS_CLIENT_TOKEN
  *  - MEWS_ACCESS_TOKEN
  *  - MEWS_SERVICE_ID
- *  - (valgfritt) MEWS_ENTERPRISE_ID
- *  - (valgfritt) MEWS_CLIENT_NAME
+ * Valgfrie ENV:
+ *  - MEWS_ENTERPRISE_ID
+ *  - MEWS_CLIENT_NAME
+ *  - MEWS_TIME_OFFSET_MINUTES  <-- lokal «midnatt» i minutter øst for UTC (f.eks. 120 for UTC+2)
  */
 
 type CommonBody = {
@@ -23,6 +26,22 @@ function envRequired(name: string): string {
   return v;
 }
 
+function envNumber(name: string, fallback: number): number {
+  const raw = (process.env[name] ?? '').trim();
+  if (!raw) return fallback;
+  const n = Number(raw);
+  return Number.isFinite(n) ? n : fallback;
+}
+
+/** Lager UTC-tidspunkt for "lokal midnatt" basert på offset-minutter (øst for UTC). */
+function localMidnightUtcString(ymd: string, offsetMinutes: number): string {
+  // "ymdT00:00Z" er midnatt UTC. For å få midnatt lokal tid (UTC+offset),
+  // må vi trekke offset fra UTC-tid.
+  const base = new Date(`${ymd}T00:00:00Z`).getTime();
+  const utcMs = base - offsetMinutes * 60_000;
+  return new Date(utcMs).toISOString().replace(/\.\d{3}Z$/, 'Z');
+}
+
 async function postJsonWithTimeout(url: string, body: unknown, timeoutMs: number): Promise<any> {
   const ctrl = new AbortController();
   const timer = setTimeout(() => ctrl.abort(), timeoutMs);
@@ -34,8 +53,14 @@ async function postJsonWithTimeout(url: string, body: unknown, timeoutMs: number
       body: JSON.stringify(body),
     });
     const text = await response.text();
-    if (!response.ok) throw new Error(`${url} -> ${response.status} ${response.statusText}: ${text.slice(0, 600)}`);
-    try { return JSON.parse(text); } catch { throw new Error(`Non-JSON from ${url}: ${text.slice(0, 300)}`); }
+    if (!response.ok) {
+      throw new Error(`${url} -> ${response.status} ${response.statusText}: ${text.slice(0, 600)}`);
+    }
+    try {
+      return JSON.parse(text);
+    } catch {
+      throw new Error(`Non-JSON response from ${url}: ${text.slice(0, 300)}`);
+    }
   } finally {
     clearTimeout(timer);
   }
@@ -70,8 +95,10 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       return;
     }
 
-    const startUtc = `${start}T00:00:00Z`;
-    const endUtc = `${end}T00:00:00Z`;
+    // Nytt: juster til lokal «TimeUnitStartUtc» via ENV-offset
+    const offsetMin = envNumber('MEWS_TIME_OFFSET_MINUTES', 0); // 0 = fall-back til UTC-midnatt
+    const startUtc = localMidnightUtcString(start, offsetMin);
+    const endUtc   = localMidnightUtcString(end,   offsetMin);
 
     const common: CommonBody = {
       ClientToken: CLIENT_TOKEN,
@@ -79,7 +106,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       Client: CLIENT_NAME,
     };
 
-    // Kjør MEWS-kall parallelt med har(d)e per-kall-timeouts
+    // Parallelt: availability (hard 9s) + categories (best-effort 12s)
     const availabilityP = postJsonWithTimeout(
       `${BASE}/services/getAvailability`,
       { ...common, ServiceId: SERVICE_ID, FirstTimeUnitStartUtc: startUtc, LastTimeUnitStartUtc: endUtc },
