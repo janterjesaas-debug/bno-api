@@ -1,0 +1,16 @@
+{
+  "MEWS_BASE_URL": "https://mews-demo-url.com",
+  "MEWS_CLIENT_TOKEN": "demo-client-token",
+  "MEWS_ACCESS_TOKEN": "demo-access-token",
+  "MEWS_CLIENT_NAME": "DemoClient",
+  "MEWS_HOTEL_ID": "demo-hotel-id",
+  "MEWS_SERVICE_ID": "demo-service-id",
+  "MEWS_ENTERPRISE_ID": "demo-enterprise-id",
+  "MEWS_RATE_ID": "demo-rate-id",
+  "MEWS_DISTRIBUTOR_BASE": "https://distributor.mews.com",
+  "MEWS_DISTRIBUTION_CONFIGURATION_ID": "demo-config-id",
+  "MEWS_LOCALE": "en-US",
+  "MEWS_CURRENCY": "EUR",
+  "HOTEL_TIMEZONE": "Europe/Oslo",
+  "MEWS_ADULT_AGE_CATEGORY_ID": "demo-adult-category-id"
+}

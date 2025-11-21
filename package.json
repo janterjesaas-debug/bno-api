@@ -1,14 +1,30 @@
 {
   "name": "bno-api",
+  "version": "1.0.0",
   "private": true,
-  "type": "module",
+  "type": "commonjs",
+  "scripts": {
+    "dev": "ts-node server.ts",
+    "clean": "rimraf node_modules package-lock.json",
+    "reinstall": "npm run clean && npm cache verify && npm install --registry=https://registry.npmjs.org/"
+  },
   "dependencies": {
-    "dayjs": "^1.11.18",
-    "next": "^15.5.5",
-    "undici": "^6.19.8"
+    "axios": "^1.12.2",
+    "cors": "^2.8.5",
+    "dotenv": "^16.6.1",
+    "express": "^4.19.2",
+    "morgan": "^1.10.1",
+    "node-fetch": "^2.7.0"
   },
   "devDependencies": {
-    "@types/node": "^24.7.2",
-    "@vercel/node": "^5.3.24"
+    "@types/cors": "^2.8.17",
+    "@types/express": "^4.17.21",
+    "@types/morgan": "^1.9.10",
+    "@types/node": "^24.8.1",
+    "@types/node-fetch": "^2.6.13",
+    "cross-env": "^10.1.0",
+    "rimraf": "^6.0.1",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.6.3"
   }
 }

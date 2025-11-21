@@ -1,0 +1,35 @@
+﻿{
+    "ok":  true,
+    "data":  {
+                 "room":  {
+                              "roomCategoryId":  "57be7642-9a83-480e-b445-b36800958986",
+                              "nights":  2,
+                              "priceNightly":  [
+                                                   100,
+                                                   100
+                                               ],
+                              "priceTotal":  200,
+                              "currency":  "GBP"
+                          },
+                 "products":  [
+                                  {
+                                      "productId":  "91beb4bf-f064-4164-9c93-b368009589dc",
+                                      "name":  "Breakfast",
+                                      "qty":  2,
+                                      "unitPrice":  15,
+                                      "charging":  "PerPersonPerTimeUnit",
+                                      "total":  120
+                                  },
+                                  {
+                                      "productId":  "277119ba-e6d9-459c-a6ef-b368009589dc",
+                                      "name":  "Coca Cola",
+                                      "qty":  2,
+                                      "unitPrice":  5,
+                                      "charging":  "Once",
+                                      "total":  10
+                                  }
+                              ],
+                 "productsTotal":  130,
+                 "grandTotal":  330
+             }
+}
