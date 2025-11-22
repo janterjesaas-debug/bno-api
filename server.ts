@@ -8,7 +8,8 @@ import axios from 'axios';
 import bodyParser from 'body-parser';
 import mews from './lib/mews';
 import { fetchPrices as fetchConnectorPrices } from './lib/prices';
-import { mewsWebhookHandler } from './mews-webhook'; // ⬅️ NY IMPORT
+import { mewsWebhookHandler } from './mews-webhook'; // Webhook for Mews
+import { fetchSiteMinderAvailability } from './lib/siteminder'; // <-- NY IMPORT (SiteMinder)
 
 const app = express();
 app.use(cors());
@@ -395,7 +396,7 @@ app.get('/api/services', async (_req, res) => {
   }
 });
 
-// ===== SEARCH / AVAILABILITY =====
+// ===== SEARCH / AVAILABILITY (MEWS) =====
 app.get(
   ['/api/search', '/search', '/api/availability', '/availability'],
   async (req, res) => {
@@ -548,6 +549,48 @@ app.get(
     });
   }
 );
+
+// ===== SITEMINDER SEARCH (egen endpoint – påvirker ikke MEWS) =====
+app.get('/api/siteminder/search', async (req, res) => {
+  const from = String(req.query.from || '');
+  const to = String(req.query.to || '');
+  const adults = Number(req.query.adults || 1);
+
+  try {
+    const result = await fetchSiteMinderAvailability({
+      fromYmd: from,
+      toYmd: to,
+      adults,
+    });
+
+    return res.json({
+      ok: true,
+      data: {
+        availability: {
+          ResourceCategoryAvailabilities:
+            result.ResourceCategoryAvailabilities || [],
+        },
+        params: {
+          from,
+          to,
+          adults,
+          src: 'siteminder',
+        },
+        raw: result.raw ?? null,
+      },
+    });
+  } catch (e: any) {
+    console.error(
+      'siteminder_search_error',
+      e?.response?.data || e?.message || e
+    );
+    return res.json({
+      ok: false,
+      error: 'siteminder_search_failed',
+      detail: e?.message || String(e),
+    });
+  }
+});
 
 // ===== PRODUCTS =====
 app.get(['/api/products', '/products'], async (_req, res) => {
@@ -708,7 +751,7 @@ app.post(['/api/booking/preview', '/booking/preview'], async (req, res) => {
           currency: (roomCurrency || DEF_CURRENCY).toUpperCase(),
           selectedUnits: units,
         },
-        products: Array.isArray(products) ? products : [],  
+        products: Array.isArray(products) ? products : [],
         productsTotal,
         grandTotal,
       },
