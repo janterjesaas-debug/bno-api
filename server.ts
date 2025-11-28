@@ -333,9 +333,7 @@ async function priceReservationOnce(opts: {
 
   const resp = await axios.post(url, payload, { timeout: 15000 });
   const item =
-    resp.data?.ReservationPrices?.[0] ||
-    resp.data?.ReservationPrice ||
-    null;
+    resp.data?.ReservationPrices?.[0] || resp.data?.ReservationPrice || null;
   if (!item) return { total: null, currency: null };
 
   const amountObj =
@@ -537,8 +535,15 @@ app.get(
         });
       }
     } catch (e: any) {
-      console.error('search_error', e?.response?.data || e?.message || e);
+      // 🔴 VIKTIG NY LOGGING HER
+      console.error('search_error FULL', {
+        params: { from, to, adults },
+        message: e?.message,
+        status: e?.response?.status,
+        data: e?.response?.data,
+      });
     }
+
 
     return res.json({
       ok: true,
@@ -914,7 +919,8 @@ app.post(['/api/booking/create', '/booking/create'], async (req, res) => {
   });
 
   if (reservationId) {
-    nextUrl += (nextUrl.includes('?') ? '&' : '?') +
+    nextUrl +=
+      (nextUrl.includes('?') ? '&' : '?') +
       `mewsReservation=${encodeURIComponent(reservationId)}`;
   }
 
