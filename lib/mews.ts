@@ -1,5 +1,5 @@
 // bno-api/lib/mews.ts
-import axios from 'axios';
+import axios, { AxiosRequestConfig } from 'axios';
 
 // ---------- env ----------
 const baseUrl = (process.env.MEWS_BASE_URL || '').trim();
@@ -13,6 +13,80 @@ if (!accessToken) throw new Error('Missing MEWS_ACCESS_TOKEN');
 
 const clientName = (process.env.MEWS_CLIENT_NAME || 'bno-api').replace(/^"|"$/g, '').trim();
 const hotelTimeZone = (process.env.HOTEL_TIMEZONE || 'Europe/Oslo').trim();
+
+// ===== Axios retry helper (handles 429 + Retry-After and transient network errors) ====
+async function axiosWithRetry<T = any>(
+  config: AxiosRequestConfig,
+  maxRetries = 3,
+  initialDelayMs = 500,
+  respectRetryAfter = true
+): Promise<T> {
+  let attempt = 0;
+  let delay = initialDelayMs;
+
+  while (true) {
+    try {
+      const resp = await axios(config);
+      return resp.data as T;
+    } catch (err: any) {
+      attempt++;
+      const status = err?.response?.status;
+      const headers = err?.response?.headers || {};
+      const retryAfterRaw = headers['retry-after'];
+      const code = err?.code || null;
+
+      // 429 handling
+      if (status === 429 && attempt <= maxRetries) {
+        let waitMs = delay;
+
+        if (respectRetryAfter && retryAfterRaw) {
+          const asNum = Number(retryAfterRaw);
+          if (!Number.isNaN(asNum)) {
+            waitMs = asNum * 1000;
+          } else {
+            const parsed = Date.parse(retryAfterRaw);
+            if (!Number.isNaN(parsed)) {
+              const now = Date.now();
+              const until = parsed - now;
+              waitMs = until > 0 ? until : delay;
+            }
+          }
+        }
+
+        const maxCap = 10 * 60 * 1000;
+        if (waitMs > maxCap) waitMs = maxCap;
+
+        console.warn(`axiosWithRetry: 429 received, attempt ${attempt}, waiting ${waitMs}ms (retry-after=${retryAfterRaw})`);
+        await new Promise((r) => setTimeout(r, waitMs));
+        delay *= 2;
+        continue;
+      }
+
+      // transient network errors
+      const transientCodes = ['ECONNRESET', 'ECONNABORTED', 'ENOTFOUND', 'EAI_AGAIN'];
+      if (transientCodes.includes(code) && attempt <= maxRetries) {
+        console.warn(`axiosWithRetry: transient error ${code}, attempt ${attempt}, retrying in ${delay}ms`);
+        await new Promise((r) => setTimeout(r, delay));
+        delay *= 2;
+        continue;
+      }
+
+      // give up - attach useful info and rethrow
+      const info = {
+        message: err?.message,
+        status,
+        code,
+        headers,
+        data: err?.response?.data || null,
+      };
+      console.error('axiosWithRetry: giving up', info);
+      const e = new Error(err?.message || 'Request failed');
+      (e as any).response = err?.response || null;
+      (e as any).mewsResponse = info;
+      throw e;
+    }
+  }
+}
 
 // ---------- helpers ----------
 function tzOffsetMinutesAt(utcInstant: Date, tz: string): number {
@@ -91,12 +165,19 @@ export function parseIsoDurationToMs(dur: string | undefined): number | null {
 // ---- liten wrapper for axios post med tidouts og detaljert error
 async function postJson(path: string, body: any, timeout = 15000) {
   try {
-    const resp = await axios.post(path, body, { timeout });
-    return resp;
+    const cleaned = removeUndefinedRecursive(body);
+    const data = await axiosWithRetry({
+      method: 'post',
+      url: path,
+      data: cleaned,
+      timeout,
+      headers: { 'Content-Type': 'application/json' },
+    }, 3, 500, true);
+    return { data };
   } catch (err: any) {
-    const respData = err?.response?.data || err?.message || err;
-    const e = new Error('Request failed');
-    (e as any).response = respData;
+    const e = new Error(err?.message || 'Request failed');
+    (e as any).response = err?.response || null;
+    (e as any).mewsResponse = err?.mewsResponse || (err?.response ? { status: err.response?.status, headers: err.response?.headers, data: err.response?.data } : null);
     throw e;
   }
 }
@@ -191,7 +272,10 @@ export async function fetchAvailabilityNamed(serviceId: string, first: string | 
           if (!catImageIds[a.CategoryId].includes(a.ImageId)) catImageIds[a.CategoryId].push(a.ImageId);
         }
       });
-    } catch {}
+    } catch (err: any) {
+      // ignore, non-fatal
+      console.warn('fetchAvailabilityNamed: resourceCategoryImageAssignments failed', err?.message || err);
+    }
   }
 
   const uniqueImageIds = Array.from(new Set(Object.values(catImageIds).flat()));
@@ -253,7 +337,7 @@ export async function findOrCreateCustomer(customer: any) {
       ? resp.data.Customers.find((c: any) => String(c?.Email || '').toLowerCase() === email)
       : null;
     if (found?.Id) return found.Id;
-  } catch {}
+  } catch (err: any) {}
 
   async function tryAdd(firstName: string, lastName: string): Promise<string> {
     const urlAdd = `${baseUrl}/api/connector/v1/customers/add`;
@@ -347,7 +431,7 @@ export async function createReservation(p: any) {
     if (resp?.data) return resp.data;
     throw new Error('Empty response from reservations/add');
   } catch (err: any) {
-    const body = err?.response || err?.message || String(err);
+    const body = err?.mewsResponse || err?.response || err?.message || String(err);
     const e = new Error('createReservation failed');
     (e as any).mewsResponse = body;
     throw e;
@@ -382,7 +466,7 @@ export async function createProductServiceOrders(serviceId: string, reservationI
     return resp.data;
   } catch (err: any) {
     const e = new Error('createProductServiceOrders failed');
-    (e as any).mewsResponse = err?.response || err?.message || err;
+    (e as any).mewsResponse = err?.mewsResponse || err?.response || err?.message || err;
     throw e;
   }
 }
