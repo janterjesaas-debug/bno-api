@@ -15,6 +15,9 @@ import { fetchSiteMinderAvailability } from './lib/siteminder'; // SiteMinder
 import { getMewsConfigForArea } from './lib/mews-config'; // Områdeconfig
 import registerHousekeepingRoutes from './lib/housekeepingRoutes'; // Renholds-/eier-API
 
+// 🆕 Bilde-mapping (Supabase)
+import { getImagesForResourceCategory } from './lib/imageMap';
+
 // ==== DEBUG: vis hvilken MEWS-konfig Node faktisk bruker ====
 console.log('DEBUG MEWS CONFIG:');
 console.log(
@@ -851,7 +854,7 @@ app.get('/api/services', async (_req, res) => {
  *
  * Nå også med:
  *  - description
- *  - bilder
+ *  - bilder (overstyrt fra Supabase via imageMap)
  *  - prisTotal / prisNightly / valuta
  */
 app.get('/api/mews/availability', async (req, res) => {
@@ -982,6 +985,8 @@ app.get('/api/mews/availability', async (req, res) => {
 
         for (const rc of rcData?.ResourceCategories || []) {
           if (!rc?.Id) continue;
+          const rcId = String(rc.Id);
+
           const localizedName =
             (rc.Names && rc.Names[LOCALE]) ||
             rc.Name ||
@@ -996,14 +1001,28 @@ app.get('/api/mews/availability', async (req, res) => {
             rc.Description ||
             null;
 
-          const image =
+          // 🆕 Hent bilder fra Supabase-mapping først
+          const mappedImages = getImagesForResourceCategory(rcId);
+          const primaryMappedImage = mappedImages[0] ?? null;
+
+          // Fallback til Mews-image hvis vi IKKE har mapping
+          const fallbackImageFromMews =
             Array.isArray(rc.ImageIds) && rc.ImageIds.length
               ? `https://cdn.mews-demo.com/Media/Image/${rc.ImageIds[0]}?Mode=Fit&Height=400&Width=600`
-              : rc.Image || null;
+              : (rc.Image as string | null) || null;
 
-          const images = Array.isArray(rc.ImageIds) ? rc.ImageIds : null;
+          const image = primaryMappedImage || fallbackImageFromMews;
 
-          categoryLookup[String(rc.Id)] = {
+          const images: string[] | null =
+            mappedImages.length > 0
+              ? mappedImages
+              : Array.isArray(rc.ImageIds)
+              ? rc.ImageIds.map((id: string) =>
+                  `https://cdn.mews-demo.com/Media/Image/${id}?Mode=Fit&Height=400&Width=600`
+                )
+              : null;
+
+          categoryLookup[rcId] = {
             name: localizedName,
             capacity: cap,
             description,
@@ -1274,6 +1293,8 @@ app.get(
 
           for (const rc of rcData?.ResourceCategories || []) {
             if (!rc?.Id) continue;
+            const rcId = String(rc.Id);
+
             const localizedName =
               (rc.Names && rc.Names[LOCALE]) ||
               rc.Name ||
@@ -1288,14 +1309,28 @@ app.get(
               rc.Description ||
               null;
 
-            const image =
+            // 🆕 Hent bilder fra Supabase-mapping først
+            const mappedImages = getImagesForResourceCategory(rcId);
+            const primaryMappedImage = mappedImages[0] ?? null;
+
+            // Fallback til Mews-image hvis vi IKKE har mapping
+            const fallbackImageFromMews =
               Array.isArray(rc.ImageIds) && rc.ImageIds.length
                 ? `https://cdn.mews-demo.com/Media/Image/${rc.ImageIds[0]}?Mode=Fit&Height=400&Width=600`
-                : rc.Image || null;
+                : (rc.Image as string | null) || null;
 
-            const images = Array.isArray(rc.ImageIds) ? rc.ImageIds : null;
+            const image = primaryMappedImage || fallbackImageFromMews;
 
-            categoryLookup[String(rc.Id)] = {
+            const images: string[] | null =
+              mappedImages.length > 0
+                ? mappedImages
+                : Array.isArray(rc.ImageIds)
+                ? rc.ImageIds.map((id: string) =>
+                    `https://cdn.mews-demo.com/Media/Image/${id}?Mode=Fit&Height=400&Width=600`
+                  )
+                : null;
+
+            categoryLookup[rcId] = {
               name: localizedName,
               capacity: cap,
               description,
