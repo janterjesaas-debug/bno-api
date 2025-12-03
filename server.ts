@@ -1837,6 +1837,7 @@ app.post(['/api/booking/create', '/booking/create'], async (req, res) => {
     }
   }
 
+  // 🔧 DEEP LINK TIL MEWS DISTRIBUTOR – forsøk å alltid havne på "summary"/steg 3
   function buildDistributorUrl(opts: {
     fromYmd: string;
     toYmd: string;
@@ -1849,21 +1850,48 @@ app.post(['/api/booking/create', '/booking/create'], async (req, res) => {
   }) {
     const cur = opts.currency || DEF_CURRENCY;
     const locale = opts.locale || LOCALE;
-    const route = 'rates';
+
+    // Vi ønsker summary/step 3
+    const route = 'summary';
+
     const qp: string[] = [
+      // Opprinnelige parametere vi brukte i demo-oppsettet
       `mewsStart=${encodeURIComponent(opts.fromYmd)}`,
       `mewsEnd=${encodeURIComponent(opts.toYmd)}`,
       `mewsAdultCount=${encodeURIComponent(String(opts.adults || 1))}`,
+      `mewsRoute=${route}`,
+      `mewsStep=3`,
+
+      // Mer generiske alternativer – i tilfelle prod-configen er satt opp med andre navn
+      `start=${encodeURIComponent(opts.fromYmd)}`,
+      `end=${encodeURIComponent(opts.toYmd)}`,
+      `adults=${encodeURIComponent(String(opts.adults || 1))}`,
+      `arrival=${encodeURIComponent(opts.fromYmd)}`,
+      `departure=${encodeURIComponent(opts.toYmd)}`,
+
+      // Språk/valuta
       `currency=${encodeURIComponent(cur)}`,
       `locale=${encodeURIComponent(locale)}`,
-      `mewsRoute=${route}`,
     ];
-    if (opts.roomCategoryId)
-      qp.push(`mewsRoom=${encodeURIComponent(opts.roomCategoryId)}`);
-    if (opts.rateId) {
-      qp.push(`mewsRateId=${encodeURIComponent(opts.rateId)}`);
-      qp.push(`rateId=${encodeURIComponent(opts.rateId)}`);
+
+    if (opts.roomCategoryId) {
+      const cat = encodeURIComponent(opts.roomCategoryId);
+      qp.push(
+        `mewsRoom=${cat}`,
+        `room=${cat}`,
+        `roomCategoryId=${cat}`
+      );
     }
+
+    if (opts.rateId) {
+      const rate = encodeURIComponent(opts.rateId);
+      qp.push(
+        `mewsRateId=${rate}`,
+        `rateId=${rate}`,
+        `rate=${rate}`
+      );
+    }
+
     const baseConfigId = opts.configId || MEWS_CONFIGURATION_ID;
     const base = `${MEWS_DISTRIBUTOR_BASE}/${baseConfigId}`;
     return `${base}?${qp.join('&')}#${route}`;
@@ -1882,10 +1910,24 @@ app.post(['/api/booking/create', '/booking/create'], async (req, res) => {
   });
 
   if (reservationId) {
+    // send med flere varianter av reservation-parameteren
+    const resIdEncoded = encodeURIComponent(reservationId);
     nextUrl +=
       (nextUrl.includes('?') ? '&' : '?') +
-      `mewsReservation=${encodeURIComponent(reservationId)}`;
+      `mewsReservation=${resIdEncoded}&reservationId=${resIdEncoded}`;
   }
+
+  // 🔍 Logg URL-en så du enkelt kan teste direkte i browser
+  console.log('MEWS distributor redirect', {
+    startYmd,
+    endYmd,
+    adults,
+    area: areaConfig.slug,
+    roomCategoryId,
+    rateId,
+    reservationId,
+    nextUrl,
+  });
 
   res.json({
     ok: true,
