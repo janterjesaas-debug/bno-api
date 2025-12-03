@@ -1804,6 +1804,7 @@ app.post(['/api/booking/create', '/booking/create'], async (req, res) => {
       if (reservationId && Array.isArray(products) && products.length > 0) {
         const orders = products
           .map((p: any) => ({
+
             ProductId: p.productId || p.ProductId || p.Id,
             Quantity: Number(p.quantity || p.count || 0),
             Price: p.price != null ? Number(p.price) : undefined,
@@ -1837,7 +1838,7 @@ app.post(['/api/booking/create', '/booking/create'], async (req, res) => {
     }
   }
 
-  // 🔧 DEEP LINK TIL MEWS DISTRIBUTOR – forsøk å alltid havne på "summary"/steg 3
+  // 🔧 DEEP LINK TIL MEWS DISTRIBUTOR – enkel variant som vi brukte da det fungerte i demo
   function buildDistributorUrl(opts: {
     fromYmd: string;
     toYmd: string;
@@ -1848,53 +1849,36 @@ app.post(['/api/booking/create', '/booking/create'], async (req, res) => {
     locale?: string;
     configId: string;
   }) {
-    const cur = opts.currency || DEF_CURRENCY;
-    const locale = opts.locale || LOCALE;
+    const encode = encodeURIComponent;
 
-    // Vi ønsker summary/step 3
-    const route = 'summary';
+    // Sikre at vi ikke får doble "/"
+    const distrBase = MEWS_DISTRIBUTOR_BASE.replace(/\/$/, '');
 
-    const qp: string[] = [
-      // Opprinnelige parametere vi brukte i demo-oppsettet
-      `mewsStart=${encodeURIComponent(opts.fromYmd)}`,
-      `mewsEnd=${encodeURIComponent(opts.toYmd)}`,
-      `mewsAdultCount=${encodeURIComponent(String(opts.adults || 1))}`,
+    // Område-spesifikk configId eller global fallback
+    const configId = opts.configId || MEWS_CONFIGURATION_ID;
+
+    // Dette er "steg 3"-routen vi brukte i demo-oppsettet
+    const route = 'prices';
+
+    const qsParts: string[] = [
+      `mewsStart=${encode(opts.fromYmd)}`,
+      `mewsEnd=${encode(opts.toYmd)}`,
+      `mewsAdultCount=${encode(String(opts.adults || 1))}`,
+      `currency=${encode(opts.currency || DEF_CURRENCY)}`,
+      `locale=${encode(opts.locale || LOCALE)}`,
       `mewsRoute=${route}`,
-      `mewsStep=3`,
-
-      // Mer generiske alternativer – i tilfelle prod-configen er satt opp med andre navn
-      `start=${encodeURIComponent(opts.fromYmd)}`,
-      `end=${encodeURIComponent(opts.toYmd)}`,
-      `adults=${encodeURIComponent(String(opts.adults || 1))}`,
-      `arrival=${encodeURIComponent(opts.fromYmd)}`,
-      `departure=${encodeURIComponent(opts.toYmd)}`,
-
-      // Språk/valuta
-      `currency=${encodeURIComponent(cur)}`,
-      `locale=${encodeURIComponent(locale)}`,
     ];
 
     if (opts.roomCategoryId) {
-      const cat = encodeURIComponent(opts.roomCategoryId);
-      qp.push(
-        `mewsRoom=${cat}`,
-        `room=${cat}`,
-        `roomCategoryId=${cat}`
-      );
+      qsParts.push(`mewsRoom=${encode(opts.roomCategoryId)}`);
     }
 
     if (opts.rateId) {
-      const rate = encodeURIComponent(opts.rateId);
-      qp.push(
-        `mewsRateId=${rate}`,
-        `rateId=${rate}`,
-        `rate=${rate}`
-      );
+      qsParts.push(`mewsRateId=${encode(opts.rateId)}`);
     }
 
-    const baseConfigId = opts.configId || MEWS_CONFIGURATION_ID;
-    const base = `${MEWS_DISTRIBUTOR_BASE}/${baseConfigId}`;
-    return `${base}?${qp.join('&')}#${route}`;
+    const qs = qsParts.join('&');
+    return `${distrBase}/${configId}?${qs}#${route}`;
   }
 
   let nextUrl = buildDistributorUrl({
