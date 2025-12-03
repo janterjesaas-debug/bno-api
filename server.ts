@@ -18,6 +18,9 @@ import registerHousekeepingRoutes from './lib/housekeepingRoutes'; // Renholds-/
 // 🆕 Bilde-mapping (Supabase)
 import { getImagesForResourceCategory } from './lib/imageMap';
 
+// 🆕 Språkvalg for Mews-tekster (Names/Descriptions)
+import { pickLocalizedText } from './lib/mewsLocalization';
+
 // ==== DEBUG: vis hvilken MEWS-konfig Node faktisk bruker ====
 console.log('DEBUG MEWS CONFIG:');
 console.log(
@@ -462,7 +465,7 @@ function extractPriceValueCurrency(priceObj: any): {
         priceObj.TotalAmount[k]?.Value ??
         priceObj.TotalAmount[k]?.Total ??
         null;
-      return { value: safeNum(v), currency: String(k) };
+      return { value: safeNum(v), currency: k };
     }
   }
 
@@ -850,7 +853,7 @@ app.get('/api/services', async (_req, res) => {
 /**
  * ===== GENERELL MEWS-AVAILABILITY (PS-SCRIPT-KLONE) =====
  *
- * GET /api/mews/availability?from=YYYY-MM-DD&to=YYYY-MM-DD[&serviceId=...][&adults=2]
+ * GET /api/mews/availability?from=YYYY-MM-DD&to=YYYY-MM-DD[&serviceId=...][&adults=2][&lang=en-GB]
  *
  * Nå også med:
  *  - description
@@ -865,6 +868,9 @@ app.get('/api/mews/availability', async (req, res) => {
     const serviceIdParam = req.query.serviceId
       ? String(req.query.serviceId).trim()
       : '';
+
+    const langParamRaw = req.query.lang ? String(req.query.lang) : '';
+    const requestedLang = (langParamRaw || LOCALE).trim();
 
     if (!from || !to) {
       return res.status(400).json({
@@ -988,7 +994,7 @@ app.get('/api/mews/availability', async (req, res) => {
           const rcId = String(rc.Id);
 
           const localizedName =
-            (rc.Names && rc.Names[LOCALE]) ||
+            pickLocalizedText(rc.Names, requestedLang, [LOCALE]) ||
             rc.Name ||
             rc.ExternalIdentifier ||
             'Rom';
@@ -997,7 +1003,7 @@ app.get('/api/mews/availability', async (req, res) => {
             typeof rc.Capacity === 'number' ? (rc.Capacity as number) : null;
 
           const description =
-            (rc.Descriptions && firstLang(rc.Descriptions, LOCALE)) ||
+            pickLocalizedText(rc.Descriptions, requestedLang, [LOCALE]) ||
             rc.Description ||
             null;
 
@@ -1139,6 +1145,7 @@ app.get('/api/mews/availability', async (req, res) => {
         adults,
         serviceId: serviceIdParam || null,
         searchedServices: servicesToQuery,
+        lang: requestedLang,
       },
     });
   } catch (err: any) {
@@ -1157,6 +1164,8 @@ app.get('/api/mews/availability', async (req, res) => {
 // ===== SEARCH / AVAILABILITY (MEWS) =====
 // Bruker samme logikk som /api/mews/availability, men returnerer
 // availability.ResourceCategoryAvailabilities slik frontend forventer.
+//
+// GET /search?from=...&to=...&adults=...&area=...&lang=en-GB
 app.get(
   ['/api/search', '/search', '/api/availability', '/availability'],
   async (req, res) => {
@@ -1168,11 +1177,15 @@ app.get(
       const adults = Number(req.query.adults || 1);
       const areaSlugRaw = req.query.area ? String(req.query.area) : '';
 
+      const langParamRaw = req.query.lang ? String(req.query.lang) : '';
+      const requestedLang = (langParamRaw || LOCALE).trim();
+
       const { services: servicesToQuery, areaKey } =
         resolveServicesForArea(areaSlugRaw);
 
       const cacheKey =
-        cacheSearchKey(from, to, adults) + `:area:${areaKey || 'ALL'}`;
+        cacheSearchKey(from, to, adults) +
+        `:area:${areaKey || 'ALL'}:lang:${requestedLang}`;
       const cached = getSearchCache(cacheKey);
       if (cached) {
         return res.json({ ok: true, data: cached });
@@ -1186,6 +1199,7 @@ app.get(
             to,
             adults,
             area: areaKey,
+            lang: requestedLang,
             warn: 'missing_params',
           },
         };
@@ -1201,6 +1215,7 @@ app.get(
             to,
             adults,
             area: areaKey,
+            lang: requestedLang,
             warn: 'mews_credentials_missing',
           },
         };
@@ -1296,7 +1311,7 @@ app.get(
             const rcId = String(rc.Id);
 
             const localizedName =
-              (rc.Names && rc.Names[LOCALE]) ||
+              pickLocalizedText(rc.Names, requestedLang, [LOCALE]) ||
               rc.Name ||
               rc.ExternalIdentifier ||
               'Rom';
@@ -1305,7 +1320,7 @@ app.get(
               typeof rc.Capacity === 'number' ? (rc.Capacity as number) : null;
 
             const description =
-              (rc.Descriptions && firstLang(rc.Descriptions, LOCALE)) ||
+              pickLocalizedText(rc.Descriptions, requestedLang, [LOCALE]) ||
               rc.Description ||
               null;
 
@@ -1378,7 +1393,7 @@ app.get(
               if (est.total != null || est.nightly.length) {
                 priceNightly = est.nightly;
                 priceTotal = est.total;
-                priceCurrency = est.currency || priceCurrency;
+                priceCurrency = est.currency || pricingCurrency;
               }
             }
 
@@ -1464,6 +1479,7 @@ app.get(
           to,
           adults,
           area: areaKey,
+          lang: requestedLang,
           src: 'mews_services_getAvailability+resourceCategories_getAll+reservations_price',
         },
       };
@@ -1482,6 +1498,10 @@ app.get(
       const to = toRaw.slice(0, 10);
       const adults = Number(req.query.adults || 1);
       const areaSlugRaw = req.query.area ? String(req.query.area) : '';
+
+      const langParamRaw = req.query.lang ? String(req.query.lang) : '';
+      const requestedLang = (langParamRaw || LOCALE).trim();
+
       const { areaKey } = resolveServicesForArea(areaSlugRaw);
 
       const resp = {
@@ -1491,11 +1511,13 @@ app.get(
           to,
           adults,
           area: areaKey,
+          lang: requestedLang,
           warn: 'mews_search_failed',
         },
       };
       const cacheKeyErr =
-        cacheSearchKey(from, to, adults) + `:area:${areaKey || 'ALL'}`;
+        cacheSearchKey(from, to, adults) +
+        `:area:${areaKey || 'ALL'}:lang:${requestedLang}`;
       setSearchCache(cacheKeyErr, resp, 10);
       return res.json({ ok: true, data: resp });
     }
@@ -1760,7 +1782,7 @@ app.post(['/api/booking/create', '/booking/create'], async (req, res) => {
         );
       }
 
-      const rooms = [
+      const Rooms = [
         {
           RoomCategoryId: roomCategoryId,
           RateId: rateId || areaConfig.rateId || MEWS_RATE_ID || undefined,
@@ -1783,7 +1805,7 @@ app.post(['/api/booking/create', '/booking/create'], async (req, res) => {
         const createResp = await mews.createReservation({
           ClientReference: `bno-${Date.now()}`,
           ServiceId: areaConfig.serviceId || MEWS_SERVICE_ID || undefined,
-          Rooms: rooms,
+          Rooms,
           CustomerId:
             customerId && customerId.length > 10 ? customerId : undefined,
           SendConfirmationEmail: false,
@@ -1804,7 +1826,6 @@ app.post(['/api/booking/create', '/booking/create'], async (req, res) => {
       if (reservationId && Array.isArray(products) && products.length > 0) {
         const orders = products
           .map((p: any) => ({
-
             ProductId: p.productId || p.ProductId || p.Id,
             Quantity: Number(p.quantity || p.count || 0),
             Price: p.price != null ? Number(p.price) : undefined,
