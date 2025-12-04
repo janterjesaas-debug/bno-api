@@ -68,8 +68,11 @@ const MEWS_CONFIGURATION_ID =
   (process.env.MEWS_DISTRIBUTION_CONFIGURATION_ID ||
     process.env.MEWS_CONFIGURATION_ID ||
     '').trim();
+
+// 🔧 Viktig: prod-url som fallback (ikke demo)
 const MEWS_DISTRIBUTOR_BASE = (process.env.MEWS_DISTRIBUTOR_BASE ||
-  'https://app.mews-demo.com/distributor').replace(/\/$/, '');
+  'https://app.mews.com/distributor').replace(/\/$/, '');
+
 const LOCALE = (process.env.MEWS_LOCALE || 'nb-NO').trim();
 const DEF_CURRENCY = (process.env.MEWS_CURRENCY || 'NOK').trim();
 const MEWS_ENTERPRISE_ID = (process.env.MEWS_ENTERPRISE_ID || '').trim();
@@ -1860,7 +1863,7 @@ app.post(['/api/booking/create', '/booking/create'], async (req, res) => {
     }
   }
 
-  // 🔧 DEEP LINK TIL MEWS DISTRIBUTOR – oppdatert for å lande på steg 3 ("rates")
+  // 🔧 Deep link til Mews Distributor – land på "Rates"-steget (steg 3)
   function buildDistributorUrl(opts: {
     fromYmd: string;
     toYmd: string;
@@ -1868,8 +1871,8 @@ app.post(['/api/booking/create', '/booking/create'], async (req, res) => {
     roomCategoryId?: string;
     rateId?: string;
     currency?: string;
-    language?: string;         // Mews forventer language=en-US/nb-NO osv
-    configId: string;
+    language?: string; // Mews forventer language=en-US/nb-NO osv
+    configId?: string;
   }) {
     const encode = encodeURIComponent;
 
@@ -1877,34 +1880,57 @@ app.post(['/api/booking/create', '/booking/create'], async (req, res) => {
     const distrBase = MEWS_DISTRIBUTOR_BASE.replace(/\/$/, '');
 
     // Område-spesifikk configId eller global fallback
-    const configId = opts.configId || MEWS_CONFIGURATION_ID;
+    const configId =
+      (opts.configId && opts.configId.trim()) ||
+      (MEWS_CONFIGURATION_ID && MEWS_CONFIGURATION_ID.trim()) ||
+      '';
 
-    // Dette er "steg 3" i Booking Engine: rates/add-ons
+    if (!configId) {
+      console.warn(
+        'buildDistributorUrl: mangler Mews distribution configuration id – bruker distributor uten configId'
+      );
+    }
+
+    // Dette er "Rates"-steget (maks hva Mews støtter for deeplink)
     const route = 'rates';
 
-    const qsParts: string[] = [
-      `mewsStart=${encode(opts.fromYmd)}`,
-      `mewsEnd=${encode(opts.toYmd)}`,
-      `mewsAdultCount=${encode(String(opts.adults || 1))}`,
-      `currency=${encode(opts.currency || DEF_CURRENCY)}`,
-      // Mews bruker "language", ikke "locale"
-      `language=${encode(opts.language || LOCALE)}`,
-      `mewsRoute=${route}`,
-    ];
+    const qsParts: string[] = [];
+
+    if (opts.fromYmd) {
+      qsParts.push(`mewsStart=${encode(opts.fromYmd)}`);
+    }
+    if (opts.toYmd) {
+      qsParts.push(`mewsEnd=${encode(opts.toYmd)}`);
+    }
+
+    qsParts.push(`mewsRoute=${route}`);
 
     if (opts.roomCategoryId) {
       qsParts.push(`mewsRoom=${encode(opts.roomCategoryId)}`);
     }
 
-    if (opts.rateId) {
-      qsParts.push(`mewsRateId=${encode(opts.rateId)}`);
-    }
+    qsParts.push(`language=${encode(opts.language || LOCALE)}`);
+    qsParts.push(`currency=${encode(opts.currency || DEF_CURRENCY)}`);
+    qsParts.push(`mewsAdultCount=${encode(String(opts.adults || 1))}`);
+
+    // Vi har ikke egne barnefelt i BNO-appen, så vi setter 0
+    qsParts.push('mewsChildCount=0');
+
+    // For enkelhets skyld dropper vi rateId her; Mews bruker uansett tilgjengelige rater
+    // Hvis du vil tvinge rate: qsParts.push(`mewsRateId=${encode(opts.rateId)}`) hvis satt.
 
     const qs = qsParts.join('&');
-    return `${distrBase}/${configId}?${qs}`;
+
+    if (configId) {
+      return `${distrBase}/${configId}?${qs}`;
+    }
+
+    // Fallback uten configId (bør helst unngås i prod)
+    return `${distrBase}?${qs}`;
   }
 
-  const languageForMews = typeof lang === 'string' && lang.length > 0 ? lang : LOCALE;
+  const languageForMews =
+    typeof lang === 'string' && lang.length > 0 ? lang : LOCALE;
 
   let nextUrl = buildDistributorUrl({
     fromYmd: startYmd,
