@@ -1393,7 +1393,7 @@ app.get(
               if (est.total != null || est.nightly.length) {
                 priceNightly = est.nightly;
                 priceTotal = est.total;
-                priceCurrency = est.currency || pricingCurrency;
+                priceCurrency = est.currency || priceCurrency;
               }
             }
 
@@ -1760,6 +1760,7 @@ app.post(['/api/booking/create', '/booking/create'], async (req, res) => {
     products,
     selectedUnits,
     area,
+    lang, // 👈 kommer fra frontend (kort.tsx)
   } = req.body || {};
 
   const areaConfig = getMewsConfigForArea(area as string | undefined);
@@ -1859,7 +1860,7 @@ app.post(['/api/booking/create', '/booking/create'], async (req, res) => {
     }
   }
 
-  // 🔧 DEEP LINK TIL MEWS DISTRIBUTOR – enkel variant som vi brukte da det fungerte i demo
+  // 🔧 DEEP LINK TIL MEWS DISTRIBUTOR – oppdatert for å lande på steg 3 ("rates")
   function buildDistributorUrl(opts: {
     fromYmd: string;
     toYmd: string;
@@ -1867,7 +1868,7 @@ app.post(['/api/booking/create', '/booking/create'], async (req, res) => {
     roomCategoryId?: string;
     rateId?: string;
     currency?: string;
-    locale?: string;
+    language?: string;         // Mews forventer language=en-US/nb-NO osv
     configId: string;
   }) {
     const encode = encodeURIComponent;
@@ -1878,15 +1879,16 @@ app.post(['/api/booking/create', '/booking/create'], async (req, res) => {
     // Område-spesifikk configId eller global fallback
     const configId = opts.configId || MEWS_CONFIGURATION_ID;
 
-    // Dette er "steg 3"-routen vi brukte i demo-oppsettet
-    const route = 'prices';
+    // Dette er "steg 3" i Booking Engine: rates/add-ons
+    const route = 'rates';
 
     const qsParts: string[] = [
       `mewsStart=${encode(opts.fromYmd)}`,
       `mewsEnd=${encode(opts.toYmd)}`,
       `mewsAdultCount=${encode(String(opts.adults || 1))}`,
       `currency=${encode(opts.currency || DEF_CURRENCY)}`,
-      `locale=${encode(opts.locale || LOCALE)}`,
+      // Mews bruker "language", ikke "locale"
+      `language=${encode(opts.language || LOCALE)}`,
       `mewsRoute=${route}`,
     ];
 
@@ -1899,8 +1901,10 @@ app.post(['/api/booking/create', '/booking/create'], async (req, res) => {
     }
 
     const qs = qsParts.join('&');
-    return `${distrBase}/${configId}?${qs}#${route}`;
+    return `${distrBase}/${configId}?${qs}`;
   }
+
+  const languageForMews = typeof lang === 'string' && lang.length > 0 ? lang : LOCALE;
 
   let nextUrl = buildDistributorUrl({
     fromYmd: startYmd,
@@ -1909,20 +1913,18 @@ app.post(['/api/booking/create', '/booking/create'], async (req, res) => {
     roomCategoryId,
     rateId,
     currency,
-    locale: LOCALE,
+    language: languageForMews,
     configId:
       areaConfig.distributionConfigurationId || MEWS_CONFIGURATION_ID,
   });
 
   if (reservationId) {
-    // send med flere varianter av reservation-parameteren
     const resIdEncoded = encodeURIComponent(reservationId);
     nextUrl +=
       (nextUrl.includes('?') ? '&' : '?') +
       `mewsReservation=${resIdEncoded}&reservationId=${resIdEncoded}`;
   }
 
-  // 🔍 Logg URL-en så du enkelt kan teste direkte i browser
   console.log('MEWS distributor redirect', {
     startYmd,
     endYmd,
