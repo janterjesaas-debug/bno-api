@@ -137,6 +137,20 @@ const MEWS_RATE_ID_LINDVALLEN_SALEN = (
   process.env.MEWS_RATE_ID_LINDVALLEN_SALEN || ''
 ).trim();
 
+/** DISTRIBUTION CONFIGS per område (fra .env) */
+const MEWS_DISTRIBUTION_CONFIGURATION_ID_TRYSIL_TURISTSENTER =
+  (process.env.MEWS_DISTRIBUTION_CONFIGURATION_ID_TRYSIL_TURISTSENTER || '').trim();
+const MEWS_DISTRIBUTION_CONFIGURATION_ID_TRYSIL_HOYFJELLSSENTER =
+  (process.env.MEWS_DISTRIBUTION_CONFIGURATION_ID_TRYSIL_HOYFJELLSSENTER || '').trim();
+const MEWS_DISTRIBUTION_CONFIGURATION_ID_TRYSILFJELL_HYTTEOMRADE =
+  (process.env.MEWS_DISTRIBUTION_CONFIGURATION_ID_TRYSILFJELL_HYTTEOMRADE || '').trim();
+const MEWS_DISTRIBUTION_CONFIGURATION_ID_TANDADALEN_SALEN =
+  (process.env.MEWS_DISTRIBUTION_CONFIGURATION_ID_TANDADALEN_SALEN || '').trim();
+const MEWS_DISTRIBUTION_CONFIGURATION_ID_HOGFJALLET_SALEN =
+  (process.env.MEWS_DISTRIBUTION_CONFIGURATION_ID_HOGFJALLET_SALEN || '').trim();
+const MEWS_DISTRIBUTION_CONFIGURATION_ID_LINDVALLEN_SALEN =
+  (process.env.MEWS_DISTRIBUTION_CONFIGURATION_ID_LINDVALLEN_SALEN || '').trim();
+
 type ServiceConfig = {
   id: string;
   name: string;
@@ -1748,6 +1762,92 @@ app.post(['/api/booking/preview', '/booking/preview'], async (req, res) => {
   }
 });
 
+// ---- Helper: map serviceId -> distributionConfigId ----
+function getDistributionConfigForServiceId(serviceId?: string | null): string | null {
+  if (!serviceId) return MEWS_CONFIGURATION_ID || null;
+  const sid = (serviceId || '').trim().toLowerCase();
+
+  if (sid === (MEWS_SERVICE_ID_TRYSIL_TURISTSENTER || '').toLowerCase()) {
+    return MEWS_DISTRIBUTION_CONFIGURATION_ID_TRYSIL_TURISTSENTER || MEWS_CONFIGURATION_ID || null;
+  }
+  if (sid === (MEWS_SERVICE_ID_TRYSIL_HOYFJELLSSENTER || '').toLowerCase()) {
+    return MEWS_DISTRIBUTION_CONFIGURATION_ID_TRYSIL_HOYFJELLSSENTER || MEWS_CONFIGURATION_ID || null;
+  }
+  if (sid === (MEWS_SERVICE_ID_TRYSILFJELL_HYTTEOMRADE || '').toLowerCase()) {
+    return MEWS_DISTRIBUTION_CONFIGURATION_ID_TRYSILFJELL_HYTTEOMRADE || MEWS_CONFIGURATION_ID || null;
+  }
+  if (sid === (MEWS_SERVICE_ID_TANDADALEN_SALEN || '').toLowerCase()) {
+    return MEWS_DISTRIBUTION_CONFIGURATION_ID_TANDADALEN_SALEN || MEWS_CONFIGURATION_ID || null;
+  }
+  if (sid === (MEWS_SERVICE_ID_HOGFJALLET_SALEN || '').toLowerCase()) {
+    return MEWS_DISTRIBUTION_CONFIGURATION_ID_HOGFJALLET_SALEN || MEWS_CONFIGURATION_ID || null;
+  }
+  if (sid === (MEWS_SERVICE_ID_LINDVALLEN_SALEN || '').toLowerCase()) {
+    return MEWS_DISTRIBUTION_CONFIGURATION_ID_LINDVALLEN_SALEN || MEWS_CONFIGURATION_ID || null;
+  }
+
+  // fallback
+  return MEWS_CONFIGURATION_ID || null;
+}
+
+// Utility: normalize locale into NB/EN/SV forms
+function normalizeLocale(input?: string) {
+  if (!input || typeof input !== 'string' || input.trim() === '') return LOCALE;
+  const s = input.trim();
+  // Already in xx-YY
+  if (s.includes('-')) return s;
+  const map: Record<string, string> = {
+    nb: 'nb-NO',
+    no: 'nb-NO',
+    sv: 'sv-SE',
+    se: 'sv-SE',
+    fr: 'fr-FR',
+    en: 'en-GB',
+    gb: 'en-GB',
+    da: 'da-DK',
+    de: 'de-DE',
+  };
+  const low = s.toLowerCase();
+  return map[low] || `${low}-${low.toUpperCase()}`;
+}
+
+// 🔧 DEEP LINK builder
+function buildDistributorUrl(opts: {
+  fromYmd: string;
+  toYmd: string;
+  adults: number;
+  roomCategoryId?: string;
+  rateId?: string | null;
+  currency?: string;
+  locale?: string; // e.g. nb-NO
+  configId?: string | null; // distributor config id
+}) {
+  const cur = opts.currency || DEF_CURRENCY;
+  const localeNormalized = normalizeLocale(opts.locale || LOCALE);
+  const route = 'rates';
+
+  const qp: string[] = [
+    `mewsStart=${encodeURIComponent(opts.fromYmd)}`,
+    `mewsEnd=${encodeURIComponent(opts.toYmd)}`,
+    `mewsRoute=${route}`,
+    `mewsAdultCount=${encodeURIComponent(String(opts.adults || 1))}`,
+    `mewsChildCount=0`,
+    `currency=${encodeURIComponent(cur)}`,
+    `locale=${encodeURIComponent(localeNormalized)}`,
+    `language=${encodeURIComponent(localeNormalized)}`, // duplicate safe
+  ];
+
+  if (opts.roomCategoryId) {
+    qp.push(`mewsRoom=${encodeURIComponent(opts.roomCategoryId)}`);
+  }
+  if (opts.rateId) {
+    qp.push(`mewsRateId=${encodeURIComponent(opts.rateId)}`);
+  }
+
+  const base = `${MEWS_DISTRIBUTOR_BASE.replace(/\/$/, '')}/${opts.configId || MEWS_CONFIGURATION_ID}`;
+  return `${base}?${qp.join('&')}#${route}`;
+}
+
 // ===== CREATE =====
 app.post(['/api/booking/create', '/booking/create'], async (req, res) => {
   const {
@@ -1760,7 +1860,8 @@ app.post(['/api/booking/create', '/booking/create'], async (req, res) => {
     products,
     selectedUnits,
     area,
-    lang, // 👈 kommer fra frontend (kort.tsx)
+    lang, // comes from frontend
+    serviceId, // frontend may send serviceId derived from room.ServiceId
   } = req.body || {};
 
   const areaConfig = getMewsConfigForArea(area as string | undefined);
@@ -1777,10 +1878,7 @@ app.post(['/api/booking/create', '/booking/create'], async (req, res) => {
           email: `guest+${Date.now()}@example.invalid`,
         });
       } catch (e) {
-        console.warn(
-          'findOrCreateCustomer failed (continuing without)',
-          (e as any)?.message || e
-        );
+        console.warn('findOrCreateCustomer failed (continuing without)', (e as any)?.message || e);
       }
 
       const Rooms = [
@@ -1817,10 +1915,7 @@ app.post(['/api/booking/create', '/booking/create'], async (req, res) => {
           createResp?.Reservation?.Id ||
           null;
       } catch (e: any) {
-        console.error(
-          'createReservation failed (continuing):',
-          e?.mewsResponse || e?.response?.data || e?.message || e
-        );
+        console.error('createReservation failed (continuing):', e?.mewsResponse || e?.response?.data || e?.message || e);
         reservationId = null;
       }
 
@@ -1842,105 +1937,59 @@ app.post(['/api/booking/create', '/booking/create'], async (req, res) => {
               orders
             );
           } catch (err: any) {
-            console.error(
-              'createProductServiceOrders failed',
-              err?.mewsResponse ||
-                err?.response?.data ||
-                err?.message ||
-                err
-            );
+            console.error('createProductServiceOrders failed', err?.mewsResponse || err?.response?.data || err?.message || err);
           }
         }
       }
     } catch (e) {
-      console.warn(
-        'server-side create skipped due to error',
-        (e as any)?.message || e
-      );
+      console.warn('server-side create skipped due to error', (e as any)?.message || e);
     }
   }
 
-  // 🔧 DEEP LINK TIL MEWS DISTRIBUTOR – land direkte på steg 3 ("rates")
-  function buildDistributorUrl(opts: {
-    fromYmd: string;
-    toYmd: string;
-    adults: number;
-    roomCategoryId?: string;
-    rateId?: string;
-    currency?: string;
-    locale?: string; // f.eks. "nb-NO"
-    configId: string; // område-spesifikk distributor-config
-  }) {
-    const cur = opts.currency || DEF_CURRENCY;
-    const locale = opts.locale || LOCALE;
-    const route = 'rates'; // steg 3
+  // Build nextUrl using serviceId -> distribution config mapping (if provided)
+  const localeForMews = normalizeLocale(typeof lang === 'string' && lang.length > 0 ? lang : LOCALE);
 
-    const qp: string[] = [
-      `mewsStart=${encodeURIComponent(opts.fromYmd)}`,
-      `mewsEnd=${encodeURIComponent(opts.toYmd)}`,
-      `mewsAdultCount=${encodeURIComponent(String(opts.adults || 1))}`,
-      `mewsChildCount=0`,
-      `currency=${encodeURIComponent(cur)}`,
-      `locale=${encodeURIComponent(locale)}`,
-      `mewsRoute=${route}`,
-    ];
+  // Prefer explicit serviceId if given, otherwise fallback to areaConfig.serviceId, then global
+  const useServiceId = (serviceId || areaConfig?.serviceId || MEWS_SERVICE_ID || '').toString();
 
-    if (opts.roomCategoryId) {
-      qp.push(`mewsRoom=${encodeURIComponent(opts.roomCategoryId)}`);
-    }
+  // Determine distribution config for this service
+  const configIdForService = getDistributionConfigForServiceId(useServiceId) || MEWS_CONFIGURATION_ID;
 
-    if (opts.rateId) {
-      qp.push(`mewsRateId=${encodeURIComponent(opts.rateId)}`);
-      // ekstra: historisk brukte vi også "rateId" uten prefix
-      qp.push(`rateId=${encodeURIComponent(opts.rateId)}`);
-    }
-
-    const base = `${MEWS_DISTRIBUTOR_BASE.replace(
-      /\/$/,
-      ''
-    )}/${opts.configId || MEWS_CONFIGURATION_ID}`;
-    return `${base}?${qp.join('&')}#${route}`;
-  }
-
-  const languageForMews =
-    typeof lang === 'string' && lang.length > 0 ? lang : LOCALE;
-
-  let nextUrl = buildDistributorUrl({
+  // Build the distributor URL (rates) and append reservation if present
+  let builtNextUrl = buildDistributorUrl({
     fromYmd: startYmd,
     toYmd: endYmd,
     adults: Number(adults || 1),
     roomCategoryId,
     rateId,
     currency,
-    locale: languageForMews, // sendes som "locale="
-    configId: areaConfig.distributionConfigurationId || MEWS_CONFIGURATION_ID,
+    locale: localeForMews,
+    configId: configIdForService || undefined,
   });
 
   if (reservationId) {
     const resIdEncoded = encodeURIComponent(reservationId);
-    nextUrl +=
-      (nextUrl.includes('?') ? '&' : '?') +
-      `mewsReservation=${resIdEncoded}&reservationId=${resIdEncoded}`;
+    builtNextUrl += (builtNextUrl.includes('?') ? '&' : '?') + `mewsReservation=${resIdEncoded}&reservationId=${resIdEncoded}`;
   }
 
   console.log('MEWS distributor redirect', {
     startYmd,
     endYmd,
     adults,
-    area: areaConfig.slug,
+    area: areaConfig ? areaConfig.slug : null,
     roomCategoryId,
     rateId,
     reservationId,
-    nextUrl,
+    nextUrl: builtNextUrl,
   });
 
   res.json({
     ok: true,
     data: {
       mode: reservationId ? 'distributor_with_reservation' : 'distributor',
-      bookingUrlRates: nextUrl,
-      bookingUrlSummary: nextUrl,
-      nextUrl,
+      bookingUrlRates: builtNextUrl,
+      bookingUrlSummary: builtNextUrl,
+      nextUrl: builtNextUrl,
       reservationId,
       echo: {
         roomCategoryId,
@@ -1949,7 +1998,7 @@ app.post(['/api/booking/create', '/booking/create'], async (req, res) => {
         currency: (currency || DEF_CURRENCY).toUpperCase(),
         products: Array.isArray(products) ? products : [],
         selectedUnits: Number(selectedUnits || 1),
-        area: areaConfig.slug,
+        area: areaConfig ? areaConfig.slug : null,
       },
     },
   });
