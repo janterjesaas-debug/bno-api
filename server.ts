@@ -68,11 +68,8 @@ const MEWS_CONFIGURATION_ID =
   (process.env.MEWS_DISTRIBUTION_CONFIGURATION_ID ||
     process.env.MEWS_CONFIGURATION_ID ||
     '').trim();
-
-// 🔧 Viktig: prod-url som fallback (ikke demo)
 const MEWS_DISTRIBUTOR_BASE = (process.env.MEWS_DISTRIBUTOR_BASE ||
-  'https://app.mews.com/distributor').replace(/\/$/, '');
-
+  'https://app.mews-demo.com/distributor').replace(/\/$/, '');
 const LOCALE = (process.env.MEWS_LOCALE || 'nb-NO').trim();
 const DEF_CURRENCY = (process.env.MEWS_CURRENCY || 'NOK').trim();
 const MEWS_ENTERPRISE_ID = (process.env.MEWS_ENTERPRISE_ID || '').trim();
@@ -1863,7 +1860,7 @@ app.post(['/api/booking/create', '/booking/create'], async (req, res) => {
     }
   }
 
-  // 🔧 Deep link til Mews Distributor – land på "Rates"-steget (steg 3)
+  // 🔧 DEEP LINK TIL MEWS DISTRIBUTOR – land direkte på steg 3 ("rates")
   function buildDistributorUrl(opts: {
     fromYmd: string;
     toYmd: string;
@@ -1871,62 +1868,38 @@ app.post(['/api/booking/create', '/booking/create'], async (req, res) => {
     roomCategoryId?: string;
     rateId?: string;
     currency?: string;
-    language?: string; // Mews forventer language=en-US/nb-NO osv
-    configId?: string;
+    locale?: string; // f.eks. "nb-NO"
+    configId: string; // område-spesifikk distributor-config
   }) {
-    const encode = encodeURIComponent;
+    const cur = opts.currency || DEF_CURRENCY;
+    const locale = opts.locale || LOCALE;
+    const route = 'rates'; // steg 3
 
-    // Sikre at vi ikke får doble "/"
-    const distrBase = MEWS_DISTRIBUTOR_BASE.replace(/\/$/, '');
-
-    // Område-spesifikk configId eller global fallback
-    const configId =
-      (opts.configId && opts.configId.trim()) ||
-      (MEWS_CONFIGURATION_ID && MEWS_CONFIGURATION_ID.trim()) ||
-      '';
-
-    if (!configId) {
-      console.warn(
-        'buildDistributorUrl: mangler Mews distribution configuration id – bruker distributor uten configId'
-      );
-    }
-
-    // Dette er "Rates"-steget (maks hva Mews støtter for deeplink)
-    const route = 'rates';
-
-    const qsParts: string[] = [];
-
-    if (opts.fromYmd) {
-      qsParts.push(`mewsStart=${encode(opts.fromYmd)}`);
-    }
-    if (opts.toYmd) {
-      qsParts.push(`mewsEnd=${encode(opts.toYmd)}`);
-    }
-
-    qsParts.push(`mewsRoute=${route}`);
+    const qp: string[] = [
+      `mewsStart=${encodeURIComponent(opts.fromYmd)}`,
+      `mewsEnd=${encodeURIComponent(opts.toYmd)}`,
+      `mewsAdultCount=${encodeURIComponent(String(opts.adults || 1))}`,
+      `mewsChildCount=0`,
+      `currency=${encodeURIComponent(cur)}`,
+      `locale=${encodeURIComponent(locale)}`,
+      `mewsRoute=${route}`,
+    ];
 
     if (opts.roomCategoryId) {
-      qsParts.push(`mewsRoom=${encode(opts.roomCategoryId)}`);
+      qp.push(`mewsRoom=${encodeURIComponent(opts.roomCategoryId)}`);
     }
 
-    qsParts.push(`language=${encode(opts.language || LOCALE)}`);
-    qsParts.push(`currency=${encode(opts.currency || DEF_CURRENCY)}`);
-    qsParts.push(`mewsAdultCount=${encode(String(opts.adults || 1))}`);
-
-    // Vi har ikke egne barnefelt i BNO-appen, så vi setter 0
-    qsParts.push('mewsChildCount=0');
-
-    // For enkelhets skyld dropper vi rateId her; Mews bruker uansett tilgjengelige rater
-    // Hvis du vil tvinge rate: qsParts.push(`mewsRateId=${encode(opts.rateId)}`) hvis satt.
-
-    const qs = qsParts.join('&');
-
-    if (configId) {
-      return `${distrBase}/${configId}?${qs}`;
+    if (opts.rateId) {
+      qp.push(`mewsRateId=${encodeURIComponent(opts.rateId)}`);
+      // ekstra: historisk brukte vi også "rateId" uten prefix
+      qp.push(`rateId=${encodeURIComponent(opts.rateId)}`);
     }
 
-    // Fallback uten configId (bør helst unngås i prod)
-    return `${distrBase}?${qs}`;
+    const base = `${MEWS_DISTRIBUTOR_BASE.replace(
+      /\/$/,
+      ''
+    )}/${opts.configId || MEWS_CONFIGURATION_ID}`;
+    return `${base}?${qp.join('&')}#${route}`;
   }
 
   const languageForMews =
@@ -1939,9 +1912,8 @@ app.post(['/api/booking/create', '/booking/create'], async (req, res) => {
     roomCategoryId,
     rateId,
     currency,
-    language: languageForMews,
-    configId:
-      areaConfig.distributionConfigurationId || MEWS_CONFIGURATION_ID,
+    locale: languageForMews, // sendes som "locale="
+    configId: areaConfig.distributionConfigurationId || MEWS_CONFIGURATION_ID,
   });
 
   if (reservationId) {
