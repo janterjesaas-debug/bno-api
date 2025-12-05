@@ -1860,6 +1860,28 @@ app.post(['/api/booking/create', '/booking/create'], async (req, res) => {
     }
   }
 
+  // ===== Normalizer for locale/language =====
+  function normalizeLocale(input?: string) {
+    if (!input || typeof input !== 'string' || input.trim() === '') return LOCALE; // fallback
+    const s = input.trim();
+    // hvis allerede i form xx-YY -> bruk som er
+    if (s.includes('-')) return s;
+    // Enkle mappinger
+    const map: Record<string, string> = {
+      nb: 'nb-NO',
+      no: 'nb-NO',
+      sv: 'sv-SE',
+      se: 'sv-SE',
+      fr: 'fr-FR',
+      en: 'en-GB',
+      gb: 'en-GB',
+      da: 'da-DK',
+      de: 'de-DE',
+    };
+    const low = s.toLowerCase();
+    return map[low] || `${low}-${low.toUpperCase()}`; // fallback attempt
+  }
+
   // 🔧 DEEP LINK TIL MEWS DISTRIBUTOR – land direkte på steg 3 ("rates")
   function buildDistributorUrl(opts: {
     fromYmd: string;
@@ -1869,42 +1891,47 @@ app.post(['/api/booking/create', '/booking/create'], async (req, res) => {
     rateId?: string;
     currency?: string;
     locale?: string; // f.eks. "nb-NO"
-    configId: string; // område-spesifikk distributor-config
+    configId?: string; // område-spesifikk distributor-config
   }) {
     const cur = opts.currency || DEF_CURRENCY;
-    const locale = opts.locale || LOCALE;
+    const localeRaw = opts.locale || LOCALE;
+    const localeNormalized = normalizeLocale(localeRaw);
     const route = 'rates'; // steg 3
+
+    // Send både locale og language for å være kompatibel med ulike BEHAVIORS
+    const languagePart = localeNormalized.split('-')[0] || localeNormalized;
 
     const qp: string[] = [
       `mewsStart=${encodeURIComponent(opts.fromYmd)}`,
       `mewsEnd=${encodeURIComponent(opts.toYmd)}`,
+      `mewsRoute=${route}`,
+      // viktig å ha voksne/barn
       `mewsAdultCount=${encodeURIComponent(String(opts.adults || 1))}`,
       `mewsChildCount=0`,
       `currency=${encodeURIComponent(cur)}`,
-      `locale=${encodeURIComponent(locale)}`,
-      `mewsRoute=${route}`,
+      `locale=${encodeURIComponent(localeNormalized)}`,
+      `language=${encodeURIComponent(localeNormalized)}`, // duplicate safe
     ];
 
     if (opts.roomCategoryId) {
       qp.push(`mewsRoom=${encodeURIComponent(opts.roomCategoryId)}`);
     }
 
+    // Vi inkluderer mewsRateId hvis vi har det — men det er ikke nødvendig
     if (opts.rateId) {
       qp.push(`mewsRateId=${encodeURIComponent(opts.rateId)}`);
-      // ekstra: historisk brukte vi også "rateId" uten prefix
-      qp.push(`rateId=${encodeURIComponent(opts.rateId)}`);
     }
 
-    const base = `${MEWS_DISTRIBUTOR_BASE.replace(
-      /\/$/,
-      ''
-    )}/${opts.configId || MEWS_CONFIGURATION_ID}`;
+    const base = `${MEWS_DISTRIBUTOR_BASE.replace(/\/$/, '')}/${opts.configId ||
+      MEWS_CONFIGURATION_ID}`;
+    // behold fragment #rates slik vi gjorde i demo
     return `${base}?${qp.join('&')}#${route}`;
   }
 
-  const languageForMews =
+  const languageForMewsRaw =
     typeof lang === 'string' && lang.length > 0 ? lang : LOCALE;
 
+  // Bygg nextUrl med normalisert locale (nb-NO, sv-SE, en-GB, etc.)
   let nextUrl = buildDistributorUrl({
     fromYmd: startYmd,
     toYmd: endYmd,
@@ -1912,7 +1939,7 @@ app.post(['/api/booking/create', '/booking/create'], async (req, res) => {
     roomCategoryId,
     rateId,
     currency,
-    locale: languageForMews, // sendes som "locale="
+    locale: normalizeLocale(languageForMewsRaw),
     configId: areaConfig.distributionConfigurationId || MEWS_CONFIGURATION_ID,
   });
 
