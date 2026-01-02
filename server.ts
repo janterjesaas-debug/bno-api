@@ -8,15 +8,13 @@ import express from 'express';
 import cors from 'cors';
 import axios, { AxiosRequestConfig } from 'axios';
 import bodyParser from 'body-parser';
+
 import mews from './lib/mews';
 import { fetchPrices as fetchConnectorPrices } from './lib/prices';
 import { mewsWebhookHandler } from './mews-webhook'; // Webhook for Mews
 import { fetchSiteMinderAvailability } from './lib/siteminder'; // SiteMinder
 import { getMewsConfigForArea } from './lib/mews-config'; // Områdeconfig
 import registerHousekeepingRoutes from './lib/housekeepingRoutes'; // Renholds-/eier-API
-import { registerMewsReservationsRoute } from './api/routes/mewsReservations';
-import { registerMewsServicesRoute } from "./api/routes/mewsServices";
-import { registerMewsSpacesRoute } from "./api/routes/mewsSpaces";
 
 // 🆕 Bilde-mapping (Supabase)
 import { getImagesForResourceCategory } from './lib/imageMap';
@@ -25,16 +23,15 @@ import { getImagesForResourceCategory } from './lib/imageMap';
 import { pickLocalizedText } from './lib/mewsLocalization';
 
 // =============================================================
-// BOOT DIAGNOSTIKK (ny)
+// BOOT DIAGNOSTIKK
 // Denne taggen gjør det lett å se om du faktisk kjører "riktig" build
 // =============================================================
-const BOOT_TAG = 'BNO-API-BOOT-2025-12-18T21:30Z';
+const BOOT_TAG = 'BNO-API-BOOT-2026-01-02T00:00Z';
 console.log(`[BOOT] ${BOOT_TAG} server.ts loaded`, {
   cwd: process.cwd(),
   node: process.version,
   portEnv: process.env.PORT,
 });
-console.log('[BOOT] imported registerMewsReservationsRoute from ./api/routes/mewsReservations');
 
 // ==== DEBUG: vis hvilken MEWS-konfig Node faktisk bruker ====
 console.log('DEBUG MEWS CONFIG:');
@@ -54,17 +51,6 @@ console.log(
 console.log('  MEWS_ENTERPRISE_ID   =', (process.env.MEWS_ENTERPRISE_ID || '').trim());
 // =============================================================
 
-const app = express();
-app.use(cors());
-app.use(bodyParser.json({ limit: '1mb' }));
-
-// Registrer renholds-/eier-API-rutene
-registerHousekeepingRoutes(app);
-
-// Registrer MEWS reservations route (brukes av admin sync)
-registerMewsReservationsRoute(app);
-console.log('[BOOT] registerMewsReservationsRoute(app) called');
-
 // ===== ENV =====
 const PORT = Number(process.env.PORT || 4000);
 const HOST = String(process.env.HOST || '0.0.0.0');
@@ -81,10 +67,12 @@ const MEWS_CONFIGURATION_ID =
   (process.env.MEWS_DISTRIBUTION_CONFIGURATION_ID ||
     process.env.MEWS_CONFIGURATION_ID ||
     '').trim();
+
 const MEWS_DISTRIBUTOR_BASE = (process.env.MEWS_DISTRIBUTOR_BASE || 'https://app.mews-demo.com/distributor').replace(
   /\/$/,
   ''
 );
+
 const LOCALE = (process.env.MEWS_LOCALE || 'nb-NO').trim();
 const DEF_CURRENCY = (process.env.MEWS_CURRENCY || 'NOK').trim();
 const MEWS_ENTERPRISE_ID = (process.env.MEWS_ENTERPRISE_ID || '').trim();
@@ -308,36 +296,6 @@ function getSearchCache(key: string) {
 function setSearchCache(key: string, data: any, ttlSec = 30) {
   setCache(key, data, ttlSec);
 }
-
-// =============================================================
-// ROUTE DUMP (ny): både logging og endpoint /api/routes
-// =============================================================
-function listRegisteredRoutes() {
-  const stack = ((app as any)?._router?.stack || []) as any[];
-  const routes: Array<{ method: string; path: string }> = [];
-  for (const layer of stack) {
-    if (layer?.route?.path && layer?.route?.methods) {
-      const methods = Object.keys(layer.route.methods)
-        .filter((k) => layer.route.methods[k])
-        .map((m) => m.toUpperCase());
-      for (const m of methods) {
-        routes.push({ method: m, path: String(layer.route.path) });
-      }
-    }
-  }
-  return routes;
-}
-
-app.get('/api/routes', (_req, res) => {
-  const routes = listRegisteredRoutes();
-  res.json({
-    ok: true,
-    bootTag: BOOT_TAG,
-    count: routes.length,
-    hasMewsReservations: routes.some((r) => r.path === '/mews/reservations'),
-    routes,
-  });
-});
 
 // ===== Axios wrapper med retry/backoff som respekterer Retry-After =====
 async function axiosWithRetry<T = any>(
@@ -695,6 +653,46 @@ async function priceReservationOnce(opts: {
   }
 }
 
+// =======================
+// Express app + middleware
+// =======================
+const app = express();
+app.use(cors());
+app.use(bodyParser.json({ limit: '1mb' }));
+
+// Registrer renholds-/eier-API-rutene
+registerHousekeepingRoutes(app);
+
+// =============================================================
+// ROUTE DUMP: endpoint /api/routes
+// =============================================================
+function listRegisteredRoutes() {
+  const stack = ((app as any)?._router?.stack || []) as any[];
+  const routes: Array<{ method: string; path: string }> = [];
+  for (const layer of stack) {
+    if (layer?.route?.path && layer?.route?.methods) {
+      const methods = Object.keys(layer.route.methods)
+        .filter((k) => layer.route.methods[k])
+        .map((m) => m.toUpperCase());
+      for (const m of methods) {
+        routes.push({ method: m, path: String(layer.route.path) });
+      }
+    }
+  }
+  return routes;
+}
+
+app.get('/api/routes', (_req, res) => {
+  const routes = listRegisteredRoutes();
+  res.json({
+    ok: true,
+    bootTag: BOOT_TAG,
+    count: routes.length,
+    hasMewsReservations: routes.some((r) => r.path === '/mews/reservations'),
+    routes,
+  });
+});
+
 // ===== PING / HEALTH =====
 app.get('/api/ping', (_req, res) => res.json({ ok: true, where: 'api', at: Date.now(), tz: HOTEL_TZ }));
 app.get('/ping', (_req, res) => res.json({ ok: true, where: 'root', at: Date.now(), tz: HOTEL_TZ }));
@@ -708,7 +706,146 @@ app.get('/api/health', (_req, res) =>
   })
 );
 
+// =============================================================
+// INLINE ROUTES: mewsReservations / mewsServices / mewsSpaces
+// (erstatter ./api/routes/* for å unngå TS2307 på Render)
+// =============================================================
+
+async function mewsConnectorPost<T = any>(path: string, data: any, timeoutMs = 20000): Promise<T> {
+  if (!MEWS_BASE || !MEWS_CLIENT_TOKEN || !MEWS_ACCESS_TOKEN) {
+    throw new Error('mews_credentials_missing');
+  }
+  const url = `${MEWS_BASE}/api/connector/v1/${path.replace(/^\//, '')}`;
+  return axiosWithRetry<T>({
+    method: 'post',
+    url,
+    data: {
+      ClientToken: MEWS_CLIENT_TOKEN,
+      AccessToken: MEWS_ACCESS_TOKEN,
+      Client: MEWS_CLIENT_NAME,
+      ...data,
+    },
+    timeout: timeoutMs,
+  });
+}
+
+// /mews/services (+ alias /api/mews/services)
+app.get(['/mews/services', '/api/mews/services'], async (_req, res) => {
+  try {
+    const cacheKey = 'mews_services_getAll_v1';
+    const cached = getCache(cacheKey);
+    if (cached) return res.json({ ok: true, data: cached });
+
+    const rData = await mewsConnectorPost<any>('services/getAll', {
+      Limitation: { Count: 1000 },
+    }, 20000);
+
+    const services: any[] = rData?.Services || [];
+    const out = services.map((svc: any) => ({
+      Id: svc?.Id,
+      Name: firstLang(svc?.Name, LOCALE) || svc?.Name || svc?.ExternalIdentifier,
+      Type: svc?.Type || null,
+      EnterpriseId: svc?.EnterpriseId || null,
+    }));
+
+    setCache(cacheKey, out, 120);
+    return res.json({ ok: true, data: out });
+  } catch (e: any) {
+    return res.status(500).json({ ok: false, error: 'mews_services_failed', detail: e?.message || String(e) });
+  }
+});
+
+// /mews/spaces (+ alias /api/mews/spaces)
+app.get(['/mews/spaces', '/api/mews/spaces'], async (req, res) => {
+  try {
+    const serviceId = String(req.query.serviceId || '').trim();
+    const serviceIds = serviceId ? [serviceId] : MEWS_SERVICES_ALL.map((s) => s.id).filter(Boolean);
+
+    const cacheKey = `mews_spaces_getAll_v1:${serviceIds.sort().join(',')}`;
+    const cached = getCache(cacheKey);
+    if (cached) return res.json({ ok: true, data: cached });
+
+    const payload: any = {
+      ServiceIds: serviceIds,
+      ActivityStates: ['Active'],
+      Limitation: { Count: 1000 },
+    };
+    if (MEWS_ENTERPRISE_ID) payload.EnterpriseIds = [MEWS_ENTERPRISE_ID];
+
+    const rData = await mewsConnectorPost<any>('spaces/getAll', payload, 25000);
+    const spaces: any[] = rData?.Spaces || rData?.SpaceGroups || [];
+
+    const out = spaces.map((sp: any) => ({
+      Id: sp?.Id,
+      Name: firstLang(sp?.Name, LOCALE) || sp?.Name || sp?.ExternalIdentifier || null,
+      ServiceId: sp?.ServiceId || null,
+      Type: sp?.Type || null,
+      IsActive: sp?.IsActive ?? null,
+    }));
+
+    setCache(cacheKey, out, 120);
+    return res.json({ ok: true, data: out, meta: { serviceIds } });
+  } catch (e: any) {
+    return res.status(500).json({ ok: false, error: 'mews_spaces_failed', detail: e?.message || String(e) });
+  }
+});
+
+// /mews/reservations (+ alias /api/mews/reservations)
+// Brukes typisk av admin-sync. Query:
+//   from=YYYY-MM-DD&to=YYYY-MM-DD&serviceId=...&states=Confirmed,Started,...
+app.get(['/mews/reservations', '/api/mews/reservations'], async (req, res) => {
+  try {
+    const from = String(req.query.from || '').slice(0, 10);
+    const to = String(req.query.to || '').slice(0, 10);
+
+    const serviceId = String(req.query.serviceId || '').trim();
+    const serviceIds = serviceId ? [serviceId] : MEWS_SERVICES_ALL.map((s) => s.id).filter(Boolean);
+
+    const statesRaw = String(req.query.states || '').trim();
+    const states = statesRaw
+      ? statesRaw.split(',').map((s) => s.trim()).filter(Boolean)
+      : undefined;
+
+    // NB: For å være robust lar vi deg kjøre uten from/to (returnerer tomt hvis mangler)
+    if (!from || !to) {
+      return res.json({
+        ok: true,
+        data: [],
+        warn: 'missing_from_to',
+        params: { from, to, serviceIds, states },
+      });
+    }
+
+    const payload: any = {
+      ServiceIds: serviceIds,
+      Limitation: { Count: 1000 },
+      StartUtc: mews.toTimeUnitUtc(from),
+      EndUtc: mews.toTimeUnitUtc(to),
+    };
+
+    if (states && states.length) payload.ReservationStates = states;
+
+    const rData = await mewsConnectorPost<any>('reservations/getAll', payload, 30000);
+    const reservations: any[] = rData?.Reservations || [];
+
+    return res.json({
+      ok: true,
+      data: reservations,
+      meta: {
+        count: reservations.length,
+        from,
+        to,
+        serviceIds,
+        states: states || null,
+      },
+    });
+  } catch (e: any) {
+    return res.status(500).json({ ok: false, error: 'mews_reservations_failed', detail: e?.message || String(e) });
+  }
+});
+
 // ===== SERVICES (diagnostic) =====
+// (beholdt fra din fil)
 app.get('/api/services', async (_req, res) => {
   try {
     if (!MEWS_BASE || !MEWS_CLIENT_TOKEN || !MEWS_ACCESS_TOKEN) {
@@ -730,7 +867,7 @@ app.get('/api/services', async (_req, res) => {
     };
 
     try {
-      const rData = await axiosWithRetry({
+      const rData = await axiosWithRetry<any>({
         method: 'post',
         url,
         data: payload,
