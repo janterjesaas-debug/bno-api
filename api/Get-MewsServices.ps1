@@ -1,29 +1,70 @@
-# === KONFIG I DETTE SCRIPTET ===
-$MEWS_BASE_URL    = "https://api.mews.com"
-$MEWS_CLIENT_NAME = "BNO Travel App 1.0"
+# Get-MewsServices.ps1
+# Kjør: cd C:\Users\jante\bno-api ; .\scripts\Get-MewsServices.ps1
+# Leser .env i repo-root og lister alle Services (Id + navn)
 
-# BYTT DISSE TIL DINE GYLDIGE PROD-TOKENS
-$MEWS_CLIENT_TOKEN = "F104E69101494DE5AC33B39F00B434C3-A861E264D646D73E4FD50F7F97250CB"
-$MEWS_ACCESS_TOKEN = "8EB59655491940C2857EB39F00B57EE1-B5C4AE1DA964E96596342B4AA3AD6E0"
+$envPath = Join-Path (Get-Location) ".env"
+if (!(Test-Path $envPath)) {
+  throw "Fant ikke .env i $(Get-Location). Gå til bno-api-mappa først."
+}
 
-$MEWS_ENTERPRISE_ID = "f45553a6-6697-485a-a352-b30600bcfd4d"
+Get-Content $envPath | ForEach-Object {
+  $line = $_.Trim()
+  if ($line -eq "" -or $line.StartsWith("#")) { return }
+  $parts = $line.Split("=", 2)
+  if ($parts.Count -ne 2) { return }
+  $k = $parts[0].Trim()
+  $v = $parts[1].Trim().Trim('"')
+  [System.Environment]::SetEnvironmentVariable($k, $v)
+}
 
-# ================================
+$baseUrl     = $env:MEWS_BASE_URL
+$clientToken = $env:MEWS_CLIENT_TOKEN
+$accessToken = $env:MEWS_ACCESS_TOKEN
+$clientName  = $env:MEWS_CLIENT_NAME
+$enterprise  = $env:MEWS_ENTERPRISE_ID
+$locale      = $env:MEWS_LOCALE
 
-$uri  = "$MEWS_BASE_URL/api/connector/v1/services/getAll"
+if (!$baseUrl -or !$clientToken -or !$accessToken -or !$enterprise) {
+  throw "Mangler MEWS_BASE_URL / MEWS_CLIENT_TOKEN / MEWS_ACCESS_TOKEN / MEWS_ENTERPRISE_ID i .env"
+}
+if (!$clientName) { $clientName = "bno-api" }
+if (!$locale) { $locale = "en-US" }
+
+$uri = ($baseUrl.TrimEnd("/")) + "/api/connector/v1/services/getAll"
 
 $body = @{
-    ClientToken   = $MEWS_CLIENT_TOKEN.Trim()
-    AccessToken   = $MEWS_ACCESS_TOKEN.Trim()
-    Client        = $MEWS_CLIENT_NAME
-    EnterpriseIds = @($MEWS_ENTERPRISE_ID)
-} | ConvertTo-Json -Depth 5
+  ClientToken   = $clientToken.Trim()
+  AccessToken   = $accessToken.Trim()
+  Client        = $clientName
+  EnterpriseIds = @($enterprise)
+  Limitation    = @{ Count = 1000 }
+} | ConvertTo-Json -Depth 10
 
-Write-Host ""
-Write-Host "== Services (kort oversikt) =="
-
+Write-Host "Henter services fra Mews..." $uri
 $response = Invoke-RestMethod -Method Post -Uri $uri -ContentType "application/json" -Body $body
 
-$response.Services |
-    Select-Object Id, Name, Type, IsActive |
-    Format-Table -AutoSize
+$services = $response.Services
+if (!$services) { $services = @() }
+
+Write-Host ""
+Write-Host ("Fant {0} service(r)" -f $services.Count)
+Write-Host ""
+
+$services | ForEach-Object {
+  $names = $_.Names
+  $name  = $null
+  if ($names -and $names.$locale) { $name = $names.$locale }
+  elseif ($names -and $names."en-US") { $name = $names."en-US" }
+  elseif ($names) { $name = $names.PSObject.Properties.Value | Select-Object -First 1 }
+  if (!$name) { $name = $_.Name }
+
+  [PSCustomObject]@{
+    Id   = $_.Id
+    Name = $name
+    IsActive = $_.IsActive
+    Type = $_.Type
+  }
+} | Sort-Object Name | Format-Table -AutoSize
+
+Write-Host ""
+Write-Host "Kopier Id-ene inn i .env som MEWS_SERVICE_IDS (komma-separert)."
