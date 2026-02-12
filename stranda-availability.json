@@ -1,0 +1,1539 @@
+﻿{
+    "serviceId":  "11f4b043-fefc-496f-9680-b15a007eea68",
+    "from":  "2026-02-10",
+    "to":  "2026-02-12",
+    "firstTimeUnitStartUtc":  "2026-02-09T23:00:00Z",
+    "lastTimeUnitStartUtc":  "2026-02-10T23:00:00Z",
+    "timeUnitsUtc":  [
+                         "2026-02-09T23:00:00Z",
+                         "2026-02-10T23:00:00Z"
+                     ],
+    "categories":  [
+                       {
+                           "CategoryId":  "aab5a0a1-6743-41d3-b641-b15a007ef02f",
+                           "Short":  "BB",
+                           "Name":  "Bergebu",
+                           "Capacity":  4,
+                           "MinAvail":  0,
+                           "MaxAvail":  0,
+                           "Availabilities":  [
+                                                  0,
+                                                  0
+                                              ]
+                       },
+                       {
+                           "CategoryId":  "a0b4d9a2-266c-40af-b4ba-b15a007ef02f",
+                           "Short":  "CS",
+                           "Name":  "Chalet Strandafjellet",
+                           "Capacity":  25,
+                           "MinAvail":  1,
+                           "MaxAvail":  1,
+                           "Availabilities":  [
+                                                  1,
+                                                  1
+                                              ]
+                       },
+                       {
+                           "CategoryId":  "b47530da-4028-42a1-a17e-b15a007ef02f",
+                           "Short":  "FA",
+                           "Name":  "Fjellsætra Alpegrend",
+                           "Capacity":  7,
+                           "MinAvail":  1,
+                           "MaxAvail":  1,
+                           "Availabilities":  [
+                                                  1,
+                                                  1
+                                              ]
+                       },
+                       {
+                           "CategoryId":  "07698215-18e7-454d-b4cf-b15a007ef02f",
+                           "Short":  "FP",
+                           "Name":  "Fjord Panorama",
+                           "Capacity":  9,
+                           "MinAvail":  1,
+                           "MaxAvail":  1,
+                           "Availabilities":  [
+                                                  1,
+                                                  1
+                                              ]
+                       },
+                       {
+                           "CategoryId":  "2d6275b2-f6b4-4ce1-a9d2-b15a007ef02f",
+                           "Short":  "FVA",
+                           "Name":  "Fjord View Apartment",
+                           "Capacity":  4,
+                           "MinAvail":  0,
+                           "MaxAvail":  0,
+                           "Availabilities":  [
+                                                  0,
+                                                  0
+                                              ]
+                       },
+                       {
+                           "CategoryId":  "1ba03370-240f-4a73-b5c3-b15a007ef02f",
+                           "Short":  "GH",
+                           "Name":  "Gladheim",
+                           "Capacity":  10,
+                           "MinAvail":  0,
+                           "MaxAvail":  0,
+                           "Availabilities":  [
+                                                  0,
+                                                  0
+                                              ]
+                       },
+                       {
+                           "CategoryId":  "abb1a8e2-ceee-4edc-aa75-b15a007ef02f",
+                           "Short":  "HV211",
+                           "Name":  "Harevadet 211",
+                           "Capacity":  8,
+                           "MinAvail":  0,
+                           "MaxAvail":  0,
+                           "Availabilities":  [
+                                                  0,
+                                                  0
+                                              ]
+                       },
+                       {
+                           "CategoryId":  "3993de9f-2871-4e82-82cc-b16301175b0c",
+                           "Short":  "HV52",
+                           "Name":  "Harevadet 52 UT",
+                           "Capacity":  6,
+                           "MinAvail":  0,
+                           "MaxAvail":  0,
+                           "Availabilities":  [
+                                                  0,
+                                                  0
+                                              ]
+                       },
+                       {
+                           "CategoryId":  "2b60d30d-929e-4f5b-b38a-b15a007ef02f",
+                           "Short":  "HV77",
+                           "Name":  "Harevadet 77 UT",
+                           "Capacity":  8,
+                           "MinAvail":  0,
+                           "MaxAvail":  0,
+                           "Availabilities":  [
+                                                  0,
+                                                  0
+                                              ]
+                       },
+                       {
+                           "CategoryId":  "d176e9f4-ecd6-46bc-990e-b16300e9d3fb",
+                           "Short":  "HV78",
+                           "Name":  "Harevadet 78",
+                           "Capacity":  6,
+                           "MinAvail":  0,
+                           "MaxAvail":  0,
+                           "Availabilities":  [
+                                                  0,
+                                                  0
+                                              ]
+                       },
+                       {
+                           "CategoryId":  "75d3db44-45a1-4310-9cbe-b15a007ef02f",
+                           "Short":  "KCP",
+                           "Name":  "Koie Camper",
+                           "Capacity":  2,
+                           "MinAvail":  10,
+                           "MaxAvail":  10,
+                           "Availabilities":  [
+                                                  10,
+                                                  10
+                                              ]
+                       },
+                       {
+                           "CategoryId":  "32324f93-8942-413b-a515-b15a007ef02f",
+                           "Short":  "KCR",
+                           "Name":  "Koie Caravan",
+                           "Capacity":  2,
+                           "MinAvail":  10,
+                           "MaxAvail":  10,
+                           "Availabilities":  [
+                                                  10,
+                                                  10
+                                              ]
+                       },
+                       {
+                           "CategoryId":  "51cff127-0eb2-4e59-bdaf-b16e0144b672",
+                           "Short":  "KD1",
+                           "Name":  "Koie Deluxe I",
+                           "Capacity":  5,
+                           "MinAvail":  1,
+                           "MaxAvail":  1,
+                           "Availabilities":  [
+                                                  1,
+                                                  1
+                                              ]
+                       },
+                       {
+                           "CategoryId":  "acc74eff-22fc-4f37-9dd6-b15a007ef02f",
+                           "Short":  "KD2",
+                           "Name":  "Koie Deluxe II",
+                           "Capacity":  5,
+                           "MinAvail":  1,
+                           "MaxAvail":  1,
+                           "Availabilities":  [
+                                                  1,
+                                                  1
+                                              ]
+                       },
+                       {
+                           "CategoryId":  "a6117fdf-342b-457b-b0b9-b15a007ef02f",
+                           "Short":  "KF",
+                           "Name":  "Koie Family",
+                           "Capacity":  3,
+                           "MinAvail":  2,
+                           "MaxAvail":  2,
+                           "Availabilities":  [
+                                                  2,
+                                                  2
+                                              ]
+                       },
+                       {
+                           "CategoryId":  "65bf8027-f03d-4a2c-8ea4-b1be0089a061",
+                           "Short":  "KHH25",
+                           "Name":  "Koie Holiday Home 25",
+                           "Capacity":  4,
+                           "MinAvail":  0,
+                           "MaxAvail":  0,
+                           "Availabilities":  [
+                                                  0,
+                                                  0
+                                              ]
+                       },
+                       {
+                           "CategoryId":  "ed46726e-e7b7-4372-a23f-b15a007ef02f",
+                           "Short":  "KHH3",
+                           "Name":  "Koie Holiday Home 3",
+                           "Capacity":  6,
+                           "MinAvail":  0,
+                           "MaxAvail":  0,
+                           "Availabilities":  [
+                                                  0,
+                                                  0
+                                              ]
+                       },
+                       {
+                           "CategoryId":  "7004da20-f4ac-414b-a613-b2ae00ebf4c3",
+                           "Short":  "KL",
+                           "Name":  "Koie Lavvo",
+                           "Capacity":  100,
+                           "MinAvail":  0,
+                           "MaxAvail":  0,
+                           "Availabilities":  [
+                                                  0,
+                                                  0
+                                              ]
+                       },
+                       {
+                           "CategoryId":  "6bfa07e2-85ae-40b5-9e62-b15a007ef02f",
+                           "Short":  "KSM",
+                           "Name":  "Koie Smart",
+                           "Capacity":  2,
+                           "MinAvail":  0,
+                           "MaxAvail":  0,
+                           "Availabilities":  [
+                                                  0,
+                                                  0
+                                              ]
+                       },
+                       {
+                           "CategoryId":  "22375a4b-751e-41df-ad35-b15a007ef02f",
+                           "Short":  "KST",
+                           "Name":  "Koie Standard",
+                           "Capacity":  2,
+                           "MinAvail":  1,
+                           "MaxAvail":  1,
+                           "Availabilities":  [
+                                                  1,
+                                                  1
+                                              ]
+                       },
+                       {
+                           "CategoryId":  "732d4795-81c8-48e3-ba22-b15a007ef02f",
+                           "Short":  "KT",
+                           "Name":  "Koie Tent",
+                           "Capacity":  2,
+                           "MinAvail":  11,
+                           "MaxAvail":  11,
+                           "Availabilities":  [
+                                                  11,
+                                                  11
+                                              ]
+                       },
+                       {
+                           "CategoryId":  "a713bf60-4d87-41ab-812c-b15a007ef02f",
+                           "Short":  "LVA2H",
+                           "Name":  "Lake View Apartment B4/L3 (2 bedrooms + loft)",
+                           "Capacity":  6,
+                           "MinAvail":  1,
+                           "MaxAvail":  1,
+                           "Availabilities":  [
+                                                  1,
+                                                  1
+                                              ]
+                       },
+                       {
+                           "CategoryId":  "f8bd976f-908a-4a36-a10b-b15a007ef02f",
+                           "Short":  "LVA42",
+                           "Name":  "Lake View Apartment B5/L5 (4 bedrooms \u0026 2 bathrooms)",
+                           "Capacity":  9,
+                           "MinAvail":  0,
+                           "MaxAvail":  1,
+                           "Availabilities":  [
+                                                  1,
+                                                  0
+                                              ]
+                       },
+                       {
+                           "CategoryId":  "4b5d7e45-3515-4076-87cc-b15a007ef02f",
+                           "Short":  "LVA4",
+                           "Name":  "Lake View Apartment B5/L6 (4 bedrooms)",
+                           "Capacity":  10,
+                           "MinAvail":  1,
+                           "MaxAvail":  1,
+                           "Availabilities":  [
+                                                  1,
+                                                  1
+                                              ]
+                       },
+                       {
+                           "CategoryId":  "8a302964-b83b-445b-973e-b15a007ef02f",
+                           "Short":  "LF",
+                           "Name":  "Langlofonna",
+                           "Capacity":  7,
+                           "MinAvail":  0,
+                           "MaxAvail":  0,
+                           "Availabilities":  [
+                                                  0,
+                                                  0
+                                              ]
+                       },
+                       {
+                           "CategoryId":  "b35b8c52-35ec-482d-aa20-b15a007ef02f",
+                           "Short":  "B10/S1",
+                           "Name":  "Lastølen B10/S1 (2 bedrooms)",
+                           "Capacity":  5,
+                           "MinAvail":  0,
+                           "MaxAvail":  0,
+                           "Availabilities":  [
+                                                  0,
+                                                  0
+                                              ]
+                       },
+                       {
+                           "CategoryId":  "c2530b78-8c5b-4fc8-b39f-b22001158262",
+                           "Short":  "B5/S2",
+                           "Name":  "Lastølen B5/S2 (3 bedrooms)",
+                           "Capacity":  7,
+                           "MinAvail":  0,
+                           "MaxAvail":  0,
+                           "Availabilities":  [
+                                                  0,
+                                                  0
+                                              ]
+                       },
+                       {
+                           "CategoryId":  "6ddde6fb-48f1-485b-bfbd-b220011453e9",
+                           "Short":  "B9/N2",
+                           "Name":  "Lastølen B9/N2 (2 bedrooms)",
+                           "Capacity":  5,
+                           "MinAvail":  1,
+                           "MaxAvail":  1,
+                           "Availabilities":  [
+                                                  1,
+                                                  1
+                                              ]
+                       },
+                       {
+                           "CategoryId":  "fb1f637a-8e13-46a4-83b0-b15a007ef02f",
+                           "Short":  "LKL",
+                           "Name":  "Lykkeli",
+                           "Capacity":  12,
+                           "MinAvail":  0,
+                           "MaxAvail":  0,
+                           "Availabilities":  [
+                                                  0,
+                                                  0
+                                              ]
+                       },
+                       {
+                           "CategoryId":  "c2341db8-6cd3-4f03-a4e7-b15a007ef02f",
+                           "Short":  "MV",
+                           "Name":  "Mountain View",
+                           "Capacity":  7,
+                           "MinAvail":  0,
+                           "MaxAvail":  0,
+                           "Availabilities":  [
+                                                  0,
+                                                  0
+                                              ]
+                       },
+                       {
+                           "CategoryId":  "57011669-35e7-4ac9-8f76-b3e100d7f92e",
+                           "Short":  "201",
+                           "Name":  "Mountain View Apartment 201",
+                           "Capacity":  7,
+                           "MinAvail":  1,
+                           "MaxAvail":  1,
+                           "Availabilities":  [
+                                                  1,
+                                                  1
+                                              ]
+                       },
+                       {
+                           "CategoryId":  "5bd7be93-f889-467b-8189-b1950042046f",
+                           "Short":  "102",
+                           "Name":  "Mountain View Apartments 102",
+                           "Capacity":  5,
+                           "MinAvail":  1,
+                           "MaxAvail":  1,
+                           "Availabilities":  [
+                                                  1,
+                                                  1
+                                              ]
+                       },
+                       {
+                           "CategoryId":  "bb96a008-eeef-4c82-bda1-b29e013c2106",
+                           "Short":  "103",
+                           "Name":  "Mountain View Apartments 103",
+                           "Capacity":  7,
+                           "MinAvail":  0,
+                           "MaxAvail":  0,
+                           "Availabilities":  [
+                                                  0,
+                                                  0
+                                              ]
+                       },
+                       {
+                           "CategoryId":  "a7a5b9ce-caa6-4dd7-9e7a-b2ab0165b9f6",
+                           "Short":  "203",
+                           "Name":  "Mountain View Apartments 203",
+                           "Capacity":  7,
+                           "MinAvail":  0,
+                           "MaxAvail":  0,
+                           "Availabilities":  [
+                                                  0,
+                                                  0
+                                              ]
+                       },
+                       {
+                           "CategoryId":  "072be395-785f-4b0e-bcc4-b18000cd2855",
+                           "Short":  "205",
+                           "Name":  "Mountain View Apartments 205",
+                           "Capacity":  5,
+                           "MinAvail":  1,
+                           "MaxAvail":  1,
+                           "Availabilities":  [
+                                                  1,
+                                                  1
+                                              ]
+                       },
+                       {
+                           "CategoryId":  "96f2f0c7-feb0-4526-945f-b3ad00a5739f",
+                           "Short":  "301",
+                           "Name":  "Mountain View Apartments 301",
+                           "Capacity":  7,
+                           "MinAvail":  0,
+                           "MaxAvail":  0,
+                           "Availabilities":  [
+                                                  0,
+                                                  0
+                                              ]
+                       },
+                       {
+                           "CategoryId":  "f4094e42-219b-40a4-b839-b1950042b19e",
+                           "Short":  "304",
+                           "Name":  "Mountain View Apartments 304 (Penthouse)",
+                           "Capacity":  10,
+                           "MinAvail":  1,
+                           "MaxAvail":  1,
+                           "Availabilities":  [
+                                                  1,
+                                                  1
+                                              ]
+                       },
+                       {
+                           "CategoryId":  "6fdf8c50-f57c-49de-afc1-b2b300e88a09",
+                           "Short":  "Ø82A",
+                           "Name":  "Mountain View Lodge",
+                           "Capacity":  8,
+                           "MinAvail":  0,
+                           "MaxAvail":  0,
+                           "Availabilities":  [
+                                                  0,
+                                                  0
+                                              ]
+                       },
+                       {
+                           "CategoryId":  "77bc1b10-682f-4afc-a8eb-b15a007ef02f",
+                           "Short":  "M84",
+                           "Name":  "Movegen 84",
+                           "Capacity":  2,
+                           "MinAvail":  1,
+                           "MaxAvail":  1,
+                           "Availabilities":  [
+                                                  1,
+                                                  1
+                                              ]
+                       },
+                       {
+                           "CategoryId":  "66536013-f2bd-4a71-95c5-b15a007ef02f",
+                           "Short":  "PV",
+                           "Name":  "Panorama View UT",
+                           "Capacity":  9,
+                           "MinAvail":  0,
+                           "MaxAvail":  0,
+                           "Availabilities":  [
+                                                  0,
+                                                  0
+                                              ]
+                       },
+                       {
+                           "CategoryId":  "4d9807a9-8542-4116-ae06-b15a007ef02f",
+                           "Short":  "RS",
+                           "Name":  "Riverside",
+                           "Capacity":  9,
+                           "MinAvail":  0,
+                           "MaxAvail":  0,
+                           "Availabilities":  [
+                                                  0,
+                                                  0
+                                              ]
+                       },
+                       {
+                           "CategoryId":  "34993a51-69ec-469e-bb25-b1950040d184",
+                           "Short":  "RB",
+                           "Name":  "Rorbu",
+                           "Capacity":  6,
+                           "MinAvail":  0,
+                           "MaxAvail":  0,
+                           "Availabilities":  [
+                                                  0,
+                                                  0
+                                              ]
+                       },
+                       {
+                           "CategoryId":  "04e0d66c-1c9f-4168-857b-b15a007ef02f",
+                           "Short":  "RK",
+                           "Name":  "Røde Kors",
+                           "Capacity":  8,
+                           "MinAvail":  0,
+                           "MaxAvail":  0,
+                           "Availabilities":  [
+                                                  0,
+                                                  0
+                                              ]
+                       },
+                       {
+                           "CategoryId":  "867c3e6f-7646-4240-84c4-b15a007ef02f",
+                           "Short":  "RKGF",
+                           "Name":  "Røde Kors ground floor",
+                           "Capacity":  4,
+                           "MinAvail":  1,
+                           "MaxAvail":  1,
+                           "Availabilities":  [
+                                                  1,
+                                                  1
+                                              ]
+                       },
+                       {
+                           "CategoryId":  "4e690c24-dcd4-4fc7-b672-b15a007ef02f",
+                           "Short":  "SF",
+                           "Name":  "Sjåfram",
+                           "Capacity":  7,
+                           "MinAvail":  0,
+                           "MaxAvail":  0,
+                           "Availabilities":  [
+                                                  0,
+                                                  0
+                                              ]
+                       },
+                       {
+                           "CategoryId":  "503a9fb6-db71-4a5f-b879-b3df00d249a9",
+                           "Short":  "SPL",
+                           "Name":  "Skarhaug Panorama Lodge",
+                           "Capacity":  8,
+                           "MinAvail":  0,
+                           "MaxAvail":  0,
+                           "Availabilities":  [
+                                                  0,
+                                                  0
+                                              ]
+                       },
+                       {
+                           "CategoryId":  "828e4c4c-22d3-42fa-81d6-b3df00cf68b3",
+                           "Short":  "SPL",
+                           "Name":  "Skarhaug Panorama Lodge",
+                           "Capacity":  8,
+                           "MinAvail":  0,
+                           "MaxAvail":  0,
+                           "Availabilities":  [
+                                                  0,
+                                                  0
+                                              ]
+                       },
+                       {
+                           "CategoryId":  "f562e533-1f85-4aeb-a92f-b1fe007f2f5a",
+                           "Short":  "12A",
+                           "Name":  "Stranda Fjellgrend 12A (3 bedrooms)",
+                           "Capacity":  7,
+                           "MinAvail":  0,
+                           "MaxAvail":  0,
+                           "Availabilities":  [
+                                                  0,
+                                                  0
+                                              ]
+                       },
+                       {
+                           "CategoryId":  "da95b306-10a2-4a04-8010-b15a007ef02f",
+                           "Short":  "SF3J",
+                           "Name":  "Stranda Fjellgrend 14A (with jacuzzi \u0026 3 bedrooms)",
+                           "Capacity":  7,
+                           "MinAvail":  0,
+                           "MaxAvail":  0,
+                           "Availabilities":  [
+                                                  0,
+                                                  0
+                                              ]
+                       },
+                       {
+                           "CategoryId":  "b92f07ae-6e35-4673-b510-b1fe007ec8d8",
+                           "Short":  "14B",
+                           "Name":  "Stranda Fjellgrend 14B (2 bedrooms + loft)",
+                           "Capacity":  7,
+                           "MinAvail":  0,
+                           "MaxAvail":  0,
+                           "Availabilities":  [
+                                                  0,
+                                                  0
+                                              ]
+                       },
+                       {
+                           "CategoryId":  "94744891-65a9-46cb-958b-b2e2013a2b68",
+                           "Short":  "16A",
+                           "Name":  "Stranda Fjellgrend 16A (3 bedrooms)",
+                           "Capacity":  7,
+                           "MinAvail":  0,
+                           "MaxAvail":  0,
+                           "Availabilities":  [
+                                                  0,
+                                                  0
+                                              ]
+                       },
+                       {
+                           "CategoryId":  "e210d1cc-0f05-44bf-8f93-b15a007ef02f",
+                           "Short":  "16B",
+                           "Name":  "Stranda Fjellgrend 16B (2 bedrooms + loft)",
+                           "Capacity":  7,
+                           "MinAvail":  0,
+                           "MaxAvail":  0,
+                           "Availabilities":  [
+                                                  0,
+                                                  0
+                                              ]
+                       },
+                       {
+                           "CategoryId":  "cb1926a5-359d-4852-8f0c-b22001028f86",
+                           "Short":  "20A",
+                           "Name":  "Stranda Fjellgrend 20A (3 bedrooms)",
+                           "Capacity":  7,
+                           "MinAvail":  0,
+                           "MaxAvail":  0,
+                           "Availabilities":  [
+                                                  0,
+                                                  0
+                                              ]
+                       },
+                       {
+                           "CategoryId":  "b1e5b34a-441d-4aad-8db9-b2200102b10c",
+                           "Short":  "22A",
+                           "Name":  "Stranda Fjellgrend 22A (3 bedrooms) UT",
+                           "Capacity":  7,
+                           "MinAvail":  0,
+                           "MaxAvail":  0,
+                           "Availabilities":  [
+                                                  0,
+                                                  0
+                                              ]
+                       },
+                       {
+                           "CategoryId":  "b9ffaad9-33ce-41a6-99e9-b1fe007f6bf3",
+                           "Short":  "24A",
+                           "Name":  "Stranda Fjellgrend 24A (3 bedrooms)",
+                           "Capacity":  7,
+                           "MinAvail":  0,
+                           "MaxAvail":  0,
+                           "Availabilities":  [
+                                                  0,
+                                                  0
+                                              ]
+                       },
+                       {
+                           "CategoryId":  "7ccdf353-6e3c-4c80-9a85-b2200101d802",
+                           "Short":  "24B",
+                           "Name":  "Stranda Fjellgrend 24B (2 bedrooms + loft)",
+                           "Capacity":  7,
+                           "MinAvail":  1,
+                           "MaxAvail":  1,
+                           "Availabilities":  [
+                                                  1,
+                                                  1
+                                              ]
+                       },
+                       {
+                           "CategoryId":  "bbba53c2-6ea3-48b2-914b-b309005f634d",
+                           "Short":  "29C",
+                           "Name":  "Stranda Fjellgrend 29C (2 bedrooms + loft)",
+                           "Capacity":  9,
+                           "MinAvail":  1,
+                           "MaxAvail":  1,
+                           "Availabilities":  [
+                                                  1,
+                                                  1
+                                              ]
+                       },
+                       {
+                           "CategoryId":  "078c0ded-070b-4549-9888-b2200102d754",
+                           "Short":  "30A",
+                           "Name":  "Stranda Fjellgrend 30A (3 bedrooms)",
+                           "Capacity":  7,
+                           "MinAvail":  0,
+                           "MaxAvail":  0,
+                           "Availabilities":  [
+                                                  0,
+                                                  0
+                                              ]
+                       },
+                       {
+                           "CategoryId":  "3a4accd0-3fa4-4f76-9c58-b1fe007f0f2d",
+                           "Short":  "30B",
+                           "Name":  "Stranda Fjellgrend 30B (2 bedrooms + loft)",
+                           "Capacity":  7,
+                           "MinAvail":  0,
+                           "MaxAvail":  0,
+                           "Availabilities":  [
+                                                  0,
+                                                  0
+                                              ]
+                       },
+                       {
+                           "CategoryId":  "eb8791bf-154c-4a43-bf7f-b2200101f2f1",
+                           "Short":  "31D",
+                           "Name":  "Stranda Fjellgrend 31D (2 bedrooms + loft)",
+                           "Capacity":  7,
+                           "MinAvail":  0,
+                           "MaxAvail":  0,
+                           "Availabilities":  [
+                                                  0,
+                                                  0
+                                              ]
+                       },
+                       {
+                           "CategoryId":  "8b70ecf1-22c8-483e-978b-b22001032d04",
+                           "Short":  "32A",
+                           "Name":  "Stranda Fjellgrend 32A (3 bedrooms)",
+                           "Capacity":  7,
+                           "MinAvail":  0,
+                           "MaxAvail":  0,
+                           "Availabilities":  [
+                                                  0,
+                                                  0
+                                              ]
+                       },
+                       {
+                           "CategoryId":  "8f0f3f35-8d0f-450f-94d3-b2200102131d",
+                           "Short":  "32B",
+                           "Name":  "Stranda Fjellgrend 32B (2 bedrooms + loft)",
+                           "Capacity":  7,
+                           "MinAvail":  0,
+                           "MaxAvail":  0,
+                           "Availabilities":  [
+                                                  0,
+                                                  0
+                                              ]
+                       },
+                       {
+                           "CategoryId":  "2e9c5ee7-ce70-4d66-b989-b1fd01497063",
+                           "Short":  "35C",
+                           "Name":  "Stranda Fjellgrend 35C (2 bedrooms)",
+                           "Capacity":  5,
+                           "MinAvail":  0,
+                           "MaxAvail":  0,
+                           "Availabilities":  [
+                                                  0,
+                                                  0
+                                              ]
+                       },
+                       {
+                           "CategoryId":  "3ecdc463-cb28-406e-b861-b22001038a3e",
+                           "Short":  "36A",
+                           "Name":  "Stranda Fjellgrend 36A (3 bedrooms)",
+                           "Capacity":  7,
+                           "MinAvail":  0,
+                           "MaxAvail":  0,
+                           "Availabilities":  [
+                                                  0,
+                                                  0
+                                              ]
+                       },
+                       {
+                           "CategoryId":  "7faa5b6a-b932-4c8b-84a1-b220011a208b",
+                           "Short":  "36B",
+                           "Name":  "Stranda Fjellgrend 36B (2 bedrooms + loft)",
+                           "Capacity":  7,
+                           "MinAvail":  0,
+                           "MaxAvail":  0,
+                           "Availabilities":  [
+                                                  0,
+                                                  0
+                                              ]
+                       },
+                       {
+                           "CategoryId":  "cd7f1c5d-f955-4833-a763-b2200103a395",
+                           "Short":  "38A",
+                           "Name":  "Stranda Fjellgrend 38A (3 bedrooms)",
+                           "Capacity":  7,
+                           "MinAvail":  0,
+                           "MaxAvail":  0,
+                           "Availabilities":  [
+                                                  0,
+                                                  0
+                                              ]
+                       },
+                       {
+                           "CategoryId":  "fed281d6-98c0-4a02-813e-b2200104b676",
+                           "Short":  "42A",
+                           "Name":  "Stranda Fjellgrend 42A (3 bedrooms)",
+                           "Capacity":  7,
+                           "MinAvail":  0,
+                           "MaxAvail":  0,
+                           "Availabilities":  [
+                                                  0,
+                                                  0
+                                              ]
+                       },
+                       {
+                           "CategoryId":  "ac18e5f6-6c88-4a01-a1db-b2ad0137d6b5",
+                           "Short":  "42B",
+                           "Name":  "Stranda Fjellgrend 42B (2 bedrooms + loft)",
+                           "Capacity":  7,
+                           "MinAvail":  1,
+                           "MaxAvail":  1,
+                           "Availabilities":  [
+                                                  1,
+                                                  1
+                                              ]
+                       },
+                       {
+                           "CategoryId":  "3fde86d5-5647-42fe-9787-b22001051a85",
+                           "Short":  "44A",
+                           "Name":  "Stranda Fjellgrend 44A (3 bedrooms)",
+                           "Capacity":  7,
+                           "MinAvail":  0,
+                           "MaxAvail":  0,
+                           "Availabilities":  [
+                                                  0,
+                                                  0
+                                              ]
+                       },
+                       {
+                           "CategoryId":  "88660a5f-6180-48bb-a0d8-b22001052d76",
+                           "Short":  "44B",
+                           "Name":  "Stranda Fjellgrend 44B (3 bedrooms)",
+                           "Capacity":  7,
+                           "MinAvail":  1,
+                           "MaxAvail":  1,
+                           "Availabilities":  [
+                                                  1,
+                                                  1
+                                              ]
+                       },
+                       {
+                           "CategoryId":  "4c37ce32-956f-4b7a-95f5-b2e20139d9e3",
+                           "Short":  "46A",
+                           "Name":  "Stranda Fjellgrend 46A (3 bedrooms)",
+                           "Capacity":  7,
+                           "MinAvail":  0,
+                           "MaxAvail":  0,
+                           "Availabilities":  [
+                                                  0,
+                                                  0
+                                              ]
+                       },
+                       {
+                           "CategoryId":  "7f9787f5-fd52-4ac6-bbbc-b1fd0149aa91",
+                           "Short":  "50A",
+                           "Name":  "Stranda Fjellgrend 50A (2 bedrooms)",
+                           "Capacity":  5,
+                           "MinAvail":  0,
+                           "MaxAvail":  0,
+                           "Availabilities":  [
+                                                  0,
+                                                  0
+                                              ]
+                       },
+                       {
+                           "CategoryId":  "b44d6081-54d8-4788-9b5b-b15a007ef02f",
+                           "Short":  "60A",
+                           "Name":  "Stranda Fjellgrend 60A (3 bedrooms \u0026 2 bathrooms)",
+                           "Capacity":  8,
+                           "MinAvail":  1,
+                           "MaxAvail":  1,
+                           "Availabilities":  [
+                                                  1,
+                                                  1
+                                              ]
+                       },
+                       {
+                           "CategoryId":  "4d02e4e0-20e9-40f9-a061-b15a007ef02f",
+                           "Short":  "60B",
+                           "Name":  "Stranda Fjellgrend 60B (3 bedrooms \u0026 2 bathrooms)",
+                           "Capacity":  7,
+                           "MinAvail":  0,
+                           "MaxAvail":  0,
+                           "Availabilities":  [
+                                                  0,
+                                                  0
+                                              ]
+                       },
+                       {
+                           "CategoryId":  "84cecb52-8c0d-40d3-add6-b1fd0149be97",
+                           "Short":  "64A",
+                           "Name":  "Stranda Fjellgrend 64A (2 bedrooms)",
+                           "Capacity":  5,
+                           "MinAvail":  0,
+                           "MaxAvail":  0,
+                           "Availabilities":  [
+                                                  0,
+                                                  0
+                                              ]
+                       },
+                       {
+                           "CategoryId":  "40d58bdf-78cb-4b0a-8088-b220010720e6",
+                           "Short":  "68A",
+                           "Name":  "Stranda Fjellgrend 68A (3 bedrooms \u0026 2 bathrooms)",
+                           "Capacity":  7,
+                           "MinAvail":  0,
+                           "MaxAvail":  0,
+                           "Availabilities":  [
+                                                  0,
+                                                  0
+                                              ]
+                       },
+                       {
+                           "CategoryId":  "64f8ee64-43e4-48df-87b7-b22001073aa6",
+                           "Short":  "68B",
+                           "Name":  "Stranda Fjellgrend 68B (3 bedrooms \u0026 2 bathrooms)",
+                           "Capacity":  7,
+                           "MinAvail":  0,
+                           "MaxAvail":  0,
+                           "Availabilities":  [
+                                                  0,
+                                                  0
+                                              ]
+                       },
+                       {
+                           "CategoryId":  "402fbc75-067a-4b1b-90f7-b1fd0149e5a3",
+                           "Short":  "72A",
+                           "Name":  "Stranda Fjellgrend 72A (2 bedrooms)",
+                           "Capacity":  5,
+                           "MinAvail":  1,
+                           "MaxAvail":  1,
+                           "Availabilities":  [
+                                                  1,
+                                                  1
+                                              ]
+                       },
+                       {
+                           "CategoryId":  "7f06b9a5-9306-42b4-a2d8-b1fd014a15fc",
+                           "Short":  "76B",
+                           "Name":  "Stranda Fjellgrend 76B (2 bedrooms)",
+                           "Capacity":  5,
+                           "MinAvail":  0,
+                           "MaxAvail":  0,
+                           "Availabilities":  [
+                                                  0,
+                                                  0
+                                              ]
+                       },
+                       {
+                           "CategoryId":  "ace31d40-13b3-4b3c-89fb-b1fd014a2f71",
+                           "Short":  "78A",
+                           "Name":  "Stranda Fjellgrend 78A (2 bedrooms)",
+                           "Capacity":  5,
+                           "MinAvail":  0,
+                           "MaxAvail":  0,
+                           "Availabilities":  [
+                                                  0,
+                                                  0
+                                              ]
+                       },
+                       {
+                           "CategoryId":  "fa403170-337c-4524-a138-b1fd014a4eaf",
+                           "Short":  "78B",
+                           "Name":  "Stranda Fjellgrend 78B (2 bedrooms)",
+                           "Capacity":  5,
+                           "MinAvail":  1,
+                           "MaxAvail":  1,
+                           "Availabilities":  [
+                                                  1,
+                                                  1
+                                              ]
+                       },
+                       {
+                           "CategoryId":  "f9005eee-bb8f-47e4-b658-b22001059b2d",
+                           "Short":  "80A",
+                           "Name":  "Stranda Fjellgrend 80A (3 bedrooms)",
+                           "Capacity":  7,
+                           "MinAvail":  0,
+                           "MaxAvail":  0,
+                           "Availabilities":  [
+                                                  0,
+                                                  0
+                                              ]
+                       },
+                       {
+                           "CategoryId":  "455a479a-9a9e-4834-bd7f-b2200105b011",
+                           "Short":  "80B",
+                           "Name":  "Stranda Fjellgrend 80B (3 bedrooms)",
+                           "Capacity":  7,
+                           "MinAvail":  0,
+                           "MaxAvail":  0,
+                           "Availabilities":  [
+                                                  0,
+                                                  0
+                                              ]
+                       },
+                       {
+                           "CategoryId":  "b6bd8814-9bf2-49f2-a8f2-b15a007ef02f",
+                           "Short":  "80C",
+                           "Name":  "Stranda Fjellgrend 80C (3 bedrooms + loft)",
+                           "Capacity":  9,
+                           "MinAvail":  1,
+                           "MaxAvail":  1,
+                           "Availabilities":  [
+                                                  1,
+                                                  1
+                                              ]
+                       },
+                       {
+                           "CategoryId":  "e4866909-615d-4052-80dd-b22001066f15",
+                           "Short":  "80D",
+                           "Name":  "Stranda Fjellgrend 80D (3 bedrooms + loft)",
+                           "Capacity":  9,
+                           "MinAvail":  0,
+                           "MaxAvail":  0,
+                           "Availabilities":  [
+                                                  0,
+                                                  0
+                                              ]
+                       },
+                       {
+                           "CategoryId":  "e3710ff1-4335-4b55-a431-b2200101b325",
+                           "Short":  "82A",
+                           "Name":  "Stranda Fjellgrend 82A (3 bedrooms)",
+                           "Capacity":  7,
+                           "MinAvail":  1,
+                           "MaxAvail":  1,
+                           "Availabilities":  [
+                                                  1,
+                                                  1
+                                              ]
+                       },
+                       {
+                           "CategoryId":  "66c7e731-9823-45b5-a1ef-b15a007ef02f",
+                           "Short":  "98A",
+                           "Name":  "Stranda Fjellgrend 98A (3 bedrooms)",
+                           "Capacity":  7,
+                           "MinAvail":  0,
+                           "MaxAvail":  0,
+                           "Availabilities":  [
+                                                  0,
+                                                  0
+                                              ]
+                       },
+                       {
+                           "CategoryId":  "a8301687-1af8-4ea4-9ce0-b2e20145e011",
+                           "Short":  "98B",
+                           "Name":  "Stranda Fjellgrend 98B (2 bedrooms + loft)",
+                           "Capacity":  6,
+                           "MinAvail":  0,
+                           "MaxAvail":  1,
+                           "Availabilities":  [
+                                                  1,
+                                                  0
+                                              ]
+                       },
+                       {
+                           "CategoryId":  "2f1beca3-adb9-47ae-aa85-b15a007ef02f",
+                           "Short":  "SML",
+                           "Name":  "Strandafjellet Mountain Lodge",
+                           "Capacity":  15,
+                           "MinAvail":  1,
+                           "MaxAvail":  1,
+                           "Availabilities":  [
+                                                  1,
+                                                  1
+                                              ]
+                       },
+                       {
+                           "CategoryId":  "4688ca1a-0bca-4338-9e7c-b25e00b42cdf",
+                           "Short":  "SG",
+                           "Name":  "Sunnmøre Getaway UT",
+                           "Capacity":  6,
+                           "MinAvail":  0,
+                           "MaxAvail":  0,
+                           "Availabilities":  [
+                                                  0,
+                                                  0
+                                              ]
+                       },
+                       {
+                           "CategoryId":  "878b1d23-6c85-4a20-8ee5-b1630119d6b9",
+                           "Short":  "TMC1",
+                           "Name":  "Tiny Mountain Cabin I",
+                           "Capacity":  6,
+                           "MinAvail":  0,
+                           "MaxAvail":  0,
+                           "Availabilities":  [
+                                                  0,
+                                                  0
+                                              ]
+                       },
+                       {
+                           "CategoryId":  "3a0f4243-1775-4990-874f-b1950043000f",
+                           "Short":  "TMC2",
+                           "Name":  "Tiny Mountain Cabin II",
+                           "Capacity":  4,
+                           "MinAvail":  0,
+                           "MaxAvail":  0,
+                           "Availabilities":  [
+                                                  0,
+                                                  0
+                                              ]
+                       },
+                       {
+                           "CategoryId":  "894b0878-441f-4c11-a807-b15a007ef02f",
+                           "Short":  "UTS",
+                           "Name":  "Utsikten",
+                           "Capacity":  9,
+                           "MinAvail":  0,
+                           "MaxAvail":  0,
+                           "Availabilities":  [
+                                                  0,
+                                                  0
+                                              ]
+                       },
+                       {
+                           "CategoryId":  "d183bf9f-0e26-4147-b341-b15a007ef02f",
+                           "Short":  "VV",
+                           "Name":  "Valley View",
+                           "Capacity":  10,
+                           "MinAvail":  0,
+                           "MaxAvail":  0,
+                           "Availabilities":  [
+                                                  0,
+                                                  0
+                                              ]
+                       },
+                       {
+                           "CategoryId":  "f456a476-d5d7-4c89-bb69-b15a007ef02f",
+                           "Short":  "VFV",
+                           "Name":  "Villa Fjord View",
+                           "Capacity":  8,
+                           "MinAvail":  1,
+                           "MaxAvail":  1,
+                           "Availabilities":  [
+                                                  1,
+                                                  1
+                                              ]
+                       },
+                       {
+                           "CategoryId":  "80818c3f-2573-4494-8ba3-b15a007ef02f",
+                           "Short":  "Ø2",
+                           "Name":  "Økslevegen 2",
+                           "Capacity":  11,
+                           "MinAvail":  1,
+                           "MaxAvail":  1,
+                           "Availabilities":  [
+                                                  1,
+                                                  1
+                                              ]
+                       }
+                   ],
+    "bookable":  [
+                     {
+                         "CategoryId":  "732d4795-81c8-48e3-ba22-b15a007ef02f",
+                         "Short":  "KT",
+                         "Name":  "Koie Tent",
+                         "Capacity":  2,
+                         "MinAvail":  11,
+                         "MaxAvail":  11,
+                         "Availabilities":  [
+                                                11,
+                                                11
+                                            ]
+                     },
+                     {
+                         "CategoryId":  "75d3db44-45a1-4310-9cbe-b15a007ef02f",
+                         "Short":  "KCP",
+                         "Name":  "Koie Camper",
+                         "Capacity":  2,
+                         "MinAvail":  10,
+                         "MaxAvail":  10,
+                         "Availabilities":  [
+                                                10,
+                                                10
+                                            ]
+                     },
+                     {
+                         "CategoryId":  "32324f93-8942-413b-a515-b15a007ef02f",
+                         "Short":  "KCR",
+                         "Name":  "Koie Caravan",
+                         "Capacity":  2,
+                         "MinAvail":  10,
+                         "MaxAvail":  10,
+                         "Availabilities":  [
+                                                10,
+                                                10
+                                            ]
+                     },
+                     {
+                         "CategoryId":  "a6117fdf-342b-457b-b0b9-b15a007ef02f",
+                         "Short":  "KF",
+                         "Name":  "Koie Family",
+                         "Capacity":  3,
+                         "MinAvail":  2,
+                         "MaxAvail":  2,
+                         "Availabilities":  [
+                                                2,
+                                                2
+                                            ]
+                     },
+                     {
+                         "CategoryId":  "402fbc75-067a-4b1b-90f7-b1fd0149e5a3",
+                         "Short":  "72A",
+                         "Name":  "Stranda Fjellgrend 72A (2 bedrooms)",
+                         "Capacity":  5,
+                         "MinAvail":  1,
+                         "MaxAvail":  1,
+                         "Availabilities":  [
+                                                1,
+                                                1
+                                            ]
+                     },
+                     {
+                         "CategoryId":  "57011669-35e7-4ac9-8f76-b3e100d7f92e",
+                         "Short":  "201",
+                         "Name":  "Mountain View Apartment 201",
+                         "Capacity":  7,
+                         "MinAvail":  1,
+                         "MaxAvail":  1,
+                         "Availabilities":  [
+                                                1,
+                                                1
+                                            ]
+                     },
+                     {
+                         "CategoryId":  "5bd7be93-f889-467b-8189-b1950042046f",
+                         "Short":  "102",
+                         "Name":  "Mountain View Apartments 102",
+                         "Capacity":  5,
+                         "MinAvail":  1,
+                         "MaxAvail":  1,
+                         "Availabilities":  [
+                                                1,
+                                                1
+                                            ]
+                     },
+                     {
+                         "CategoryId":  "ac18e5f6-6c88-4a01-a1db-b2ad0137d6b5",
+                         "Short":  "42B",
+                         "Name":  "Stranda Fjellgrend 42B (2 bedrooms + loft)",
+                         "Capacity":  7,
+                         "MinAvail":  1,
+                         "MaxAvail":  1,
+                         "Availabilities":  [
+                                                1,
+                                                1
+                                            ]
+                     },
+                     {
+                         "CategoryId":  "bbba53c2-6ea3-48b2-914b-b309005f634d",
+                         "Short":  "29C",
+                         "Name":  "Stranda Fjellgrend 29C (2 bedrooms + loft)",
+                         "Capacity":  9,
+                         "MinAvail":  1,
+                         "MaxAvail":  1,
+                         "Availabilities":  [
+                                                1,
+                                                1
+                                            ]
+                     },
+                     {
+                         "CategoryId":  "fa403170-337c-4524-a138-b1fd014a4eaf",
+                         "Short":  "78B",
+                         "Name":  "Stranda Fjellgrend 78B (2 bedrooms)",
+                         "Capacity":  5,
+                         "MinAvail":  1,
+                         "MaxAvail":  1,
+                         "Availabilities":  [
+                                                1,
+                                                1
+                                            ]
+                     },
+                     {
+                         "CategoryId":  "b6bd8814-9bf2-49f2-a8f2-b15a007ef02f",
+                         "Short":  "80C",
+                         "Name":  "Stranda Fjellgrend 80C (3 bedrooms + loft)",
+                         "Capacity":  9,
+                         "MinAvail":  1,
+                         "MaxAvail":  1,
+                         "Availabilities":  [
+                                                1,
+                                                1
+                                            ]
+                     },
+                     {
+                         "CategoryId":  "b44d6081-54d8-4788-9b5b-b15a007ef02f",
+                         "Short":  "60A",
+                         "Name":  "Stranda Fjellgrend 60A (3 bedrooms \u0026 2 bathrooms)",
+                         "Capacity":  8,
+                         "MinAvail":  1,
+                         "MaxAvail":  1,
+                         "Availabilities":  [
+                                                1,
+                                                1
+                                            ]
+                     },
+                     {
+                         "CategoryId":  "77bc1b10-682f-4afc-a8eb-b15a007ef02f",
+                         "Short":  "M84",
+                         "Name":  "Movegen 84",
+                         "Capacity":  2,
+                         "MinAvail":  1,
+                         "MaxAvail":  1,
+                         "Availabilities":  [
+                                                1,
+                                                1
+                                            ]
+                     },
+                     {
+                         "CategoryId":  "7ccdf353-6e3c-4c80-9a85-b2200101d802",
+                         "Short":  "24B",
+                         "Name":  "Stranda Fjellgrend 24B (2 bedrooms + loft)",
+                         "Capacity":  7,
+                         "MinAvail":  1,
+                         "MaxAvail":  1,
+                         "Availabilities":  [
+                                                1,
+                                                1
+                                            ]
+                     },
+                     {
+                         "CategoryId":  "88660a5f-6180-48bb-a0d8-b22001052d76",
+                         "Short":  "44B",
+                         "Name":  "Stranda Fjellgrend 44B (3 bedrooms)",
+                         "Capacity":  7,
+                         "MinAvail":  1,
+                         "MaxAvail":  1,
+                         "Availabilities":  [
+                                                1,
+                                                1
+                                            ]
+                     },
+                     {
+                         "CategoryId":  "e3710ff1-4335-4b55-a431-b2200101b325",
+                         "Short":  "82A",
+                         "Name":  "Stranda Fjellgrend 82A (3 bedrooms)",
+                         "Capacity":  7,
+                         "MinAvail":  1,
+                         "MaxAvail":  1,
+                         "Availabilities":  [
+                                                1,
+                                                1
+                                            ]
+                     },
+                     {
+                         "CategoryId":  "51cff127-0eb2-4e59-bdaf-b16e0144b672",
+                         "Short":  "KD1",
+                         "Name":  "Koie Deluxe I",
+                         "Capacity":  5,
+                         "MinAvail":  1,
+                         "MaxAvail":  1,
+                         "Availabilities":  [
+                                                1,
+                                                1
+                                            ]
+                     },
+                     {
+                         "CategoryId":  "acc74eff-22fc-4f37-9dd6-b15a007ef02f",
+                         "Short":  "KD2",
+                         "Name":  "Koie Deluxe II",
+                         "Capacity":  5,
+                         "MinAvail":  1,
+                         "MaxAvail":  1,
+                         "Availabilities":  [
+                                                1,
+                                                1
+                                            ]
+                     },
+                     {
+                         "CategoryId":  "80818c3f-2573-4494-8ba3-b15a007ef02f",
+                         "Short":  "Ø2",
+                         "Name":  "Økslevegen 2",
+                         "Capacity":  11,
+                         "MinAvail":  1,
+                         "MaxAvail":  1,
+                         "Availabilities":  [
+                                                1,
+                                                1
+                                            ]
+                     },
+                     {
+                         "CategoryId":  "07698215-18e7-454d-b4cf-b15a007ef02f",
+                         "Short":  "FP",
+                         "Name":  "Fjord Panorama",
+                         "Capacity":  9,
+                         "MinAvail":  1,
+                         "MaxAvail":  1,
+                         "Availabilities":  [
+                                                1,
+                                                1
+                                            ]
+                     },
+                     {
+                         "CategoryId":  "a0b4d9a2-266c-40af-b4ba-b15a007ef02f",
+                         "Short":  "CS",
+                         "Name":  "Chalet Strandafjellet",
+                         "Capacity":  25,
+                         "MinAvail":  1,
+                         "MaxAvail":  1,
+                         "Availabilities":  [
+                                                1,
+                                                1
+                                            ]
+                     },
+                     {
+                         "CategoryId":  "2f1beca3-adb9-47ae-aa85-b15a007ef02f",
+                         "Short":  "SML",
+                         "Name":  "Strandafjellet Mountain Lodge",
+                         "Capacity":  15,
+                         "MinAvail":  1,
+                         "MaxAvail":  1,
+                         "Availabilities":  [
+                                                1,
+                                                1
+                                            ]
+                     },
+                     {
+                         "CategoryId":  "f456a476-d5d7-4c89-bb69-b15a007ef02f",
+                         "Short":  "VFV",
+                         "Name":  "Villa Fjord View",
+                         "Capacity":  8,
+                         "MinAvail":  1,
+                         "MaxAvail":  1,
+                         "Availabilities":  [
+                                                1,
+                                                1
+                                            ]
+                     },
+                     {
+                         "CategoryId":  "b47530da-4028-42a1-a17e-b15a007ef02f",
+                         "Short":  "FA",
+                         "Name":  "Fjellsætra Alpegrend",
+                         "Capacity":  7,
+                         "MinAvail":  1,
+                         "MaxAvail":  1,
+                         "Availabilities":  [
+                                                1,
+                                                1
+                                            ]
+                     },
+                     {
+                         "CategoryId":  "22375a4b-751e-41df-ad35-b15a007ef02f",
+                         "Short":  "KST",
+                         "Name":  "Koie Standard",
+                         "Capacity":  2,
+                         "MinAvail":  1,
+                         "MaxAvail":  1,
+                         "Availabilities":  [
+                                                1,
+                                                1
+                                            ]
+                     },
+                     {
+                         "CategoryId":  "f4094e42-219b-40a4-b839-b1950042b19e",
+                         "Short":  "304",
+                         "Name":  "Mountain View Apartments 304 (Penthouse)",
+                         "Capacity":  10,
+                         "MinAvail":  1,
+                         "MaxAvail":  1,
+                         "Availabilities":  [
+                                                1,
+                                                1
+                                            ]
+                     },
+                     {
+                         "CategoryId":  "072be395-785f-4b0e-bcc4-b18000cd2855",
+                         "Short":  "205",
+                         "Name":  "Mountain View Apartments 205",
+                         "Capacity":  5,
+                         "MinAvail":  1,
+                         "MaxAvail":  1,
+                         "Availabilities":  [
+                                                1,
+                                                1
+                                            ]
+                     },
+                     {
+                         "CategoryId":  "867c3e6f-7646-4240-84c4-b15a007ef02f",
+                         "Short":  "RKGF",
+                         "Name":  "Røde Kors ground floor",
+                         "Capacity":  4,
+                         "MinAvail":  1,
+                         "MaxAvail":  1,
+                         "Availabilities":  [
+                                                1,
+                                                1
+                                            ]
+                     },
+                     {
+                         "CategoryId":  "a713bf60-4d87-41ab-812c-b15a007ef02f",
+                         "Short":  "LVA2H",
+                         "Name":  "Lake View Apartment B4/L3 (2 bedrooms + loft)",
+                         "Capacity":  6,
+                         "MinAvail":  1,
+                         "MaxAvail":  1,
+                         "Availabilities":  [
+                                                1,
+                                                1
+                                            ]
+                     },
+                     {
+                         "CategoryId":  "4b5d7e45-3515-4076-87cc-b15a007ef02f",
+                         "Short":  "LVA4",
+                         "Name":  "Lake View Apartment B5/L6 (4 bedrooms)",
+                         "Capacity":  10,
+                         "MinAvail":  1,
+                         "MaxAvail":  1,
+                         "Availabilities":  [
+                                                1,
+                                                1
+                                            ]
+                     },
+                     {
+                         "CategoryId":  "6ddde6fb-48f1-485b-bfbd-b220011453e9",
+                         "Short":  "B9/N2",
+                         "Name":  "Lastølen B9/N2 (2 bedrooms)",
+                         "Capacity":  5,
+                         "MinAvail":  1,
+                         "MaxAvail":  1,
+                         "Availabilities":  [
+                                                1,
+                                                1
+                                            ]
+                     }
+                 ]
+}

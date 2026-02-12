@@ -1,0 +1,905 @@
+{
+  "version": 1,
+  "tasks": [
+    {
+      "id": "9c4490b1-cbad-4719-a3a9-0ae76dac6302",
+      "type": "cleaning",
+      "title": "Sluttrengjøring hytte 2124",
+      "description": "Standard sluttrengjøring med tre soverom, stue, kjøkken og bad med badstue.",
+      "resourceId": "demo-2124",
+      "resourceNumber": "Hytte 2124",
+      "status": "in_progress",
+      "priority": "normal",
+      "checklist": [
+        {
+          "id": "f74b41e8-73e5-4b84-9a6d-9a336249030c",
+          "label": "Soverom 1: Vask tak, vegger og lister",
+          "completed": false
+        },
+        {
+          "id": "4a73030c-a656-404a-a817-1a950ff7f400",
+          "label": "Soverom 1: Støvsug madrassene",
+          "completed": false
+        },
+        {
+          "id": "9800982e-0285-4ac2-a859-de62fb17b223",
+          "label": "Soverom 1: Vask alle flater (oppå skap, vindusposter, lamper etc.)",
+          "completed": false
+        },
+        {
+          "id": "66c8d5b4-c27e-43a7-9d92-d186c0224f50",
+          "label": "Soverom 1: Puss speil og vinduer (utsiden der det er lett å komme til)",
+          "completed": false
+        },
+        {
+          "id": "4ca1ae57-069c-470c-9f8e-5b0d3ca1f9f3",
+          "label": "Soverom 2: Vask tak, vegger og lister",
+          "completed": false
+        },
+        {
+          "id": "cf2dfec9-a2df-4976-930e-1cf6f02627c3",
+          "label": "Soverom 2: Støvsug madrassene",
+          "completed": false
+        },
+        {
+          "id": "8e34006d-dffb-4b87-a4f6-1573e617196d",
+          "label": "Soverom 2: Vask alle flater (oppå skap, vindusposter, lamper etc.)",
+          "completed": false
+        },
+        {
+          "id": "d18a720e-4488-478b-af67-1815a4159b62",
+          "label": "Soverom 2: Puss speil og vinduer (utsiden der det er lett å komme til)",
+          "completed": false
+        },
+        {
+          "id": "812f3d49-db7b-4d3d-b0a8-4bd46fc0346f",
+          "label": "Soverom 3: Vask tak, vegger og lister",
+          "completed": false
+        },
+        {
+          "id": "63a7efbe-b1f2-462f-ba3b-442b932d6969",
+          "label": "Soverom 3: Støvsug madrassene",
+          "completed": false
+        },
+        {
+          "id": "200698e1-9ed9-43ed-b00a-f9782270b5be",
+          "label": "Soverom 3: Vask alle flater (oppå skap, vindusposter, lamper etc.)",
+          "completed": false
+        },
+        {
+          "id": "e171bea9-6881-4b4b-b4c6-ad06db900e7c",
+          "label": "Soverom 3: Puss speil og vinduer (utsiden der det er lett å komme til)",
+          "completed": false
+        },
+        {
+          "id": "a69fdf18-7954-4da8-864f-991103c046ab",
+          "label": "Kjøkken: Vask tak, vegger og lister",
+          "completed": false
+        },
+        {
+          "id": "a4149ce8-0118-496c-9bef-d509d794a09b",
+          "label": "Kjøkken: Dra frem kjøleskap og vask bak",
+          "completed": false
+        },
+        {
+          "id": "5a36b589-3e4d-4992-990c-ad120365da04",
+          "label": "Kjøkken: Avrim fryser og vask inni",
+          "completed": false
+        },
+        {
+          "id": "9d6c6227-a3ee-416e-8c3f-10b82bb02f10",
+          "label": "Kjøkken: Vask komfyr, underskuffen og stekeplater",
+          "completed": false
+        },
+        {
+          "id": "d4621da7-cf2e-4513-90bf-fb022a717867",
+          "label": "Kjøkken: Dra frem komfyr og vask bak",
+          "completed": false
+        },
+        {
+          "id": "1256b402-c734-435c-80fc-897513e21bb9",
+          "label": "Kjøkken: Vask ventilator og filter",
+          "completed": false
+        },
+        {
+          "id": "1b6392fa-5c22-4f33-a107-0001d3809d5f",
+          "label": "Kjøkken: Vask alle skap og skuffer på innsiden og utsiden",
+          "completed": false
+        },
+        {
+          "id": "f8bd8516-d2b6-49f1-b28a-6ef370fa88d6",
+          "label": "Kjøkken: Vask alle møbler",
+          "completed": false
+        },
+        {
+          "id": "d5b714bc-9042-49f8-9524-746c1da94b8c",
+          "label": "Stue/gang: Vask tak, vegger og lister",
+          "completed": false
+        },
+        {
+          "id": "c520d2d3-029f-4f11-b453-8d90841b12d0",
+          "label": "Stue/gang: Støvsug sofaputene, også under",
+          "completed": false
+        },
+        {
+          "id": "f7d0b8e3-8443-4081-9cf6-176f317b65ed",
+          "label": "Stue/gang: Vask alle flater og inventar (vindusposter, bord, hyller etc.)",
+          "completed": false
+        },
+        {
+          "id": "bbc2be0c-2503-40ee-9485-932e1da87770",
+          "label": "Stue/gang: Puss speil og vinduer",
+          "completed": false
+        },
+        {
+          "id": "89482512-b484-4987-9a5d-5ffe1b06846b",
+          "label": "Stue/gang: Vask gulv – også under sofaen (dra frem sofaen hvis nødvendig)",
+          "completed": false
+        },
+        {
+          "id": "981a3188-f215-4c61-8f10-9292b99377c7",
+          "label": "Bad med badstue: Vask tak, vegger og lister",
+          "completed": false
+        },
+        {
+          "id": "f60867a3-b060-49e3-929e-813d60888035",
+          "label": "Bad med badstue: Rens baderomsviften for støv",
+          "completed": false
+        },
+        {
+          "id": "e42b6293-76f1-472e-a8fb-272c59e735aa",
+          "label": "Bad med badstue: Vask badstuebenken og gulvet",
+          "completed": false
+        },
+        {
+          "id": "99a256f7-a3f3-4122-a799-d9e0d27a55fa",
+          "label": "Bad med badstue: Vask dusjen (vegger og dører), fjern hår og smuss fra sluk, og dra frem dusjkabinett og vask bak",
+          "completed": false
+        },
+        {
+          "id": "923e486a-cfbc-4fa4-a096-e2a75f7a545c",
+          "label": "Bad med badstue: Vask alle vaskbare flater (vask, hyller, oppå skap etc.). Puss speil, vinduer og blandebatterier",
+          "completed": false
+        },
+        {
+          "id": "4a4808ea-84a5-4a84-836b-10ccf43b422f",
+          "label": "Bad med badstue: Vask badegulv",
+          "completed": false
+        }
+      ],
+      "photos": [],
+      "logs": [
+        {
+          "id": "252ae004-06b6-449e-97bb-c4bf6a164bfc",
+          "createdAt": "2025-12-04T06:29:54.627Z",
+          "message": "Startet i service-appen"
+        }
+      ],
+      "createdAt": "2025-12-04T06:29:49.285Z",
+      "updatedAt": "2025-12-04T06:29:54.627Z",
+      "startedAt": "2025-12-04T06:29:54.627Z"
+    },
+    {
+      "id": "6353ad02-01d7-4f0c-b742-9bc5407634bb",
+      "type": "cleaning",
+      "title": "Sluttrengjøring hytte 2124",
+      "description": "Standard sluttrengjøring med tre soverom, stue, kjøkken og bad med badstue.",
+      "resourceId": "demo-2124",
+      "resourceNumber": "Hytte 2124",
+      "status": "open",
+      "priority": "normal",
+      "checklist": [
+        {
+          "id": "40c80f9e-00eb-4271-9a69-061dd434c1bd",
+          "label": "Soverom 1: Vask tak, vegger og lister",
+          "completed": false
+        },
+        {
+          "id": "5f6d6418-adec-4e24-8977-b01e9da93620",
+          "label": "Soverom 1: Støvsug madrassene",
+          "completed": false
+        },
+        {
+          "id": "dc091a22-2fe9-46fe-9b4b-52c6d872ce6c",
+          "label": "Soverom 1: Vask alle flater (oppå skap, vindusposter, lamper etc.)",
+          "completed": false
+        },
+        {
+          "id": "9faef746-f8db-4c23-9c8c-36dd93c90d28",
+          "label": "Soverom 1: Puss speil og vinduer (utsiden der det er lett å komme til)",
+          "completed": false
+        },
+        {
+          "id": "ac118718-2943-45b5-a838-fda3fd673955",
+          "label": "Soverom 2: Vask tak, vegger og lister",
+          "completed": false
+        },
+        {
+          "id": "1cf06354-073e-4b43-8bd1-9ab93b73260c",
+          "label": "Soverom 2: Støvsug madrassene",
+          "completed": false
+        },
+        {
+          "id": "f3f4ec7b-14c8-4a68-9499-3cc468f8ec02",
+          "label": "Soverom 2: Vask alle flater (oppå skap, vindusposter, lamper etc.)",
+          "completed": false
+        },
+        {
+          "id": "b1e239a5-5727-4804-904f-500f828b4c0e",
+          "label": "Soverom 2: Puss speil og vinduer (utsiden der det er lett å komme til)",
+          "completed": false
+        },
+        {
+          "id": "7ab91aa6-01c4-428c-b3d3-b8a89c063b65",
+          "label": "Soverom 3: Vask tak, vegger og lister",
+          "completed": false
+        },
+        {
+          "id": "7f6e892f-8512-453e-818e-6f688d56d3d8",
+          "label": "Soverom 3: Støvsug madrassene",
+          "completed": false
+        },
+        {
+          "id": "f6fe704c-3d73-4c6e-98ad-be1e54e48246",
+          "label": "Soverom 3: Vask alle flater (oppå skap, vindusposter, lamper etc.)",
+          "completed": false
+        },
+        {
+          "id": "8e8e1639-24f0-4807-8140-afd57089d16a",
+          "label": "Soverom 3: Puss speil og vinduer (utsiden der det er lett å komme til)",
+          "completed": false
+        },
+        {
+          "id": "1c86717f-d355-4d7a-be79-3d0f17a48e27",
+          "label": "Kjøkken: Vask tak, vegger og lister",
+          "completed": false
+        },
+        {
+          "id": "7a006278-4578-4b71-b3b1-583a94521fc1",
+          "label": "Kjøkken: Dra frem kjøleskap og vask bak",
+          "completed": false
+        },
+        {
+          "id": "566deee6-e21e-4d23-bfbe-adbc7c283c5f",
+          "label": "Kjøkken: Avrim fryser og vask inni",
+          "completed": false
+        },
+        {
+          "id": "a5253bb2-5029-4a67-9af0-5518959def3e",
+          "label": "Kjøkken: Vask komfyr, underskuffen og stekeplater",
+          "completed": false
+        },
+        {
+          "id": "3863caef-4694-4c2c-9b8a-2726b2bc0b33",
+          "label": "Kjøkken: Dra frem komfyr og vask bak",
+          "completed": false
+        },
+        {
+          "id": "9148add6-3c4f-49ce-a012-06ee056d376c",
+          "label": "Kjøkken: Vask ventilator og filter",
+          "completed": false
+        },
+        {
+          "id": "1d75158a-01be-4f12-b8cf-3f65af7dcf1f",
+          "label": "Kjøkken: Vask alle skap og skuffer på innsiden og utsiden",
+          "completed": false
+        },
+        {
+          "id": "94e53e8c-2ad3-41d8-b799-77f52e7edbf3",
+          "label": "Kjøkken: Vask alle møbler",
+          "completed": false
+        },
+        {
+          "id": "98867a4a-a548-4420-ab85-f7cff5e42b80",
+          "label": "Stue/gang: Vask tak, vegger og lister",
+          "completed": false
+        },
+        {
+          "id": "dde23064-1ad1-4863-943a-83f2dc918691",
+          "label": "Stue/gang: Støvsug sofaputene, også under",
+          "completed": false
+        },
+        {
+          "id": "2f45fbdb-7e08-4b49-8a02-357ee9d9f27d",
+          "label": "Stue/gang: Vask alle flater og inventar (vindusposter, bord, hyller etc.)",
+          "completed": false
+        },
+        {
+          "id": "9bc8dbdc-e927-4773-9336-f046841572dd",
+          "label": "Stue/gang: Puss speil og vinduer",
+          "completed": false
+        },
+        {
+          "id": "9e282224-05aa-4088-a5e2-702e39be08fd",
+          "label": "Stue/gang: Vask gulv – også under sofaen (dra frem sofaen hvis nødvendig)",
+          "completed": false
+        },
+        {
+          "id": "a38eece5-dcc7-4819-b1aa-c79c7dad7003",
+          "label": "Bad med badstue: Vask tak, vegger og lister",
+          "completed": false
+        },
+        {
+          "id": "01919a4a-e71f-40b2-a548-e3e156b03080",
+          "label": "Bad med badstue: Rens baderomsviften for støv",
+          "completed": false
+        },
+        {
+          "id": "ac9e4bbd-5b5b-43fa-8e9b-124482139b4c",
+          "label": "Bad med badstue: Vask badstuebenken og gulvet",
+          "completed": false
+        },
+        {
+          "id": "151436dc-06b0-4bda-925c-5921ff74b754",
+          "label": "Bad med badstue: Vask dusjen (vegger og dører), fjern hår og smuss fra sluk, og dra frem dusjkabinett og vask bak",
+          "completed": false
+        },
+        {
+          "id": "13ebcb82-dec7-4bc3-b785-cf5056b27318",
+          "label": "Bad med badstue: Vask alle vaskbare flater (vask, hyller, oppå skap etc.). Puss speil, vinduer og blandebatterier",
+          "completed": false
+        },
+        {
+          "id": "ffa31354-6e38-4bad-a889-c841d9c499d1",
+          "label": "Bad med badstue: Vask badegulv",
+          "completed": false
+        }
+      ],
+      "photos": [],
+      "logs": [],
+      "createdAt": "2025-12-04T06:35:09.684Z",
+      "updatedAt": "2025-12-04T06:35:09.684Z"
+    },
+    {
+      "id": "d0f70121-b09a-407e-98d9-f5246ee873c8",
+      "type": "cleaning",
+      "title": "Soverom 1 – Sluttrengjøring Hytte 2124",
+      "description": "Standard sluttrengjøring soverom",
+      "resourceId": "demo-hytte-2124",
+      "resourceNumber": "Hytte 2124",
+      "reservationId": "DEMO-2124",
+      "createdById": "user-jan-terje",
+      "assignedToId": "user-jan-terje",
+      "status": "open",
+      "priority": "normal",
+      "estimatedMinutes": 25,
+      "checklist": [
+        {
+          "id": "91c9967a-93b1-40af-9dd4-6162889d2d89",
+          "label": "Vask tak, vegger og lister",
+          "completed": false
+        },
+        {
+          "id": "24759eac-c2a4-47da-aa17-d968edbbc135",
+          "label": "Støvsug madrassene",
+          "completed": false
+        },
+        {
+          "id": "834b96e5-3a24-4eef-936f-7b26b8fb613a",
+          "label": "Vask alle flater (oppå skap, vindusposter, lamper etc.)",
+          "completed": false
+        },
+        {
+          "id": "b94580d9-56fc-45b5-a48f-015617a4bcb8",
+          "label": "Puss speil og vinduer (utsiden der det er lett å komme til)",
+          "completed": false
+        }
+      ],
+      "photos": [],
+      "logs": [],
+      "createdAt": "2025-12-04T06:54:44.438Z",
+      "updatedAt": "2025-12-04T06:54:44.438Z"
+    },
+    {
+      "id": "401c0942-3572-4d5c-aa06-cf9db519c0e9",
+      "type": "cleaning",
+      "title": "Soverom 2 – Sluttrengjøring Hytte 2124",
+      "description": "Standard sluttrengjøring soverom",
+      "resourceId": "demo-hytte-2124",
+      "resourceNumber": "Hytte 2124",
+      "reservationId": "DEMO-2124",
+      "createdById": "user-jan-terje",
+      "assignedToId": "user-jan-terje",
+      "status": "open",
+      "priority": "normal",
+      "estimatedMinutes": 25,
+      "checklist": [
+        {
+          "id": "f789f017-81a3-41f6-81c1-813e0bb76ce5",
+          "label": "Vask tak, vegger og lister",
+          "completed": false
+        },
+        {
+          "id": "d9746938-f467-4b7c-8c8e-934c7e921772",
+          "label": "Støvsug madrassene",
+          "completed": false
+        },
+        {
+          "id": "66f7cef2-d1a9-4faf-b764-6e76b1c86362",
+          "label": "Vask alle flater (oppå skap, vindusposter, lamper etc.)",
+          "completed": false
+        },
+        {
+          "id": "c6915a00-07f2-4a5f-ba1a-e00009b25006",
+          "label": "Puss speil og vinduer (utsiden der det er lett å komme til)",
+          "completed": false
+        }
+      ],
+      "photos": [],
+      "logs": [],
+      "createdAt": "2025-12-04T06:54:44.461Z",
+      "updatedAt": "2025-12-04T06:54:44.461Z"
+    },
+    {
+      "id": "96616cda-0b04-4366-a486-43e14000f51b",
+      "type": "cleaning",
+      "title": "Soverom 3 – Sluttrengjøring Hytte 2124",
+      "description": "Standard sluttrengjøring soverom",
+      "resourceId": "demo-hytte-2124",
+      "resourceNumber": "Hytte 2124",
+      "reservationId": "DEMO-2124",
+      "createdById": "user-jan-terje",
+      "assignedToId": "user-jan-terje",
+      "status": "open",
+      "priority": "normal",
+      "estimatedMinutes": 25,
+      "checklist": [
+        {
+          "id": "f05a9c0b-64d2-4d6b-9e08-fbdb39b532b8",
+          "label": "Vask tak, vegger og lister",
+          "completed": false
+        },
+        {
+          "id": "dc0d5792-a2e8-4c54-b469-2a80326cf725",
+          "label": "Støvsug madrassene",
+          "completed": false
+        },
+        {
+          "id": "ce354be6-b578-49ab-b466-010025d121c4",
+          "label": "Vask alle flater (oppå skap, vindusposter, lamper etc.)",
+          "completed": false
+        },
+        {
+          "id": "cc6750b4-8d88-4b2b-9feb-bd89e1da16e2",
+          "label": "Puss speil og vinduer (utsiden der det er lett å komme til)",
+          "completed": false
+        }
+      ],
+      "photos": [],
+      "logs": [],
+      "createdAt": "2025-12-04T06:54:44.482Z",
+      "updatedAt": "2025-12-04T06:54:44.482Z"
+    },
+    {
+      "id": "696071a3-f3aa-466c-98d8-39c61813d8a1",
+      "type": "cleaning",
+      "title": "Kjøkken – Sluttrengjøring Hytte 2124",
+      "description": "Sluttrengjøring kjøkken",
+      "resourceId": "demo-hytte-2124",
+      "resourceNumber": "Hytte 2124",
+      "reservationId": "DEMO-2124",
+      "createdById": "user-jan-terje",
+      "assignedToId": "user-jan-terje",
+      "status": "open",
+      "priority": "normal",
+      "estimatedMinutes": 40,
+      "checklist": [
+        {
+          "id": "ae081d8b-e386-447f-8350-b87f9da2dd7d",
+          "label": "Vask tak, vegger og lister",
+          "completed": false
+        },
+        {
+          "id": "18eb7f46-9fe2-4acf-bc96-474ed245f197",
+          "label": "Dra frem kjøleskap og vask bak",
+          "completed": false
+        },
+        {
+          "id": "88337393-82e1-4fad-ac66-4a538e20078c",
+          "label": "Avrim fryser og vask inni",
+          "completed": false
+        },
+        {
+          "id": "68d30715-4f8b-4145-9dbf-1a866101a8a3",
+          "label": "Vask komfyr, underskuffen og stekeplater",
+          "completed": false
+        },
+        {
+          "id": "51ae0580-7764-4a16-bd1f-5a737f23a928",
+          "label": "Dra frem komfyr og vask bak",
+          "completed": false
+        },
+        {
+          "id": "8e07bf64-d09a-4cbe-bb0e-8cfb1eb602a7",
+          "label": "Vask ventilator og filter",
+          "completed": false
+        },
+        {
+          "id": "ff6fe55e-c3f9-4ff6-93cc-884c446b103f",
+          "label": "Vask alle skap og skuffer på innsiden og utsiden",
+          "completed": false
+        },
+        {
+          "id": "58295322-0ea9-4d7f-86e6-dcac5053fea3",
+          "label": "Vask alle møbler",
+          "completed": false
+        }
+      ],
+      "photos": [],
+      "logs": [],
+      "createdAt": "2025-12-04T06:54:44.511Z",
+      "updatedAt": "2025-12-04T06:54:44.511Z"
+    },
+    {
+      "id": "ece26bce-fd2f-444d-b7e2-bd97840598a3",
+      "type": "cleaning",
+      "title": "Stue / gang – Sluttrengjøring Hytte 2124",
+      "description": "Sluttrengjøring stue og gang",
+      "resourceId": "demo-hytte-2124",
+      "resourceNumber": "Hytte 2124",
+      "reservationId": "DEMO-2124",
+      "createdById": "user-jan-terje",
+      "assignedToId": "user-jan-terje",
+      "status": "open",
+      "priority": "normal",
+      "estimatedMinutes": 35,
+      "checklist": [
+        {
+          "id": "2918f56e-9875-4797-88bf-ef527c6f213c",
+          "label": "Vask tak, vegger og lister",
+          "completed": false
+        },
+        {
+          "id": "8b080752-6693-4828-97f3-f5de0de31b94",
+          "label": "Støvsug sofaputene, også under",
+          "completed": false
+        },
+        {
+          "id": "5eac8490-3aca-4a97-b8e0-5dd8e7fa1288",
+          "label": "Vask alle flater og inventar (vindusposter, bord, hyller etc.)",
+          "completed": false
+        },
+        {
+          "id": "8f0e44d1-559d-44ba-9aa4-4c800d824cd7",
+          "label": "Puss speil og vinduer",
+          "completed": false
+        },
+        {
+          "id": "fb37ce03-3e22-4858-8287-1f7bf6f59cd0",
+          "label": "Vask gulv – også under sofaen (dra frem sofaen hvis nødvendig)",
+          "completed": false
+        }
+      ],
+      "photos": [],
+      "logs": [],
+      "createdAt": "2025-12-04T06:54:44.536Z",
+      "updatedAt": "2025-12-04T06:54:44.536Z"
+    },
+    {
+      "id": "31864ad3-f63d-4abb-bca8-81e3e2cf0617",
+      "type": "cleaning",
+      "title": "Bad med badstue – Sluttrengjøring Hytte 2124",
+      "description": "Sluttrengjøring bad og badstue",
+      "resourceId": "demo-hytte-2124",
+      "resourceNumber": "Hytte 2124",
+      "reservationId": "DEMO-2124",
+      "createdById": "user-jan-terje",
+      "assignedToId": "user-jan-terje",
+      "status": "open",
+      "priority": "normal",
+      "estimatedMinutes": 35,
+      "checklist": [
+        {
+          "id": "6afd006f-b045-4d30-8fa6-c7c15b0d2035",
+          "label": "Vask tak, vegger og lister",
+          "completed": false
+        },
+        {
+          "id": "cb704ee9-2fd0-42bd-b971-843b418e4dec",
+          "label": "Rens baderomsviften for støv",
+          "completed": false
+        },
+        {
+          "id": "a2d8d58b-bf7e-4ddd-8f61-0cbdf0d9dad4",
+          "label": "Vask badstuebenk og gulv",
+          "completed": false
+        },
+        {
+          "id": "c04c861b-fdfa-4ffd-8c12-9093b172ba29",
+          "label": "Vask dusjen (vegger og dører). Fjern hår og smuss fra sluk, og dra frem dusjkabinett og vask bak",
+          "completed": false
+        },
+        {
+          "id": "72ce25c7-a6df-498d-a736-19cd734463d7",
+          "label": "Vask alle vaskbare flater (vask, hyller, oppå skap etc.). Puss speil, vinduer og blandebatterier",
+          "completed": false
+        },
+        {
+          "id": "d926d822-4313-4f17-871f-6536bb94ce3d",
+          "label": "Vask badegulv",
+          "completed": false
+        }
+      ],
+      "photos": [],
+      "logs": [],
+      "createdAt": "2025-12-04T06:54:44.557Z",
+      "updatedAt": "2025-12-04T06:54:44.557Z"
+    },
+    {
+      "id": "d41bd93c-4eb7-4571-9258-e6ed98368790",
+      "type": "cleaning",
+      "title": "Soverom 1 – Sluttrengjøring Hytte 2124",
+      "description": "Standard sluttrengjøring soverom",
+      "resourceId": "demo-hytte-2124",
+      "resourceNumber": "Hytte 2124",
+      "reservationId": "DEMO-2124",
+      "createdById": "user-jan-terje",
+      "assignedToId": "user-jan-terje",
+      "status": "open",
+      "priority": "normal",
+      "estimatedMinutes": 25,
+      "checklist": [
+        {
+          "id": "6ca6c996-afac-4f38-968a-f695d6f0f453",
+          "label": "Vask tak, vegger og lister",
+          "completed": false
+        },
+        {
+          "id": "e219e1f6-628e-4c1d-8c72-b5801251d346",
+          "label": "Støvsug madrassene",
+          "completed": false
+        },
+        {
+          "id": "3a105ff5-3117-42a0-aa73-4e386c8f843a",
+          "label": "Vask alle flater (oppå skap, vindusposter, lamper etc.)",
+          "completed": false
+        },
+        {
+          "id": "98186a1c-7b0f-4a14-9bb2-9a729e546302",
+          "label": "Puss speil og vinduer (utsiden der det er lett å komme til)",
+          "completed": false
+        }
+      ],
+      "photos": [],
+      "logs": [],
+      "createdAt": "2025-12-04T06:54:59.279Z",
+      "updatedAt": "2025-12-04T06:54:59.279Z"
+    },
+    {
+      "id": "c0f53263-bc9f-42cc-8fca-07311d508a22",
+      "type": "cleaning",
+      "title": "Soverom 2 – Sluttrengjøring Hytte 2124",
+      "description": "Standard sluttrengjøring soverom",
+      "resourceId": "demo-hytte-2124",
+      "resourceNumber": "Hytte 2124",
+      "reservationId": "DEMO-2124",
+      "createdById": "user-jan-terje",
+      "assignedToId": "user-jan-terje",
+      "status": "open",
+      "priority": "normal",
+      "estimatedMinutes": 25,
+      "checklist": [
+        {
+          "id": "970394a6-481e-4b13-9a17-17b5f37c8442",
+          "label": "Vask tak, vegger og lister",
+          "completed": false
+        },
+        {
+          "id": "ff88d034-0150-4564-b0c9-923f7de79fec",
+          "label": "Støvsug madrassene",
+          "completed": false
+        },
+        {
+          "id": "032dfd9c-463b-42f1-b3ae-71de0b90a048",
+          "label": "Vask alle flater (oppå skap, vindusposter, lamper etc.)",
+          "completed": false
+        },
+        {
+          "id": "fd56c42c-0ee4-4e59-8350-b1f1fc520af7",
+          "label": "Puss speil og vinduer (utsiden der det er lett å komme til)",
+          "completed": false
+        }
+      ],
+      "photos": [],
+      "logs": [],
+      "createdAt": "2025-12-04T06:54:59.306Z",
+      "updatedAt": "2025-12-04T06:54:59.306Z"
+    },
+    {
+      "id": "549b5392-4c1d-4925-b85a-5429ac24f8de",
+      "type": "cleaning",
+      "title": "Soverom 3 – Sluttrengjøring Hytte 2124",
+      "description": "Standard sluttrengjøring soverom",
+      "resourceId": "demo-hytte-2124",
+      "resourceNumber": "Hytte 2124",
+      "reservationId": "DEMO-2124",
+      "createdById": "user-jan-terje",
+      "assignedToId": "user-jan-terje",
+      "status": "open",
+      "priority": "normal",
+      "estimatedMinutes": 25,
+      "checklist": [
+        {
+          "id": "b88c9600-5cb3-4695-8a18-2b48fe72ec1d",
+          "label": "Vask tak, vegger og lister",
+          "completed": false
+        },
+        {
+          "id": "42d8ee13-dceb-4f25-bfcb-5b990f0f12ce",
+          "label": "Støvsug madrassene",
+          "completed": false
+        },
+        {
+          "id": "a4314416-3ae3-494f-b132-c1d099d23fc1",
+          "label": "Vask alle flater (oppå skap, vindusposter, lamper etc.)",
+          "completed": false
+        },
+        {
+          "id": "7a6cecda-1a74-4377-8093-149a7c38bde4",
+          "label": "Puss speil og vinduer (utsiden der det er lett å komme til)",
+          "completed": false
+        }
+      ],
+      "photos": [],
+      "logs": [],
+      "createdAt": "2025-12-04T06:54:59.345Z",
+      "updatedAt": "2025-12-04T06:54:59.345Z"
+    },
+    {
+      "id": "dd04e5e9-42c8-44a1-bfa6-75f27fe7a7cf",
+      "type": "cleaning",
+      "title": "Kjøkken – Sluttrengjøring Hytte 2124",
+      "description": "Sluttrengjøring kjøkken",
+      "resourceId": "demo-hytte-2124",
+      "resourceNumber": "Hytte 2124",
+      "reservationId": "DEMO-2124",
+      "createdById": "user-jan-terje",
+      "assignedToId": "user-jan-terje",
+      "status": "open",
+      "priority": "normal",
+      "estimatedMinutes": 40,
+      "checklist": [
+        {
+          "id": "aff468a4-9a94-442e-bbd1-dcdfd0b0a05b",
+          "label": "Vask tak, vegger og lister",
+          "completed": false
+        },
+        {
+          "id": "2d3f15ba-604f-4113-9f5b-8f9120f6e8ba",
+          "label": "Dra frem kjøleskap og vask bak",
+          "completed": false
+        },
+        {
+          "id": "2c75014c-390b-4f86-aba8-36a1bea7ee08",
+          "label": "Avrim fryser og vask inni",
+          "completed": false
+        },
+        {
+          "id": "c8016562-5773-4915-aeae-abea46794553",
+          "label": "Vask komfyr, underskuffen og stekeplater",
+          "completed": false
+        },
+        {
+          "id": "b15168dc-9624-4a84-bd2e-15eeece9f453",
+          "label": "Dra frem komfyr og vask bak",
+          "completed": false
+        },
+        {
+          "id": "ef462025-cfe5-450d-9370-e19a280726c4",
+          "label": "Vask ventilator og filter",
+          "completed": false
+        },
+        {
+          "id": "4f94f285-641c-48be-9fe7-ebfa188bb0ed",
+          "label": "Vask alle skap og skuffer på innsiden og utsiden",
+          "completed": false
+        },
+        {
+          "id": "76cc149a-6dfe-4146-bfe1-a35ca8da3540",
+          "label": "Vask alle møbler",
+          "completed": false
+        }
+      ],
+      "photos": [],
+      "logs": [],
+      "createdAt": "2025-12-04T06:54:59.595Z",
+      "updatedAt": "2025-12-04T06:54:59.595Z"
+    },
+    {
+      "id": "7b3fd5be-a195-481c-b1a5-5b6d654a74cb",
+      "type": "cleaning",
+      "title": "Stue / gang – Sluttrengjøring Hytte 2124",
+      "description": "Sluttrengjøring stue og gang",
+      "resourceId": "demo-hytte-2124",
+      "resourceNumber": "Hytte 2124",
+      "reservationId": "DEMO-2124",
+      "createdById": "user-jan-terje",
+      "assignedToId": "user-jan-terje",
+      "status": "open",
+      "priority": "normal",
+      "estimatedMinutes": 35,
+      "checklist": [
+        {
+          "id": "8b2af2a3-1361-47cf-a900-14246c7c5fe5",
+          "label": "Vask tak, vegger og lister",
+          "completed": false
+        },
+        {
+          "id": "3e2a2932-8302-43f3-90a9-3d1adf210e2c",
+          "label": "Støvsug sofaputene, også under",
+          "completed": false
+        },
+        {
+          "id": "bd883a56-e9c6-474a-a9e1-c9bbce59d478",
+          "label": "Vask alle flater og inventar (vindusposter, bord, hyller etc.)",
+          "completed": false
+        },
+        {
+          "id": "255ec613-a3bd-4381-a32f-608d2967d97e",
+          "label": "Puss speil og vinduer",
+          "completed": false
+        },
+        {
+          "id": "dce0eb25-9f4f-47c0-9131-cdc5db9c5632",
+          "label": "Vask gulv – også under sofaen (dra frem sofaen hvis nødvendig)",
+          "completed": false
+        }
+      ],
+      "photos": [],
+      "logs": [],
+      "createdAt": "2025-12-04T06:54:59.625Z",
+      "updatedAt": "2025-12-04T06:54:59.625Z"
+    },
+    {
+      "id": "edab99d9-3d2a-46d0-934f-98ccd8f03699",
+      "type": "cleaning",
+      "title": "Bad med badstue – Sluttrengjøring Hytte 2124",
+      "description": "Sluttrengjøring bad og badstue",
+      "resourceId": "demo-hytte-2124",
+      "resourceNumber": "Hytte 2124",
+      "reservationId": "DEMO-2124",
+      "createdById": "user-jan-terje",
+      "assignedToId": "user-jan-terje",
+      "status": "open",
+      "priority": "normal",
+      "estimatedMinutes": 35,
+      "checklist": [
+        {
+          "id": "e82141b8-a93f-4dde-ba6f-01324f6e6d6f",
+          "label": "Vask tak, vegger og lister",
+          "completed": false
+        },
+        {
+          "id": "9c046eb6-7fba-4038-b79d-125a4170ec07",
+          "label": "Rens baderomsviften for støv",
+          "completed": false
+        },
+        {
+          "id": "ddb9890f-7a57-477c-9f34-72a659f99aa3",
+          "label": "Vask badstuebenk og gulv",
+          "completed": false
+        },
+        {
+          "id": "76825e99-23c8-46a6-b616-daf76eb18a11",
+          "label": "Vask dusjen (vegger og dører). Fjern hår og smuss fra sluk, og dra frem dusjkabinett og vask bak",
+          "completed": false
+        },
+        {
+          "id": "42acd78c-6502-40c8-9ea2-eb577bc797e7",
+          "label": "Vask alle vaskbare flater (vask, hyller, oppå skap etc.). Puss speil, vinduer og blandebatterier",
+          "completed": false
+        },
+        {
+          "id": "306f53ab-231e-4081-9a40-069dd487a9c2",
+          "label": "Vask badegulv",
+          "completed": false
+        }
+      ],
+      "photos": [],
+      "logs": [],
+      "createdAt": "2025-12-04T06:54:59.683Z",
+      "updatedAt": "2025-12-04T06:54:59.683Z"
+    }
+  ],
+  "staff": []
+}

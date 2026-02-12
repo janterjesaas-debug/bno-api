@@ -1,0 +1,323 @@
+﻿{
+    "meta":  {
+                 "CheckIn":  "2026-02-10",
+                 "CheckOut":  "2026-02-12",
+                 "Nights":  2,
+                 "ServiceId":  "394c01db-2c18-46a9-b1a8-b31400865186",
+                 "EnterpriseId":  "f45553a6-6697-485a-a352-b30600bcfd4d",
+                 "RateId":  "3c65bf02-53a9-473c-a792-b314008651e4",
+                 "PriceMode":  "Agent",
+                 "Lang":  "nb",
+                 "IncludeSoldOut":  true,
+                 "GeneratedUtc":  "2026-02-05T14:33:43.0416697Z"
+             },
+    "availability":  {
+                         "DatesUtc":  [
+                                          "2026-02-09T23:00:00Z",
+                                          "2026-02-10T23:00:00Z",
+                                          "2026-02-11T23:00:00Z"
+                                      ],
+                         "TimeUnitStartsUtc":  [
+                                                   "2026-02-09T23:00:00Z",
+                                                   "2026-02-10T23:00:00Z",
+                                                   "2026-02-11T23:00:00Z"
+                                               ],
+                         "CategoryAvailabilities":  [
+                                                        {
+                                                            "CategoryId":  "25859550-3b6b-424b-8eb5-b32c00a70c07",
+                                                            "Availabilities":  [
+                                                                                   1,
+                                                                                   1,
+                                                                                   1
+                                                                               ],
+                                                            "Adjustments":  [
+                                                                                0,
+                                                                                0,
+                                                                                0
+                                                                            ]
+                                                        }
+                                                    ]
+                     },
+    "pricing":  {
+                    "Currency":  "NOK",
+                    "DatesUtc":  [
+                                     "2026-02-09T23:00:00Z",
+                                     "2026-02-10T23:00:00Z",
+                                     "2026-02-11T23:00:00Z"
+                                 ],
+                    "TimeUnitStartsUtc":  [
+                                              "2026-02-09T23:00:00Z",
+                                              "2026-02-10T23:00:00Z",
+                                              "2026-02-11T23:00:00Z"
+                                          ],
+                    "BasePrices":  [
+                                       9999.00,
+                                       9999.00,
+                                       9999.00
+                                   ],
+                    "BaseAmountPrices":  [
+                                             {
+                                                 "Currency":  "NOK",
+                                                 "NetValue":  9999.00,
+                                                 "GrossValue":  9999.00,
+                                                 "TaxValues":  [
+                                                                   {
+                                                                       "Code":  "NO-2025-0%",
+                                                                       "Value":  0.00
+                                                                   }
+                                                               ],
+                                                 "Breakdown":  {
+                                                                   "Items":  [
+                                                                                 {
+                                                                                     "TaxRateCode":  "NO-2025-0%",
+                                                                                     "NetValue":  9999.00,
+                                                                                     "TaxValue":  0.00
+                                                                                 }
+                                                                             ]
+                                                               }
+                                             },
+                                             {
+                                                 "Currency":  "NOK",
+                                                 "NetValue":  9999.00,
+                                                 "GrossValue":  9999.00,
+                                                 "TaxValues":  [
+                                                                   {
+                                                                       "Code":  "NO-2025-0%",
+                                                                       "Value":  0.00
+                                                                   }
+                                                               ],
+                                                 "Breakdown":  {
+                                                                   "Items":  [
+                                                                                 {
+                                                                                     "TaxRateCode":  "NO-2025-0%",
+                                                                                     "NetValue":  9999.00,
+                                                                                     "TaxValue":  0.00
+                                                                                 }
+                                                                             ]
+                                                               }
+                                             },
+                                             {
+                                                 "Currency":  "NOK",
+                                                 "NetValue":  9999.00,
+                                                 "GrossValue":  9999.00,
+                                                 "TaxValues":  [
+                                                                   {
+                                                                       "Code":  "NO-2025-0%",
+                                                                       "Value":  0.00
+                                                                   }
+                                                               ],
+                                                 "Breakdown":  {
+                                                                   "Items":  [
+                                                                                 {
+                                                                                     "TaxRateCode":  "NO-2025-0%",
+                                                                                     "NetValue":  9999.00,
+                                                                                     "TaxValue":  0.00
+                                                                                 }
+                                                                             ]
+                                                               }
+                                             }
+                                         ],
+                    "CategoryPrices":  [
+                                           {
+                                               "CategoryId":  "25859550-3b6b-424b-8eb5-b32c00a70c07",
+                                               "Prices":  [
+                                                              9999.00,
+                                                              9999.00,
+                                                              9999.00
+                                                          ],
+                                               "AmountPrices":  [
+                                                                    {
+                                                                        "Currency":  "NOK",
+                                                                        "NetValue":  9999.00,
+                                                                        "GrossValue":  9999.00,
+                                                                        "TaxValues":  [
+                                                                                          {
+                                                                                              "Code":  "NO-2025-0%",
+                                                                                              "Value":  0.00
+                                                                                          }
+                                                                                      ],
+                                                                        "Breakdown":  {
+                                                                                          "Items":  [
+                                                                                                        {
+                                                                                                            "TaxRateCode":  "NO-2025-0%",
+                                                                                                            "NetValue":  9999.00,
+                                                                                                            "TaxValue":  0.00
+                                                                                                        }
+                                                                                                    ]
+                                                                                      }
+                                                                    },
+                                                                    {
+                                                                        "Currency":  "NOK",
+                                                                        "NetValue":  9999.00,
+                                                                        "GrossValue":  9999.00,
+                                                                        "TaxValues":  [
+                                                                                          {
+                                                                                              "Code":  "NO-2025-0%",
+                                                                                              "Value":  0.00
+                                                                                          }
+                                                                                      ],
+                                                                        "Breakdown":  {
+                                                                                          "Items":  [
+                                                                                                        {
+                                                                                                            "TaxRateCode":  "NO-2025-0%",
+                                                                                                            "NetValue":  9999.00,
+                                                                                                            "TaxValue":  0.00
+                                                                                                        }
+                                                                                                    ]
+                                                                                      }
+                                                                    },
+                                                                    {
+                                                                        "Currency":  "NOK",
+                                                                        "NetValue":  9999.00,
+                                                                        "GrossValue":  9999.00,
+                                                                        "TaxValues":  [
+                                                                                          {
+                                                                                              "Code":  "NO-2025-0%",
+                                                                                              "Value":  0.00
+                                                                                          }
+                                                                                      ],
+                                                                        "Breakdown":  {
+                                                                                          "Items":  [
+                                                                                                        {
+                                                                                                            "TaxRateCode":  "NO-2025-0%",
+                                                                                                            "NetValue":  9999.00,
+                                                                                                            "TaxValue":  0.00
+                                                                                                        }
+                                                                                                    ]
+                                                                                      }
+                                                                    }
+                                                                ]
+                                           }
+                                       ],
+                    "CategoryAdjustments":  [
+
+                                            ],
+                    "AgeCategoryAdjustments":  [
+                                                   {
+                                                       "AgeCategoryId":  "c4fe316b-92ae-4011-8482-b314008651db",
+                                                       "AbsoluteValue":  0.0000,
+                                                       "Type":  "NegativeOccupancyAdjustment"
+                                                   },
+                                                   {
+                                                       "AgeCategoryId":  "c4fe316b-92ae-4011-8482-b314008651db",
+                                                       "AbsoluteValue":  0.0000,
+                                                       "Type":  "ExtraOccupancyAdjustment"
+                                                   }
+                                               ],
+                    "RelativeAdjustment":  0.0,
+                    "AbsoluteAdjustment":  0.0,
+                    "EmptyUnitAdjustment":  0.0000,
+                    "ExtraUnitAdjustment":  0.0000
+                },
+    "resourceCategories":  {
+                               "ResourceCategories":  [
+                                                          {
+                                                              "Id":  "25859550-3b6b-424b-8eb5-b32c00a70c07",
+                                                              "EnterpriseId":  "f45553a6-6697-485a-a352-b30600bcfd4d",
+                                                              "ServiceId":  "394c01db-2c18-46a9-b1a8-b31400865186",
+                                                              "IsActive":  true,
+                                                              "Type":  "Room",
+                                                              "Classification":  null,
+                                                              "Names":  {
+                                                                            "cs-CZ":  "Máte chatu k pronájmu?",
+                                                                            "da-DK":  "Har du en hytte, du vil leje ud?",
+                                                                            "de-CH":  "Händ Sie es Hüttli zum Vermiete?",
+                                                                            "de-DE":  "Haben Sie eine Hütte zu vermieten?",
+                                                                            "el-GR":  "Έχετε ένα σαλέ για ενοικίαση;",
+                                                                            "en-GB":  "Do you have a cabin to rent out?",
+                                                                            "ca-ES":  "Tens una cabana per llogar?",
+                                                                            "eu-ES":  "Baduzu alokatzeko txabolarik?",
+                                                                            "es-ES":  "¿Tienes una cabaña para alquilar?",
+                                                                            "et-EE":  "Kas sul on suvila, mida välja üürida?",
+                                                                            "fi-FI":  "Onko sinulla mökki vuokrattavaksi?",
+                                                                            "fr-CA":  "Avez-vous un chalet à louer ?",
+                                                                            "fr-FR":  "Avez-vous un chalet à louer ?",
+                                                                            "is-IS":  "Áttu sumarhús til leigu?",
+                                                                            "it-IT":  "Hai una baita da affittare?",
+                                                                            "ja-JP":  "貸し出せるコテージ（別荘）はありますか？",
+                                                                            "ka-GE":  "გაქვთ ქოხი გასაქირავებლად?",
+                                                                            "ko-KR":  "임대할 오두막(캐빈)이 있으신가요?",
+                                                                            "lv-LV":  "Vai tev ir mājiņa, ko izīrēt?",
+                                                                            "ms-MY":  "Adakah anda mempunyai kabin untuk disewakan?",
+                                                                            "nl-NL":  "Heb je een cabin om te verhuren?",
+                                                                            "nb-NO":  "Har du en hytte å leie ut?",
+                                                                            "pl-PL":  "Czy masz chatę do wynajęcia?",
+                                                                            "pt-BR":  "Você tem uma cabana para alugar?",
+                                                                            "pt-PT":  "Tem uma cabana para arrendar?",
+                                                                            "ru-RU":  "У вас есть домик, который можно сдавать?",
+                                                                            "sk-SK":  "Máte chatu na prenájom?",
+                                                                            "sv-SE":  "Har du en stuga att hyra ut?",
+                                                                            "ta-IN":  "வாடகைக்கு விடுவதற்கான குடில் உங்களிடம் உள்ளதா?",
+                                                                            "tr-TR":  "Kiraya verebileceğiniz bir kulübeniz var mı?",
+                                                                            "uk-UA":  "У вас є будиночок, який можна здавати в оренду?",
+                                                                            "zh-CN":  "你有小屋可以出租吗？",
+                                                                            "en-US":  "Do you have a cabin to rent out?"
+                                                                        },
+                                                              "ShortNames":  {
+
+                                                                             },
+                                                              "Descriptions":  {
+                                                                                   "cs-CZ":  "Hledáme další ubytovací jednotky v Norsku a Švédsku. Ať už jste v jakékoli oblasti, můžeme posoudit potenciál pronájmu a pomoci vám začít s profesionálním marketingem a rezervacemi. Pošlete nám prosím pár informací e-mailem na booking@bno-travel.com\r\n – a ozveme se vám.",
+                                                                                   "da-DK":  "Vi søger flere enheder i Norge og Sverige. Uanset område kan vi vurdere udlejningspotentialet og hjælpe dig i gang med professionel markedsføring og booking. Send os lidt info på mail: booking@bno-travel.com\r\n – så kontakter vi dig.",
+                                                                                   "de-CH":  "Mir sueched wiiteri Objekte i Norwege und Schwede. Egal i welere Region: Mir chönd s Vermietigspotenzial iischätze und helfed Ihne bim Start mit professionellem Marketing und em Buechigs-Management. Schicked Sie eus chli Info per Mail a booking@bno-travel.com\r\n – denn melded mir eus bi Ihne.",
+                                                                                   "de-DE":  "Wir suchen weitere Objekte in Norwegen und Schweden. Unabhängig von der Region können wir das Vermietungspotenzial einschätzen und Ihnen beim Start mit professionellem Marketing und Buchungsmanagement helfen. Senden Sie uns kurz einige Informationen per E-Mail an booking@bno-travel.com\r\n – dann melden wir uns bei Ihnen.",
+                                                                                   "el-GR":  "Αναζητούμε περισσότερα καταλύματα στη Νορβηγία και στη Σουηδία. Ανεξάρτητα από την περιοχή, μπορούμε να αξιολογήσουμε το δυναμικό ενοικίασης και να σας βοηθήσουμε να ξεκινήσετε με επαγγελματικό μάρκετινγκ και κρατήσεις. Στείλτε μας λίγες πληροφορίες με email στο booking@bno-travel.com\r\n – και θα επικοινωνήσουμε μαζί σας.",
+                                                                                   "en-GB":  "We are looking for more properties in Norway and Sweden. Wherever you are, we can assess the rental potential and help you get started with professional marketing and bookings. Send us a bit of information by email to booking@bno-travel.com\r\n – and we will be in touch.",
+                                                                                   "ca-ES":  "Busquem més allotjaments a Noruega i Suècia. Sigui quina sigui la zona, podem valorar el potencial de lloguer i ajudar-te a començar amb màrqueting professional i gestió de reserves. Envia’ns una mica d’informació per correu a booking@bno-travel.com\r\n i ens posarem en contacte.",
+                                                                                   "eu-ES":  "Norvegian eta Suedian unitate gehiago bilatzen ari gara. Edozein eremutan egonda ere, alokairu-potentziala baloratu eta marketin profesionalarekin eta erreserben kudeaketarekin hasteko lagun zaitzakegu. Bidali informazio pixka bat posta elektronikoz: booking@bno-travel.com\r\n – eta zurekin harremanetan jarriko gara.",
+                                                                                   "es-ES":  "Buscamos más alojamientos en Noruega y Suecia. Independientemente de la zona, podemos evaluar el potencial de alquiler y ayudarte a empezar con marketing profesional y gestión de reservas. Envíanos un poco de información por correo a booking@bno-travel.com\r\n y nos pondremos en contacto.",
+                                                                                   "et-EE":  "Otsime juurde majutuskohti Norras ja Rootsis. Sõltumata asukohast saame hinnata üüripotentsiaali ning aidata sul alustada professionaalse turunduse ja broneeringute haldamisega. Saada meile veidi infot e-posti teel: booking@bno-travel.com\r\n – ja võtame ühendust.",
+                                                                                   "fi-FI":  "Etsimme lisää kohteita Norjasta ja Ruotsista. Alueesta riippumatta voimme arvioida vuokrauspotentiaalin ja auttaa sinut alkuun ammattimaisella markkinoinnilla ja varauksilla. Lähetä meille hieman tietoja sähköpostilla: booking@bno-travel.com\r\n – niin otamme yhteyttä.",
+                                                                                   "fr-CA":  "Nous cherchons davantage de propriétés en Norvège et en Suède. Peu importe la région, on peut évaluer le potentiel de location et vous aider à démarrer avec du marketing professionnel et la gestion des réservations. Envoyez-nous quelques infos par courriel à booking@bno-travel.com\r\n – et on vous recontacte.",
+                                                                                   "fr-FR":  "Nous recherchons davantage de biens en Norvège et en Suède. Quelle que soit la région, nous pouvons évaluer le potentiel locatif et vous aider à démarrer avec un marketing professionnel et la gestion des réservations. Envoyez-nous quelques informations par e-mail à booking@bno-travel.com\r\n – et nous vous recontacterons.",
+                                                                                   "is-IS":  "Við leitum að fleiri eignum í Noregi og Svíþjóð. Óháð staðsetningu getum við metið leigumöguleikana og hjálpað þér að komast af stað með faglegri markaðssetningu og bókunum. Sendu okkur smá upplýsingar í tölvupósti: booking@bno-travel.com\r\n – og við höfum samband.",
+                                                                                   "it-IT":  "Siamo alla ricerca di più strutture in Norvegia e Svezia. Qualunque sia la zona, possiamo valutare il potenziale di affitto e aiutarti a partire con marketing professionale e gestione delle prenotazioni. Inviaci qualche informazione via email a booking@bno-travel.com\r\n – e ti contatteremo.",
+                                                                                   "ja-JP":  "私たちはノルウェーとスウェーデンで、より多くの宿泊施設（物件）を募集しています。エリアを問わず、貸し出しの可能性を評価し、プロによるマーケティングと予約対応でスタートをサポートします。メールで簡単な情報をお送りください：booking@bno-travel.com\r\n — 折り返しご連絡いたします。",
+                                                                                   "ka-GE":  "ჩვენ ვეძებთ მეტ ობიექტს ნორვეგიასა და შვედეთში. ტერიტორიის მიუხედავად, შეგვიძლია შევაფასოთ გაქირავების პოტენციალი და დაგეხმაროთ დაწყებაში პროფესიონალური მარკეტინგითა და ჯავშნებით. გამოგვიგზავნეთ მცირე ინფორმაცია ელფოსტაზე: booking@bno-travel.com\r\n – და დაგიკავშირდებით.",
+                                                                                   "ko-KR":  "저희는 노르웨이와 스웨덴에서 더 많은 숙소(유닛)를 찾고 있습니다. 지역과 관계없이 임대(숙박) 잠재력을 평가하고, 전문적인 마케팅과 예약 운영으로 시작할 수 있도록 도와드립니다. 이메일로 간단한 정보를 보내주세요: booking@bno-travel.com\r\n — 그러면 저희가 연락드리겠습니다.",
+                                                                                   "lv-LV":  "Mēs meklējam vairāk īpašumu Norvēģijā un Zviedrijā. Neatkarīgi no atrašanās vietas varam izvērtēt izīrēšanas potenciālu un palīdzēt tev sākt ar profesionālu mārketingu un rezervāciju pārvaldību. Atsūti mums īsu informāciju e-pastā: booking@bno-travel.com\r\n – un mēs sazināsimies.",
+                                                                                   "ms-MY":  "Kami sedang mencari lebih banyak unit di Norway dan Sweden. Tidak kira di mana lokasi anda, kami boleh menilai potensi sewaan dan membantu anda bermula dengan pemasaran profesional serta pengurusan tempahan. Hantar sedikit maklumat melalui e-mel: booking@bno-travel.com\r\n – dan kami akan menghubungi anda.",
+                                                                                   "nl-NL":  "We zijn op zoek naar meer accommodaties in Noorwegen en Zweden. Ongeacht de locatie kunnen we het verhuurpotentieel beoordelen en je helpen op weg met professionele marketing en boekingen. Stuur ons wat informatie per e-mail: booking@bno-travel.com\r\n – dan nemen we contact met je op.",
+                                                                                   "nb-NO":  "Vi søker flere enheter i Norge og Sverige. Uansett område kan vi vurdere utleiepotensialet og hjelpe deg i gang med profesjonell markedsføring og booking. Send oss litt info på mail: booking@bno-travel.com\r\n – så tar vi kontakt.",
+                                                                                   "pl-PL":  "Szukamy kolejnych obiektów w Norwegii i Szwecji. Niezależnie od lokalizacji możemy ocenić potencjał wynajmu i pomóc Ci wystartować z profesjonalnym marketingiem oraz obsługą rezerwacji. Wyślij nam kilka informacji e-mailem na booking@bno-travel.com\r\n – a skontaktujemy się z Tobą.",
+                                                                                   "pt-BR":  "Estamos buscando mais imóveis na Noruega e na Suécia. Independentemente da região, podemos avaliar o potencial de locação e ajudar você a começar com marketing profissional e gestão de reservas. Envie algumas informações por e-mail para booking@bno-travel.com\r\n — e entraremos em contato.",
+                                                                                   "pt-PT":  "Estamos à procura de mais unidades na Noruega e na Suécia. Independentemente da zona, podemos avaliar o potencial de arrendamento e ajudá-lo(a) a começar com marketing profissional e gestão de reservas. Envie-nos algumas informações por e-mail para booking@bno-travel.com\r\n – e entraremos em contacto.",
+                                                                                   "ru-RU":  "Мы ищем больше объектов в Норвегии и Швеции. Независимо от региона мы можем оценить потенциал аренды и помочь вам начать с профессионального маркетинга и бронирований. Отправьте нам немного информации на e-mail: booking@bno-travel.com\r\n — и мы свяжемся с вами.",
+                                                                                   "sk-SK":  "Hľadáme ďalšie ubytovacie jednotky v Nórsku a vo Švédsku. Nezáleží na tom, v akej oblasti sa nachádzate – vieme posúdiť potenciál prenájmu a pomôcť vám začať s profesionálnym marketingom a rezerváciami. Pošlite nám pár informácií e-mailom na booking@bno-travel.com\r\n – a ozveme sa vám.",
+                                                                                   "sv-SE":  "Vi söker fler enheter i Norge och Sverige. Oavsett område kan vi bedöma uthyrningspotentialen och hjälpa dig i gång med professionell marknadsföring och bokning. Skicka lite info via mejl: booking@bno-travel.com\r\n – så hör vi av oss.",
+                                                                                   "ta-IN":  "நாங்கள் நோர்வே மற்றும் ஸ்வீடனில் மேலும் பல யூனிட்களை தேடுகிறோம். பகுதி எதுவாக இருந்தாலும், வாடகைக்கு விடும் திறனை மதிப்பீடு செய்து, தொழில்முறை மார்க்கெட்டிங் மற்றும் முன்பதிவுடன் நீங்கள் தொடங்க உதவுகிறோம். சிறிது தகவலை மின்னஞ்சலில் அனுப்புங்கள்: booking@bno-travel.com\r\n – பின்னர் நாங்கள் தொடர்பு கொள்கிறோம்.",
+                                                                                   "tr-TR":  "Norveç ve İsveç’te daha fazla konaklama birimi arıyoruz. Bölge fark etmeksizin kiralama potansiyelini değerlendirebilir ve profesyonel pazarlama ile rezervasyon sürecini başlatmanda yardımcı olabiliriz. Bize e-posta ile biraz bilgi gönder: booking@bno-travel.com\r\n – ardından seninle iletişime geçeriz.",
+                                                                                   "uk-UA":  "Ми шукаємо більше об’єктів у Норвегії та Швеції. Незалежно від локації ми можемо оцінити потенціал оренди та допомогти вам розпочати з професійного маркетингу й бронювань. Надішліть нам трохи інформації на email: booking@bno-travel.com\r\n — і ми зв’яжемося з вами.",
+                                                                                   "zh-CN":  "我们正在挪威和瑞典寻找更多房源。无论在哪个地区，我们都可以评估出租潜力，并协助你通过专业营销与预订管理快速开始。请发送一些信息至邮箱：booking@bno-travel.com\r\n——我们会与您联系。",
+                                                                                   "en-US":  "We’re looking for more properties in Norway and Sweden. No matter where you are, we can assess the rental potential and help you get started with professional marketing and bookings. Email us a bit of information at booking@bno-travel.com\r\n — and we’ll be in touch."
+                                                                               },
+                                                              "Ordering":  0,
+                                                              "Capacity":  5,
+                                                              "ExtraCapacity":  0,
+                                                              "ExternalIdentifier":  null,
+                                                              "AccountingCategoryId":  "756e1768-c984-410d-ba9b-b30600bd0ae6"
+                                                          }
+                                                      ],
+                               "Cursor":  null
+                           },
+    "report":  [
+                   {
+                       "ResourceCategoryId":  "25859550-3b6b-424b-8eb5-b32c00a70c07",
+                       "ShortName":  "a70c07",
+                       "Name":  "Category 25859550-3b6b-424b-8eb5-b32c00a70c07",
+                       "Capacity":  5,
+                       "MinAvail":  1,
+                       "LodgingTotal":  29997.00,
+                       "FeeExVat":  0,
+                       "FeeVat":  0,
+                       "FeeIncVat":  0,
+                       "CustomerTotal":  29997.00,
+                       "SupplierNet":  29997.00,
+                       "Currency":  "NOK",
+                       "BookingMode":  "INTERNAL",
+                       "BookingUrl":  "",
+                       "FeePolicy":  "NONE (own inventory)",
+                       "Description":  ""
+                   }
+               ]
+}

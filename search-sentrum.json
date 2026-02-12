@@ -1,0 +1,36 @@
+﻿{
+    "ok":  true,
+    "data":  {
+                 "availability":  {
+                                      "ResourceCategoryAvailabilities":  [
+                                                                             {
+                                                                                 "ResourceCategoryId":  "35f40983-7045-409a-a0ae-b3bb00ba99fc",
+                                                                                 "RoomCategoryId":  "35f40983-7045-409a-a0ae-b3bb00ba99fc",
+                                                                                 "Name":  "Vestsidevegen 14",
+                                                                                 "Description":  null,
+                                                                                 "Capacity":  12,
+                                                                                 "Image":  null,
+                                                                                 "Images":  null,
+                                                                                 "AvailableUnits":  1,
+                                                                                 "TotalAvailableUnitsCount":  1,
+                                                                                 "AvailableRoomCount":  1,
+                                                                                 "PriceNightly":  [
+                                                                                                      null
+                                                                                                  ],
+                                                                                 "PriceTotal":  10000,
+                                                                                 "PriceCurrency":  "NOK",
+                                                                                 "ServiceId":  "2d94a493-81f2-4651-9faf-b3bb0097bdeb",
+                                                                                 "ServiceName":  "Trysil Sentrum"
+                                                                             }
+                                                                         ]
+                                  },
+                 "params":  {
+                                "from":  "2026-01-03",
+                                "to":  "2026-01-04",
+                                "adults":  2,
+                                "area":  "TRYSIL_SENTRUM",
+                                "lang":  "en",
+                                "src":  "mews_services_getAvailability+resourceCategories_getAll+reservations_price"
+                            }
+             }
+}

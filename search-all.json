@@ -1,0 +1,150 @@
+﻿{
+    "ok":  true,
+    "data":  {
+                 "availability":  {
+                                      "ResourceCategoryAvailabilities":  [
+                                                                             {
+                                                                                 "ResourceCategoryId":  "7b6a63f0-f035-4248-8caf-b31b00c7b029",
+                                                                                 "RoomCategoryId":  "7b6a63f0-f035-4248-8caf-b31b00c7b029",
+                                                                                 "Name":  "1181 Fagerhøy",
+                                                                                 "Description":  "Welcome to Fagerhøy, a spacious family lodge. Fagerhøy 1181 is a spacious family lodge of 113 m² with 10 beds, 3 bedrooms, 2 living rooms and 2 bathrooms – one with a sauna. Centrally located yet sheltered at Trysil Høyfjellssenter. Ski in/ski out to both cross-country and alpine skiing.\r\n\r\nThe lodge features:\r\n\r\n- Three bedrooms with 8 beds, plus a sofa bed in the mezzanine lounge\r\n- Bright and roomy lounge with comfortable seating and TV\r\n- Fully equipped kitchen – ideal for cooking and enjoying meals together\r\n- Two bathrooms, one with its own sauna – perfect after a day on the slopes\r\n- Free parking right by the lodge\r\n- Veranda with excellent views of the mountains and nature\r\n",
+                                                                                 "Capacity":  10,
+                                                                                 "Image":  "https://qcjpfiwootjfqpxhtldm.supabase.co/storage/v1/object/public/bno-images/Fagerhoy2-01.jpg",
+                                                                                 "Images":  [
+                                                                                                "https://qcjpfiwootjfqpxhtldm.supabase.co/storage/v1/object/public/bno-images/Fagerhoy2-01.jpg",
+                                                                                                "https://qcjpfiwootjfqpxhtldm.supabase.co/storage/v1/object/public/bno-images/Fagerhoy2-02.jpg",
+                                                                                                "https://qcjpfiwootjfqpxhtldm.supabase.co/storage/v1/object/public/bno-images/Fagerhoy2-03.jpg",
+                                                                                                "https://qcjpfiwootjfqpxhtldm.supabase.co/storage/v1/object/public/bno-images/Fagerhoy2-04.jpg",
+                                                                                                "https://qcjpfiwootjfqpxhtldm.supabase.co/storage/v1/object/public/bno-images/Fagerhoy2-05.jpg",
+                                                                                                "https://qcjpfiwootjfqpxhtldm.supabase.co/storage/v1/object/public/bno-images/Fagerhoy2-06.jpg",
+                                                                                                "https://qcjpfiwootjfqpxhtldm.supabase.co/storage/v1/object/public/bno-images/Fagerhoy2-07.jpg",
+                                                                                                "https://qcjpfiwootjfqpxhtldm.supabase.co/storage/v1/object/public/bno-images/Fagerhoy2-08.jpg",
+                                                                                                "https://qcjpfiwootjfqpxhtldm.supabase.co/storage/v1/object/public/bno-images/Fagerhoy2-09.jpg",
+                                                                                                "https://qcjpfiwootjfqpxhtldm.supabase.co/storage/v1/object/public/bno-images/Fagerhoy2-10.jpg"
+                                                                                            ],
+                                                                                 "AvailableUnits":  1,
+                                                                                 "TotalAvailableUnitsCount":  1,
+                                                                                 "AvailableRoomCount":  1,
+                                                                                 "PriceNightly":  [
+                                                                                                      null
+                                                                                                  ],
+                                                                                 "PriceTotal":  11881,
+                                                                                 "PriceCurrency":  "NOK",
+                                                                                 "ServiceId":  "c4964b1d-2303-4ebd-9be8-b3140084d802",
+                                                                                 "ServiceName":  "Trysil Høyfjellssenter"
+                                                                             },
+                                                                             {
+                                                                                 "ResourceCategoryId":  "06160e45-0a97-401c-889c-b32c00a4bb64",
+                                                                                 "RoomCategoryId":  "06160e45-0a97-401c-889c-b32c00a4bb64",
+                                                                                 "Name":  "Test: your cabin TFH",
+                                                                                 "Description":  "This is a test",
+                                                                                 "Capacity":  5,
+                                                                                 "Image":  "https://qcjpfiwootjfqpxhtldm.supabase.co/storage/v1/object/public/bno-images/Demo%201.jpg",
+                                                                                 "Images":  [
+                                                                                                "https://qcjpfiwootjfqpxhtldm.supabase.co/storage/v1/object/public/bno-images/Demo%201.jpg"
+                                                                                            ],
+                                                                                 "AvailableUnits":  1,
+                                                                                 "TotalAvailableUnitsCount":  1,
+                                                                                 "AvailableRoomCount":  1,
+                                                                                 "PriceNightly":  [
+                                                                                                      null
+                                                                                                  ],
+                                                                                 "PriceTotal":  9999,
+                                                                                 "PriceCurrency":  "NOK",
+                                                                                 "ServiceId":  "ba0090d5-a22d-4836-a5de-b3140084990e",
+                                                                                 "ServiceName":  "Trysilfjell Hytteområde"
+                                                                             },
+                                                                             {
+                                                                                 "ResourceCategoryId":  "35f40983-7045-409a-a0ae-b3bb00ba99fc",
+                                                                                 "RoomCategoryId":  "35f40983-7045-409a-a0ae-b3bb00ba99fc",
+                                                                                 "Name":  "Vestsidevegen 14",
+                                                                                 "Description":  null,
+                                                                                 "Capacity":  12,
+                                                                                 "Image":  null,
+                                                                                 "Images":  null,
+                                                                                 "AvailableUnits":  1,
+                                                                                 "TotalAvailableUnitsCount":  1,
+                                                                                 "AvailableRoomCount":  1,
+                                                                                 "PriceNightly":  [
+                                                                                                      null
+                                                                                                  ],
+                                                                                 "PriceTotal":  10000,
+                                                                                 "PriceCurrency":  "NOK",
+                                                                                 "ServiceId":  "2d94a493-81f2-4651-9faf-b3bb0097bdeb",
+                                                                                 "ServiceName":  "Trysil Sentrum"
+                                                                             },
+                                                                             {
+                                                                                 "ResourceCategoryId":  "e2add613-9f83-4acc-abef-b32c00a74bd9",
+                                                                                 "RoomCategoryId":  "e2add613-9f83-4acc-abef-b32c00a74bd9",
+                                                                                 "Name":  "Demo - your cabin Tandådalen",
+                                                                                 "Description":  "Dette er en test",
+                                                                                 "Capacity":  6,
+                                                                                 "Image":  "https://qcjpfiwootjfqpxhtldm.supabase.co/storage/v1/object/public/bno-images/Demo%203.jpg",
+                                                                                 "Images":  [
+                                                                                                "https://qcjpfiwootjfqpxhtldm.supabase.co/storage/v1/object/public/bno-images/Demo%203.jpg"
+                                                                                            ],
+                                                                                 "AvailableUnits":  1,
+                                                                                 "TotalAvailableUnitsCount":  1,
+                                                                                 "AvailableRoomCount":  1,
+                                                                                 "PriceNightly":  [
+                                                                                                      null
+                                                                                                  ],
+                                                                                 "PriceTotal":  9999,
+                                                                                 "PriceCurrency":  "NOK",
+                                                                                 "ServiceId":  "c6d6a149-4e06-4cd0-b44b-b3140086ce52",
+                                                                                 "ServiceName":  "Tandådalen Sälen"
+                                                                             },
+                                                                             {
+                                                                                 "ResourceCategoryId":  "25859550-3b6b-424b-8eb5-b32c00a70c07",
+                                                                                 "RoomCategoryId":  "25859550-3b6b-424b-8eb5-b32c00a70c07",
+                                                                                 "Name":  "Demo - your cabin Högfjället",
+                                                                                 "Description":  "Dette er en test",
+                                                                                 "Capacity":  5,
+                                                                                 "Image":  "https://qcjpfiwootjfqpxhtldm.supabase.co/storage/v1/object/public/bno-images/Demo%202.jpg",
+                                                                                 "Images":  [
+                                                                                                "https://qcjpfiwootjfqpxhtldm.supabase.co/storage/v1/object/public/bno-images/Demo%202.jpg"
+                                                                                            ],
+                                                                                 "AvailableUnits":  1,
+                                                                                 "TotalAvailableUnitsCount":  1,
+                                                                                 "AvailableRoomCount":  1,
+                                                                                 "PriceNightly":  [
+                                                                                                      null
+                                                                                                  ],
+                                                                                 "PriceTotal":  9999,
+                                                                                 "PriceCurrency":  "NOK",
+                                                                                 "ServiceId":  "394c01db-2c18-46a9-b1a8-b31400865186",
+                                                                                 "ServiceName":  "Högfjället Sälen"
+                                                                             },
+                                                                             {
+                                                                                 "ResourceCategoryId":  "2f5505b5-3b94-4b03-a4ca-b32c00a6c1c0",
+                                                                                 "RoomCategoryId":  "2f5505b5-3b94-4b03-a4ca-b32c00a6c1c0",
+                                                                                 "Name":  "Demo - your cabin Lindvallen ",
+                                                                                 "Description":  "Tester detteTester detteTester dette",
+                                                                                 "Capacity":  8,
+                                                                                 "Image":  "https://qcjpfiwootjfqpxhtldm.supabase.co/storage/v1/object/public/bno-images/Demo%204.jpg",
+                                                                                 "Images":  [
+                                                                                                "https://qcjpfiwootjfqpxhtldm.supabase.co/storage/v1/object/public/bno-images/Demo%204.jpg"
+                                                                                            ],
+                                                                                 "AvailableUnits":  1,
+                                                                                 "TotalAvailableUnitsCount":  1,
+                                                                                 "AvailableRoomCount":  1,
+                                                                                 "PriceNightly":  [
+                                                                                                      null
+                                                                                                  ],
+                                                                                 "PriceTotal":  9999,
+                                                                                 "PriceCurrency":  "NOK",
+                                                                                 "ServiceId":  "35745e9e-1318-42e4-8b9d-b31400855336",
+                                                                                 "ServiceName":  "Lindvallen Sälen"
+                                                                             }
+                                                                         ]
+                                  },
+                 "params":  {
+                                "from":  "2026-01-03",
+                                "to":  "2026-01-04",
+                                "adults":  2,
+                                "area":  null,
+                                "lang":  "en",
+                                "src":  "mews_services_getAvailability+resourceCategories_getAll+reservations_price"
+                            }
+             }
+}

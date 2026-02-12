@@ -3,15 +3,19 @@
   "version": "1.0.0",
   "private": true,
   "type": "commonjs",
+  "main": "dist/server.js",
   "scripts": {
     "dev": "dotenv -e .env -- ts-node server.ts",
     "dev:prod": "dotenv -e .env.prod -- ts-node server.ts",
 
-    "clean": "rimraf node_modules package-lock.json",
+    "build": "tsc -p tsconfig.json",
+    "start": "node dist/server.js",
+    "start:prod": "dotenv -e .env.prod -- node dist/server.js",
+
+    "clean": "rimraf dist node_modules package-lock.json",
     "reinstall": "npm run clean && npm cache verify && npm install --registry=https://registry.npmjs.org/",
 
     "get:mews:prod-ids": "dotenv -e .env.prod -- ts-node lib/fetch-mews-prod-ids.ts",
-
     "mews:sync": "dotenv -e .env -- ts-node scripts/mews-sync.ts",
     "sync-once": "dotenv -e .env -- ts-node scripts/mews-sync.ts",
     "sync-cron": "dotenv -e .env -- ts-node scripts/sync-cron.ts",
@@ -25,6 +29,7 @@
     "cors": "^2.8.5",
     "dotenv": "^16.6.1",
     "express": "^4.19.2",
+    "lru-cache": "^11.2.5",
     "morgan": "^1.10.1",
     "node-cron": "^4.2.1",
     "node-fetch": "^2.7.0"
@@ -41,5 +46,8 @@
     "rimraf": "^6.0.1",
     "ts-node": "^10.9.2",
     "typescript": "^5.9.3"
+  },
+  "engines": {
+    "node": ">=20"
   }
 }

@@ -1,17 +1,16 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-
 /**
- * server.ts (CommonJS + ts-node)
+ * server.ts
  *
  * Viktig:
  * - Denne filen laster .env før vi importerer moduler som kan lese process.env.
- * - Den støtter å velge env-fil via:
+ * - Støtter å velge env-fil via:
  *      DOTENV_FILE=.env.prod
- *   eller bare faller tilbake til ".env".
+ *   eller fallback til ".env".
  *
- * Du kan kjøre:
- *   npm run dev        (bruker .env eller DOTENV_FILE hvis satt)
- *   npm run dev:prod   (typisk DOTENV_FILE=.env.prod i scriptet)
+ * Anbefalt i prod på Render:
+ *   - bygg til dist/ (tsc)
+ *   - start med: node dist/server.js
  */
 
 import * as dotenv from 'dotenv';
@@ -58,29 +57,36 @@ import express from 'express';
 import cors from 'cors';
 import axios, { AxiosRequestConfig } from 'axios';
 import bodyParser from 'body-parser';
+import http from 'http';
+import https from 'https';
 
 import mews from './lib/mews';
 import { fetchPrices as fetchConnectorPrices } from './lib/prices';
-import { mewsWebhookHandler } from './mews-webhook'; // Webhook for Mews
-import { fetchSiteMinderAvailability } from './lib/siteminder'; // SiteMinder
-import { getMewsConfigForArea } from './lib/mews-config'; // (beholdt import, selv om den ikke brukes her)
-import registerHousekeepingRoutes from './lib/housekeepingRoutes'; // Renholds-/eier-API
+import { mewsWebhookHandler } from './mews-webhook';
+import { fetchSiteMinderAvailability } from './lib/siteminder';
+import { getMewsConfigForArea } from './lib/mews-config'; // beholdt import
+import registerHousekeepingRoutes from './lib/housekeepingRoutes';
 
-// Bilde-mapping (Supabase)
 import { getImagesForResourceCategory } from './lib/imageMap';
-
-// Språkvalg for Mews-tekster (Names/Descriptions)
 import { pickLocalizedText } from './lib/mewsLocalization';
 
 // =============================================================
 // BOOT DIAGNOSTIKK
 // =============================================================
-const BOOT_TAG = 'BNO-API-BOOT-2026-01-08T00:00Z';
+const BOOT_TAG = 'BNO-API-BOOT-2026-02-12T00:00Z';
 console.log(`[BOOT] ${BOOT_TAG} server.ts loaded`, {
   cwd: process.cwd(),
   node: process.version,
   portEnv: process.env.PORT,
 });
+
+// =============================================================
+// Axios keep-alive (bedrer “første kall” og generell stabilitet)
+// =============================================================
+const httpAgent = new http.Agent({ keepAlive: true, maxSockets: 50 });
+const httpsAgent = new https.Agent({ keepAlive: true, maxSockets: 50 });
+axios.defaults.httpAgent = httpAgent;
+axios.defaults.httpsAgent = httpsAgent;
 
 // =============================================================
 // MEWS multi-credentials (DEFAULT + STRANDA)
@@ -116,16 +122,14 @@ const HOTEL_TZ = String(process.env.HOTEL_TIMEZONE || 'Europe/Oslo');
 const LOCALE = (process.env.MEWS_LOCALE || 'nb-NO').trim();
 const DEF_CURRENCY = (process.env.MEWS_CURRENCY || 'NOK').trim();
 
-// DEFAULT creds (eksisterende)
+// DEFAULT creds
 const MEWS_BASE_DEFAULT = (process.env.MEWS_BASE_URL || '').trim().replace(/\/$/, '');
 const MEWS_CLIENT_TOKEN_DEFAULT = (process.env.MEWS_CLIENT_TOKEN || '').trim();
 const MEWS_ACCESS_TOKEN_DEFAULT = (process.env.MEWS_ACCESS_TOKEN || '').trim();
 const MEWS_CLIENT_NAME_DEFAULT = (process.env.MEWS_CLIENT_NAME || 'bno-api').trim();
 const MEWS_ENTERPRISE_ID_DEFAULT = (process.env.MEWS_ENTERPRISE_ID || '').trim();
 
-// =============================================================
 // STRANDA creds (støtter begge ENV-navnekonvensjoner)
-// =============================================================
 const MEWS_BASE_STRANDA = (
   process.env.MEWS_BASE_URL_STRANDA ||
   process.env.MEWS_STRANDA_BASE_URL ||
@@ -171,19 +175,21 @@ const MEWS_DISTRIBUTOR_BASE = (process.env.MEWS_DISTRIBUTOR_BASE || 'https://app
   .trim()
   .replace(/\/$/, '');
 
-const MEWS_SERVICE_ID = (process.env.MEWS_SERVICE_ID || '').trim(); // global fallback (Trysil)
+const MEWS_SERVICE_ID = (process.env.MEWS_SERVICE_ID || '').trim(); // global fallback
 
-// ✅ Global config-id (du har nå lagt den til i .env)
 const MEWS_CONFIGURATION_ID = (
   process.env.MEWS_DISTRIBUTION_CONFIGURATION_ID ||
   process.env.MEWS_CONFIGURATION_ID ||
   ''
 ).trim();
 
-// NB: beholdt for bakoverkomp, men vi bruker IKKE lenger global MEWS_RATE_ID som fallback i pricing/create
+// NB: beholdt for bakoverkomp (men brukes ikke som global fallback i pricing/create)
 const MEWS_RATE_ID = (process.env.MEWS_RATE_ID || '').trim();
 
 const ENABLE_SERVER_RESERVATION = String(process.env.ENABLE_SERVER_RESERVATION || '0') === '1';
+
+// cap på fallback-prising for å unngå eksplosjon
+const PRICE_FALLBACK_MAX_PER_SERVICE = Number(process.env.PRICE_FALLBACK_MAX_PER_SERVICE || 20);
 
 function getCreds(key: MewsCredKey): MewsCreds {
   if (key === 'STRANDA') {
@@ -208,7 +214,7 @@ function hasCreds(c: MewsCreds) {
   return !!(c.baseUrl && c.clientToken && c.accessToken);
 }
 
-// ==== DEBUG: vis hvilken MEWS-konfig Node faktisk bruker ====
+// DEBUG: vis hvilken MEWS-konfig Node faktisk bruker
 console.log('DEBUG MEWS CREDS:');
 console.log('  DEFAULT base        =', MEWS_BASE_DEFAULT);
 console.log('  DEFAULT clientToken =', maskToken(MEWS_CLIENT_TOKEN_DEFAULT));
@@ -241,13 +247,10 @@ const MEWS_SERVICE_ID_TRYSILFJELL_HYTTEOMRADE = (process.env.MEWS_SERVICE_ID_TRY
 const MEWS_SERVICE_ID_TANDADALEN_SALEN = (process.env.MEWS_SERVICE_ID_TANDADALEN_SALEN || '').trim();
 const MEWS_SERVICE_ID_HOGFJALLET_SALEN = (process.env.MEWS_SERVICE_ID_HOGFJALLET_SALEN || '').trim();
 const MEWS_SERVICE_ID_LINDVALLEN_SALEN = (process.env.MEWS_SERVICE_ID_LINDVALLEN_SALEN || '').trim();
-
-/** Trysil Sentrum */
 const MEWS_SERVICE_ID_TRYSIL_SENTRUM = (process.env.MEWS_SERVICE_ID_TRYSIL_SENTRUM || '').trim();
 
-/** område-spesifikke ageCategory (fra .env) */
+/** ageCategory */
 const MEWS_ADULT_AGE_CATEGORY_ID = (process.env.MEWS_ADULT_AGE_CATEGORY_ID || '').trim();
-
 const MEWS_ADULT_AGE_CATEGORY_ID_TRYSIL_TURISTSENTER = (process.env.MEWS_ADULT_AGE_CATEGORY_ID_TRYSIL_TURISTSENTER || '').trim();
 const MEWS_ADULT_AGE_CATEGORY_ID_TRYSIL_HOYFJELLSSENTER = (process.env.MEWS_ADULT_AGE_CATEGORY_ID_TRYSIL_HOYFJELLSSENTER || '').trim();
 const MEWS_ADULT_AGE_CATEGORY_ID_TRYSILFJELL_HYTTEOMRADE = (process.env.MEWS_ADULT_AGE_CATEGORY_ID_TRYSILFJELL_HYTTEOMRADE || '').trim();
@@ -264,11 +267,9 @@ const MEWS_RATE_ID_TANDADALEN_SALEN = (process.env.MEWS_RATE_ID_TANDADALEN_SALEN
 const MEWS_RATE_ID_HOGFJALLET_SALEN = (process.env.MEWS_RATE_ID_HOGFJALLET_SALEN || '').trim();
 const MEWS_RATE_ID_LINDVALLEN_SALEN = (process.env.MEWS_RATE_ID_LINDVALLEN_SALEN || '').trim();
 const MEWS_RATE_ID_TRYSIL_SENTRUM = (process.env.MEWS_RATE_ID_TRYSIL_SENTRUM || '').trim();
-
-// STRANDA rateId
 const MEWS_RATE_ID_STRANDA = (process.env.MEWS_RATE_ID_STRANDA || '').trim();
 
-/** Liste over alle områder vi vil bruke i "generelt søk" */
+/** Liste over alle områder */
 const MEWS_SERVICES_ALL: ServiceConfig[] = [
   {
     id: MEWS_SERVICE_ID_TRYSIL_TURISTSENTER,
@@ -331,7 +332,7 @@ const MEWS_SERVICES_ALL: ServiceConfig[] = [
 console.log('MEWS_SERVICES_ALL =', MEWS_SERVICES_ALL);
 
 // =============================================================
-// 🆕 Booking / Distributor helpers (per område)
+// Booking / Distributor helpers (per område)
 // =============================================================
 function normAreaKey(areaKey: string | null): string | null {
   if (!areaKey) return null;
@@ -414,7 +415,6 @@ function pickRateIdForServiceAndNights(serviceId: string, nights: number): strin
   return m[nights] || null;
 }
 
-/** Helper: map area-slug -> services + "areaKey" til params.area */
 function resolveServicesForArea(areaSlugRaw: string | undefined | null): { services: ServiceConfig[]; areaKey: string | null } {
   const slug = (areaSlugRaw || '').toLowerCase().trim();
 
@@ -427,22 +427,13 @@ function resolveServicesForArea(areaSlugRaw: string | undefined | null): { servi
     return { services: MEWS_SERVICES_ALL.filter((s) => s.id === MEWS_SERVICE_ID_TRYSIL_SENTRUM), areaKey: 'TRYSIL_SENTRUM' };
   }
   if (slug === 'trysil-turistsenter' || slug === 'trysil_turistsenter') {
-    return {
-      services: MEWS_SERVICES_ALL.filter((s) => s.id === MEWS_SERVICE_ID_TRYSIL_TURISTSENTER),
-      areaKey: 'TRYSIL_TURISTSENTER',
-    };
+    return { services: MEWS_SERVICES_ALL.filter((s) => s.id === MEWS_SERVICE_ID_TRYSIL_TURISTSENTER), areaKey: 'TRYSIL_TURISTSENTER' };
   }
   if (slug === 'trysil-hoyfjellssenter' || slug === 'trysil-høyfjellssenter' || slug === 'trysil_hoyfjellssenter') {
-    return {
-      services: MEWS_SERVICES_ALL.filter((s) => s.id === MEWS_SERVICE_ID_TRYSIL_HOYFJELLSSENTER),
-      areaKey: 'TRYSIL_HOYFJELLSSENTER',
-    };
+    return { services: MEWS_SERVICES_ALL.filter((s) => s.id === MEWS_SERVICE_ID_TRYSIL_HOYFJELLSSENTER), areaKey: 'TRYSIL_HOYFJELLSSENTER' };
   }
   if (slug === 'trysilfjell-hytteomrade' || slug === 'trysilfjell-hytteområde' || slug === 'trysilfjell_hytteomrade') {
-    return {
-      services: MEWS_SERVICES_ALL.filter((s) => s.id === MEWS_SERVICE_ID_TRYSILFJELL_HYTTEOMRADE),
-      areaKey: 'TRYSILFJELL_HYTTEOMRADE',
-    };
+    return { services: MEWS_SERVICES_ALL.filter((s) => s.id === MEWS_SERVICE_ID_TRYSILFJELL_HYTTEOMRADE), areaKey: 'TRYSILFJELL_HYTTEOMRADE' };
   }
   if (slug === 'tandadalen-salen' || slug === 'tandådalen-sälen' || slug === 'tandadalen_salen') {
     return { services: MEWS_SERVICES_ALL.filter((s) => s.id === MEWS_SERVICE_ID_TANDADALEN_SALEN), areaKey: 'TANDADALEN_SALEN' };
@@ -474,7 +465,7 @@ function getCache(key: string) {
   return v.data;
 }
 
-function setSearchCache(key: string, data: any, ttlSec = 30) {
+function setSearchCache(key: string, data: any, ttlSec = 45) {
   setCache(key, data, ttlSec);
 }
 function getSearchCache(key: string) {
@@ -547,6 +538,23 @@ async function axiosWithRetry<T = any>(
       throw err;
     }
   }
+}
+
+// ===== Concurrency helper (kontrollert parallellisering) =====
+async function mapLimit<T, R>(items: T[], limit: number, fn: (item: T, idx: number) => Promise<R>): Promise<R[]> {
+  const out: R[] = new Array(items.length);
+  let i = 0;
+
+  const workers = Array.from({ length: Math.max(1, limit) }).map(async () => {
+    while (true) {
+      const idx = i++;
+      if (idx >= items.length) break;
+      out[idx] = await fn(items[idx], idx);
+    }
+  });
+
+  await Promise.all(workers);
+  return out;
 }
 
 // ===== HELPERS =====
@@ -650,7 +658,7 @@ function avToCount(x: AvItem): number {
   return 0;
 }
 
-/** Viktig: For å unngå “falsk ledighet”, må vi bruke MIN over alle netter (inkl. 0). */
+/** Viktig: For å unngå “falsk ledighet”, bruk MIN over alle netter (inkl. 0). */
 function computeAvailableUnits(item: any): number {
   if (Array.isArray(item?.Availabilities) && item.Availabilities.length > 0) {
     const vals = (item.Availabilities as AvItem[]).map(avToCount).filter((v: number) => Number.isFinite(v));
@@ -733,7 +741,7 @@ function computePricesFromAvailabilities(item: any): { nightly: (number | null)[
 
 /**
  * Hent totalpris for EN reservasjon (1 enhet) via reservations/price.
- * NB: vi sender KUN RateId hvis vi faktisk har en (for å unngå Invalid RateId).
+ * NB: vi sender KUN RateId hvis vi faktisk har en.
  */
 async function priceReservationOnce(opts: {
   credsKey: MewsCredKey;
@@ -778,31 +786,24 @@ async function priceReservationOnce(opts: {
     Reservations: [reservation],
   };
 
-  try {
-    const respData = await axiosWithRetry<any>({
+  const respData = await axiosWithRetry<any>(
+    {
       method: 'post',
       url,
       data: payload,
       timeout: 15000,
-    });
+    },
+    2,
+    500,
+    true
+  );
 
-    const item = respData?.ReservationPrices?.[0] || respData?.ReservationPrice || null;
-    if (!item) return { total: null, currency: null };
+  const item = respData?.ReservationPrices?.[0] || respData?.ReservationPrice || null;
+  if (!item) return { total: null, currency: null };
 
-    const amountObj = item.TotalAmount || item.Total || item.TotalPrice || item.Price || null;
-    const ex = extractPriceValueCurrency(amountObj);
-    return { total: ex.value, currency: ex.currency || DEF_CURRENCY };
-  } catch (e: any) {
-    console.error('priceReservationOnce_error', {
-      url,
-      message: e?.message,
-      code: e?.code || null,
-      status: e?.response?.status || null,
-      data: e?.response?.data || null,
-      headers: e?.response?.headers || null,
-    });
-    throw e;
-  }
+  const amountObj = item.TotalAmount || item.Total || item.TotalPrice || item.Price || null;
+  const ex = extractPriceValueCurrency(amountObj);
+  return { total: ex.value, currency: ex.currency || DEF_CURRENCY };
 }
 
 // =======================
@@ -812,7 +813,6 @@ const app = express();
 app.use(cors());
 app.use(bodyParser.json({ limit: '1mb' }));
 
-// Registrer renholds-/eier-API-rutene
 registerHousekeepingRoutes(app);
 
 // =============================================================
@@ -839,6 +839,7 @@ app.get('/api/routes', (_req, res) => {
     bootTag: BOOT_TAG,
     count: routes.length,
     hasMewsReservations: routes.some((r) => r.path === '/mews/reservations'),
+    hasServerReservation: routes.some((r) => r.path === '/api/mews/reservation'),
     routes,
   });
 });
@@ -863,7 +864,7 @@ app.get('/api/health', (_req, res) =>
 );
 
 // =============================================================
-// 🆕 Booking-link endpoint (per område)
+// Booking-link endpoint (per område)
 // GET /api/mews/booking-link?area=trysil-turistsenter&from=YYYY-MM-DD&to=YYYY-MM-DD&adults=2
 // =============================================================
 app.get('/api/mews/booking-link', (req, res) => {
@@ -937,7 +938,6 @@ app.get(['/mews/services', '/api/mews/services'], async (req, res) => {
     if (cached) return res.json({ ok: true, data: cached });
 
     const rData = await mewsConnectorPost<any>(credsKey, 'services/getAll', { Limitation: { Count: 1000 } }, 20000);
-
     const services: any[] = rData?.Services || [];
     const out = services.map((svc: any) => ({
       Id: svc?.Id,
@@ -946,7 +946,7 @@ app.get(['/mews/services', '/api/mews/services'], async (req, res) => {
       EnterpriseId: svc?.EnterpriseId || null,
     }));
 
-    setCache(cacheKey, out, 120);
+    setCache(cacheKey, out, 300);
     return res.json({ ok: true, data: out });
   } catch (e: any) {
     return res.status(500).json({ ok: false, error: 'mews_services_failed', detail: e?.message || String(e) });
@@ -970,7 +970,6 @@ app.get(['/mews/spaces', '/api/mews/spaces'], async (req, res) => {
     if (cached) return res.json({ ok: true, data: cached });
 
     const payload: any = { ServiceIds: serviceIds, Limitation: { Count: 1000 } };
-
     const rData = await mewsConnectorPost<any>(credsKey, 'resources/getAll', payload, 25000);
     const resources: any[] = rData?.Resources || [];
 
@@ -982,7 +981,7 @@ app.get(['/mews/spaces', '/api/mews/spaces'], async (req, res) => {
       IsActive: r?.IsActive ?? null,
     }));
 
-    setCache(cacheKey, out, 120);
+    setCache(cacheKey, out, 300);
     return res.json({ ok: true, data: out, meta: { serviceIds, credsKey } });
   } catch (e: any) {
     return res.status(500).json({ ok: false, error: 'mews_spaces_failed', detail: e?.message || String(e) });
@@ -1024,7 +1023,7 @@ app.get(['/mews/reservations', '/api/mews/reservations'], async (req, res) => {
     };
     if (states && states.length) payload.ReservationStates = states;
 
-    const rData = await mewsConnectorPost<any>(credsKey, 'reservations/getAll', payload, 30000);
+    const rData = await mewsConnectorPost<any>(credsKey, 'reservations/getAll/2023-06-06', payload, 30000);
     const reservations: any[] = rData?.Reservations || [];
 
     return res.json({
@@ -1036,6 +1035,68 @@ app.get(['/mews/reservations', '/api/mews/reservations'], async (req, res) => {
     return res.status(500).json({ ok: false, error: 'mews_reservations_failed', detail: e?.message || String(e) });
   }
 });
+
+// =============================================================
+// ResourceCategories cache helper (stor win for første søk)
+// =============================================================
+async function getResourceCategoriesForServiceCached(
+  credsKey: MewsCredKey,
+  serviceId: string,
+  requestedLang: string
+): Promise<Record<string, { name: string; capacity: number | null; description: string | null; image: string | null; images: string[] | null; raw: any }>> {
+  const cacheKey = `rc_lookup:${credsKey}:${serviceId}:lang:${requestedLang}`;
+  const cached = getCache(cacheKey);
+  if (cached) return cached;
+
+  const creds = getCreds(credsKey);
+  const rcPayload: any = {
+    ClientToken: creds.clientToken,
+    AccessToken: creds.accessToken,
+    Client: creds.clientName,
+    ServiceIds: [serviceId],
+    ActivityStates: ['Active'],
+    Limitation: { Count: 1000 },
+  };
+  if (creds.enterpriseId) rcPayload.EnterpriseIds = [creds.enterpriseId];
+
+  const rcData = await axiosWithRetry<any>({
+    method: 'post',
+    url: `${creds.baseUrl}/api/connector/v1/resourceCategories/getAll`,
+    data: rcPayload,
+    timeout: 20000,
+  });
+
+  const lookup: Record<string, any> = {};
+  for (const rc of rcData?.ResourceCategories || []) {
+    if (!rc?.Id) continue;
+    const rcId = String(rc.Id);
+
+    const localizedName = pickLocalizedText(rc.Names, requestedLang, [LOCALE]) || rc.Name || rc.ExternalIdentifier || 'Rom';
+    const cap = typeof rc.Capacity === 'number' ? (rc.Capacity as number) : null;
+    const description = pickLocalizedText(rc.Descriptions, requestedLang, [LOCALE]) || rc.Description || null;
+
+    const mappedImages = getImagesForResourceCategory(rcId);
+    const primaryMappedImage = mappedImages[0] ?? null;
+
+    const fallbackImageFromMews =
+      Array.isArray(rc.ImageIds) && rc.ImageIds.length
+        ? `https://cdn.mews-demo.com/Media/Image/${rc.ImageIds[0]}?Mode=Fit&Height=400&Width=600`
+        : (rc.Image as string | null) || null;
+
+    const image = primaryMappedImage || fallbackImageFromMews;
+    const images: string[] | null =
+      mappedImages.length > 0
+        ? mappedImages
+        : Array.isArray(rc.ImageIds)
+        ? rc.ImageIds.map((id: string) => `https://cdn.mews-demo.com/Media/Image/${id}?Mode=Fit&Height=400&Width=600`)
+        : null;
+
+    lookup[rcId] = { name: localizedName, capacity: cap, description, image, images, raw: rc };
+  }
+
+  setCache(cacheKey, lookup, 10 * 60); // 10 min
+  return lookup;
+}
 
 // =============================================================
 // GENERELL MEWS-AVAILABILITY
@@ -1059,7 +1120,7 @@ app.get('/api/mews/availability', async (req, res) => {
 
     const nights = daysBetween(from, to);
 
-    // Hvilke services skal vi spørre mot?
+    // servicesToQuery
     let servicesToQuery: ServiceConfig[] = [];
     if (serviceIdParam) {
       const found = MEWS_SERVICES_ALL.find((s) => s.id === serviceIdParam);
@@ -1070,18 +1131,18 @@ app.get('/api/mews/availability', async (req, res) => {
 
     const allRooms: any[] = [];
 
-    for (const svc of servicesToQuery) {
-      if (!svc.id) continue;
+    // parallel per service, kontrollert
+    await mapLimit(servicesToQuery, 3, async (svc) => {
+      if (!svc.id) return;
 
       const svcCredsKey: MewsCredKey = svc.credsKey || 'DEFAULT';
       const creds = getCreds(svcCredsKey);
 
       if (!hasCreds(creds)) {
         console.warn('mews_availability: missing creds for service', { serviceId: svc.id, name: svc.name, credsKey: svcCredsKey });
-        continue;
+        return;
       }
 
-      // For pris – kun bruk fetchConnectorPrices på DEFAULT (den bruker global creds).
       let pricingCurrency: string | null = DEF_CURRENCY;
       if (svcCredsKey === 'DEFAULT') {
         try {
@@ -1092,162 +1153,94 @@ app.get('/api/mews/availability', async (req, res) => {
         }
       }
 
-      try {
-        const { firstUtc, lastUtc } = buildTimeUnitRange(from, to);
+      const { firstUtc, lastUtc } = buildTimeUnitRange(from, to);
 
-        const availPayload = {
-          ClientToken: creds.clientToken,
-          AccessToken: creds.accessToken,
-          Client: creds.clientName,
-          ServiceId: svc.id,
-          FirstTimeUnitStartUtc: firstUtc,
-          LastTimeUnitStartUtc: lastUtc,
-        };
+      const availPayload = {
+        ClientToken: creds.clientToken,
+        AccessToken: creds.accessToken,
+        Client: creds.clientName,
+        ServiceId: svc.id,
+        FirstTimeUnitStartUtc: firstUtc,
+        LastTimeUnitStartUtc: lastUtc,
+      };
 
-        const availData = await axiosWithRetry<any>({
-          method: 'post',
-          url: `${creds.baseUrl}/api/connector/v1/services/getAvailability`,
-          data: availPayload,
-          timeout: 20000,
-        });
+      const availData = await axiosWithRetry<any>({
+        method: 'post',
+        url: `${creds.baseUrl}/api/connector/v1/services/getAvailability`,
+        data: availPayload,
+        timeout: 20000,
+      });
 
-        const cats: any[] = availData?.CategoryAvailabilities || [];
-        if (!cats.length) {
-          console.warn('mews_availability_no_categories', { serviceId: svc.id, name: svc.name });
-          continue;
+      const cats: any[] = availData?.CategoryAvailabilities || [];
+      if (!cats.length) return;
+
+      const categoryLookup = await getResourceCategoriesForServiceCached(svcCredsKey, svc.id, requestedLang);
+
+      // bygg rom og gjør price fallback med cap
+      let priceFallbackUsed = 0;
+
+      for (const ca of cats) {
+        const catId = String(ca.CategoryId || '');
+        if (!catId) continue;
+
+        const info =
+          categoryLookup[catId] || { name: 'Ukjent kategori', capacity: null, description: null, image: null, images: null, raw: null };
+
+        const availableUnits = computeAvailableUnits(ca);
+
+        let priceNightly: (number | null)[] = [];
+        let priceTotal: number | null = null;
+        let priceCurrency: string | null = pricingCurrency;
+
+        const est = computePricesFromAvailabilities(ca);
+        if (est.total != null || est.nightly.length) {
+          priceNightly = est.nightly;
+          priceTotal = est.total;
+          priceCurrency = est.currency || priceCurrency;
         }
 
-        const rcPayload: any = {
-          ClientToken: creds.clientToken,
-          AccessToken: creds.accessToken,
-          Client: creds.clientName,
-          ServiceIds: [svc.id],
-          ActivityStates: ['Active'],
-          Limitation: { Count: 1000 },
-        };
-        if (creds.enterpriseId) rcPayload.EnterpriseIds = [creds.enterpriseId];
+        // fallback: reservations/price (begrenset)
+        if (priceTotal == null && availableUnits > 0 && svc.adultAgeCategoryId && priceFallbackUsed < PRICE_FALLBACK_MAX_PER_SERVICE) {
+          try {
+            const chosenRateId = pickRateIdForServiceAndNights(svc.id, nights) || (svc.rateId && svc.rateId.trim().length ? svc.rateId : null);
+            const rp = await priceReservationOnce({
+              credsKey: svcCredsKey,
+              startYmd: from,
+              endYmd: to,
+              categoryId: catId,
+              rateId: chosenRateId || undefined,
+              adults,
+              serviceId: svc.id,
+              adultAgeCategoryId: svc.adultAgeCategoryId,
+            });
 
-        const rcData = await axiosWithRetry<any>({
-          method: 'post',
-          url: `${creds.baseUrl}/api/connector/v1/resourceCategories/getAll`,
-          data: rcPayload,
-          timeout: 20000,
-        });
-
-        const categoryLookup: Record<
-          string,
-          { name: string; capacity: number | null; description: string | null; image: string | null; images: string[] | null; raw: any }
-        > = {};
-
-        for (const rc of rcData?.ResourceCategories || []) {
-          if (!rc?.Id) continue;
-          const rcId = String(rc.Id);
-
-          const localizedName = pickLocalizedText(rc.Names, requestedLang, [LOCALE]) || rc.Name || rc.ExternalIdentifier || 'Rom';
-
-          const cap = typeof rc.Capacity === 'number' ? (rc.Capacity as number) : null;
-
-          const description = pickLocalizedText(rc.Descriptions, requestedLang, [LOCALE]) || rc.Description || null;
-
-          const mappedImages = getImagesForResourceCategory(rcId);
-          const primaryMappedImage = mappedImages[0] ?? null;
-
-          const fallbackImageFromMews =
-            Array.isArray(rc.ImageIds) && rc.ImageIds.length
-              ? `https://cdn.mews-demo.com/Media/Image/${rc.ImageIds[0]}?Mode=Fit&Height=400&Width=600`
-              : (rc.Image as string | null) || null;
-
-          const image = primaryMappedImage || fallbackImageFromMews;
-
-          const images: string[] | null =
-            mappedImages.length > 0
-              ? mappedImages
-              : Array.isArray(rc.ImageIds)
-              ? rc.ImageIds.map((id: string) => `https://cdn.mews-demo.com/Media/Image/${id}?Mode=Fit&Height=400&Width=600`)
-              : null;
-
-          categoryLookup[rcId] = { name: localizedName, capacity: cap, description, image, images, raw: rc };
-        }
-
-        for (const ca of cats) {
-          const catId = String(ca.CategoryId || '');
-          if (!catId) continue;
-
-          const info =
-            categoryLookup[catId] || { name: 'Ukjent kategori', capacity: null, description: null, image: null, images: null, raw: null };
-
-          const availableUnits = computeAvailableUnits(ca);
-
-          let priceNightly: (number | null)[] = [];
-          let priceTotal: number | null = null;
-          let priceCurrency: string | null = pricingCurrency;
-
-          if (priceTotal == null) {
-            const est = computePricesFromAvailabilities(ca);
-            if (est.total != null || est.nightly.length) {
-              priceNightly = est.nightly;
-              priceTotal = est.total;
-              priceCurrency = est.currency || priceCurrency;
+            priceFallbackUsed++;
+            if (rp.total != null) {
+              priceTotal = rp.total;
+              priceCurrency = rp.currency || priceCurrency;
             }
+          } catch (err: any) {
+            console.warn('mews_availability_price_reservation_fallback', { serviceId: svc.id, categoryId: catId, message: err?.message });
           }
-
-          // Ekstra fallback: reservations/price hvis vi fortsatt mangler total
-          if (priceTotal == null && svc.adultAgeCategoryId) {
-            try {
-              const chosenRateId = pickRateIdForServiceAndNights(svc.id, nights) || (svc.rateId && svc.rateId.trim().length ? svc.rateId : null);
-
-              const rp = await priceReservationOnce({
-                credsKey: svcCredsKey,
-                startYmd: from,
-                endYmd: to,
-                categoryId: catId,
-                rateId: chosenRateId || undefined,
-                adults,
-                serviceId: svc.id,
-                adultAgeCategoryId: svc.adultAgeCategoryId,
-              });
-
-              if (rp.total != null) {
-                priceTotal = rp.total;
-                priceCurrency = rp.currency || priceCurrency;
-              }
-            } catch (err: any) {
-              console.warn('mews_availability_price_reservation_fallback', {
-                serviceId: svc.id,
-                categoryId: catId,
-                message: err?.message,
-              });
-            }
-          }
-
-          allRooms.push({
-            serviceId: svc.id,
-            serviceName: svc.name,
-            categoryId: catId,
-            categoryName: info.name,
-            description: info.description,
-            image: info.image,
-            images: info.images,
-            capacity: info.capacity,
-            availableUnits,
-            priceTotal,
-            priceCurrency: (priceCurrency || DEF_CURRENCY).toUpperCase(),
-            priceNightly,
-            credsKey: svcCredsKey,
-          });
         }
-      } catch (e: any) {
-        console.error('mews_availability_service_failed', {
+
+        allRooms.push({
           serviceId: svc.id,
-          name: svc.name,
+          serviceName: svc.name,
+          categoryId: catId,
+          categoryName: info.name,
+          description: info.description,
+          image: info.image,
+          images: info.images,
+          capacity: info.capacity,
+          availableUnits,
+          priceTotal,
+          priceCurrency: (priceCurrency || DEF_CURRENCY).toUpperCase(),
+          priceNightly,
           credsKey: svcCredsKey,
-          message: e?.message,
-          status: e?.response?.status || null,
-          data: e?.response?.data || null,
         });
-        continue;
       }
-    }
+    });
 
     const filteredRooms = allRooms.filter((r) => typeof r.availableUnits === 'number' && r.availableUnits > 0);
 
@@ -1263,6 +1256,7 @@ app.get('/api/mews/availability', async (req, res) => {
         searchedServices: servicesToQuery,
         lang: requestedLang,
         credsKey: credsKeyParam,
+        priceFallbackMaxPerService: PRICE_FALLBACK_MAX_PER_SERVICE,
       },
     });
   } catch (err: any) {
@@ -1302,18 +1296,17 @@ app.get(['/api/search', '/search', '/api/availability', '/availability'], async 
     const nights = daysBetween(from, to);
     const allRooms: any[] = [];
 
-    for (const svc of servicesToQuery) {
-      if (!svc.id) continue;
+    await mapLimit(servicesToQuery, 3, async (svc) => {
+      if (!svc.id) return;
 
       const svcCredsKey: MewsCredKey = svc.credsKey || 'DEFAULT';
       const creds = getCreds(svcCredsKey);
 
       if (!hasCreds(creds)) {
         console.warn('search: missing creds for service', { serviceId: svc.id, name: svc.name, credsKey: svcCredsKey });
-        continue;
+        return;
       }
 
-      // Pris: kun hent global pricing for DEFAULT (den bruker global creds)
       let pricingCurrency: string | null = DEF_CURRENCY;
       if (svcCredsKey === 'DEFAULT') {
         try {
@@ -1324,164 +1317,95 @@ app.get(['/api/search', '/search', '/api/availability', '/availability'], async 
         }
       }
 
-      try {
-        const { firstUtc, lastUtc } = buildTimeUnitRange(from, to);
+      const { firstUtc, lastUtc } = buildTimeUnitRange(from, to);
 
-        const availPayload = {
-          ClientToken: creds.clientToken,
-          AccessToken: creds.accessToken,
-          Client: creds.clientName,
+      const availPayload = {
+        ClientToken: creds.clientToken,
+        AccessToken: creds.accessToken,
+        Client: creds.clientName,
+        ServiceId: svc.id,
+        FirstTimeUnitStartUtc: firstUtc,
+        LastTimeUnitStartUtc: lastUtc,
+      };
+
+      const availData = await axiosWithRetry<any>({
+        method: 'post',
+        url: `${creds.baseUrl}/api/connector/v1/services/getAvailability`,
+        data: availPayload,
+        timeout: 20000,
+      });
+
+      const cats: any[] = availData?.CategoryAvailabilities || [];
+      if (!cats.length) return;
+
+      const categoryLookup = await getResourceCategoriesForServiceCached(svcCredsKey, svc.id, requestedLang);
+
+      let priceFallbackUsed = 0;
+
+      for (const ca of cats) {
+        const catId = String(ca.CategoryId || '');
+        if (!catId) continue;
+
+        const info =
+          categoryLookup[catId] || { name: 'Ukjent kategori', capacity: null, description: null, image: null, images: null, raw: null };
+
+        const availableUnits = computeAvailableUnits(ca);
+
+        let priceNightly: (number | null)[] = [];
+        let priceTotal: number | null = null;
+        let priceCurrency: string | null = pricingCurrency;
+
+        const est = computePricesFromAvailabilities(ca);
+        if (est.total != null || est.nightly.length) {
+          priceNightly = est.nightly;
+          priceTotal = est.total;
+          priceCurrency = est.currency || priceCurrency;
+        }
+
+        if (priceTotal == null && availableUnits > 0 && svc.adultAgeCategoryId && priceFallbackUsed < PRICE_FALLBACK_MAX_PER_SERVICE) {
+          try {
+            const chosenRateId = pickRateIdForServiceAndNights(svc.id, nights) || (svc.rateId && svc.rateId.trim().length ? svc.rateId : null);
+            const rp = await priceReservationOnce({
+              credsKey: svcCredsKey,
+              startYmd: from,
+              endYmd: to,
+              categoryId: catId,
+              rateId: chosenRateId || undefined,
+              adults,
+              serviceId: svc.id,
+              adultAgeCategoryId: svc.adultAgeCategoryId,
+            });
+
+            priceFallbackUsed++;
+            if (rp.total != null) {
+              priceTotal = rp.total;
+              priceCurrency = rp.currency || priceCurrency;
+            }
+          } catch (err: any) {
+            console.warn('search_price_reservation_fallback', { serviceId: svc.id, categoryId: catId, message: err?.message });
+          }
+        }
+
+        allRooms.push({
+          ResourceCategoryId: catId,
+          RoomCategoryId: catId,
+          Name: info.name,
+          Description: info.description,
+          Capacity: info.capacity,
+          Image: info.image,
+          Images: info.images,
+          AvailableUnits: availableUnits,
+          TotalAvailableUnitsCount: availableUnits,
+          AvailableRoomCount: availableUnits,
+          PriceNightly: priceNightly,
+          PriceTotal: priceTotal,
+          PriceCurrency: (priceCurrency || DEF_CURRENCY).toUpperCase(),
           ServiceId: svc.id,
-          FirstTimeUnitStartUtc: firstUtc,
-          LastTimeUnitStartUtc: lastUtc,
-        };
-
-        const availData = await axiosWithRetry<any>({
-          method: 'post',
-          url: `${creds.baseUrl}/api/connector/v1/services/getAvailability`,
-          data: availPayload,
-          timeout: 20000,
-        });
-
-        const cats: any[] = availData?.CategoryAvailabilities || [];
-        if (!cats.length) {
-          console.warn('search: no categories for service', { serviceId: svc.id, name: svc.name, credsKey: svcCredsKey });
-          continue;
-        }
-
-        const rcPayload: any = {
-          ClientToken: creds.clientToken,
-          AccessToken: creds.accessToken,
-          Client: creds.clientName,
-          ServiceIds: [svc.id],
-          ActivityStates: ['Active'],
-          Limitation: { Count: 1000 },
-        };
-        if (creds.enterpriseId) rcPayload.EnterpriseIds = [creds.enterpriseId];
-
-        const rcData = await axiosWithRetry<any>({
-          method: 'post',
-          url: `${creds.baseUrl}/api/connector/v1/resourceCategories/getAll`,
-          data: rcPayload,
-          timeout: 20000,
-        });
-
-        const categoryLookup: Record<
-          string,
-          { name: string; capacity: number | null; description: string | null; image: string | null; images: string[] | null; raw: any }
-        > = {};
-
-        for (const rc of rcData?.ResourceCategories || []) {
-          if (!rc?.Id) continue;
-          const rcId = String(rc.Id);
-
-          const localizedName = pickLocalizedText(rc.Names, requestedLang, [LOCALE]) || rc.Name || rc.ExternalIdentifier || 'Rom';
-
-          const cap = typeof rc.Capacity === 'number' ? (rc.Capacity as number) : null;
-
-          const description = pickLocalizedText(rc.Descriptions, requestedLang, [LOCALE]) || rc.Description || null;
-
-          const mappedImages = getImagesForResourceCategory(rcId);
-          const primaryMappedImage = mappedImages[0] ?? null;
-
-          const fallbackImageFromMews =
-            Array.isArray(rc.ImageIds) && rc.ImageIds.length
-              ? `https://cdn.mews-demo.com/Media/Image/${rc.ImageIds[0]}?Mode=Fit&Height=400&Width=600`
-              : (rc.Image as string | null) || null;
-
-          const image = primaryMappedImage || fallbackImageFromMews;
-
-          const images: string[] | null =
-            mappedImages.length > 0
-              ? mappedImages
-              : Array.isArray(rc.ImageIds)
-              ? rc.ImageIds.map((id: string) => `https://cdn.mews-demo.com/Media/Image/${id}?Mode=Fit&Height=400&Width=600`)
-              : null;
-
-          categoryLookup[rcId] = { name: localizedName, capacity: cap, description, image, images, raw: rc };
-        }
-
-        for (const ca of cats) {
-          const catId = String(ca.CategoryId || '');
-          if (!catId) continue;
-
-          const info =
-            categoryLookup[catId] || { name: 'Ukjent kategori', capacity: null, description: null, image: null, images: null, raw: null };
-
-          const availableUnits = computeAvailableUnits(ca);
-
-          let priceNightly: (number | null)[] = [];
-          let priceTotal: number | null = null;
-          let priceCurrency: string | null = pricingCurrency;
-
-          if (priceTotal == null) {
-            const est = computePricesFromAvailabilities(ca);
-            if (est.total != null || est.nightly.length) {
-              priceNightly = est.nightly;
-              priceTotal = est.total;
-              priceCurrency = est.currency || priceCurrency;
-            }
-          }
-
-          if (priceTotal == null && svc.adultAgeCategoryId) {
-            try {
-              const chosenRateId = pickRateIdForServiceAndNights(svc.id, nights) || (svc.rateId && svc.rateId.trim().length ? svc.rateId : null);
-
-              const rp = await priceReservationOnce({
-                credsKey: svcCredsKey,
-                startYmd: from,
-                endYmd: to,
-                categoryId: catId,
-                rateId: chosenRateId || undefined,
-                adults,
-                serviceId: svc.id,
-                adultAgeCategoryId: svc.adultAgeCategoryId,
-              });
-
-              if (rp.total != null) {
-                priceTotal = rp.total;
-                priceCurrency = rp.currency || priceCurrency;
-              }
-            } catch (err: any) {
-              console.warn('search_price_reservation_fallback', {
-                serviceId: svc.id,
-                categoryId: catId,
-                message: err?.message,
-              });
-            }
-          }
-
-          allRooms.push({
-            ResourceCategoryId: catId,
-            RoomCategoryId: catId,
-            Name: info.name,
-            Description: info.description,
-            Capacity: info.capacity,
-            Image: info.image,
-            Images: info.images,
-            AvailableUnits: availableUnits,
-            TotalAvailableUnitsCount: availableUnits,
-            AvailableRoomCount: availableUnits,
-            PriceNightly: priceNightly,
-            PriceTotal: priceTotal,
-            PriceCurrency: (priceCurrency || DEF_CURRENCY).toUpperCase(),
-            ServiceId: svc.id,
-            ServiceName: svc.name,
-            credsKey: svcCredsKey,
-          });
-        }
-      } catch (e: any) {
-        console.error('search_service_failed', {
-          serviceId: svc.id,
-          name: svc.name,
+          ServiceName: svc.name,
           credsKey: svcCredsKey,
-          message: e?.message,
-          status: e?.response?.status || null,
-          data: e?.response?.data || null,
         });
-        continue;
       }
-    }
+    });
 
     const rcList = allRooms.filter((r) => typeof r.AvailableUnits === 'number' && r.AvailableUnits > 0);
 
@@ -1494,11 +1418,12 @@ app.get(['/api/search', '/search', '/api/availability', '/availability'], async 
         adults,
         area: areaKey,
         lang: requestedLang,
-        src: 'mews_services_getAvailability+resourceCategories_getAll+reservations_price',
+        src: 'mews_services_getAvailability+resourceCategories_getAll(cached)+reservations_price(capped)',
+        priceFallbackMaxPerService: PRICE_FALLBACK_MAX_PER_SERVICE,
       },
     };
 
-    setSearchCache(cacheKey, outResp, 30);
+    setSearchCache(cacheKey, outResp, 45);
     return res.json({ ok: true, data: outResp });
   } catch (e: any) {
     console.error('search_general_error', e?.response?.data || e?.message || e);
@@ -1580,10 +1505,7 @@ app.get(['/api/products', '/products'], async (_req, res) => {
       Id: p?.Id,
       Name: firstLang(p?.Name, LOCALE) || p?.Name || p?.ExternalIdentifier || 'Product',
       Description: firstLang(p?.Description, LOCALE) || '',
-      Image:
-        Array.isArray(p?.ImageIds) && p.ImageIds.length
-          ? `https://cdn.mews-demo.com/Media/Image/${p.ImageIds[0]}?Mode=Fit&Height=400&Width=600`
-          : null,
+      Image: Array.isArray(p?.ImageIds) && p.ImageIds.length ? `https://cdn.mews-demo.com/Media/Image/${p.ImageIds[0]}?Mode=Fit&Height=400&Width=600` : null,
       Currency: DEF_CURRENCY,
       PriceGross: p?.Price?.Value ?? p?.PriceGross ?? null,
     }));
@@ -1596,19 +1518,53 @@ app.get(['/api/products', '/products'], async (_req, res) => {
 
 app.post('/webhooks/mews', mewsWebhookHandler);
 
+// =============================================================
+// (Valgfritt) server-side create reservation (bak feature flag)
+// =============================================================
+if (ENABLE_SERVER_RESERVATION) {
+  app.post('/api/mews/reservation', async (req, res) => {
+    try {
+      // Her kan du implementere create-reservation når du er klar,
+      // uten å påvirke andre endepunkt. Foreløpig returnerer vi "not implemented".
+      return res.status(501).json({ ok: false, error: 'not_implemented', detail: 'ENABLE_SERVER_RESERVATION=1 men endpoint er ikke implementert ennå' });
+    } catch (e: any) {
+      return res.status(500).json({ ok: false, error: 'server_error', detail: e?.message || String(e) });
+    }
+  });
+}
+
+// 404
 app.use((req, res) => {
   console.warn(`404 ${req.method} ${req.url}`);
   res.status(404).json({ ok: false, error: 'not_found' });
 });
+
+// =============================================================
+// Pre-warm (liten win på første /api/search)
+// - Henter resourceCategories for alle services (per creds)
+// =============================================================
+async function prewarmResourceCategories() {
+  try {
+    const unique = MEWS_SERVICES_ALL.map((s) => ({ id: s.id, credsKey: (s.credsKey || 'DEFAULT') as MewsCredKey })).filter((x) => !!x.id);
+    await mapLimit(unique, 2, async (x) => {
+      await getResourceCategoriesForServiceCached(x.credsKey, x.id, LOCALE);
+    });
+    console.log('[BOOT] prewarmResourceCategories done', { count: unique.length });
+  } catch (e: any) {
+    console.warn('[BOOT] prewarmResourceCategories failed (non-fatal)', e?.message || e);
+  }
+}
 
 app.listen(PORT, HOST, () => {
   const hostShown = HOST === '0.0.0.0' ? 'localhost' : HOST;
   console.log(`✅ Server running at http://${hostShown}:${PORT}`);
   console.log(`MEWS_DISTRIBUTOR_BASE=${MEWS_DISTRIBUTOR_BASE} MEWS_DISTRIBUTION_CONFIGURATION_ID=${MEWS_CONFIGURATION_ID}`);
   console.log(`ENABLE_SERVER_RESERVATION=${ENABLE_SERVER_RESERVATION ? '1' : '0'}`);
+  console.log(`PRICE_FALLBACK_MAX_PER_SERVICE=${PRICE_FALLBACK_MAX_PER_SERVICE}`);
 
   const routes = listRegisteredRoutes();
-  console.log(
-    `[BOOT] ${BOOT_TAG} route count=${routes.length} has /mews/reservations=${routes.some((r) => r.path === '/mews/reservations')}`
-  );
+  console.log(`[BOOT] ${BOOT_TAG} route count=${routes.length} has /mews/reservations=${routes.some((r) => r.path === '/mews/reservations')}`);
+
+  // kickoff prewarm (ikke blokker start)
+  void prewarmResourceCategories();
 });

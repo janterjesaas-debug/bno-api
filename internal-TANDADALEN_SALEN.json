@@ -1,0 +1,323 @@
+﻿{
+    "meta":  {
+                 "CheckIn":  "2026-02-10",
+                 "CheckOut":  "2026-02-12",
+                 "Nights":  2,
+                 "ServiceId":  "c6d6a149-4e06-4cd0-b44b-b3140086ce52",
+                 "EnterpriseId":  "f45553a6-6697-485a-a352-b30600bcfd4d",
+                 "RateId":  "dd9862dd-9e16-46a1-a80d-b3140086ce7d",
+                 "PriceMode":  "Agent",
+                 "Lang":  "nb",
+                 "IncludeSoldOut":  false,
+                 "GeneratedUtc":  "2026-02-05T16:03:33.8309782Z"
+             },
+    "availability":  {
+                         "DatesUtc":  [
+                                          "2026-02-09T23:00:00Z",
+                                          "2026-02-10T23:00:00Z",
+                                          "2026-02-11T23:00:00Z"
+                                      ],
+                         "TimeUnitStartsUtc":  [
+                                                   "2026-02-09T23:00:00Z",
+                                                   "2026-02-10T23:00:00Z",
+                                                   "2026-02-11T23:00:00Z"
+                                               ],
+                         "CategoryAvailabilities":  [
+                                                        {
+                                                            "CategoryId":  "e2add613-9f83-4acc-abef-b32c00a74bd9",
+                                                            "Availabilities":  [
+                                                                                   1,
+                                                                                   1,
+                                                                                   1
+                                                                               ],
+                                                            "Adjustments":  [
+                                                                                0,
+                                                                                0,
+                                                                                0
+                                                                            ]
+                                                        }
+                                                    ]
+                     },
+    "pricing":  {
+                    "Currency":  "NOK",
+                    "DatesUtc":  [
+                                     "2026-02-09T23:00:00Z",
+                                     "2026-02-10T23:00:00Z",
+                                     "2026-02-11T23:00:00Z"
+                                 ],
+                    "TimeUnitStartsUtc":  [
+                                              "2026-02-09T23:00:00Z",
+                                              "2026-02-10T23:00:00Z",
+                                              "2026-02-11T23:00:00Z"
+                                          ],
+                    "BasePrices":  [
+                                       9999.00,
+                                       9999.00,
+                                       9999.00
+                                   ],
+                    "BaseAmountPrices":  [
+                                             {
+                                                 "Currency":  "NOK",
+                                                 "NetValue":  9999.00,
+                                                 "GrossValue":  9999.00,
+                                                 "TaxValues":  [
+                                                                   {
+                                                                       "Code":  "NO-2025-0%",
+                                                                       "Value":  0.00
+                                                                   }
+                                                               ],
+                                                 "Breakdown":  {
+                                                                   "Items":  [
+                                                                                 {
+                                                                                     "TaxRateCode":  "NO-2025-0%",
+                                                                                     "NetValue":  9999.00,
+                                                                                     "TaxValue":  0.00
+                                                                                 }
+                                                                             ]
+                                                               }
+                                             },
+                                             {
+                                                 "Currency":  "NOK",
+                                                 "NetValue":  9999.00,
+                                                 "GrossValue":  9999.00,
+                                                 "TaxValues":  [
+                                                                   {
+                                                                       "Code":  "NO-2025-0%",
+                                                                       "Value":  0.00
+                                                                   }
+                                                               ],
+                                                 "Breakdown":  {
+                                                                   "Items":  [
+                                                                                 {
+                                                                                     "TaxRateCode":  "NO-2025-0%",
+                                                                                     "NetValue":  9999.00,
+                                                                                     "TaxValue":  0.00
+                                                                                 }
+                                                                             ]
+                                                               }
+                                             },
+                                             {
+                                                 "Currency":  "NOK",
+                                                 "NetValue":  9999.00,
+                                                 "GrossValue":  9999.00,
+                                                 "TaxValues":  [
+                                                                   {
+                                                                       "Code":  "NO-2025-0%",
+                                                                       "Value":  0.00
+                                                                   }
+                                                               ],
+                                                 "Breakdown":  {
+                                                                   "Items":  [
+                                                                                 {
+                                                                                     "TaxRateCode":  "NO-2025-0%",
+                                                                                     "NetValue":  9999.00,
+                                                                                     "TaxValue":  0.00
+                                                                                 }
+                                                                             ]
+                                                               }
+                                             }
+                                         ],
+                    "CategoryPrices":  [
+                                           {
+                                               "CategoryId":  "e2add613-9f83-4acc-abef-b32c00a74bd9",
+                                               "Prices":  [
+                                                              9999.00,
+                                                              9999.00,
+                                                              9999.00
+                                                          ],
+                                               "AmountPrices":  [
+                                                                    {
+                                                                        "Currency":  "NOK",
+                                                                        "NetValue":  9999.00,
+                                                                        "GrossValue":  9999.00,
+                                                                        "TaxValues":  [
+                                                                                          {
+                                                                                              "Code":  "NO-2025-0%",
+                                                                                              "Value":  0.00
+                                                                                          }
+                                                                                      ],
+                                                                        "Breakdown":  {
+                                                                                          "Items":  [
+                                                                                                        {
+                                                                                                            "TaxRateCode":  "NO-2025-0%",
+                                                                                                            "NetValue":  9999.00,
+                                                                                                            "TaxValue":  0.00
+                                                                                                        }
+                                                                                                    ]
+                                                                                      }
+                                                                    },
+                                                                    {
+                                                                        "Currency":  "NOK",
+                                                                        "NetValue":  9999.00,
+                                                                        "GrossValue":  9999.00,
+                                                                        "TaxValues":  [
+                                                                                          {
+                                                                                              "Code":  "NO-2025-0%",
+                                                                                              "Value":  0.00
+                                                                                          }
+                                                                                      ],
+                                                                        "Breakdown":  {
+                                                                                          "Items":  [
+                                                                                                        {
+                                                                                                            "TaxRateCode":  "NO-2025-0%",
+                                                                                                            "NetValue":  9999.00,
+                                                                                                            "TaxValue":  0.00
+                                                                                                        }
+                                                                                                    ]
+                                                                                      }
+                                                                    },
+                                                                    {
+                                                                        "Currency":  "NOK",
+                                                                        "NetValue":  9999.00,
+                                                                        "GrossValue":  9999.00,
+                                                                        "TaxValues":  [
+                                                                                          {
+                                                                                              "Code":  "NO-2025-0%",
+                                                                                              "Value":  0.00
+                                                                                          }
+                                                                                      ],
+                                                                        "Breakdown":  {
+                                                                                          "Items":  [
+                                                                                                        {
+                                                                                                            "TaxRateCode":  "NO-2025-0%",
+                                                                                                            "NetValue":  9999.00,
+                                                                                                            "TaxValue":  0.00
+                                                                                                        }
+                                                                                                    ]
+                                                                                      }
+                                                                    }
+                                                                ]
+                                           }
+                                       ],
+                    "CategoryAdjustments":  [
+
+                                            ],
+                    "AgeCategoryAdjustments":  [
+                                                   {
+                                                       "AgeCategoryId":  "9833240e-86d8-469a-9424-b3140086ce77",
+                                                       "AbsoluteValue":  0.0000,
+                                                       "Type":  "NegativeOccupancyAdjustment"
+                                                   },
+                                                   {
+                                                       "AgeCategoryId":  "9833240e-86d8-469a-9424-b3140086ce77",
+                                                       "AbsoluteValue":  0.0000,
+                                                       "Type":  "ExtraOccupancyAdjustment"
+                                                   }
+                                               ],
+                    "RelativeAdjustment":  0.0,
+                    "AbsoluteAdjustment":  0.0,
+                    "EmptyUnitAdjustment":  0.0000,
+                    "ExtraUnitAdjustment":  0.0000
+                },
+    "resourceCategories":  {
+                               "ResourceCategories":  [
+                                                          {
+                                                              "Id":  "e2add613-9f83-4acc-abef-b32c00a74bd9",
+                                                              "EnterpriseId":  "f45553a6-6697-485a-a352-b30600bcfd4d",
+                                                              "ServiceId":  "c6d6a149-4e06-4cd0-b44b-b3140086ce52",
+                                                              "IsActive":  true,
+                                                              "Type":  "Room",
+                                                              "Classification":  null,
+                                                              "Names":  {
+                                                                            "cs-CZ":  "Vlastníte chatu v Tandådalen?",
+                                                                            "da-DK":  "Ejer du en hytte i Tandådalen?",
+                                                                            "de-CH":  "Händ Sie es Hüttli i Tandådalen?",
+                                                                            "de-DE":  "Besitzen Sie eine Hütte in Tandådalen?",
+                                                                            "el-GR":  "Έχετε σαλέ στο Tandådalen;",
+                                                                            "en-GB":  "Do you own a cabin in Tandådalen?",
+                                                                            "ca-ES":  "Tens una cabana a Tandådalen?",
+                                                                            "eu-ES":  "Baduzu Tandådalen-en txabola bat?",
+                                                                            "es-ES":  "¿Tienes una cabaña en Tandådalen?",
+                                                                            "et-EE":  "Kas sul on Tandådalenis suvila?",
+                                                                            "fi-FI":  "Omistatko mökin Tandådalenissa?",
+                                                                            "fr-CA":  "Avez-vous un chalet à Tandådalen ?",
+                                                                            "fr-FR":  "Avez-vous un chalet à Tandådalen ?",
+                                                                            "is-IS":  "Áttu sumarhús í Tandådalen?",
+                                                                            "it-IT":  "Hai una baita a Tandådalen?",
+                                                                            "ja-JP":  "タンオーダレン（Tandådalen）にコテージをお持ちですか？",
+                                                                            "ka-GE":  "გაქვთ ქოხი ტანდოდალენში (Tandådalen)?",
+                                                                            "ko-KR":  "Tandådalen에 오두막(캐빈)을 소유하고 계신가요?",
+                                                                            "lv-LV":  "Vai tev pieder mājiņa Tandådalenā?",
+                                                                            "ms-MY":  "Adakah anda memiliki kabin di Tandådalen?",
+                                                                            "nl-NL":  "Heb je een cabin in Tandådalen?",
+                                                                            "nb-NO":  "Eier du hytte i Tandådalen?",
+                                                                            "pl-PL":  "Czy masz chatę w Tandådalen?",
+                                                                            "pt-BR":  "Você tem uma cabana em Tandådalen?",
+                                                                            "pt-PT":  "Tem uma cabana em Tandådalen?",
+                                                                            "ru-RU":  "У вас есть домик в Тандо̊далене (Tandådalen)?",
+                                                                            "sk-SK":  "Vlastníte chatu v Tandådalen?",
+                                                                            "sv-SE":  "Äger du en stuga i Tandådalen?",
+                                                                            "ta-IN":  "Tandådalen-ல் உங்களுக்குச் சொந்தமான குடில் உள்ளதா?",
+                                                                            "tr-TR":  "Tandådalen’de bir kulübeniz var mı?",
+                                                                            "uk-UA":  "У вас є будиночок у Тандо̊далені (Tandådalen)?",
+                                                                            "zh-CN":  "你在坦多达伦（Tandådalen）有小屋吗？",
+                                                                            "en-US":  "Do you own a cabin in Tandådalen?"
+                                                                        },
+                                                              "ShortNames":  {
+
+                                                                             },
+                                                              "Descriptions":  {
+                                                                                   "cs-CZ":  "Nechte svou chatu vydělávat, když ji zrovna nevyužíváte. Pomůžeme vám se zviditelněním, nastavením cen, rezervacemi i péčí o hosty. Kontaktujte nás pro nezávazné posouzení.",
+                                                                                   "da-DK":  "Lad din hytte give dig lejeindtægter, når du ikke bruger den. Vi hjælper dig med synlighed, prissætning, booking og gæsteservice. Kontakt os for en uforpligtende vurdering.",
+                                                                                   "de-CH":  "Lönd Sie Ihr Hüttli Mieteinnahme iibringe, wenn Sie’s nöd bruuched. Mir hälfed Ihne bi Sichtbarkeit, Prisig, Buchige und Gästeservice. Kontaktiere Sie eus für e unverbindlichi Iischätzig.",
+                                                                                   "de-DE":  "Lassen Sie Ihre Hütte Mieteinnahmen erzielen, wenn Sie sie nicht nutzen. Wir unterstützen Sie bei Sichtbarkeit, Preisgestaltung, Buchungen und Gästeservice. Kontaktieren Sie uns für eine unverbindliche Einschätzung.",
+                                                                                   "el-GR":  "Αφήστε το σαλέ σας να σας αποφέρει εισόδημα από ενοικίαση όταν δεν το χρησιμοποιείτε. Σας βοηθάμε με την προβολή, την τιμολόγηση, τις κρατήσεις και την εξυπηρέτηση επισκεπτών. Επικοινωνήστε μαζί μας για μια μη δεσμευτική αξιολόγηση.",
+                                                                                   "en-GB":  "Let your cabin earn rental income when you’re not using it. We help with visibility, pricing, bookings and guest services. Get in touch for a no-obligation assessment.",
+                                                                                   "ca-ES":  "Deixa que la teva cabana et generi ingressos de lloguer quan no la facis servir. T’ajudem amb la visibilitat, els preus, les reserves i l’atenció als hostes. Contacta’ns per a una valoració sense compromís.",
+                                                                                   "eu-ES":  "Utzi zure txabolak alokairu-sarrerak eman diezazkizun erabiltzen ez duzunean. Ikusgarritasunean, prezioetan, erreserbetan eta bezeroen arretan laguntzen dizugu. Jarri gurekin harremanetan konpromisorik gabeko balorazio baterako.",
+                                                                                   "es-ES":  "Deja que tu cabaña te genere ingresos por alquiler cuando no la estés usando. Te ayudamos con visibilidad, precios, reservas y atención al huésped. Contáctanos para una valoración sin compromiso.",
+                                                                                   "et-EE":  "Las sinu suvila teenib üüritulu siis, kui sa seda ei kasuta. Aitame nähtavuse, hinnastamise, broneeringute ja külaliste teenindusega. Võta meiega ühendust tasuta ja kohustusteta hinnangu saamiseks.",
+                                                                                   "fi-FI":  "Anna mökkisi tuottaa vuokratuloja silloin, kun et käytä sitä. Autamme näkyvyydessä, hinnoittelussa, varauksissa ja vieraspalvelussa. Ota yhteyttä saadaksesi sitoumuksettoman arvion.",
+                                                                                   "fr-CA":  "Faites générer des revenus de location à votre chalet quand vous ne l’utilisez pas. On vous aide avec la visibilité, la tarification, les réservations et le service aux voyageurs. Communiquez avec nous pour une évaluation sans engagement.",
+                                                                                   "fr-FR":  "Faites générer des revenus locatifs à votre chalet lorsque vous ne l’utilisez pas. Nous vous aidons pour la visibilité, la tarification, les réservations et le service aux voyageurs. Contactez-nous pour une évaluation sans engagement.",
+                                                                                   "is-IS":  "Láttu sumarhúsið þitt skila þér leigutekjum þegar þú ert ekki að nota það. Við hjálpum þér með sýnileika, verðlagningu, bókanir og þjónustu við gesti. Hafðu samband til að fá óskuldbindandi mat.",
+                                                                                   "it-IT":  "Lascia che la tua baita ti generi entrate da affitto quando non la utilizzi. Ti aiutiamo con visibilità, prezzi, prenotazioni e assistenza agli ospiti. Contattaci per una valutazione senza impegno.",
+                                                                                   "ja-JP":  "使っていない間も、コテージで賃貸収入を得られるようにしませんか。露出強化、価格設定、予約対応、ゲスト対応までサポートします。まずはお気軽に、無料の査定（ご相談）をご依頼ください。",
+                                                                                   "ka-GE":  "დაე, თქვენი ქოხი გაქირავებიდან შემოსავალს გაძლევდეთ მაშინ, როცა მას არ იყენებთ. ჩვენ დაგეხმარებით ხილვადობაში, ფასების განსაზღვრაში, ჯავშნებში და სტუმრების მომსახურებაში. დაგვიკავშირდით ვალდებულების გარეშე შეფასებისთვის.",
+                                                                                   "ko-KR":  "사용하지 않을 때도 오두막이 임대 수익을 올릴 수 있게 하세요. 노출, 가격 설정, 예약, 게스트 응대까지 저희가 도와드립니다. 부담 없는 상담 및 평가를 위해 문의해 주세요.",
+                                                                                   "lv-LV":  "Ļauj savai mājiņai pelnīt īres ienākumus, kad tu to neizmanto. Mēs palīdzam ar redzamību, cenu noteikšanu, rezervācijām un viesu apkalpošanu. Sazinies ar mums, lai saņemtu nesaistošu izvērtējumu.",
+                                                                                   "ms-MY":  "Biarkan kabin anda menjana pendapatan sewaan apabila anda tidak menggunakannya. Kami membantu dengan keterlihatan, penetapan harga, tempahan dan perkhidmatan tetamu. Hubungi kami untuk penilaian tanpa komitmen.",
+                                                                                   "nl-NL":  "Laat je cabin huurinkomsten opleveren wanneer je hem niet gebruikt. We helpen je met zichtbaarheid, prijsstelling, boekingen en gastservice. Neem contact met ons op voor een vrijblijvende beoordeling.",
+                                                                                   "nb-NO":  "La hytta gi deg leieinntekter når du ikke bruker den. Vi hjelper deg med synlighet, prising, booking og gjesteservice. Kontakt oss for en uforpliktende vurdering.",
+                                                                                   "pl-PL":  "Niech Twoja chata przynosi Ci dochód z najmu, gdy z niej nie korzystasz. Pomożemy Ci w widoczności, ustalaniu cen, rezerwacjach i obsłudze gości. Skontaktuj się z nami, aby otrzymać niezobowiązującą ocenę.",
+                                                                                   "pt-BR":  "Deixe sua cabana gerar renda de aluguel quando você não estiver usando. Ajudamos com visibilidade, precificação, reservas e atendimento aos hóspedes. Fale com a gente para uma avaliação sem compromisso.",
+                                                                                   "pt-PT":  "Deixe a sua cabana gerar rendimentos de arrendamento quando não a estiver a utilizar. Ajudamos com visibilidade, definição de preços, reservas e apoio aos hóspedes. Contacte-nos para uma avaliação sem compromisso.",
+                                                                                   "ru-RU":  "Пусть ваш домик приносит вам доход от аренды, когда вы им не пользуетесь. Мы поможем с видимостью, ценообразованием, бронированиями и обслуживанием гостей. Свяжитесь с нами для бесплатной, ни к чему не обязывающей оценки.",
+                                                                                   "sk-SK":  "Nechajte svoju chatu zarábať príjmom z prenájmu, keď ju práve nevyužívate. Pomôžeme vám so zviditeľnením, nastavením cien, rezerváciami a starostlivosťou o hostí. Kontaktujte nás pre nezáväzné posúdenie.",
+                                                                                   "sv-SE":  "Låt din stuga ge dig hyresintäkter när du inte använder den. Vi hjälper dig med synlighet, prissättning, bokning och gästservice. Kontakta oss för en kostnadsfri och förutsättningslös bedömning.",
+                                                                                   "ta-IN":  "நீங்கள் பயன்படுத்தாத நேரங்களில் உங்கள் குடில் வாடகை வருமானம் தரட்டும். காட்சியளிப்பு, விலை நிர்ணயம், முன்பதிவு மற்றும் விருந்தினர் சேவைகளில் நாங்கள் உதவுகிறோம். கட்டாயமில்லாத மதிப்பீட்டிற்கு எங்களைத் தொடர்பு கொள்ளுங்கள்.",
+                                                                                   "tr-TR":  "Kullanmadığınız zamanlarda kulübeniz size kira geliri sağlasın. Görünürlük, fiyatlandırma, rezervasyon ve misafir hizmetlerinde size yardımcı oluyoruz. Bağlayıcı olmayan bir değerlendirme için bizimle iletişime geçin.",
+                                                                                   "uk-UA":  "Нехай ваш будиночок приносить вам дохід від оренди, коли ви ним не користуєтеся. Ми допоможемо з видимістю, ціноутворенням, бронюваннями та обслуговуванням гостей. Зв’яжіться з нами для беззобов’язальної оцінки.",
+                                                                                   "zh-CN":  "让你的小屋在你不使用的时候也能带来租金收入。我们协助提升曝光、定价、预订以及住客服务。欢迎联系获取无义务评估。",
+                                                                                   "en-US":  "Let your cabin earn rental income when you’re not using it. We help with visibility, pricing, bookings, and guest support. Contact us for a no-obligation assessment."
+                                                                               },
+                                                              "Ordering":  0,
+                                                              "Capacity":  6,
+                                                              "ExtraCapacity":  0,
+                                                              "ExternalIdentifier":  null,
+                                                              "AccountingCategoryId":  "756e1768-c984-410d-ba9b-b30600bd0ae6"
+                                                          }
+                                                      ],
+                               "Cursor":  null
+                           },
+    "report":  [
+                   {
+                       "ResourceCategoryId":  "e2add613-9f83-4acc-abef-b32c00a74bd9",
+                       "ShortName":  "a74bd9",
+                       "Name":  "Category e2add613-9f83-4acc-abef-b32c00a74bd9",
+                       "Capacity":  6,
+                       "MinAvail":  1,
+                       "LodgingTotal":  29997.00,
+                       "FeeExVat":  0,
+                       "FeeVat":  0,
+                       "FeeIncVat":  0,
+                       "CustomerTotal":  29997.00,
+                       "SupplierNet":  29997.00,
+                       "Currency":  "NOK",
+                       "BookingMode":  "INTERNAL",
+                       "BookingUrl":  "",
+                       "FeePolicy":  "NONE (own inventory)",
+                       "Description":  ""
+                   }
+               ]
+}

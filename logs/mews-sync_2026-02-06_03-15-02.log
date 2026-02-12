@@ -1,0 +1,47 @@
+﻿**********************
+Windows PowerShell transcript start
+Start time: 20260206031502
+Username: DESKTOP-JT\jante
+RunAs User: DESKTOP-JT\jante
+Configuration Name: 
+Machine: DESKTOP-JT (Microsoft Windows NT 10.0.22621.0)
+Host Application: C:\WINDOWS\System32\WindowsPowerShell\v1.0\powershell.exe -NoProfile -ExecutionPolicy Bypass -File C:\Users\jante\bno-api\run-mews-sync.ps1
+Process ID: 89484
+PSVersion: 5.1.22621.4249
+PSEdition: Desktop
+PSCompatibleVersions: 1.0, 2.0, 3.0, 4.0, 5.0, 5.1.22621.4249
+BuildVersion: 10.0.22621.4249
+CLRVersion: 4.0.30319.42000
+WSManStackVersion: 3.0
+PSRemotingProtocolVersion: 2.3
+SerializationVersion: 1.1.0.1
+**********************
+== RUN MEWS SYNC ==
+Repo: C:\Users\jante\bno-api
+MEWS_SYNC_DAYS_BACK=7  MEWS_SYNC_DAYS_AHEAD=180  DRY_RUN=
+== MEWS → Supabase cleaning+linen assignments sync ==
+Reservable services: 9f600b99-057d-4a35-90a4-b30600bd0c64, c4964b1d-2303-4ebd-9be8-b3140084d802, ba0090d5-a22d-4836-a5de
+-b3140084990e, da6cc834-d7d5-456b-b394-b31400850c96, 64a92916-4f67-4432-a125-b34c0069ad62, 27dfd300-b69f-4c72-bc6b-b3140
+086f556, c6d6a149-4e06-4cd0-b44b-b3140086ce52, 394c01db-2c18-46a9-b1a8-b31400865186, 35745e9e-1318-42e4-8b9d-b3140085533
+6, 17e06708-6635-4bc2-a326-b32101598261
+Linen product services: da6cc834-d7d5-456b-b394-b31400850c96
+DRY_RUN: OFF
+Periode: 2026-01-30 → 2026-08-05 (basert på lokal dato / departure)
+Uventet feil i mews-sync-cleaning.ts: {
+  message: 'Service for this project is restricted due to the following violations: exceed_storage_size_quota. Please re
+ach out to Supabase support at https://supabase.help immediately.'
+}
+PS>TerminatingError(run-mews-sync.ps1): "The running command stopped because the preference variable "ErrorActionPreference" or common parameter is set to Stop: mews-sync-cleaning.ts exit code: 1"
+>> TerminatingError(run-mews-sync.ps1): "The running command stopped because the preference variable "ErrorActionPreference" or common parameter is set to Stop: mews-sync-cleaning.ts exit code: 1"
+The running command stopped because the preference variable "ErrorActionPreference" or common parameter is set to Stop: mews-sync-cleaning.ts exit code: 1
+C:\Users\jante\bno-api\run-mews-sync.ps1 : mews-sync-cleaning.ts exit code: 1
+At C:\Users\jante\bno-api\run-mews-sync.ps1:54 char:3
++   Write-Error $_
++   ~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (:) [Write-Error], WriteErrorException
+    + FullyQualifiedErrorId : Microsoft.PowerShell.Commands.WriteErrorException,run-mews-sync.ps1
+
+**********************
+Windows PowerShell transcript end
+End time: 20260206031512
+**********************

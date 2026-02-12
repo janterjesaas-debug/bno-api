@@ -1,0 +1,52 @@
+﻿**********************
+Windows PowerShell transcript start
+Start time: 20260128075922
+Username: DESKTOP-JT\jante
+RunAs User: DESKTOP-JT\jante
+Configuration Name: 
+Machine: DESKTOP-JT (Microsoft Windows NT 10.0.22621.0)
+Host Application: C:\WINDOWS\System32\WindowsPowerShell\v1.0\powershell.exe -NoProfile -ExecutionPolicy Bypass -File C:\Users\jante\bno-api\run-mews-sync.ps1
+Process ID: 32392
+PSVersion: 5.1.22621.4249
+PSEdition: Desktop
+PSCompatibleVersions: 1.0, 2.0, 3.0, 4.0, 5.0, 5.1.22621.4249
+BuildVersion: 10.0.22621.4249
+CLRVersion: 4.0.30319.42000
+WSManStackVersion: 3.0
+PSRemotingProtocolVersion: 2.3
+SerializationVersion: 1.1.0.1
+**********************
+== RUN MEWS SYNC ==
+Repo: C:\Users\jante\bno-api
+MEWS_SYNC_DAYS_BACK=7  MEWS_SYNC_DAYS_AHEAD=180  DRY_RUN=
+Count":1000}}
+MEWS CALL https://api.mews.com/api/connector/v1/orderItems/getAll {"ClientToken":"[MASKED]","AccessToken":"[MASKED]","Cl
+ient":"BNO Travel App 1.0","EnterpriseId":"f45553a6-6697-485a-a352-b30600bcfd4d","ServiceIds":["da6cc834-d7d5-456b-b394-
+b31400850c96"],"ConsumedUtc":{"StartUtc":"2026-07-23T22:00:00.000Z","EndUtc":"2026-07-24T22:00:00.000Z"},"Limitation":{"
+Count":1000}}
+MEWS CALL https://api.mews.com/api/connector/v1/orderItems/getAll {"ClientToken":"[MASKED]","AccessToken":"[MASKED]","Cl
+ient":"BNO Travel App 1.0","EnterpriseId":"f45553a6-6697-485a-a352-b30600bcfd4d","ServiceIds":["da6cc834-d7d5-456b-b394-
+b31400850c96"],"ConsumedUtc":{"StartUtc":"2026-07-24T22:00:00.000Z","EndUtc":"2026-07-25T22:00:00.000Z"},"Limitation":{"
+Count":1000}}
+MEWS CALL https://api.mews.com/api/connector/v1/orderItems/getAll {"ClientToken":"[MASKED]","AccessToken":"[MASKED]","Cl
+ient":"BNO Travel App 1.0","EnterpriseId":"f45553a6-6697-485a-a352-b30600bcfd4d","ServiceIds":["da6cc834-d7d5-456b-b394-
+b31400850c96"],"ConsumedUtc":{"StartUtc":"2026-07-25T22:00:00.000Z","EndUtc":"2026-07-26T22:00:00.000Z"},"Limitation":{"
+Count":1000}}
+MEWS CALL https://api.mews.com/api/connector/v1/orderItems/getAll {"ClientToken":"[MASKED]","AccessToken":"[MASKED]","Cl
+ient":"BNO Travel App 1.0","EnterpriseId":"f45553a6-6697-485a-a352-b30600bcfd4d","ServiceIds":["da6cc834-d7d5-456b-b394-
+b31400850c96"],"ConsumedUtc":{"StartUtc":"2026-07-26T22:00:00.000Z","EndUtc":"2026-07-27T22:00:00.000Z"},"Limitation":{"
+Count":1000}}
+DEBUG: aggregated orderItems count = 477 for serviceIds=da6cc834-d7d5-456b-b394-b31400850c96
+OrderItems: 477, reservasjoner med linen: 8
+
+=== Oppsummering ===
+Reservasjoner behandlet: 69
+Nye vask-oppdrag:        1
+Oppdaterte vask-oppdrag: 1
+Nye sengetøy-oppdrag:    1
+Oppdaterte sengetøy:     0
+OK
+**********************
+Windows PowerShell transcript end
+End time: 20260128081201
+**********************

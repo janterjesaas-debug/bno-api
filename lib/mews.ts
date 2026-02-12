@@ -12,21 +12,14 @@ function parseIdList(v: string): string[] {
     .filter(Boolean);
 }
 
-// ---------- DEFAULT creds ----------
-const baseUrlRaw = envTrim('MEWS_BASE_URL');
-if (!baseUrlRaw) throw new Error('Missing MEWS_BASE_URL');
-const baseUrlDefault = normalizeBase(baseUrlRaw);
-
-const clientTokenDefault = envTrim('MEWS_CLIENT_TOKEN');
-if (!clientTokenDefault) throw new Error('Missing MEWS_CLIENT_TOKEN');
-
-const accessTokenDefault = envTrim('MEWS_ACCESS_TOKEN');
-if (!accessTokenDefault) throw new Error('Missing MEWS_ACCESS_TOKEN');
-
+// ---------- DEFAULT creds (LAZY) ----------
+// Viktig: Ikke throw på import. Vi validerer først når vi faktisk bruker Mews.
+const baseUrlDefault = normalizeBase(envTrim('MEWS_BASE_URL') || '');
+const clientTokenDefault = envTrim('MEWS_CLIENT_TOKEN') || '';
+const accessTokenDefault = envTrim('MEWS_ACCESS_TOKEN') || '';
 const enterpriseIdDefault = envTrim('MEWS_ENTERPRISE_ID') || undefined;
 
 const clientName = (envTrim('MEWS_CLIENT_NAME') || 'bno-api').replace(/^"|"$/g, '').trim();
-
 const hotelTimeZone = (envTrim('HOTEL_TIMEZONE') || 'Europe/Oslo').trim();
 
 // ---------- STRANDA creds (optional) ----------
@@ -49,6 +42,12 @@ type MewsCreds = {
   clientName: string;
 };
 
+function assertDefaultCreds() {
+  if (!baseUrlDefault) throw new Error('Missing MEWS_BASE_URL');
+  if (!clientTokenDefault) throw new Error('Missing MEWS_CLIENT_TOKEN');
+  if (!accessTokenDefault) throw new Error('Missing MEWS_ACCESS_TOKEN');
+}
+
 function isStrandaService(serviceId?: string): boolean {
   if (!serviceId) return false;
   const sid = String(serviceId).trim().toLowerCase();
@@ -57,11 +56,13 @@ function isStrandaService(serviceId?: string): boolean {
 
 function getCredsForService(serviceId?: string): MewsCreds {
   if (isStrandaService(serviceId)) {
+    // Stranda: base/clientToken kan arves fra default, men access-token må finnes
     if (!strandaAccessToken) {
-      throw new Error(
-        `ServiceId ${serviceId} is mapped to STRANDA, but MEWS_STRANDA_ACCESS_TOKEN is missing.`,
-      );
+      throw new Error(`ServiceId ${serviceId} is mapped to STRANDA, but MEWS_STRANDA_ACCESS_TOKEN is missing.`);
     }
+    if (!strandaBaseUrl) throw new Error('Missing MEWS_STRANDA_BASE_URL (or MEWS_BASE_URL as fallback)');
+    if (!strandaClientToken) throw new Error('Missing MEWS_STRANDA_CLIENT_TOKEN (or MEWS_CLIENT_TOKEN as fallback)');
+
     return {
       key: 'STRANDA',
       baseUrl: strandaBaseUrl,
@@ -72,6 +73,8 @@ function getCredsForService(serviceId?: string): MewsCreds {
     };
   }
 
+  // Default
+  assertDefaultCreds();
   return {
     key: 'DEFAULT',
     baseUrl: baseUrlDefault,
@@ -747,9 +750,7 @@ export async function fetchResources(serviceId: string | string[]) {
   // alle må være samme credsKey (ellers må man splitte i flere kall)
   const keys = new Set(serviceIds.map((sid) => (isStrandaService(sid) ? 'STRANDA' : 'DEFAULT')));
   if (keys.size > 1) {
-    throw new Error(
-      `fetchResources: serviceIds span multiple credential sets (DEFAULT/STRANDA). Split the call per tenant.`,
-    );
+    throw new Error(`fetchResources: serviceIds span multiple credential sets (DEFAULT/STRANDA). Split the call per tenant.`);
   }
 
   const creds = getCredsForService(serviceIds[0]);
@@ -786,9 +787,7 @@ export async function fetchOrderItemsForCleaningRange(
 
   const keys = new Set(serviceIds.map((sid) => (isStrandaService(sid) ? 'STRANDA' : 'DEFAULT')));
   if (keys.size > 1) {
-    throw new Error(
-      `fetchOrderItemsForCleaningRange: serviceIds span multiple credential sets (DEFAULT/STRANDA). Split per tenant.`,
-    );
+    throw new Error(`fetchOrderItemsForCleaningRange: serviceIds span multiple credential sets (DEFAULT/STRANDA). Split per tenant.`);
   }
 
   const creds = getCredsForService(serviceIds[0]);
@@ -864,9 +863,7 @@ export async function fetchOrderItemsForCleaningRange(
             `fetchOrderItemsForCleaningRange: Limitation error and cannot subdivide further for interval ${subStart.toISOString()} -> ${subEnd.toISOString()}`,
           );
         } else {
-          console.error(
-            `fetchOrderItemsForCleaningRange: Error fetching items for ${subStart.toISOString()} -> ${subEnd.toISOString()}`,
-          );
+          console.error(`fetchOrderItemsForCleaningRange: Error fetching items for ${subStart.toISOString()} -> ${subEnd.toISOString()}`);
           console.error(err?.mewsResponse || err?.response?.data || err?.message || err);
         }
       }

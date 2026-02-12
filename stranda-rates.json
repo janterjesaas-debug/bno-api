@@ -1,0 +1,2170 @@
+﻿{
+    "Rates":  [
+                  {
+                      "Id":  "fa19d996-1249-4c3e-addb-b3a00148aba5",
+                      "GroupId":  "cacee119-77dd-4a7b-9598-b22100f275d0",
+                      "ServiceId":  "11f4b043-fefc-496f-9680-b15a007eea68",
+                      "BaseRateId":  "3a4010e2-2876-40d3-b026-b22100f580ce",
+                      "IsBaseRate":  false,
+                      "BusinessSegmentId":  null,
+                      "IsActive":  true,
+                      "IsEnabled":  true,
+                      "IsPublic":  false,
+                      "IsDefault":  false,
+                      "Type":  "Private",
+                      "Name":  "DEAL 15% OFF - 12%",
+                      "Names":  {
+                                    "en-US":  "DEAL 15% OFF - 12%"
+                                },
+                      "ShortName":  "DO",
+                      "UpdatedUtc":  "2025-11-25T20:05:59Z",
+                      "ExternalNames":  {
+                                            "en-US":  "SKI"
+                                        },
+                      "Description":  {
+
+                                      },
+                      "ExternalIdentifier":  null,
+                      "Options":  {
+                                      "HidePriceFromGuest":  false,
+                                      "IsBonusPointsEligible":  false
+                                  },
+                      "Pricing":  {
+                                      "Discriminator":  "DependentRatePricing",
+                                      "BaseRatePricing":  null,
+                                      "DependentRatePricing":  {
+                                                                   "BaseRateId":  "3a4010e2-2876-40d3-b026-b22100f580ce",
+                                                                   "RelativeAdjustment":  -0.15000000,
+                                                                   "AbsoluteAdjustment":  0.00000000
+                                                               }
+                                  },
+                      "TaxExemptionReason":  null,
+                      "TaxExemptionLegalReference":  null
+                  },
+                  {
+                      "Id":  "de3514b2-51f3-4a68-af50-b3a001488060",
+                      "GroupId":  "0d880488-5cb2-4f21-aaf8-b16100d42742",
+                      "ServiceId":  "11f4b043-fefc-496f-9680-b15a007eea68",
+                      "BaseRateId":  "dc234bc8-8957-4304-a6b8-b161015428c3",
+                      "IsBaseRate":  false,
+                      "BusinessSegmentId":  null,
+                      "IsActive":  true,
+                      "IsEnabled":  true,
+                      "IsPublic":  false,
+                      "IsDefault":  false,
+                      "Type":  "Private",
+                      "Name":  "DEAL 15% OFF - 0%",
+                      "Names":  {
+                                    "en-US":  "DEAL 15% OFF - 0%"
+                                },
+                      "ShortName":  "DO",
+                      "UpdatedUtc":  "2025-11-25T19:59:11Z",
+                      "ExternalNames":  {
+                                            "en-US":  "SKI"
+                                        },
+                      "Description":  {
+
+                                      },
+                      "ExternalIdentifier":  null,
+                      "Options":  {
+                                      "HidePriceFromGuest":  false,
+                                      "IsBonusPointsEligible":  false
+                                  },
+                      "Pricing":  {
+                                      "Discriminator":  "DependentRatePricing",
+                                      "BaseRatePricing":  null,
+                                      "DependentRatePricing":  {
+                                                                   "BaseRateId":  "dc234bc8-8957-4304-a6b8-b161015428c3",
+                                                                   "RelativeAdjustment":  -0.15000000,
+                                                                   "AbsoluteAdjustment":  0.00000000
+                                                               }
+                                  },
+                      "TaxExemptionReason":  null,
+                      "TaxExemptionLegalReference":  null
+                  },
+                  {
+                      "Id":  "e35ca8b9-940d-467a-8691-b38b015a36af",
+                      "GroupId":  "0d880488-5cb2-4f21-aaf8-b16100d42742",
+                      "ServiceId":  "11f4b043-fefc-496f-9680-b15a007eea68",
+                      "BaseRateId":  null,
+                      "IsBaseRate":  true,
+                      "BusinessSegmentId":  null,
+                      "IsActive":  true,
+                      "IsEnabled":  true,
+                      "IsPublic":  false,
+                      "IsDefault":  false,
+                      "Type":  "Private",
+                      "Name":  "Nordic Collection - 0%",
+                      "Names":  {
+                                    "en-US":  "Nordic Collection - 0%"
+                                },
+                      "ShortName":  "NC0",
+                      "UpdatedUtc":  "2025-12-03T16:33:47Z",
+                      "ExternalNames":  {
+                                            "en-US":  "Nordic Collection"
+                                        },
+                      "Description":  {
+
+                                      },
+                      "ExternalIdentifier":  null,
+                      "Options":  {
+                                      "HidePriceFromGuest":  false,
+                                      "IsBonusPointsEligible":  false
+                                  },
+                      "Pricing":  {
+                                      "Discriminator":  "BaseRatePricing",
+                                      "BaseRatePricing":  {
+                                                              "Amount":  {
+                                                                             "Currency":  "NOK",
+                                                                             "NetValue":  8928.57,
+                                                                             "GrossValue":  10000.00,
+                                                                             "TaxValues":  [
+                                                                                               {
+                                                                                                   "Code":  "NO-2025-12%",
+                                                                                                   "Value":  1071.43
+                                                                                               }
+                                                                                           ],
+                                                                             "Breakdown":  {
+                                                                                               "Items":  [
+                                                                                                             {
+                                                                                                                 "TaxRateCode":  "NO-2025-12%",
+                                                                                                                 "NetValue":  8928.57,
+                                                                                                                 "TaxValue":  1071.43
+                                                                                                             }
+                                                                                                         ]
+                                                                                           }
+                                                                         }
+                                                          },
+                                      "DependentRatePricing":  null
+                                  },
+                      "TaxExemptionReason":  null,
+                      "TaxExemptionLegalReference":  null
+                  },
+                  {
+                      "Id":  "17170a21-eb11-4d4a-b007-b37000e2390a",
+                      "GroupId":  "0d880488-5cb2-4f21-aaf8-b16100d42742",
+                      "ServiceId":  "11f4b043-fefc-496f-9680-b15a007eea68",
+                      "BaseRateId":  null,
+                      "IsBaseRate":  true,
+                      "BusinessSegmentId":  null,
+                      "IsActive":  true,
+                      "IsEnabled":  true,
+                      "IsPublic":  false,
+                      "IsDefault":  false,
+                      "Type":  "AvailabilityBlock",
+                      "Name":  "TA150 (Noorderhuis 2026)",
+                      "Names":  {
+                                    "en-GB":  "TA150 (Noorderhuis 2026)"
+                                },
+                      "ShortName":  "TN",
+                      "UpdatedUtc":  "2025-10-08T13:44:09Z",
+                      "ExternalNames":  {
+
+                                        },
+                      "Description":  {
+
+                                      },
+                      "ExternalIdentifier":  null,
+                      "Options":  {
+                                      "HidePriceFromGuest":  false,
+                                      "IsBonusPointsEligible":  false
+                                  },
+                      "Pricing":  {
+                                      "Discriminator":  "BaseRatePricing",
+                                      "BaseRatePricing":  {
+                                                              "Amount":  {
+                                                                             "Currency":  "NOK",
+                                                                             "NetValue":  8500.00,
+                                                                             "GrossValue":  8500.00,
+                                                                             "TaxValues":  [
+                                                                                               {
+                                                                                                   "Code":  "NO-2025-0%",
+                                                                                                   "Value":  0.00
+                                                                                               }
+                                                                                           ],
+                                                                             "Breakdown":  {
+                                                                                               "Items":  [
+                                                                                                             {
+                                                                                                                 "TaxRateCode":  "NO-2025-0%",
+                                                                                                                 "NetValue":  8500.00,
+                                                                                                                 "TaxValue":  0.00
+                                                                                                             }
+                                                                                                         ]
+                                                                                           }
+                                                                         }
+                                                          },
+                                      "DependentRatePricing":  null
+                                  },
+                      "TaxExemptionReason":  null,
+                      "TaxExemptionLegalReference":  null
+                  },
+                  {
+                      "Id":  "10272c1f-cb15-4a95-9935-b37000c4b0ee",
+                      "GroupId":  "0d880488-5cb2-4f21-aaf8-b16100d42742",
+                      "ServiceId":  "11f4b043-fefc-496f-9680-b15a007eea68",
+                      "BaseRateId":  null,
+                      "IsBaseRate":  true,
+                      "BusinessSegmentId":  null,
+                      "IsActive":  true,
+                      "IsEnabled":  true,
+                      "IsPublic":  false,
+                      "IsDefault":  false,
+                      "Type":  "AvailabilityBlock",
+                      "Name":  "TA150 (Nordic Collection 2026)",
+                      "Names":  {
+                                    "en-GB":  "TA150 (Nordic Collection 2026)"
+                                },
+                      "ShortName":  "TNC",
+                      "UpdatedUtc":  "2025-11-04T21:43:03Z",
+                      "ExternalNames":  {
+
+                                        },
+                      "Description":  {
+
+                                      },
+                      "ExternalIdentifier":  null,
+                      "Options":  {
+                                      "HidePriceFromGuest":  false,
+                                      "IsBonusPointsEligible":  false
+                                  },
+                      "Pricing":  {
+                                      "Discriminator":  "BaseRatePricing",
+                                      "BaseRatePricing":  {
+                                                              "Amount":  {
+                                                                             "Currency":  "NOK",
+                                                                             "NetValue":  8500.00,
+                                                                             "GrossValue":  8500.00,
+                                                                             "TaxValues":  [
+                                                                                               {
+                                                                                                   "Code":  "NO-2025-0%",
+                                                                                                   "Value":  0.00
+                                                                                               }
+                                                                                           ],
+                                                                             "Breakdown":  {
+                                                                                               "Items":  [
+                                                                                                             {
+                                                                                                                 "TaxRateCode":  "NO-2025-0%",
+                                                                                                                 "NetValue":  8500.00,
+                                                                                                                 "TaxValue":  0.00
+                                                                                                             }
+                                                                                                         ]
+                                                                                           }
+                                                                         }
+                                                          },
+                                      "DependentRatePricing":  null
+                                  },
+                      "TaxExemptionReason":  null,
+                      "TaxExemptionLegalReference":  null
+                  },
+                  {
+                      "Id":  "2caaaf94-ed1f-4641-ad9d-b367009410c1",
+                      "GroupId":  "cacee119-77dd-4a7b-9598-b22100f275d0",
+                      "ServiceId":  "11f4b043-fefc-496f-9680-b15a007eea68",
+                      "BaseRateId":  "3a4010e2-2876-40d3-b026-b22100f580ce",
+                      "IsBaseRate":  false,
+                      "BusinessSegmentId":  null,
+                      "IsActive":  true,
+                      "IsEnabled":  true,
+                      "IsPublic":  false,
+                      "IsDefault":  false,
+                      "Type":  "Private",
+                      "Name":  "DEAL 10% OFF - 12%",
+                      "Names":  {
+                                    "en-US":  "DEAL 10% OFF - 12%"
+                                },
+                      "ShortName":  "DO",
+                      "UpdatedUtc":  "2025-11-25T19:55:25Z",
+                      "ExternalNames":  {
+                                            "en-US":  "SKIMORE"
+                                        },
+                      "Description":  {
+
+                                      },
+                      "ExternalIdentifier":  null,
+                      "Options":  {
+                                      "HidePriceFromGuest":  false,
+                                      "IsBonusPointsEligible":  false
+                                  },
+                      "Pricing":  {
+                                      "Discriminator":  "DependentRatePricing",
+                                      "BaseRatePricing":  null,
+                                      "DependentRatePricing":  {
+                                                                   "BaseRateId":  "3a4010e2-2876-40d3-b026-b22100f580ce",
+                                                                   "RelativeAdjustment":  -0.10000000,
+                                                                   "AbsoluteAdjustment":  0.00000000
+                                                               }
+                                  },
+                      "TaxExemptionReason":  null,
+                      "TaxExemptionLegalReference":  null
+                  },
+                  {
+                      "Id":  "fbc78197-5715-406b-8ad6-b3670093d7d3",
+                      "GroupId":  "0d880488-5cb2-4f21-aaf8-b16100d42742",
+                      "ServiceId":  "11f4b043-fefc-496f-9680-b15a007eea68",
+                      "BaseRateId":  "dc234bc8-8957-4304-a6b8-b161015428c3",
+                      "IsBaseRate":  false,
+                      "BusinessSegmentId":  null,
+                      "IsActive":  true,
+                      "IsEnabled":  true,
+                      "IsPublic":  false,
+                      "IsDefault":  false,
+                      "Type":  "Private",
+                      "Name":  "DEAL 10% OFF - 0%",
+                      "Names":  {
+                                    "en-US":  "DEAL 10% OFF - 0%"
+                                },
+                      "ShortName":  "DO",
+                      "UpdatedUtc":  "2025-11-25T19:55:17Z",
+                      "ExternalNames":  {
+                                            "en-US":  "SKIMORE"
+                                        },
+                      "Description":  {
+
+                                      },
+                      "ExternalIdentifier":  null,
+                      "Options":  {
+                                      "HidePriceFromGuest":  false,
+                                      "IsBonusPointsEligible":  false
+                                  },
+                      "Pricing":  {
+                                      "Discriminator":  "DependentRatePricing",
+                                      "BaseRatePricing":  null,
+                                      "DependentRatePricing":  {
+                                                                   "BaseRateId":  "dc234bc8-8957-4304-a6b8-b161015428c3",
+                                                                   "RelativeAdjustment":  -0.10000000,
+                                                                   "AbsoluteAdjustment":  0.00000000
+                                                               }
+                                  },
+                      "TaxExemptionReason":  null,
+                      "TaxExemptionLegalReference":  null
+                  },
+                  {
+                      "Id":  "dcdb0b8f-c617-4c76-9d70-b36700937a6a",
+                      "GroupId":  "0d880488-5cb2-4f21-aaf8-b16100d42742",
+                      "ServiceId":  "11f4b043-fefc-496f-9680-b15a007eea68",
+                      "BaseRateId":  null,
+                      "IsBaseRate":  true,
+                      "BusinessSegmentId":  null,
+                      "IsActive":  false,
+                      "IsEnabled":  false,
+                      "IsPublic":  false,
+                      "IsDefault":  false,
+                      "Type":  "Private",
+                      "Name":  "DEAL 10% OFF - 0%",
+                      "Names":  {
+                                    "en-US":  "DEAL 10% OFF - 0%"
+                                },
+                      "ShortName":  "DO",
+                      "UpdatedUtc":  "2025-09-29T08:57:15Z",
+                      "ExternalNames":  {
+
+                                        },
+                      "Description":  {
+
+                                      },
+                      "ExternalIdentifier":  null,
+                      "Options":  {
+                                      "HidePriceFromGuest":  false,
+                                      "IsBonusPointsEligible":  false
+                                  },
+                      "Pricing":  {
+                                      "Discriminator":  "BaseRatePricing",
+                                      "BaseRatePricing":  {
+                                                              "Amount":  {
+                                                                             "Currency":  "NOK",
+                                                                             "NetValue":  8928.57,
+                                                                             "GrossValue":  10000.00,
+                                                                             "TaxValues":  [
+                                                                                               {
+                                                                                                   "Code":  "NO-2025-12%",
+                                                                                                   "Value":  1071.43
+                                                                                               }
+                                                                                           ],
+                                                                             "Breakdown":  {
+                                                                                               "Items":  [
+                                                                                                             {
+                                                                                                                 "TaxRateCode":  "NO-2025-12%",
+                                                                                                                 "NetValue":  8928.57,
+                                                                                                                 "TaxValue":  1071.43
+                                                                                                             }
+                                                                                                         ]
+                                                                                           }
+                                                                         }
+                                                          },
+                                      "DependentRatePricing":  null
+                                  },
+                      "TaxExemptionReason":  null,
+                      "TaxExemptionLegalReference":  null
+                  },
+                  {
+                      "Id":  "dbda5301-468e-4a5c-9165-b26100fb6386",
+                      "GroupId":  "cacee119-77dd-4a7b-9598-b22100f275d0",
+                      "ServiceId":  "11f4b043-fefc-496f-9680-b15a007eea68",
+                      "BaseRateId":  "3a4010e2-2876-40d3-b026-b22100f580ce",
+                      "IsBaseRate":  false,
+                      "BusinessSegmentId":  null,
+                      "IsActive":  true,
+                      "IsEnabled":  true,
+                      "IsPublic":  false,
+                      "IsDefault":  false,
+                      "Type":  "Private",
+                      "Name":  "Original - 12%",
+                      "Names":  {
+                                    "en-US":  "Original - 12%"
+                                },
+                      "ShortName":  "O0",
+                      "UpdatedUtc":  "2025-11-25T11:43:24Z",
+                      "ExternalNames":  {
+                                            "en-US":  "Original"
+                                        },
+                      "Description":  {
+
+                                      },
+                      "ExternalIdentifier":  null,
+                      "Options":  {
+                                      "HidePriceFromGuest":  false,
+                                      "IsBonusPointsEligible":  false
+                                  },
+                      "Pricing":  {
+                                      "Discriminator":  "DependentRatePricing",
+                                      "BaseRatePricing":  null,
+                                      "DependentRatePricing":  {
+                                                                   "BaseRateId":  "3a4010e2-2876-40d3-b026-b22100f580ce",
+                                                                   "RelativeAdjustment":  0.00000000,
+                                                                   "AbsoluteAdjustment":  0.00000000
+                                                               }
+                                  },
+                      "TaxExemptionReason":  null,
+                      "TaxExemptionLegalReference":  null
+                  },
+                  {
+                      "Id":  "ee833f1e-aa09-48a7-8ce4-b26100fb226b",
+                      "GroupId":  "0d880488-5cb2-4f21-aaf8-b16100d42742",
+                      "ServiceId":  "11f4b043-fefc-496f-9680-b15a007eea68",
+                      "BaseRateId":  "dc234bc8-8957-4304-a6b8-b161015428c3",
+                      "IsBaseRate":  false,
+                      "BusinessSegmentId":  null,
+                      "IsActive":  true,
+                      "IsEnabled":  true,
+                      "IsPublic":  false,
+                      "IsDefault":  false,
+                      "Type":  "Private",
+                      "Name":  "Original - 0%",
+                      "Names":  {
+                                    "en-US":  "Original - 0%"
+                                },
+                      "ShortName":  "O0",
+                      "UpdatedUtc":  "2025-11-25T11:43:05Z",
+                      "ExternalNames":  {
+                                            "en-US":  "Original"
+                                        },
+                      "Description":  {
+
+                                      },
+                      "ExternalIdentifier":  null,
+                      "Options":  {
+                                      "HidePriceFromGuest":  false,
+                                      "IsBonusPointsEligible":  false
+                                  },
+                      "Pricing":  {
+                                      "Discriminator":  "DependentRatePricing",
+                                      "BaseRatePricing":  null,
+                                      "DependentRatePricing":  {
+                                                                   "BaseRateId":  "dc234bc8-8957-4304-a6b8-b161015428c3",
+                                                                   "RelativeAdjustment":  0.00000000,
+                                                                   "AbsoluteAdjustment":  0.00000000
+                                                               }
+                                  },
+                      "TaxExemptionReason":  null,
+                      "TaxExemptionLegalReference":  null
+                  },
+                  {
+                      "Id":  "74055de5-857d-4f81-be10-b26100f93b81",
+                      "GroupId":  "6fc991b5-ee06-445b-b199-b31a00aa8f7f",
+                      "ServiceId":  "11f4b043-fefc-496f-9680-b15a007eea68",
+                      "BaseRateId":  "3a4010e2-2876-40d3-b026-b22100f580ce",
+                      "IsBaseRate":  false,
+                      "BusinessSegmentId":  null,
+                      "IsActive":  true,
+                      "IsEnabled":  true,
+                      "IsPublic":  false,
+                      "IsDefault":  false,
+                      "Type":  "Private",
+                      "Name":  "SUMMER DEAL - 12%",
+                      "Names":  {
+                                    "en-US":  "SUMMER DEAL - 12%"
+                                },
+                      "ShortName":  "SD12",
+                      "UpdatedUtc":  "2025-07-14T12:50:24Z",
+                      "ExternalNames":  {
+                                            "en-US":  "SUMMER DEAL"
+                                        },
+                      "Description":  {
+
+                                      },
+                      "ExternalIdentifier":  null,
+                      "Options":  {
+                                      "HidePriceFromGuest":  false,
+                                      "IsBonusPointsEligible":  false
+                                  },
+                      "Pricing":  {
+                                      "Discriminator":  "DependentRatePricing",
+                                      "BaseRatePricing":  null,
+                                      "DependentRatePricing":  {
+                                                                   "BaseRateId":  "3a4010e2-2876-40d3-b026-b22100f580ce",
+                                                                   "RelativeAdjustment":  -0.20000000,
+                                                                   "AbsoluteAdjustment":  0.00000000
+                                                               }
+                                  },
+                      "TaxExemptionReason":  null,
+                      "TaxExemptionLegalReference":  null
+                  },
+                  {
+                      "Id":  "523d7fef-42b1-4fa1-99f0-b26100f2064a",
+                      "GroupId":  "80cbbc32-72ce-4ab0-b030-b31a00aa65bd",
+                      "ServiceId":  "11f4b043-fefc-496f-9680-b15a007eea68",
+                      "BaseRateId":  "dc234bc8-8957-4304-a6b8-b161015428c3",
+                      "IsBaseRate":  false,
+                      "BusinessSegmentId":  null,
+                      "IsActive":  true,
+                      "IsEnabled":  true,
+                      "IsPublic":  false,
+                      "IsDefault":  false,
+                      "Type":  "Private",
+                      "Name":  "SUMMER DEAL - 0%",
+                      "Names":  {
+                                    "en-US":  "SUMMER DEAL - 0%"
+                                },
+                      "ShortName":  "SD0",
+                      "UpdatedUtc":  "2025-07-14T12:50:17Z",
+                      "ExternalNames":  {
+                                            "en-US":  "SUMMER DEAL"
+                                        },
+                      "Description":  {
+
+                                      },
+                      "ExternalIdentifier":  null,
+                      "Options":  {
+                                      "HidePriceFromGuest":  false,
+                                      "IsBonusPointsEligible":  false
+                                  },
+                      "Pricing":  {
+                                      "Discriminator":  "DependentRatePricing",
+                                      "BaseRatePricing":  null,
+                                      "DependentRatePricing":  {
+                                                                   "BaseRateId":  "dc234bc8-8957-4304-a6b8-b161015428c3",
+                                                                   "RelativeAdjustment":  -0.20000000,
+                                                                   "AbsoluteAdjustment":  0.00000000
+                                                               }
+                                  },
+                      "TaxExemptionReason":  null,
+                      "TaxExemptionLegalReference":  null
+                  },
+                  {
+                      "Id":  "8ae00f1a-2669-484f-afae-b22100f7bb7d",
+                      "GroupId":  "cacee119-77dd-4a7b-9598-b22100f275d0",
+                      "ServiceId":  "11f4b043-fefc-496f-9680-b15a007eea68",
+                      "BaseRateId":  "3a4010e2-2876-40d3-b026-b22100f580ce",
+                      "IsBaseRate":  false,
+                      "BusinessSegmentId":  null,
+                      "IsActive":  true,
+                      "IsEnabled":  true,
+                      "IsPublic":  false,
+                      "IsDefault":  false,
+                      "Type":  "Private",
+                      "Name":  "TA 2025 - 12%",
+                      "Names":  {
+                                    "en-US":  "TA 2025 - 12%"
+                                },
+                      "ShortName":  "TA12",
+                      "UpdatedUtc":  "2025-11-04T20:59:49Z",
+                      "ExternalNames":  {
+                                            "en-US":  "TA2025"
+                                        },
+                      "Description":  {
+
+                                      },
+                      "ExternalIdentifier":  null,
+                      "Options":  {
+                                      "HidePriceFromGuest":  false,
+                                      "IsBonusPointsEligible":  false
+                                  },
+                      "Pricing":  {
+                                      "Discriminator":  "DependentRatePricing",
+                                      "BaseRatePricing":  null,
+                                      "DependentRatePricing":  {
+                                                                   "BaseRateId":  "3a4010e2-2876-40d3-b026-b22100f580ce",
+                                                                   "RelativeAdjustment":  -0.15000000,
+                                                                   "AbsoluteAdjustment":  0.00000000
+                                                               }
+                                  },
+                      "TaxExemptionReason":  null,
+                      "TaxExemptionLegalReference":  null
+                  },
+                  {
+                      "Id":  "105a0fbd-604e-44de-9d6b-b22100f72980",
+                      "GroupId":  "6fc991b5-ee06-445b-b199-b31a00aa8f7f",
+                      "ServiceId":  "11f4b043-fefc-496f-9680-b15a007eea68",
+                      "BaseRateId":  "3a4010e2-2876-40d3-b026-b22100f580ce",
+                      "IsBaseRate":  false,
+                      "BusinessSegmentId":  null,
+                      "IsActive":  true,
+                      "IsEnabled":  true,
+                      "IsPublic":  true,
+                      "IsDefault":  false,
+                      "Type":  "Public",
+                      "Name":  "Non-ref - 12%",
+                      "Names":  {
+                                    "en-US":  "Non-ref - 12%"
+                                },
+                      "ShortName":  "NR12",
+                      "UpdatedUtc":  "2025-07-14T12:39:05Z",
+                      "ExternalNames":  {
+                                            "en-US":  "Non-refundable"
+                                        },
+                      "Description":  {
+
+                                      },
+                      "ExternalIdentifier":  null,
+                      "Options":  {
+                                      "HidePriceFromGuest":  false,
+                                      "IsBonusPointsEligible":  false
+                                  },
+                      "Pricing":  {
+                                      "Discriminator":  "DependentRatePricing",
+                                      "BaseRatePricing":  null,
+                                      "DependentRatePricing":  {
+                                                                   "BaseRateId":  "3a4010e2-2876-40d3-b026-b22100f580ce",
+                                                                   "RelativeAdjustment":  -0.10000000,
+                                                                   "AbsoluteAdjustment":  0.00000000
+                                                               }
+                                  },
+                      "TaxExemptionReason":  null,
+                      "TaxExemptionLegalReference":  null
+                  },
+                  {
+                      "Id":  "39076ed8-720a-44ed-a874-b22100f6cbaa",
+                      "GroupId":  "cacee119-77dd-4a7b-9598-b22100f275d0",
+                      "ServiceId":  "11f4b043-fefc-496f-9680-b15a007eea68",
+                      "BaseRateId":  "3a4010e2-2876-40d3-b026-b22100f580ce",
+                      "IsBaseRate":  false,
+                      "BusinessSegmentId":  null,
+                      "IsActive":  true,
+                      "IsEnabled":  true,
+                      "IsPublic":  false,
+                      "IsDefault":  false,
+                      "Type":  "Private",
+                      "Name":  "Travel Agency (15%) - 12%",
+                      "Names":  {
+                                    "en-US":  "Travel Agency (15%) - 12%"
+                                },
+                      "ShortName":  "TA1512",
+                      "UpdatedUtc":  "2025-01-20T15:24:08Z",
+                      "ExternalNames":  {
+                                            "en-US":  "Travel Agency (15%)"
+                                        },
+                      "Description":  {
+
+                                      },
+                      "ExternalIdentifier":  null,
+                      "Options":  {
+                                      "HidePriceFromGuest":  false,
+                                      "IsBonusPointsEligible":  false
+                                  },
+                      "Pricing":  {
+                                      "Discriminator":  "DependentRatePricing",
+                                      "BaseRatePricing":  null,
+                                      "DependentRatePricing":  {
+                                                                   "BaseRateId":  "3a4010e2-2876-40d3-b026-b22100f580ce",
+                                                                   "RelativeAdjustment":  -0.15000000,
+                                                                   "AbsoluteAdjustment":  0.00000000
+                                                               }
+                                  },
+                      "TaxExemptionReason":  null,
+                      "TaxExemptionLegalReference":  null
+                  },
+                  {
+                      "Id":  "e3a2d409-7402-46a2-a02f-b22100f6a9be",
+                      "GroupId":  "cacee119-77dd-4a7b-9598-b22100f275d0",
+                      "ServiceId":  "11f4b043-fefc-496f-9680-b15a007eea68",
+                      "BaseRateId":  "3a4010e2-2876-40d3-b026-b22100f580ce",
+                      "IsBaseRate":  false,
+                      "BusinessSegmentId":  null,
+                      "IsActive":  true,
+                      "IsEnabled":  true,
+                      "IsPublic":  false,
+                      "IsDefault":  false,
+                      "Type":  "Private",
+                      "Name":  "Travel Agency (10%) - 12%",
+                      "Names":  {
+                                    "en-US":  "Travel Agency (10%) - 12%"
+                                },
+                      "ShortName":  "TA1012",
+                      "UpdatedUtc":  "2025-01-20T15:24:55Z",
+                      "ExternalNames":  {
+                                            "en-US":  "Travel Agency (10%)"
+                                        },
+                      "Description":  {
+
+                                      },
+                      "ExternalIdentifier":  null,
+                      "Options":  {
+                                      "HidePriceFromGuest":  false,
+                                      "IsBonusPointsEligible":  false
+                                  },
+                      "Pricing":  {
+                                      "Discriminator":  "DependentRatePricing",
+                                      "BaseRatePricing":  null,
+                                      "DependentRatePricing":  {
+                                                                   "BaseRateId":  "3a4010e2-2876-40d3-b026-b22100f580ce",
+                                                                   "RelativeAdjustment":  -0.10000000,
+                                                                   "AbsoluteAdjustment":  0.00000000
+                                                               }
+                                  },
+                      "TaxExemptionReason":  null,
+                      "TaxExemptionLegalReference":  null
+                  },
+                  {
+                      "Id":  "bf2c1815-cebd-40f6-9042-b22100f672bc",
+                      "GroupId":  "f311e56d-f423-44fc-a9db-b31a00a4e54a",
+                      "ServiceId":  "11f4b043-fefc-496f-9680-b15a007eea68",
+                      "BaseRateId":  "3a4010e2-2876-40d3-b026-b22100f580ce",
+                      "IsBaseRate":  false,
+                      "BusinessSegmentId":  null,
+                      "IsActive":  true,
+                      "IsEnabled":  true,
+                      "IsPublic":  false,
+                      "IsDefault":  false,
+                      "Type":  "Private",
+                      "Name":  "Booking.com (weekly) - 12%",
+                      "Names":  {
+                                    "en-US":  "Booking.com (weekly) - 12%"
+                                },
+                      "ShortName":  "BW12",
+                      "UpdatedUtc":  "2025-07-14T10:04:57Z",
+                      "ExternalNames":  {
+                                            "en-US":  "Booking.com (weekly)"
+                                        },
+                      "Description":  {
+
+                                      },
+                      "ExternalIdentifier":  null,
+                      "Options":  {
+                                      "HidePriceFromGuest":  false,
+                                      "IsBonusPointsEligible":  false
+                                  },
+                      "Pricing":  {
+                                      "Discriminator":  "DependentRatePricing",
+                                      "BaseRatePricing":  null,
+                                      "DependentRatePricing":  {
+                                                                   "BaseRateId":  "3a4010e2-2876-40d3-b026-b22100f580ce",
+                                                                   "RelativeAdjustment":  0.25000000,
+                                                                   "AbsoluteAdjustment":  0.00000000
+                                                               }
+                                  },
+                      "TaxExemptionReason":  null,
+                      "TaxExemptionLegalReference":  null
+                  },
+                  {
+                      "Id":  "d14d53e7-da0a-4485-9094-b22100f6535b",
+                      "GroupId":  "f311e56d-f423-44fc-a9db-b31a00a4e54a",
+                      "ServiceId":  "11f4b043-fefc-496f-9680-b15a007eea68",
+                      "BaseRateId":  "3a4010e2-2876-40d3-b026-b22100f580ce",
+                      "IsBaseRate":  false,
+                      "BusinessSegmentId":  null,
+                      "IsActive":  true,
+                      "IsEnabled":  true,
+                      "IsPublic":  false,
+                      "IsDefault":  false,
+                      "Type":  "Private",
+                      "Name":  "Booking.com (standard) - 12%",
+                      "Names":  {
+                                    "en-US":  "Booking.com (standard) - 12%"
+                                },
+                      "ShortName":  "BS12",
+                      "UpdatedUtc":  "2025-07-14T10:04:27Z",
+                      "ExternalNames":  {
+                                            "en-US":  "Booking.com (standard)"
+                                        },
+                      "Description":  {
+
+                                      },
+                      "ExternalIdentifier":  null,
+                      "Options":  {
+                                      "HidePriceFromGuest":  false,
+                                      "IsBonusPointsEligible":  false
+                                  },
+                      "Pricing":  {
+                                      "Discriminator":  "DependentRatePricing",
+                                      "BaseRatePricing":  null,
+                                      "DependentRatePricing":  {
+                                                                   "BaseRateId":  "3a4010e2-2876-40d3-b026-b22100f580ce",
+                                                                   "RelativeAdjustment":  0.30000000,
+                                                                   "AbsoluteAdjustment":  0.00000000
+                                                               }
+                                  },
+                      "TaxExemptionReason":  null,
+                      "TaxExemptionLegalReference":  null
+                  },
+                  {
+                      "Id":  "0ab0bd2d-9ae3-40f5-99b2-b22100f6399b",
+                      "GroupId":  "f311e56d-f423-44fc-a9db-b31a00a4e54a",
+                      "ServiceId":  "11f4b043-fefc-496f-9680-b15a007eea68",
+                      "BaseRateId":  "3a4010e2-2876-40d3-b026-b22100f580ce",
+                      "IsBaseRate":  false,
+                      "BusinessSegmentId":  null,
+                      "IsActive":  true,
+                      "IsEnabled":  true,
+                      "IsPublic":  false,
+                      "IsDefault":  false,
+                      "Type":  "Private",
+                      "Name":  "Booking.com (non-ref) - 12%",
+                      "Names":  {
+                                    "en-US":  "Booking.com (non-ref) - 12%"
+                                },
+                      "ShortName":  "BNR12",
+                      "UpdatedUtc":  "2025-07-14T10:03:39Z",
+                      "ExternalNames":  {
+                                            "en-US":  "Booking.com (non-refundable)"
+                                        },
+                      "Description":  {
+
+                                      },
+                      "ExternalIdentifier":  null,
+                      "Options":  {
+                                      "HidePriceFromGuest":  false,
+                                      "IsBonusPointsEligible":  false
+                                  },
+                      "Pricing":  {
+                                      "Discriminator":  "DependentRatePricing",
+                                      "BaseRatePricing":  null,
+                                      "DependentRatePricing":  {
+                                                                   "BaseRateId":  "3a4010e2-2876-40d3-b026-b22100f580ce",
+                                                                   "RelativeAdjustment":  0.20000000,
+                                                                   "AbsoluteAdjustment":  0.00000000
+                                                               }
+                                  },
+                      "TaxExemptionReason":  null,
+                      "TaxExemptionLegalReference":  null
+                  },
+                  {
+                      "Id":  "580f7e9e-c8d4-4ebd-954c-b22100f61565",
+                      "GroupId":  "048e8f94-38ad-4345-954c-b31a00a6eb96",
+                      "ServiceId":  "11f4b043-fefc-496f-9680-b15a007eea68",
+                      "BaseRateId":  "3a4010e2-2876-40d3-b026-b22100f580ce",
+                      "IsBaseRate":  false,
+                      "BusinessSegmentId":  null,
+                      "IsActive":  true,
+                      "IsEnabled":  true,
+                      "IsPublic":  false,
+                      "IsDefault":  false,
+                      "Type":  "Private",
+                      "Name":  "Airbnb (standard) - 12%",
+                      "Names":  {
+                                    "en-US":  "Airbnb (standard) - 12%"
+                                },
+                      "ShortName":  "AS12",
+                      "UpdatedUtc":  "2025-07-14T10:11:22Z",
+                      "ExternalNames":  {
+                                            "en-US":  "Standard"
+                                        },
+                      "Description":  {
+
+                                      },
+                      "ExternalIdentifier":  null,
+                      "Options":  {
+                                      "HidePriceFromGuest":  false,
+                                      "IsBonusPointsEligible":  false
+                                  },
+                      "Pricing":  {
+                                      "Discriminator":  "DependentRatePricing",
+                                      "BaseRatePricing":  null,
+                                      "DependentRatePricing":  {
+                                                                   "BaseRateId":  "3a4010e2-2876-40d3-b026-b22100f580ce",
+                                                                   "RelativeAdjustment":  0.30000000,
+                                                                   "AbsoluteAdjustment":  0.00000000
+                                                               }
+                                  },
+                      "TaxExemptionReason":  null,
+                      "TaxExemptionLegalReference":  null
+                  },
+                  {
+                      "Id":  "5fee5ab3-f882-4291-b071-b22100f5de20",
+                      "GroupId":  "048e8f94-38ad-4345-954c-b31a00a6eb96",
+                      "ServiceId":  "11f4b043-fefc-496f-9680-b15a007eea68",
+                      "BaseRateId":  "3a4010e2-2876-40d3-b026-b22100f580ce",
+                      "IsBaseRate":  false,
+                      "BusinessSegmentId":  null,
+                      "IsActive":  true,
+                      "IsEnabled":  true,
+                      "IsPublic":  false,
+                      "IsDefault":  false,
+                      "Type":  "Private",
+                      "Name":  "Airbnb (non-ref) - 12%",
+                      "Names":  {
+                                    "en-US":  "Airbnb (non-ref) - 12%"
+                                },
+                      "ShortName":  "ANR12",
+                      "UpdatedUtc":  "2025-07-14T10:11:08Z",
+                      "ExternalNames":  {
+                                            "en-US":  "Non-refundable"
+                                        },
+                      "Description":  {
+
+                                      },
+                      "ExternalIdentifier":  null,
+                      "Options":  {
+                                      "HidePriceFromGuest":  false,
+                                      "IsBonusPointsEligible":  false
+                                  },
+                      "Pricing":  {
+                                      "Discriminator":  "DependentRatePricing",
+                                      "BaseRatePricing":  null,
+                                      "DependentRatePricing":  {
+                                                                   "BaseRateId":  "3a4010e2-2876-40d3-b026-b22100f580ce",
+                                                                   "RelativeAdjustment":  0.10000000,
+                                                                   "AbsoluteAdjustment":  0.00000000
+                                                               }
+                                  },
+                      "TaxExemptionReason":  null,
+                      "TaxExemptionLegalReference":  null
+                  },
+                  {
+                      "Id":  "3a4010e2-2876-40d3-b026-b22100f580ce",
+                      "GroupId":  "cacee119-77dd-4a7b-9598-b22100f275d0",
+                      "ServiceId":  "11f4b043-fefc-496f-9680-b15a007eea68",
+                      "BaseRateId":  null,
+                      "IsBaseRate":  true,
+                      "BusinessSegmentId":  null,
+                      "IsActive":  true,
+                      "IsEnabled":  true,
+                      "IsPublic":  true,
+                      "IsDefault":  false,
+                      "Type":  "Public",
+                      "Name":  "Standard - 12%",
+                      "Names":  {
+                                    "en-US":  "Standard - 12%"
+                                },
+                      "ShortName":  "12%",
+                      "UpdatedUtc":  "2025-12-23T10:31:51Z",
+                      "ExternalNames":  {
+                                            "en-US":  "Standard"
+                                        },
+                      "Description":  {
+
+                                      },
+                      "ExternalIdentifier":  null,
+                      "Options":  {
+                                      "HidePriceFromGuest":  false,
+                                      "IsBonusPointsEligible":  false
+                                  },
+                      "Pricing":  {
+                                      "Discriminator":  "BaseRatePricing",
+                                      "BaseRatePricing":  {
+                                                              "Amount":  {
+                                                                             "Currency":  "NOK",
+                                                                             "NetValue":  8928.57,
+                                                                             "GrossValue":  10000.00,
+                                                                             "TaxValues":  [
+                                                                                               {
+                                                                                                   "Code":  "NO-2025-12%",
+                                                                                                   "Value":  1071.43
+                                                                                               }
+                                                                                           ],
+                                                                             "Breakdown":  {
+                                                                                               "Items":  [
+                                                                                                             {
+                                                                                                                 "TaxRateCode":  "NO-2025-12%",
+                                                                                                                 "NetValue":  8928.57,
+                                                                                                                 "TaxValue":  1071.43
+                                                                                                             }
+                                                                                                         ]
+                                                                                           }
+                                                                         }
+                                                          },
+                                      "DependentRatePricing":  null
+                                  },
+                      "TaxExemptionReason":  null,
+                      "TaxExemptionLegalReference":  null
+                  },
+                  {
+                      "Id":  "ce2de0d6-7535-43d7-a557-b22100f526f9",
+                      "GroupId":  "cacee119-77dd-4a7b-9598-b22100f275d0",
+                      "ServiceId":  "11f4b043-fefc-496f-9680-b15a007eea68",
+                      "BaseRateId":  "3043d4b3-88c0-443d-92e2-b16e00bbe753",
+                      "IsBaseRate":  false,
+                      "BusinessSegmentId":  null,
+                      "IsActive":  false,
+                      "IsEnabled":  true,
+                      "IsPublic":  false,
+                      "IsDefault":  false,
+                      "Type":  "Private",
+                      "Name":  "booking.com.standard",
+                      "Names":  {
+                                    "en-US":  "booking.com.standard"
+                                },
+                      "ShortName":  "b",
+                      "UpdatedUtc":  "2024-11-07T14:53:29Z",
+                      "ExternalNames":  {
+
+                                        },
+                      "Description":  {
+
+                                      },
+                      "ExternalIdentifier":  null,
+                      "Options":  {
+                                      "HidePriceFromGuest":  false,
+                                      "IsBonusPointsEligible":  false
+                                  },
+                      "Pricing":  {
+                                      "Discriminator":  "DependentRatePricing",
+                                      "BaseRatePricing":  null,
+                                      "DependentRatePricing":  {
+                                                                   "BaseRateId":  "3043d4b3-88c0-443d-92e2-b16e00bbe753",
+                                                                   "RelativeAdjustment":  0.00000000,
+                                                                   "AbsoluteAdjustment":  0.00000000
+                                                               }
+                                  },
+                      "TaxExemptionReason":  null,
+                      "TaxExemptionLegalReference":  null
+                  },
+                  {
+                      "Id":  "f55c6858-083f-4ee1-8c49-b22100f501b0",
+                      "GroupId":  "cacee119-77dd-4a7b-9598-b22100f275d0",
+                      "ServiceId":  "11f4b043-fefc-496f-9680-b15a007eea68",
+                      "BaseRateId":  "f99610f8-1b1d-469e-8788-b1700111e9a3",
+                      "IsBaseRate":  false,
+                      "BusinessSegmentId":  null,
+                      "IsActive":  false,
+                      "IsEnabled":  true,
+                      "IsPublic":  false,
+                      "IsDefault":  false,
+                      "Type":  "Private",
+                      "Name":  "booking.com.non-refundable",
+                      "Names":  {
+                                    "en-US":  "booking.com.non-refundable"
+                                },
+                      "ShortName":  "b",
+                      "UpdatedUtc":  "2024-11-07T14:53:21Z",
+                      "ExternalNames":  {
+
+                                        },
+                      "Description":  {
+
+                                      },
+                      "ExternalIdentifier":  null,
+                      "Options":  {
+                                      "HidePriceFromGuest":  false,
+                                      "IsBonusPointsEligible":  false
+                                  },
+                      "Pricing":  {
+                                      "Discriminator":  "DependentRatePricing",
+                                      "BaseRatePricing":  null,
+                                      "DependentRatePricing":  {
+                                                                   "BaseRateId":  "f99610f8-1b1d-469e-8788-b1700111e9a3",
+                                                                   "RelativeAdjustment":  0.00000000,
+                                                                   "AbsoluteAdjustment":  0.00000000
+                                                               }
+                                  },
+                      "TaxExemptionReason":  null,
+                      "TaxExemptionLegalReference":  null
+                  },
+                  {
+                      "Id":  "22e623df-e6c7-49ea-824b-b22100f4c9a4",
+                      "GroupId":  "cacee119-77dd-4a7b-9598-b22100f275d0",
+                      "ServiceId":  "11f4b043-fefc-496f-9680-b15a007eea68",
+                      "BaseRateId":  "64750c1f-6c8f-41ca-bb1a-b17d01223d08",
+                      "IsBaseRate":  false,
+                      "BusinessSegmentId":  null,
+                      "IsActive":  false,
+                      "IsEnabled":  true,
+                      "IsPublic":  false,
+                      "IsDefault":  false,
+                      "Type":  "Private",
+                      "Name":  "Airbnb.standard",
+                      "Names":  {
+                                    "en-US":  "Airbnb.standard"
+                                },
+                      "ShortName":  "A",
+                      "UpdatedUtc":  "2024-11-07T14:53:02Z",
+                      "ExternalNames":  {
+
+                                        },
+                      "Description":  {
+
+                                      },
+                      "ExternalIdentifier":  null,
+                      "Options":  {
+                                      "HidePriceFromGuest":  false,
+                                      "IsBonusPointsEligible":  false
+                                  },
+                      "Pricing":  {
+                                      "Discriminator":  "DependentRatePricing",
+                                      "BaseRatePricing":  null,
+                                      "DependentRatePricing":  {
+                                                                   "BaseRateId":  "64750c1f-6c8f-41ca-bb1a-b17d01223d08",
+                                                                   "RelativeAdjustment":  0.00000000,
+                                                                   "AbsoluteAdjustment":  0.00000000
+                                                               }
+                                  },
+                      "TaxExemptionReason":  null,
+                      "TaxExemptionLegalReference":  null
+                  },
+                  {
+                      "Id":  "bb9fe50c-9c11-4fe4-92ba-b22100f4a5a8",
+                      "GroupId":  "cacee119-77dd-4a7b-9598-b22100f275d0",
+                      "ServiceId":  "11f4b043-fefc-496f-9680-b15a007eea68",
+                      "BaseRateId":  "5afcd4c3-25ce-4ff9-b525-b17e008a7be0",
+                      "IsBaseRate":  false,
+                      "BusinessSegmentId":  null,
+                      "IsActive":  false,
+                      "IsEnabled":  true,
+                      "IsPublic":  false,
+                      "IsDefault":  false,
+                      "Type":  "Private",
+                      "Name":  "Airbnb.non-refundable",
+                      "Names":  {
+                                    "en-US":  "Airbnb.non-refundable"
+                                },
+                      "ShortName":  "A",
+                      "UpdatedUtc":  "2024-11-07T14:52:52Z",
+                      "ExternalNames":  {
+
+                                        },
+                      "Description":  {
+
+                                      },
+                      "ExternalIdentifier":  null,
+                      "Options":  {
+                                      "HidePriceFromGuest":  false,
+                                      "IsBonusPointsEligible":  false
+                                  },
+                      "Pricing":  {
+                                      "Discriminator":  "DependentRatePricing",
+                                      "BaseRatePricing":  null,
+                                      "DependentRatePricing":  {
+                                                                   "BaseRateId":  "5afcd4c3-25ce-4ff9-b525-b17e008a7be0",
+                                                                   "RelativeAdjustment":  0.00000000,
+                                                                   "AbsoluteAdjustment":  0.00000000
+                                                               }
+                                  },
+                      "TaxExemptionReason":  null,
+                      "TaxExemptionLegalReference":  null
+                  },
+                  {
+                      "Id":  "7d6b13d8-87db-4184-ac6a-b22000e01416",
+                      "GroupId":  "0d880488-5cb2-4f21-aaf8-b16100d42742",
+                      "ServiceId":  "11f4b043-fefc-496f-9680-b15a007eea68",
+                      "BaseRateId":  "dc234bc8-8957-4304-a6b8-b161015428c3",
+                      "IsBaseRate":  false,
+                      "BusinessSegmentId":  null,
+                      "IsActive":  false,
+                      "IsEnabled":  true,
+                      "IsPublic":  true,
+                      "IsDefault":  false,
+                      "Type":  "Public",
+                      "Name":  "Standard 12",
+                      "Names":  {
+                                    "en-US":  "Standard 12"
+                                },
+                      "ShortName":  "S",
+                      "UpdatedUtc":  "2024-11-07T14:57:33Z",
+                      "ExternalNames":  {
+
+                                        },
+                      "Description":  {
+
+                                      },
+                      "ExternalIdentifier":  null,
+                      "Options":  {
+                                      "HidePriceFromGuest":  false,
+                                      "IsBonusPointsEligible":  false
+                                  },
+                      "Pricing":  {
+                                      "Discriminator":  "DependentRatePricing",
+                                      "BaseRatePricing":  null,
+                                      "DependentRatePricing":  {
+                                                                   "BaseRateId":  "dc234bc8-8957-4304-a6b8-b161015428c3",
+                                                                   "RelativeAdjustment":  0.00000000,
+                                                                   "AbsoluteAdjustment":  0.00000000
+                                                               }
+                                  },
+                      "TaxExemptionReason":  null,
+                      "TaxExemptionLegalReference":  null
+                  },
+                  {
+                      "Id":  "c9ddaf2d-cc0a-42d8-b7ca-b1fe00e7c931",
+                      "GroupId":  "0125c2cb-ebbc-402e-85c9-b1fe0084880b",
+                      "ServiceId":  "11f4b043-fefc-496f-9680-b15a007eea68",
+                      "BaseRateId":  null,
+                      "IsBaseRate":  true,
+                      "BusinessSegmentId":  null,
+                      "IsActive":  false,
+                      "IsEnabled":  true,
+                      "IsPublic":  false,
+                      "IsDefault":  false,
+                      "Type":  "AvailabilityBlock",
+                      "Name":  "Noorderhuis",
+                      "Names":  {
+                                    "en-US":  "Noorderhuis"
+                                },
+                      "ShortName":  "N",
+                      "UpdatedUtc":  "2025-09-20T00:35:09Z",
+                      "ExternalNames":  {
+
+                                        },
+                      "Description":  {
+
+                                      },
+                      "ExternalIdentifier":  null,
+                      "Options":  {
+                                      "HidePriceFromGuest":  false,
+                                      "IsBonusPointsEligible":  false
+                                  },
+                      "Pricing":  {
+                                      "Discriminator":  "BaseRatePricing",
+                                      "BaseRatePricing":  {
+                                                              "Amount":  {
+                                                                             "Currency":  "NOK",
+                                                                             "NetValue":  8500.00,
+                                                                             "GrossValue":  8500.00,
+                                                                             "TaxValues":  [
+                                                                                               {
+                                                                                                   "Code":  "NO-2025-0%",
+                                                                                                   "Value":  0.00
+                                                                                               }
+                                                                                           ],
+                                                                             "Breakdown":  {
+                                                                                               "Items":  [
+                                                                                                             {
+                                                                                                                 "TaxRateCode":  "NO-2025-0%",
+                                                                                                                 "NetValue":  8500.00,
+                                                                                                                 "TaxValue":  0.00
+                                                                                                             }
+                                                                                                         ]
+                                                                                           }
+                                                                         }
+                                                          },
+                                      "DependentRatePricing":  null
+                                  },
+                      "TaxExemptionReason":  null,
+                      "TaxExemptionLegalReference":  null
+                  },
+                  {
+                      "Id":  "e7bcbcf7-8cf7-4cd4-951a-b1fe0084bf65",
+                      "GroupId":  "0d880488-5cb2-4f21-aaf8-b16100d42742",
+                      "ServiceId":  "11f4b043-fefc-496f-9680-b15a007eea68",
+                      "BaseRateId":  "dc234bc8-8957-4304-a6b8-b161015428c3",
+                      "IsBaseRate":  false,
+                      "BusinessSegmentId":  null,
+                      "IsActive":  true,
+                      "IsEnabled":  true,
+                      "IsPublic":  false,
+                      "IsDefault":  false,
+                      "Type":  "Private",
+                      "Name":  "TA 2025 - 0%",
+                      "Names":  {
+                                    "en-US":  "TA 2025 - 0%"
+                                },
+                      "ShortName":  "TA0",
+                      "UpdatedUtc":  "2025-11-04T20:59:26Z",
+                      "ExternalNames":  {
+                                            "en-US":  "TA2025"
+                                        },
+                      "Description":  {
+
+                                      },
+                      "ExternalIdentifier":  null,
+                      "Options":  {
+                                      "HidePriceFromGuest":  false,
+                                      "IsBonusPointsEligible":  false
+                                  },
+                      "Pricing":  {
+                                      "Discriminator":  "DependentRatePricing",
+                                      "BaseRatePricing":  null,
+                                      "DependentRatePricing":  {
+                                                                   "BaseRateId":  "dc234bc8-8957-4304-a6b8-b161015428c3",
+                                                                   "RelativeAdjustment":  -0.10000000,
+                                                                   "AbsoluteAdjustment":  0.00000000
+                                                               }
+                                  },
+                      "TaxExemptionReason":  null,
+                      "TaxExemptionLegalReference":  null
+                  },
+                  {
+                      "Id":  "0de847bc-e826-4a41-8f40-b1fd01460050",
+                      "GroupId":  "0125c2cb-ebbc-402e-85c9-b1fe0084880b",
+                      "ServiceId":  "11f4b043-fefc-496f-9680-b15a007eea68",
+                      "BaseRateId":  null,
+                      "IsBaseRate":  true,
+                      "BusinessSegmentId":  null,
+                      "IsActive":  false,
+                      "IsEnabled":  true,
+                      "IsPublic":  false,
+                      "IsDefault":  false,
+                      "Type":  "AvailabilityBlock",
+                      "Name":  "Nordic Collection",
+                      "Names":  {
+                                    "en-US":  "Nordic Collection"
+                                },
+                      "ShortName":  "NC",
+                      "UpdatedUtc":  "2025-09-05T00:36:00Z",
+                      "ExternalNames":  {
+
+                                        },
+                      "Description":  {
+
+                                      },
+                      "ExternalIdentifier":  null,
+                      "Options":  {
+                                      "HidePriceFromGuest":  false,
+                                      "IsBonusPointsEligible":  false
+                                  },
+                      "Pricing":  {
+                                      "Discriminator":  "BaseRatePricing",
+                                      "BaseRatePricing":  {
+                                                              "Amount":  {
+                                                                             "Currency":  "NOK",
+                                                                             "NetValue":  8500.00,
+                                                                             "GrossValue":  8500.00,
+                                                                             "TaxValues":  [
+                                                                                               {
+                                                                                                   "Code":  "NO-2025-0%",
+                                                                                                   "Value":  0.00
+                                                                                               }
+                                                                                           ],
+                                                                             "Breakdown":  {
+                                                                                               "Items":  [
+                                                                                                             {
+                                                                                                                 "TaxRateCode":  "NO-2025-0%",
+                                                                                                                 "NetValue":  8500.00,
+                                                                                                                 "TaxValue":  0.00
+                                                                                                             }
+                                                                                                         ]
+                                                                                           }
+                                                                         }
+                                                          },
+                                      "DependentRatePricing":  null
+                                  },
+                      "TaxExemptionReason":  null,
+                      "TaxExemptionLegalReference":  null
+                  },
+                  {
+                      "Id":  "fdcfce78-b050-4be9-825c-b1a400e56158",
+                      "GroupId":  "791fbb96-9e9f-46e8-9e59-b1a400cb63ba",
+                      "ServiceId":  "11f4b043-fefc-496f-9680-b15a007eea68",
+                      "BaseRateId":  null,
+                      "IsBaseRate":  true,
+                      "BusinessSegmentId":  null,
+                      "IsActive":  false,
+                      "IsEnabled":  true,
+                      "IsPublic":  false,
+                      "IsDefault":  false,
+                      "Type":  "AvailabilityBlock",
+                      "Name":  "SD (SUMMER DEAL)",
+                      "Names":  {
+                                    "en-US":  "SD (SUMMER DEAL)"
+                                },
+                      "ShortName":  "SD (SD)",
+                      "UpdatedUtc":  "2025-07-06T00:36:03Z",
+                      "ExternalNames":  {
+
+                                        },
+                      "Description":  {
+
+                                      },
+                      "ExternalIdentifier":  null,
+                      "Options":  {
+                                      "HidePriceFromGuest":  false,
+                                      "IsBonusPointsEligible":  false
+                                  },
+                      "Pricing":  {
+                                      "Discriminator":  "BaseRatePricing",
+                                      "BaseRatePricing":  {
+                                                              "Amount":  {
+                                                                             "Currency":  "NOK",
+                                                                             "NetValue":  7142.86,
+                                                                             "GrossValue":  8000.00,
+                                                                             "TaxValues":  [
+                                                                                               {
+                                                                                                   "Code":  "NO-2025-12%",
+                                                                                                   "Value":  857.14
+                                                                                               }
+                                                                                           ],
+                                                                             "Breakdown":  {
+                                                                                               "Items":  [
+                                                                                                             {
+                                                                                                                 "TaxRateCode":  "NO-2025-12%",
+                                                                                                                 "NetValue":  7142.86,
+                                                                                                                 "TaxValue":  857.14
+                                                                                                             }
+                                                                                                         ]
+                                                                                           }
+                                                                         }
+                                                          },
+                                      "DependentRatePricing":  null
+                                  },
+                      "TaxExemptionReason":  null,
+                      "TaxExemptionLegalReference":  null
+                  },
+                  {
+                      "Id":  "0e75d937-a4e2-4916-b5a4-b1a400ce43b1",
+                      "GroupId":  "791fbb96-9e9f-46e8-9e59-b1a400cb63ba",
+                      "ServiceId":  "11f4b043-fefc-496f-9680-b15a007eea68",
+                      "BaseRateId":  "dc234bc8-8957-4304-a6b8-b161015428c3",
+                      "IsBaseRate":  false,
+                      "BusinessSegmentId":  null,
+                      "IsActive":  false,
+                      "IsEnabled":  false,
+                      "IsPublic":  true,
+                      "IsDefault":  false,
+                      "Type":  "Public",
+                      "Name":  "SUMMER DEAL",
+                      "Names":  {
+                                    "en-US":  "SUMMER DEAL"
+                                },
+                      "ShortName":  "SD",
+                      "UpdatedUtc":  "2024-11-07T14:48:44Z",
+                      "ExternalNames":  {
+
+                                        },
+                      "Description":  {
+
+                                      },
+                      "ExternalIdentifier":  null,
+                      "Options":  {
+                                      "HidePriceFromGuest":  false,
+                                      "IsBonusPointsEligible":  false
+                                  },
+                      "Pricing":  {
+                                      "Discriminator":  "DependentRatePricing",
+                                      "BaseRatePricing":  null,
+                                      "DependentRatePricing":  {
+                                                                   "BaseRateId":  "dc234bc8-8957-4304-a6b8-b161015428c3",
+                                                                   "RelativeAdjustment":  -0.20000000,
+                                                                   "AbsoluteAdjustment":  0.00000000
+                                                               }
+                                  },
+                      "TaxExemptionReason":  null,
+                      "TaxExemptionLegalReference":  null
+                  },
+                  {
+                      "Id":  "9320ca50-0bcf-4ef0-be37-b1a100f4eec4",
+                      "GroupId":  "0d880488-5cb2-4f21-aaf8-b16100d42742",
+                      "ServiceId":  "11f4b043-fefc-496f-9680-b15a007eea68",
+                      "BaseRateId":  "dc234bc8-8957-4304-a6b8-b161015428c3",
+                      "IsBaseRate":  false,
+                      "BusinessSegmentId":  null,
+                      "IsActive":  true,
+                      "IsEnabled":  true,
+                      "IsPublic":  false,
+                      "IsDefault":  false,
+                      "Type":  "Private",
+                      "Name":  "Travel Agency (10%) - 0%",
+                      "Names":  {
+                                    "en-US":  "Travel Agency (10%) - 0%"
+                                },
+                      "ShortName":  "TA100",
+                      "UpdatedUtc":  "2025-01-10T15:06:07Z",
+                      "ExternalNames":  {
+                                            "en-US":  "Travel Agency (10%)"
+                                        },
+                      "Description":  {
+
+                                      },
+                      "ExternalIdentifier":  null,
+                      "Options":  {
+                                      "HidePriceFromGuest":  false,
+                                      "IsBonusPointsEligible":  false
+                                  },
+                      "Pricing":  {
+                                      "Discriminator":  "DependentRatePricing",
+                                      "BaseRatePricing":  null,
+                                      "DependentRatePricing":  {
+                                                                   "BaseRateId":  "dc234bc8-8957-4304-a6b8-b161015428c3",
+                                                                   "RelativeAdjustment":  -0.10000000,
+                                                                   "AbsoluteAdjustment":  0.00000000
+                                                               }
+                                  },
+                      "TaxExemptionReason":  null,
+                      "TaxExemptionLegalReference":  null
+                  },
+                  {
+                      "Id":  "ec26a0f0-8999-42f7-aa7a-b181008813dd",
+                      "GroupId":  "665be280-d4d4-44b2-afbe-b1810087f56b",
+                      "ServiceId":  "11f4b043-fefc-496f-9680-b15a007eea68",
+                      "BaseRateId":  null,
+                      "IsBaseRate":  true,
+                      "BusinessSegmentId":  null,
+                      "IsActive":  true,
+                      "IsEnabled":  true,
+                      "IsPublic":  false,
+                      "IsDefault":  false,
+                      "Type":  "Private",
+                      "Name":  "Eierbooking",
+                      "Names":  {
+                                    "en-US":  "Eierbooking"
+                                },
+                      "ShortName":  "E",
+                      "UpdatedUtc":  "2024-12-26T23:20:16Z",
+                      "ExternalNames":  {
+
+                                        },
+                      "Description":  {
+
+                                      },
+                      "ExternalIdentifier":  null,
+                      "Options":  {
+                                      "HidePriceFromGuest":  false,
+                                      "IsBonusPointsEligible":  false
+                                  },
+                      "Pricing":  {
+                                      "Discriminator":  "BaseRatePricing",
+                                      "BaseRatePricing":  {
+                                                              "Amount":  {
+                                                                             "Currency":  "NOK",
+                                                                             "NetValue":  0.00,
+                                                                             "GrossValue":  0.00,
+                                                                             "TaxValues":  [
+                                                                                               {
+                                                                                                   "Code":  "NO-2025-12%",
+                                                                                                   "Value":  0.0
+                                                                                               }
+                                                                                           ],
+                                                                             "Breakdown":  {
+                                                                                               "Items":  [
+                                                                                                             {
+                                                                                                                 "TaxRateCode":  "NO-2025-12%",
+                                                                                                                 "NetValue":  0.00,
+                                                                                                                 "TaxValue":  0.0
+                                                                                                             }
+                                                                                                         ]
+                                                                                           }
+                                                                         }
+                                                          },
+                                      "DependentRatePricing":  null
+                                  },
+                      "TaxExemptionReason":  null,
+                      "TaxExemptionLegalReference":  null
+                  },
+                  {
+                      "Id":  "5afcd4c3-25ce-4ff9-b525-b17e008a7be0",
+                      "GroupId":  "53fc6975-0206-43c2-a358-b31a00a6cc88",
+                      "ServiceId":  "11f4b043-fefc-496f-9680-b15a007eea68",
+                      "BaseRateId":  "dc234bc8-8957-4304-a6b8-b161015428c3",
+                      "IsBaseRate":  false,
+                      "BusinessSegmentId":  null,
+                      "IsActive":  true,
+                      "IsEnabled":  true,
+                      "IsPublic":  false,
+                      "IsDefault":  false,
+                      "Type":  "Private",
+                      "Name":  "Airbnb (non-ref) - 0%",
+                      "Names":  {
+                                    "en-US":  "Airbnb (non-ref) - 0%"
+                                },
+                      "ShortName":  "ANR0",
+                      "UpdatedUtc":  "2025-07-14T10:11:02Z",
+                      "ExternalNames":  {
+                                            "en-US":  "Non-refundable"
+                                        },
+                      "Description":  {
+
+                                      },
+                      "ExternalIdentifier":  null,
+                      "Options":  {
+                                      "HidePriceFromGuest":  false,
+                                      "IsBonusPointsEligible":  false
+                                  },
+                      "Pricing":  {
+                                      "Discriminator":  "DependentRatePricing",
+                                      "BaseRatePricing":  null,
+                                      "DependentRatePricing":  {
+                                                                   "BaseRateId":  "dc234bc8-8957-4304-a6b8-b161015428c3",
+                                                                   "RelativeAdjustment":  0.10000000,
+                                                                   "AbsoluteAdjustment":  0.00000000
+                                                               }
+                                  },
+                      "TaxExemptionReason":  null,
+                      "TaxExemptionLegalReference":  null
+                  },
+                  {
+                      "Id":  "64750c1f-6c8f-41ca-bb1a-b17d01223d08",
+                      "GroupId":  "53fc6975-0206-43c2-a358-b31a00a6cc88",
+                      "ServiceId":  "11f4b043-fefc-496f-9680-b15a007eea68",
+                      "BaseRateId":  "dc234bc8-8957-4304-a6b8-b161015428c3",
+                      "IsBaseRate":  false,
+                      "BusinessSegmentId":  null,
+                      "IsActive":  true,
+                      "IsEnabled":  true,
+                      "IsPublic":  false,
+                      "IsDefault":  false,
+                      "Type":  "Private",
+                      "Name":  "Airbnb (standard) - 0%",
+                      "Names":  {
+                                    "en-US":  "Airbnb (standard) - 0%"
+                                },
+                      "ShortName":  "AS0",
+                      "UpdatedUtc":  "2025-07-14T10:11:16Z",
+                      "ExternalNames":  {
+                                            "en-US":  "Standard"
+                                        },
+                      "Description":  {
+
+                                      },
+                      "ExternalIdentifier":  null,
+                      "Options":  {
+                                      "HidePriceFromGuest":  false,
+                                      "IsBonusPointsEligible":  false
+                                  },
+                      "Pricing":  {
+                                      "Discriminator":  "DependentRatePricing",
+                                      "BaseRatePricing":  null,
+                                      "DependentRatePricing":  {
+                                                                   "BaseRateId":  "dc234bc8-8957-4304-a6b8-b161015428c3",
+                                                                   "RelativeAdjustment":  0.30000000,
+                                                                   "AbsoluteAdjustment":  0.00000000
+                                                               }
+                                  },
+                      "TaxExemptionReason":  null,
+                      "TaxExemptionLegalReference":  null
+                  },
+                  {
+                      "Id":  "24560409-3e77-43f9-86df-b17001127001",
+                      "GroupId":  "f6b8226a-c94a-4212-9d91-b16e00bb302b",
+                      "ServiceId":  "11f4b043-fefc-496f-9680-b15a007eea68",
+                      "BaseRateId":  "dc234bc8-8957-4304-a6b8-b161015428c3",
+                      "IsBaseRate":  false,
+                      "BusinessSegmentId":  null,
+                      "IsActive":  true,
+                      "IsEnabled":  true,
+                      "IsPublic":  false,
+                      "IsDefault":  false,
+                      "Type":  "Private",
+                      "Name":  "Booking.com (weekly) - 0%",
+                      "Names":  {
+                                    "en-US":  "Booking.com (weekly) - 0%"
+                                },
+                      "ShortName":  "BW0",
+                      "UpdatedUtc":  "2025-07-14T10:02:07Z",
+                      "ExternalNames":  {
+                                            "en-US":  "Booking.com (weekly)"
+                                        },
+                      "Description":  {
+
+                                      },
+                      "ExternalIdentifier":  null,
+                      "Options":  {
+                                      "HidePriceFromGuest":  false,
+                                      "IsBonusPointsEligible":  false
+                                  },
+                      "Pricing":  {
+                                      "Discriminator":  "DependentRatePricing",
+                                      "BaseRatePricing":  null,
+                                      "DependentRatePricing":  {
+                                                                   "BaseRateId":  "dc234bc8-8957-4304-a6b8-b161015428c3",
+                                                                   "RelativeAdjustment":  0.25000000,
+                                                                   "AbsoluteAdjustment":  0.00000000
+                                                               }
+                                  },
+                      "TaxExemptionReason":  null,
+                      "TaxExemptionLegalReference":  null
+                  },
+                  {
+                      "Id":  "f99610f8-1b1d-469e-8788-b1700111e9a3",
+                      "GroupId":  "f6b8226a-c94a-4212-9d91-b16e00bb302b",
+                      "ServiceId":  "11f4b043-fefc-496f-9680-b15a007eea68",
+                      "BaseRateId":  "dc234bc8-8957-4304-a6b8-b161015428c3",
+                      "IsBaseRate":  false,
+                      "BusinessSegmentId":  null,
+                      "IsActive":  true,
+                      "IsEnabled":  true,
+                      "IsPublic":  false,
+                      "IsDefault":  false,
+                      "Type":  "Private",
+                      "Name":  "Booking.com (non-ref) - 0%",
+                      "Names":  {
+                                    "en-US":  "Booking.com (non-ref) - 0%"
+                                },
+                      "ShortName":  "BNR0",
+                      "UpdatedUtc":  "2025-07-14T10:03:03Z",
+                      "ExternalNames":  {
+                                            "en-US":  "Booking.com (non-refundable)"
+                                        },
+                      "Description":  {
+
+                                      },
+                      "ExternalIdentifier":  null,
+                      "Options":  {
+                                      "HidePriceFromGuest":  false,
+                                      "IsBonusPointsEligible":  false
+                                  },
+                      "Pricing":  {
+                                      "Discriminator":  "DependentRatePricing",
+                                      "BaseRatePricing":  null,
+                                      "DependentRatePricing":  {
+                                                                   "BaseRateId":  "dc234bc8-8957-4304-a6b8-b161015428c3",
+                                                                   "RelativeAdjustment":  0.20000000,
+                                                                   "AbsoluteAdjustment":  0.00000000
+                                                               }
+                                  },
+                      "TaxExemptionReason":  null,
+                      "TaxExemptionLegalReference":  null
+                  },
+                  {
+                      "Id":  "e1481f3d-c812-4df6-8cf8-b17001119a1f",
+                      "GroupId":  "f6b8226a-c94a-4212-9d91-b16e00bb302b",
+                      "ServiceId":  "11f4b043-fefc-496f-9680-b15a007eea68",
+                      "BaseRateId":  "3043d4b3-88c0-443d-92e2-b16e00bbe753",
+                      "IsBaseRate":  false,
+                      "BusinessSegmentId":  null,
+                      "IsActive":  false,
+                      "IsEnabled":  false,
+                      "IsPublic":  true,
+                      "IsDefault":  false,
+                      "Type":  "Public",
+                      "Name":  "booking.com - non-refundable",
+                      "Names":  {
+                                    "en-US":  "booking.com - non-refundable"
+                                },
+                      "ShortName":  "bn",
+                      "UpdatedUtc":  "2024-05-14T16:36:57Z",
+                      "ExternalNames":  {
+
+                                        },
+                      "Description":  {
+
+                                      },
+                      "ExternalIdentifier":  null,
+                      "Options":  {
+                                      "HidePriceFromGuest":  false,
+                                      "IsBonusPointsEligible":  false
+                                  },
+                      "Pricing":  {
+                                      "Discriminator":  "DependentRatePricing",
+                                      "BaseRatePricing":  null,
+                                      "DependentRatePricing":  {
+                                                                   "BaseRateId":  "3043d4b3-88c0-443d-92e2-b16e00bbe753",
+                                                                   "RelativeAdjustment":  0.00000000,
+                                                                   "AbsoluteAdjustment":  0.00000000
+                                                               }
+                                  },
+                      "TaxExemptionReason":  null,
+                      "TaxExemptionLegalReference":  null
+                  },
+                  {
+                      "Id":  "3043d4b3-88c0-443d-92e2-b16e00bbe753",
+                      "GroupId":  "f6b8226a-c94a-4212-9d91-b16e00bb302b",
+                      "ServiceId":  "11f4b043-fefc-496f-9680-b15a007eea68",
+                      "BaseRateId":  "dc234bc8-8957-4304-a6b8-b161015428c3",
+                      "IsBaseRate":  false,
+                      "BusinessSegmentId":  null,
+                      "IsActive":  true,
+                      "IsEnabled":  true,
+                      "IsPublic":  false,
+                      "IsDefault":  false,
+                      "Type":  "Private",
+                      "Name":  "Booking.com (standard) - 0%",
+                      "Names":  {
+                                    "en-US":  "Booking.com (standard) - 0%"
+                                },
+                      "ShortName":  "BS0",
+                      "UpdatedUtc":  "2025-07-14T10:04:18Z",
+                      "ExternalNames":  {
+                                            "en-US":  "Booking.com (standard)"
+                                        },
+                      "Description":  {
+
+                                      },
+                      "ExternalIdentifier":  null,
+                      "Options":  {
+                                      "HidePriceFromGuest":  false,
+                                      "IsBonusPointsEligible":  false
+                                  },
+                      "Pricing":  {
+                                      "Discriminator":  "DependentRatePricing",
+                                      "BaseRatePricing":  null,
+                                      "DependentRatePricing":  {
+                                                                   "BaseRateId":  "dc234bc8-8957-4304-a6b8-b161015428c3",
+                                                                   "RelativeAdjustment":  0.30000000,
+                                                                   "AbsoluteAdjustment":  0.00000000
+                                                               }
+                                  },
+                      "TaxExemptionReason":  null,
+                      "TaxExemptionLegalReference":  null
+                  },
+                  {
+                      "Id":  "2ce809f9-3f4e-440b-a8c6-b168008eb02c",
+                      "GroupId":  "0d880488-5cb2-4f21-aaf8-b16100d42742",
+                      "ServiceId":  "11f4b043-fefc-496f-9680-b15a007eea68",
+                      "BaseRateId":  "dc234bc8-8957-4304-a6b8-b161015428c3",
+                      "IsBaseRate":  false,
+                      "BusinessSegmentId":  null,
+                      "IsActive":  true,
+                      "IsEnabled":  true,
+                      "IsPublic":  false,
+                      "IsDefault":  false,
+                      "Type":  "Private",
+                      "Name":  "Travel Agency (15%) - 0%",
+                      "Names":  {
+                                    "en-US":  "Travel Agency (15%) - 0%"
+                                },
+                      "ShortName":  "TA150",
+                      "UpdatedUtc":  "2025-01-10T15:05:53Z",
+                      "ExternalNames":  {
+                                            "en-US":  "Travel Agency (15%)"
+                                        },
+                      "Description":  {
+
+                                      },
+                      "ExternalIdentifier":  null,
+                      "Options":  {
+                                      "HidePriceFromGuest":  false,
+                                      "IsBonusPointsEligible":  false
+                                  },
+                      "Pricing":  {
+                                      "Discriminator":  "DependentRatePricing",
+                                      "BaseRatePricing":  null,
+                                      "DependentRatePricing":  {
+                                                                   "BaseRateId":  "dc234bc8-8957-4304-a6b8-b161015428c3",
+                                                                   "RelativeAdjustment":  -0.15000000,
+                                                                   "AbsoluteAdjustment":  0.00000000
+                                                               }
+                                  },
+                      "TaxExemptionReason":  null,
+                      "TaxExemptionLegalReference":  null
+                  },
+                  {
+                      "Id":  "c60f9366-42bb-47b6-a502-b1680082ad71",
+                      "GroupId":  "80cbbc32-72ce-4ab0-b030-b31a00aa65bd",
+                      "ServiceId":  "11f4b043-fefc-496f-9680-b15a007eea68",
+                      "BaseRateId":  "dc234bc8-8957-4304-a6b8-b161015428c3",
+                      "IsBaseRate":  false,
+                      "BusinessSegmentId":  null,
+                      "IsActive":  true,
+                      "IsEnabled":  true,
+                      "IsPublic":  true,
+                      "IsDefault":  false,
+                      "Type":  "Public",
+                      "Name":  "Non-ref - 0%",
+                      "Names":  {
+                                    "en-US":  "Non-ref - 0%"
+                                },
+                      "ShortName":  "NR0",
+                      "UpdatedUtc":  "2025-07-14T12:38:42Z",
+                      "ExternalNames":  {
+                                            "en-US":  "Non-refundable"
+                                        },
+                      "Description":  {
+
+                                      },
+                      "ExternalIdentifier":  null,
+                      "Options":  {
+                                      "HidePriceFromGuest":  false,
+                                      "IsBonusPointsEligible":  false
+                                  },
+                      "Pricing":  {
+                                      "Discriminator":  "DependentRatePricing",
+                                      "BaseRatePricing":  null,
+                                      "DependentRatePricing":  {
+                                                                   "BaseRateId":  "dc234bc8-8957-4304-a6b8-b161015428c3",
+                                                                   "RelativeAdjustment":  -0.10000000,
+                                                                   "AbsoluteAdjustment":  0.00000000
+                                                               }
+                                  },
+                      "TaxExemptionReason":  null,
+                      "TaxExemptionLegalReference":  null
+                  },
+                  {
+                      "Id":  "dc234bc8-8957-4304-a6b8-b161015428c3",
+                      "GroupId":  "0d880488-5cb2-4f21-aaf8-b16100d42742",
+                      "ServiceId":  "11f4b043-fefc-496f-9680-b15a007eea68",
+                      "BaseRateId":  null,
+                      "IsBaseRate":  true,
+                      "BusinessSegmentId":  null,
+                      "IsActive":  true,
+                      "IsEnabled":  true,
+                      "IsPublic":  true,
+                      "IsDefault":  true,
+                      "Type":  "Public",
+                      "Name":  "Standard - 0%",
+                      "Names":  {
+                                    "en-US":  "Standard - 0%"
+                                },
+                      "ShortName":  "0%",
+                      "UpdatedUtc":  "2026-02-03T08:29:48Z",
+                      "ExternalNames":  {
+                                            "en-US":  "Standard"
+                                        },
+                      "Description":  {
+
+                                      },
+                      "ExternalIdentifier":  null,
+                      "Options":  {
+                                      "HidePriceFromGuest":  false,
+                                      "IsBonusPointsEligible":  false
+                                  },
+                      "Pricing":  {
+                                      "Discriminator":  "BaseRatePricing",
+                                      "BaseRatePricing":  {
+                                                              "Amount":  {
+                                                                             "Currency":  "NOK",
+                                                                             "NetValue":  10000.00,
+                                                                             "GrossValue":  10000.00,
+                                                                             "TaxValues":  [
+                                                                                               {
+                                                                                                   "Code":  "NO-2025-0%",
+                                                                                                   "Value":  0.00
+                                                                                               }
+                                                                                           ],
+                                                                             "Breakdown":  {
+                                                                                               "Items":  [
+                                                                                                             {
+                                                                                                                 "TaxRateCode":  "NO-2025-0%",
+                                                                                                                 "NetValue":  10000.00,
+                                                                                                                 "TaxValue":  0.00
+                                                                                                             }
+                                                                                                         ]
+                                                                                           }
+                                                                         }
+                                                          },
+                                      "DependentRatePricing":  null
+                                  },
+                      "TaxExemptionReason":  null,
+                      "TaxExemptionLegalReference":  null
+                  },
+                  {
+                      "Id":  "391190ae-e633-4162-8e31-b1610152dcd9",
+                      "GroupId":  "1664de11-8652-4d5f-a4ef-b16100d4558c",
+                      "ServiceId":  "11f4b043-fefc-496f-9680-b15a007eea68",
+                      "BaseRateId":  null,
+                      "IsBaseRate":  true,
+                      "BusinessSegmentId":  null,
+                      "IsActive":  false,
+                      "IsEnabled":  false,
+                      "IsPublic":  true,
+                      "IsDefault":  false,
+                      "Type":  "Public",
+                      "Name":  "Non-refundable",
+                      "Names":  {
+                                    "en-US":  "Non-refundable"
+                                },
+                      "ShortName":  "N",
+                      "UpdatedUtc":  "2024-05-06T07:55:53Z",
+                      "ExternalNames":  {
+
+                                        },
+                      "Description":  {
+
+                                      },
+                      "ExternalIdentifier":  null,
+                      "Options":  {
+                                      "HidePriceFromGuest":  false,
+                                      "IsBonusPointsEligible":  false
+                                  },
+                      "Pricing":  {
+                                      "Discriminator":  "BaseRatePricing",
+                                      "BaseRatePricing":  {
+                                                              "Amount":  {
+                                                                             "Currency":  "NOK",
+                                                                             "NetValue":  8928.57,
+                                                                             "GrossValue":  10000.00,
+                                                                             "TaxValues":  [
+                                                                                               {
+                                                                                                   "Code":  "NO-2025-12%",
+                                                                                                   "Value":  1071.43
+                                                                                               }
+                                                                                           ],
+                                                                             "Breakdown":  {
+                                                                                               "Items":  [
+                                                                                                             {
+                                                                                                                 "TaxRateCode":  "NO-2025-12%",
+                                                                                                                 "NetValue":  8928.57,
+                                                                                                                 "TaxValue":  1071.43
+                                                                                                             }
+                                                                                                         ]
+                                                                                           }
+                                                                         }
+                                                          },
+                                      "DependentRatePricing":  null
+                                  },
+                      "TaxExemptionReason":  null,
+                      "TaxExemptionLegalReference":  null
+                  },
+                  {
+                      "Id":  "eb7085e9-5fcd-443a-b506-b15a007eec2d",
+                      "GroupId":  "fb1d83bf-ee8a-43d6-b77b-b15a007eea8f",
+                      "ServiceId":  "11f4b043-fefc-496f-9680-b15a007eea68",
+                      "BaseRateId":  null,
+                      "IsBaseRate":  true,
+                      "BusinessSegmentId":  null,
+                      "IsActive":  false,
+                      "IsEnabled":  true,
+                      "IsPublic":  true,
+                      "IsDefault":  false,
+                      "Type":  "Public",
+                      "Name":  "Fully Flexible",
+                      "Names":  {
+                                    "en-US":  "Fully Flexible"
+                                },
+                      "ShortName":  "FF",
+                      "UpdatedUtc":  "2024-05-06T07:56:12Z",
+                      "ExternalNames":  {
+
+                                        },
+                      "Description":  {
+
+                                      },
+                      "ExternalIdentifier":  null,
+                      "Options":  {
+                                      "HidePriceFromGuest":  false,
+                                      "IsBonusPointsEligible":  false
+                                  },
+                      "Pricing":  {
+                                      "Discriminator":  "BaseRatePricing",
+                                      "BaseRatePricing":  {
+                                                              "Amount":  {
+                                                                             "Currency":  "NOK",
+                                                                             "NetValue":  8928.57,
+                                                                             "GrossValue":  10000.00,
+                                                                             "TaxValues":  [
+                                                                                               {
+                                                                                                   "Code":  "NO-2025-12%",
+                                                                                                   "Value":  1071.43
+                                                                                               }
+                                                                                           ],
+                                                                             "Breakdown":  {
+                                                                                               "Items":  [
+                                                                                                             {
+                                                                                                                 "TaxRateCode":  "NO-2025-12%",
+                                                                                                                 "NetValue":  8928.57,
+                                                                                                                 "TaxValue":  1071.43
+                                                                                                             }
+                                                                                                         ]
+                                                                                           }
+                                                                         }
+                                                          },
+                                      "DependentRatePricing":  null
+                                  },
+                      "TaxExemptionReason":  null,
+                      "TaxExemptionLegalReference":  null
+                  }
+              ],
+    "RateGroups":  [
+                       {
+                           "Id":  "0d880488-5cb2-4f21-aaf8-b16100d42742",
+                           "ServiceId":  "11f4b043-fefc-496f-9680-b15a007eea68",
+                           "IsActive":  true,
+                           "Name":  "Standard 0%",
+                           "ExternalIdentifier":  null
+                       },
+                       {
+                           "Id":  "1664de11-8652-4d5f-a4ef-b16100d4558c",
+                           "ServiceId":  "11f4b043-fefc-496f-9680-b15a007eea68",
+                           "IsActive":  true,
+                           "Name":  "Non-refundable",
+                           "ExternalIdentifier":  null
+                       },
+                       {
+                           "Id":  "f6b8226a-c94a-4212-9d91-b16e00bb302b",
+                           "ServiceId":  "11f4b043-fefc-496f-9680-b15a007eea68",
+                           "IsActive":  true,
+                           "Name":  "Booking.com 0%",
+                           "ExternalIdentifier":  null
+                       },
+                       {
+                           "Id":  "665be280-d4d4-44b2-afbe-b1810087f56b",
+                           "ServiceId":  "11f4b043-fefc-496f-9680-b15a007eea68",
+                           "IsActive":  true,
+                           "Name":  "Eierbooking",
+                           "ExternalIdentifier":  null
+                       },
+                       {
+                           "Id":  "791fbb96-9e9f-46e8-9e59-b1a400cb63ba",
+                           "ServiceId":  "11f4b043-fefc-496f-9680-b15a007eea68",
+                           "IsActive":  true,
+                           "Name":  "Kampanjer",
+                           "ExternalIdentifier":  null
+                       },
+                       {
+                           "Id":  "0125c2cb-ebbc-402e-85c9-b1fe0084880b",
+                           "ServiceId":  "11f4b043-fefc-496f-9680-b15a007eea68",
+                           "IsActive":  true,
+                           "Name":  "2025",
+                           "ExternalIdentifier":  null
+                       },
+                       {
+                           "Id":  "cacee119-77dd-4a7b-9598-b22100f275d0",
+                           "ServiceId":  "11f4b043-fefc-496f-9680-b15a007eea68",
+                           "IsActive":  true,
+                           "Name":  "Standard 12%",
+                           "ExternalIdentifier":  null
+                       },
+                       {
+                           "Id":  "f311e56d-f423-44fc-a9db-b31a00a4e54a",
+                           "ServiceId":  "11f4b043-fefc-496f-9680-b15a007eea68",
+                           "IsActive":  true,
+                           "Name":  "Booking.com 12%",
+                           "ExternalIdentifier":  null
+                       },
+                       {
+                           "Id":  "53fc6975-0206-43c2-a358-b31a00a6cc88",
+                           "ServiceId":  "11f4b043-fefc-496f-9680-b15a007eea68",
+                           "IsActive":  true,
+                           "Name":  "Airbnb 0%",
+                           "ExternalIdentifier":  null
+                       },
+                       {
+                           "Id":  "048e8f94-38ad-4345-954c-b31a00a6eb96",
+                           "ServiceId":  "11f4b043-fefc-496f-9680-b15a007eea68",
+                           "IsActive":  true,
+                           "Name":  "Airbnb 12%",
+                           "ExternalIdentifier":  null
+                       },
+                       {
+                           "Id":  "80cbbc32-72ce-4ab0-b030-b31a00aa65bd",
+                           "ServiceId":  "11f4b043-fefc-496f-9680-b15a007eea68",
+                           "IsActive":  true,
+                           "Name":  "Non-ref 0%",
+                           "ExternalIdentifier":  null
+                       },
+                       {
+                           "Id":  "6fc991b5-ee06-445b-b199-b31a00aa8f7f",
+                           "ServiceId":  "11f4b043-fefc-496f-9680-b15a007eea68",
+                           "IsActive":  true,
+                           "Name":  "Non-ref 12%",
+                           "ExternalIdentifier":  null
+                       },
+                       {
+                           "Id":  "fb1d83bf-ee8a-43d6-b77b-b15a007eea8f",
+                           "ServiceId":  "11f4b043-fefc-496f-9680-b15a007eea68",
+                           "IsActive":  false,
+                           "Name":  "Flexible (NOT FINISHED)",
+                           "ExternalIdentifier":  null
+                       },
+                       {
+                           "Id":  "08bd13ea-1e9b-45d1-be6b-b168008e49d2",
+                           "ServiceId":  "11f4b043-fefc-496f-9680-b15a007eea68",
+                           "IsActive":  false,
+                           "Name":  "Travel Agency",
+                           "ExternalIdentifier":  null
+                       },
+                       {
+                           "Id":  "2ccbfaea-851e-45a2-a3af-b17d01221113",
+                           "ServiceId":  "11f4b043-fefc-496f-9680-b15a007eea68",
+                           "IsActive":  false,
+                           "Name":  "Airbnb",
+                           "ExternalIdentifier":  null
+                       },
+                       {
+                           "Id":  "24814411-6887-42a2-acd3-b22100f1062d",
+                           "ServiceId":  "11f4b043-fefc-496f-9680-b15a007eea68",
+                           "IsActive":  false,
+                           "Name":  "Default",
+                           "ExternalIdentifier":  null
+                       }
+                   ],
+    "RateRestrictions":  null,
+    "AvailabilityBlockAssignments":  null,
+    "Cursor":  "eb7085e9-5fcd-443a-b506-b15a007eec2d"
+}

@@ -1,0 +1,311 @@
+﻿{
+    "meta":  {
+                 "CheckIn":  "2026-02-10",
+                 "CheckOut":  "2026-02-12",
+                 "Nights":  2,
+                 "ServiceId":  "ba0090d5-a22d-4836-a5de-b3140084990e",
+                 "EnterpriseId":  "f45553a6-6697-485a-a352-b30600bcfd4d",
+                 "RateId":  "bb1fdd04-0f50-4379-92d1-b31400849968",
+                 "PriceMode":  "Agent",
+                 "Lang":  "nb",
+                 "IncludeSoldOut":  false,
+                 "GeneratedUtc":  "2026-02-05T16:03:30.1653143Z"
+             },
+    "availability":  {
+                         "DatesUtc":  [
+                                          "2026-02-09T23:00:00Z",
+                                          "2026-02-10T23:00:00Z",
+                                          "2026-02-11T23:00:00Z"
+                                      ],
+                         "TimeUnitStartsUtc":  [
+                                                   "2026-02-09T23:00:00Z",
+                                                   "2026-02-10T23:00:00Z",
+                                                   "2026-02-11T23:00:00Z"
+                                               ],
+                         "CategoryAvailabilities":  [
+                                                        {
+                                                            "CategoryId":  "06160e45-0a97-401c-889c-b32c00a4bb64",
+                                                            "Availabilities":  [
+                                                                                   0,
+                                                                                   1,
+                                                                                   0
+                                                                               ],
+                                                            "Adjustments":  [
+                                                                                0,
+                                                                                0,
+                                                                                0
+                                                                            ]
+                                                        }
+                                                    ]
+                     },
+    "pricing":  {
+                    "Currency":  "NOK",
+                    "DatesUtc":  [
+                                     "2026-02-09T23:00:00Z",
+                                     "2026-02-10T23:00:00Z",
+                                     "2026-02-11T23:00:00Z"
+                                 ],
+                    "TimeUnitStartsUtc":  [
+                                              "2026-02-09T23:00:00Z",
+                                              "2026-02-10T23:00:00Z",
+                                              "2026-02-11T23:00:00Z"
+                                          ],
+                    "BasePrices":  [
+                                       4628.00,
+                                       4628.00,
+                                       4628.00
+                                   ],
+                    "BaseAmountPrices":  [
+                                             {
+                                                 "Currency":  "NOK",
+                                                 "NetValue":  4628.00,
+                                                 "GrossValue":  4628.00,
+                                                 "TaxValues":  [
+                                                                   {
+                                                                       "Code":  "NO-2025-0%",
+                                                                       "Value":  0.00
+                                                                   }
+                                                               ],
+                                                 "Breakdown":  {
+                                                                   "Items":  [
+                                                                                 {
+                                                                                     "TaxRateCode":  "NO-2025-0%",
+                                                                                     "NetValue":  4628.00,
+                                                                                     "TaxValue":  0.00
+                                                                                 }
+                                                                             ]
+                                                               }
+                                             },
+                                             {
+                                                 "Currency":  "NOK",
+                                                 "NetValue":  4628.00,
+                                                 "GrossValue":  4628.00,
+                                                 "TaxValues":  [
+                                                                   {
+                                                                       "Code":  "NO-2025-0%",
+                                                                       "Value":  0.00
+                                                                   }
+                                                               ],
+                                                 "Breakdown":  {
+                                                                   "Items":  [
+                                                                                 {
+                                                                                     "TaxRateCode":  "NO-2025-0%",
+                                                                                     "NetValue":  4628.00,
+                                                                                     "TaxValue":  0.00
+                                                                                 }
+                                                                             ]
+                                                               }
+                                             },
+                                             {
+                                                 "Currency":  "NOK",
+                                                 "NetValue":  4628.00,
+                                                 "GrossValue":  4628.00,
+                                                 "TaxValues":  [
+                                                                   {
+                                                                       "Code":  "NO-2025-0%",
+                                                                       "Value":  0.00
+                                                                   }
+                                                               ],
+                                                 "Breakdown":  {
+                                                                   "Items":  [
+                                                                                 {
+                                                                                     "TaxRateCode":  "NO-2025-0%",
+                                                                                     "NetValue":  4628.00,
+                                                                                     "TaxValue":  0.00
+                                                                                 }
+                                                                             ]
+                                                               }
+                                             }
+                                         ],
+                    "CategoryPrices":  [
+                                           {
+                                               "CategoryId":  "06160e45-0a97-401c-889c-b32c00a4bb64",
+                                               "Prices":  [
+                                                              5553.60,
+                                                              5553.60,
+                                                              5553.60
+                                                          ],
+                                               "AmountPrices":  [
+                                                                    {
+                                                                        "Currency":  "NOK",
+                                                                        "NetValue":  5553.60,
+                                                                        "GrossValue":  5553.60,
+                                                                        "TaxValues":  [
+                                                                                          {
+                                                                                              "Code":  "NO-2025-0%",
+                                                                                              "Value":  0.00
+                                                                                          }
+                                                                                      ],
+                                                                        "Breakdown":  {
+                                                                                          "Items":  [
+                                                                                                        {
+                                                                                                            "TaxRateCode":  "NO-2025-0%",
+                                                                                                            "NetValue":  5553.60,
+                                                                                                            "TaxValue":  0.00
+                                                                                                        }
+                                                                                                    ]
+                                                                                      }
+                                                                    },
+                                                                    {
+                                                                        "Currency":  "NOK",
+                                                                        "NetValue":  5553.60,
+                                                                        "GrossValue":  5553.60,
+                                                                        "TaxValues":  [
+                                                                                          {
+                                                                                              "Code":  "NO-2025-0%",
+                                                                                              "Value":  0.00
+                                                                                          }
+                                                                                      ],
+                                                                        "Breakdown":  {
+                                                                                          "Items":  [
+                                                                                                        {
+                                                                                                            "TaxRateCode":  "NO-2025-0%",
+                                                                                                            "NetValue":  5553.60,
+                                                                                                            "TaxValue":  0.00
+                                                                                                        }
+                                                                                                    ]
+                                                                                      }
+                                                                    },
+                                                                    {
+                                                                        "Currency":  "NOK",
+                                                                        "NetValue":  5553.60,
+                                                                        "GrossValue":  5553.60,
+                                                                        "TaxValues":  [
+                                                                                          {
+                                                                                              "Code":  "NO-2025-0%",
+                                                                                              "Value":  0.00
+                                                                                          }
+                                                                                      ],
+                                                                        "Breakdown":  {
+                                                                                          "Items":  [
+                                                                                                        {
+                                                                                                            "TaxRateCode":  "NO-2025-0%",
+                                                                                                            "NetValue":  5553.60,
+                                                                                                            "TaxValue":  0.00
+                                                                                                        }
+                                                                                                    ]
+                                                                                      }
+                                                                    }
+                                                                ]
+                                           }
+                                       ],
+                    "CategoryAdjustments":  [
+                                                {
+                                                    "CategoryId":  "06160e45-0a97-401c-889c-b32c00a4bb64",
+                                                    "ParentCategoryId":  null,
+                                                    "AbsoluteValue":  0.00000000,
+                                                    "RelativeValue":  0.20000000
+                                                }
+                                            ],
+                    "AgeCategoryAdjustments":  [
+                                                   {
+                                                       "AgeCategoryId":  "f7589fa6-524d-4f24-be2c-b3140084995e",
+                                                       "AbsoluteValue":  0.0000,
+                                                       "Type":  "NegativeOccupancyAdjustment"
+                                                   },
+                                                   {
+                                                       "AgeCategoryId":  "f7589fa6-524d-4f24-be2c-b3140084995e",
+                                                       "AbsoluteValue":  0.0000,
+                                                       "Type":  "ExtraOccupancyAdjustment"
+                                                   }
+                                               ],
+                    "RelativeAdjustment":  0.0,
+                    "AbsoluteAdjustment":  0.0,
+                    "EmptyUnitAdjustment":  0.0000,
+                    "ExtraUnitAdjustment":  0.0000
+                },
+    "resourceCategories":  {
+                               "ResourceCategories":  [
+                                                          {
+                                                              "Id":  "06160e45-0a97-401c-889c-b32c00a4bb64",
+                                                              "EnterpriseId":  "f45553a6-6697-485a-a352-b30600bcfd4d",
+                                                              "ServiceId":  "ba0090d5-a22d-4836-a5de-b3140084990e",
+                                                              "IsActive":  true,
+                                                              "Type":  "Apartment",
+                                                              "Classification":  null,
+                                                              "Names":  {
+                                                                            "cs-CZ":  "Ugla 917 Trysilfjell Hytteområde",
+                                                                            "da-DK":  "Ugla 917 Trysilfjell Hytteområde",
+                                                                            "de-CH":  "Ugla 917 Trysilfjell Hytteområde",
+                                                                            "de-DE":  "Ugla 917 Trysilfjell Hytteområde",
+                                                                            "el-GR":  "Ugla 917 Trysilfjell Hytteområde",
+                                                                            "en-GB":  "Ugla 917 Trysilfjell Hytteområde",
+                                                                            "ca-ES":  "Ugla 917 Trysilfjell Hytteområde",
+                                                                            "eu-ES":  "Ugla 917 Trysilfjell Hytteområde",
+                                                                            "es-ES":  "Ugla 917 Trysilfjell Hytteområde",
+                                                                            "et-EE":  "Ugla 917 Trysilfjell Hytteområde",
+                                                                            "fi-FI":  "Ugla 917 Trysilfjell Hytteområde",
+                                                                            "fr-CA":  "Ugla 917 Trysilfjell Hytteområde",
+                                                                            "fr-FR":  "Ugla 917 Trysilfjell Hytteområde",
+                                                                            "is-IS":  "Ugla 917 Trysilfjell Hytteområde",
+                                                                            "it-IT":  "Ugla 917 Trysilfjell Hytteområde",
+                                                                            "ja-JP":  "Ugla 917 Trysilfjell Hytteområde",
+                                                                            "ka-GE":  "Ugla 917 Trysilfjell Hytteområde",
+                                                                            "ko-KR":  "Ugla 917 Trysilfjell Hytteområde",
+                                                                            "lv-LV":  "Ugla 917 Trysilfjell Hytteområde",
+                                                                            "ms-MY":  "Ugla 917 Trysilfjell Hytteområde",
+                                                                            "nl-NL":  "Ugla 917 Trysilfjell Hytteområde",
+                                                                            "nb-NO":  "Ugla 917 Trysilfjell Hytteområde",
+                                                                            "pl-PL":  "Ugla 917 Trysilfjell Hytteområde",
+                                                                            "pt-BR":  "Ugla 917 Trysilfjell Hytteområde",
+                                                                            "pt-PT":  "Ugla 917 Trysilfjell Hytteområde",
+                                                                            "ru-RU":  "Ugla 917 Trysilfjell Hytteområde",
+                                                                            "sk-SK":  "Ugla 917 Trysilfjell Hytteområde",
+                                                                            "sv-SE":  "Ugla 917 Trysilfjell Hytteområde",
+                                                                            "ta-IN":  "Ugla 917 Trysilfjell Hytteområde",
+                                                                            "tr-TR":  "Ugla 917 Trysilfjell Hytteområde",
+                                                                            "uk-UA":  "Ugla 917 Trysilfjell Hytteområde",
+                                                                            "zh-CN":  "Ugla 917 Trysilfjell Hytteområde",
+                                                                            "en-US":  "Ugla 917 Trysilfjell Hytteområde"
+                                                                        },
+                                                              "ShortNames":  {
+
+                                                                             },
+                                                              "Descriptions":  {
+                                                                                   "cs-CZ":  "Vítejte v Ugla 917 – moderní a útulné chatě o 105 m² na jednom podlaží, ideální pro rodiny i skupiny, které chtějí pohodlí a jednoduchou logistiku. Najdete zde světlý obývací prostor s TV, plně vybavenou kuchyň, 2 koupelny se sprchou a soukromou saunu pro dokonalý odpočinek po dni na sjezdovkách či v horách. Díky ski-in/ski-out, výhledu směrem na centrum Trysilu a krátké vzdálenosti k vlekům, Turistsenteret, restauracím a obchodům je to skvělá základna po celý rok. Parkování přímo u dveří.\r\nLožnice a lůžka:\r\n\r\nLožnice 1: 2 palandy\r\nLožnice 2: palanda + palanda (120 cm)\r\nLožnice 3: rodinná palanda (spodní 150 cm)\r\nLožnice 4: rodinná palanda",
+                                                                                   "da-DK":  "Velkommen til Ugla 917 – en moderne og hyggelig hytte på 105 m² i ét plan, perfekt til familier og grupper, der ønsker komfort og enkel logistik. Hytten har en lys stue med TV, fuldt udstyret køkken, 2 badeværelser med bruser og egen sauna til afslapning efter en dag på ski eller i fjeldet. Med ski-in/ski-out, udsigt mod Trysil centrum og kort afstand til lifte, Turistsenteret, restauranter og butikker er dette en ideel base året rundt. Praktisk parkering lige ved døren.\r\nSoveværelser og senge:\r\n\r\nSoveværelse 1: 2 køjesenge\r\nSoveværelse 2: køjeseng + køjeseng (120 cm)\r\nSoveværelse 3: familiekøjeseng (150 cm nederst)\r\nSoveværelse 4: familiekøjeseng",
+                                                                                   "de-CH":  "Willkommen in Ugla 917 – einer modernen, gemütlichen Hütte mit 105 m² auf einer Ebene, ideal für Familien und Gruppen, die Komfort und einfache Abläufe schätzen. Heller Wohnbereich mit TV, voll ausgestattete Küche, 2 Bäder mit Dusche und private Sauna für entspannte Abende nach dem Ski- oder Bergtag. Ski-in/Ski-out, Aussicht Richtung Trysil Zentrum und kurze Wege zu Liften, Turistsenteret, Restaurants und Läden. Parkplatz direkt vor der Tür.\r\nSchlafzimmer \u0026 Betten:\r\n\r\nSchlafzimmer 1: 2 Etagenbetten\r\nSchlafzimmer 2: Etagenbett + Etagenbett (120 cm)\r\nSchlafzimmer 3: Familien-Etagenbett (unten 150 cm)\r\nSchlafzimmer 4: Familien-Etagenbett",
+                                                                                   "de-DE":  "Willkommen in Ugla 917 – einer modernen, gemütlichen Hütte mit 105 m² auf einer Ebene, ideal für Familien und Gruppen, die Komfort und einfache Abläufe schätzen. Freuen Sie sich auf einen hellen Wohnbereich mit TV, eine voll ausgestattete Küche, 2 Bäder mit Dusche und eine private Sauna zum Entspannen nach einem Ski- oder Bergtag. Mit Ski-in/Ski-out, Blick Richtung Trysil Zentrum und kurzen Wegen zu Liften, Turistsenteret, Restaurants und Geschäften ist dies eine perfekte Basis zu jeder Jahreszeit. Parkplatz direkt vor der Tür.\r\nSchlafzimmer \u0026 Betten:\r\n\r\nSchlafzimmer 1: 2 Etagenbetten\r\nSchlafzimmer 2: Etagenbett + Etagenbett (120 cm)\r\nSchlafzimmer 3: Familien-Etagenbett (unten 150 cm)\r\nSchlafzimmer 4: Familien-Etagenbett",
+                                                                                   "el-GR":  "Καλώς ήρθατε στο Ugla 917 – ένα μοντέρνο και ζεστό κατάλυμα 105 m² σε ένα επίπεδο, ιδανικό για οικογένειες και παρέες που θέλουν άνεση και εύκολη οργάνωση. Διαθέτει φωτεινό σαλόνι με TV, πλήρως εξοπλισμένη κουζίνα, 2 μπάνια με ντους και ιδιωτική σάουνα για χαλάρωση μετά το σκι ή τις δραστηριότητες στο βουνό. Με ski-in/ski-out, θέα προς το κέντρο του Trysil και εύκολη πρόσβαση σε αναβατήρες, Turistsenteret, εστιατόρια και καταστήματα, είναι ιδανική βάση όλο τον χρόνο. Πάρκινγκ έξω από την πόρτα.\r\nΥπνοδωμάτια \u0026 κρεβάτια:\r\n\r\nΥ/Δ 1: 2 κουκέτες\r\nΥ/Δ 2: κουκέτα + κουκέτα (120 εκ.)\r\nΥ/Δ 3: οικογενειακή κουκέτα (κάτω 150 εκ.)\r\nΥ/Δ 4: οικογενειακή κουκέτα",
+                                                                                   "en-GB":  "Welcome to Ugla 917 – a modern, cosy 105 m² cabin on one level, ideal for families and groups who want comfort and easy logistics. Enjoy a bright living area with TV, a fully equipped kitchen, two bathrooms with showers, and a private sauna for unwinding after a day of skiing or mountain adventures. With ski-in/ski-out, views towards Trysil centre and easy access to lifts, the Turistsenter, restaurants and shops, it’s a perfect year-round base. Convenient parking right outside.\r\nBedrooms \u0026 beds:\r\n\r\nBedroom 1: 2 bunk beds\r\nBedroom 2: bunk bed + bunk bed (120 cm)\r\nBedroom 3: family bunk bed (150 cm lower)\r\nBedroom 4: family bunk bed",
+                                                                                   "ca-ES":  "Benvingut a Ugla 917 – una cabana moderna i acollidora de 105 m² en una sola planta, ideal per a famílies i grups que volen confort i enkel logística. Aquí tens sala d’estar lluminosa amb TV, cuina totalment equipada, 2 banys amb dutxa i sauna privada per avslapament després d’un dia d’esquí o muntanya. Amb ski-in/ski-out, vistes cap al centre de Trysil i a poca distància d’ascensors, Turistsenteret, restaurants i botigues, és una base perfecta tot l’any. Aparcament pràctic just a la porta.\r\nDormitoris i llits:\r\n\r\nDormitori 1: 2 lliteres\r\nDormitori 2: 1 llitera + 1 llitera (120 cm)\r\nDormitori 3: llitera familiar (150 cm a sota)\r\nDormitori 4: llitera familiar",
+                                                                                   "eu-ES":  "Ongi etorri Ugla 917ra – Trysilen solairu bakarreko 105 m²-ko etxe moderno eta atsegina, familientzat eta taldeentzat aproposa. Egongela argitsua (TVrekin), sukalde guztiz hornitua, 2 bainugela dutxarekin eta sauna pribatua ditu, eski edo mendi-egunaren ondoren atseden hartzeko. Ski-in/ski-out, Trysil erdigunerantz ikuspegiak eta igogailu, Turistsenteret, jatetxe eta dendetara sarbide erraza. Aparkalekua ate ondoan.\r\nLogelak eta oheak:\r\n\r\nlogela: 2 literak (ohe bikoitzak)\r\nlogela: litera + litera (120 cm)\r\nlogela: familia litera (behean 150 cm)\r\nlogela: familia litera",
+                                                                                   "es-ES":  "Bienvenido a Ugla 917 – una cabaña moderna y acogedora de 105 m² en una sola planta, ideal para familias y grupos que buscan comodidad y logística sencilla. Disfruta de un salón luminoso con TV, cocina totalmente equipada, 2 baños con ducha y sauna privada para relajarte tras un día de esquí o montaña. Con ski-in/ski-out, vistas hacia el centro de Trysil y cerca de remontes, Turistsenteret, restaurantes y tiendas, es una base perfecta todo el año. Aparcamiento práctico en la puerta.\r\nDormitorios y camas:\r\n\r\nDormitorio 1: 2 literas\r\nDormitorio 2: litera + litera (120 cm)\r\nDormitorio 3: litera familiar (cama inferior 150 cm)\r\nDormitorio 4: litera familiar",
+                                                                                   "et-EE":  "Tere tulemast Ugla 917-sse – modernsesse ja hubasesse 105 m² majja ühel korrusel, mis sobib suurepäraselt peredele ja seltskondadele, kes hindavad mugavust ja lihtsat logistikat. Olemas on valgusküllane elutuba TV-ga, täielikult varustatud köök, 2 dušiga vannituba ning privaatne saun lõõgastumiseks pärast suusa- või matkapäeva. Ski-in/ski-out, vaade Trysili keskuse suunas ja lühike maa tõstukite, Turistsentereti, restoranide ja poodideni. Parkimine otse ukse ees.\r\nMagamistoad ja voodid:\r\n\r\nMagamistuba 1: 2 narivoodit\r\nMagamistuba 2: narivoodi + narivoodi (120 cm)\r\nMagamistuba 3: pere-narivoodi (all 150 cm)\r\nMagamistuba 4: pere-narivoodi",
+                                                                                   "fi-FI":  "Tervetuloa Ugla 917:ään – moderniin ja viihtyisään 105 m² yhden tason mökkiin, joka sopii erinomaisesti perheille ja ryhmille. Mökissä on valoisa olohuone TV:llä, täysin varusteltu keittiö, 2 suihkullista kylpyhuonetta sekä oma sauna rentoutumiseen aktiivisen rinne- tai retkipäivän jälkeen. Ski-in/ski-out, näkymät kohti Trysilin keskustaa ja lyhyt matka hisseille, Turistsenteretiin, ravintoloihin ja kauppoihin. Pysäköinti suoraan oven edessä.\r\nMakuuhuoneet \u0026 vuoteet:\r\n\r\nMakuuhuone 1: 2 kerrossänkyä\r\nMakuuhuone 2: kerrossänky + kerrossänky (120 cm)\r\nMakuuhuone 3: perhekerrossänky (alavuode 150 cm)\r\nMakuuhuone 4: perhekerrossänky",
+                                                                                   "fr-CA":  "Bienvenue à Ugla 917 – un chalet moderne et convivial de 105 m² sur un seul niveau, parfait pour les familles et les groupes qui veulent du confort et une logistique simple. Salon lumineux avec TV, cuisine tout équipée, 2 salles de bain avec douche et sauna privé pour relaxer après une journée de ski ou d’activités en montagne. Ski-in/ski-out, vue vers le centre de Trysil et près des remontées, du Turistsenteret, des restos et des magasins. Stationnement pratique à la porte.\r\n\r\nChambres \u0026 lits:\r\nChambre 1 : 2 lits superposés\r\nChambre 2 : lit superposé + lit superposé (120 cm)\r\nChambre 3 : lit superposé familial (150 cm en bas)\r\nChambre 4 : lit superposé familial",
+                                                                                   "fr-FR":  "Bienvenue à Ugla 917 – un chalet moderne et chaleureux de 105 m² de plain-pied, idéal pour les familles et les groupes en quête de confort et de simplicité. Profitez d’un séjour lumineux avec TV, d’une cuisine entièrement équipée, de 2 salles de bain avec douche et d’un sauna privé pour se détendre après une journée de ski ou de montagne. Avec ski-in/ski-out, vue vers le centre de Trysil et accès facile aux remontées, au Turistsenteret, aux restaurants et aux commerces, c’est une base parfaite toute l’année. Parking pratique devant la porte.\r\nChambres \u0026 couchages:\r\n\r\nChambre 1 : 2 lits superposés\r\nChambre 2 : lit superposé + lit superposé (120 cm)\r\nChambre 3 : lit superposé familial (150 cm en bas)\r\nChambre 4 : lit superposé familial",
+                                                                                   "is-IS":  "Velkomin í Ugla 917 – nútímalegt og notalegt 105 m² hús á einni hæð, frábært fyrir fjölskyldur og hópa sem vilja þægindi og einfalda skipulagningu. Björt stofa með sjónvarpi, fullbúið eldhús, 2 baðherbergi með sturtu og einkasauna til að slaka á eftir dag í brekkunum eða á fjalli. Ski-in/ski-out, útsýni í átt að miðbæ Trysil og stutt í lyftur, Turistsenteret, veitingastaði og verslanir. Bílastæði við dyrnar.\r\nSvefnherbergi \u0026 rúm:\r\n\r\nHerbergi 1: 2 kojur\r\nHerbergi 2: koja + koja (120 cm)\r\nHerbergi 3: fjölskyldukoja (150 cm neðri)\r\nHerbergi 4: fjölskyldukoja",
+                                                                                   "it-IT":  "Benvenuti a Ugla 917 – baita moderna e accogliente di 105 m² su un unico livello, ideale per famiglie e gruppi che cercano comfort e praticità. Troverete un soggiorno luminoso con TV, cucina completamente attrezzata, 2 bagni con doccia e una sauna privata per rilassarvi dopo una giornata sugli sci o in montagna. Con ski-in/ski-out, vista verso il centro di Trysil e facile accesso a impianti, Turistsenteret, ristoranti e negozi, è una base perfetta tutto l’anno. Parcheggio comodo davanti alla porta.\r\nCamere \u0026 letti:\r\n\r\nCamera 1: 2 letti a castello\r\nCamera 2: letto a castello + letto a castello (120 cm)\r\nCamera 3: castello familiare (letto sotto 150 cm)\r\nCamera 4: castello familiare",
+                                                                                   "ja-JP":  "Ugla 917へようこそ。 トリシル（Trysil）の105㎡・ワンフロアで使いやすい、モダンで居心地の良いキャビンです。明るいリビング（TV）、設備の整ったキッチン、シャワー付きのバスルーム2室、そして一日の締めくくりに嬉しいプライベートサウナを完備。スキーイン／スキーアウトが可能で、トリシル中心部方面の眺望も良好。リフトやTuristsenteret、レストラン、ショップにも近く、四季を通じて快適な拠点になります。玄関前に駐車可能。\r\n寝室・ベッド構成：\r\n\r\n寝室1：二段ベッド×2\r\n寝室2：二段ベッド×1＋二段ベッド×1（幅120cm）\r\n寝室3：ファミリー二段ベッド（下段150cm）\r\n寝室4：ファミリー二段ベッド",
+                                                                                   "ka-GE":  "მოგესალმებით Ugla 917-ში — თანამედროვე და მყუდრო 105 მ² ერთსართულიან კოტეჯში, იდეალური ოჯახებისა და ჯგუფებისთვის, ვისაც კომფორტი და მარტივი ლოგისტიკა სურს. აქ არის ნათელი მისაღები TV-ით, სრულად აღჭურვილი სამზარეულო, 2 სველი წერტილი შხაპით და პირადი საუნა დასასვენებლად აქტიური დღის შემდეგ. Ski-in/ski-out, Trysil-ის ცენტრისკენ ხედები და ახლო მდებარეობა ლიფტებთან, Turistsenteret-თან, რესტორნებთან და მაღაზიებთან — შესანიშნავი ბაზაა მთელი წლის განმავლობაში. პარკინგი კართან.\r\nსაძინებლები და საწოლები:\r\n\r\nსაძინებელი 1: 2 ორსართულიანი საწოლი\r\nსაძინებელი 2: ორსართულიანი საწოლი + ორსართულიანი საწოლი (120 სმ)\r\nსაძინებელი 3: ოჯახური ორსართულიანი საწოლი (ქვედა 150 სმ)\r\nსაძინებელი 4: ოჯახური ორსართულიანი საწოლი",
+                                                                                   "ko-KR":  "Ugla 917에 오신 것을 환영합니다. 트리실(Trysil)에 위치한 105㎡ 규모의 단층 숙소로, 가족과 그룹 여행에 이상적입니다. 밝은 거실(TV), 완비된 주방, 샤워가 있는 욕실 2개, 그리고 하루를 마무리하며 쉬기 좋은 전용 사우나를 갖추고 있습니다. 스키 인/스키 아웃 가능하며, 트리실 시내 방향 전망과 리프트·Turistsenteret·레스토랑·상점까지의 접근성도 뛰어나 사계절 내내 훌륭한 베이스가 됩니다. 문 앞 주차 가능.\r\n침실 \u0026 침대 구성:\r\n\r\n침실 1: 이층침대 2개\r\n침실 2: 이층침대 1개 + 이층침대 1개(폭 120cm)\r\n침실 3: 패밀리 이층침대(아래 150cm)\r\n침실 4: 패밀리 이층침대",
+                                                                                   "lv-LV":  "Laipni lūdzam Ugla 917 – modernā un mājīgā 105 m² mājiņā vienā stāvā, kas lieliski piemērota ģimenēm un grupām, kuras vēlas komfortu un vienkāršu loģistiku. Gaiša viesistaba ar TV, pilnībā aprīkota virtuve, 2 vannasistabas ar dušu un privāta sauna atpūtai pēc slēpošanas vai kalnu dienas. Ski-in/ski-out, skaists skats uz Trysil centru un ērta piekļuve pacēlājiem, Turistsenteret, restorāniem un veikaliem. Ērta autostāvvieta pie durvīm.\r\nGuļamistabas \u0026 gultas:\r\n\r\nGuļamistaba 1: 2 divstāvu gultas\r\nGuļamistaba 2: divstāvu gulta + divstāvu gulta (120 cm)\r\nGuļamistaba 3: ģimenes divstāvu gulta (apakšā 150 cm)\r\nGuļamistaba 4: ģimenes divstāvu gulta",
+                                                                                   "ms-MY":  "Selamat datang ke Ugla 917 – kabin moden dan selesa seluas 105 m² di satu aras, sesuai untuk keluarga dan kumpulan yang mahukan keselesaan serta logistik yang mudah. Terdapat ruang tamu cerah dengan TV, dapur lengkap, 2 bilik mandi dengan pancuran dan sauna peribadi untuk berehat selepas seharian bermain ski atau aktiviti gunung. Ski-in/ski-out, pemandangan ke arah pusat Trysil dan dekat dengan lif, Turistsenteret, restoran serta kedai. Parkir mudah betul-betul di depan pintu.\r\nBilik tidur \u0026 katil:\r\n\r\nBilik 1: 2 katil dua tingkat\r\nBilik 2: katil dua tingkat + katil dua tingkat (120 cm)\r\nBilik 3: katil dua tingkat keluarga (bawah 150 cm)\r\nBilik 4: katil dua tingkat keluarga",
+                                                                                   "nl-NL":  "Welkom bij Ugla 917 – een modern en gezellig verblijf van 105 m² op één niveau, ideaal voor families en groepen die comfort en gemak willen. Met een lichte woonkamer met tv, volledig uitgeruste keuken, 2 badkamers met douche en een privé-sauna om te ontspannen na een dag skiën of buitenactiviteiten. Dankzij ski-in/ski-out, uitzicht richting het centrum van Trysil en de nabijheid van liften, Turistsenteret, restaurants en winkels is dit een perfecte uitvalsbasis het hele jaar door. Parkeren kan direct voor de deur.\r\nSlaapkamers \u0026 bedden:\r\n\r\nSlaapkamer 1: 2 stapelbedden\r\nSlaapkamer 2: stapelbed + stapelbed (120 cm)\r\nSlaapkamer 3: familystapelbed (onder 150 cm)\r\nSlaapkamer 4: familystapelbed",
+                                                                                   "nb-NO":  "Velkommen til Ugla 917 – en moderne og koselig hytte på 105 m² med alt praktisk på ett plan. Perfekt for familier og vennegjenger som ønsker god plass, enkel logistikk og høy komfort. Hytta har lys stue med TV, fullt utstyrt kjøkken, 2 bad med dusj og en egen badstue som gir ekstra velvære etter en dag i bakken eller på tur. Med ski-in/ski-out, flott utsikt mot Trysil sentrum og kort vei til heiser, Turistsenteret, restauranter og butikker, er dette en ideell base året rundt. Praktisk parkering rett utenfor døren.\r\nSoverom og sengefordeling:\r\n\r\nSoverom 1: 2 x køyeseng\r\nSoverom 2: køyeseng + køyeseng (120 cm)\r\nSoverom 3: familiekøyeseng (150 cm nede)\r\nSoverom 4: familiekøyeseng",
+                                                                                   "pl-PL":  "Witamy w Ugla 917 – nowoczesnym i przytulnym domku o powierzchni 105 m² na jednym poziomie, idealnym dla rodzin i grup ceniących komfort oraz prostą logistykę. Do dyspozycji jest jasny salon z TV, w pełni wyposażona kuchnia, 2 łazienki z prysznicem oraz prywatna sauna na relaks po dniu na stoku lub w górach. Ski-in/ski-out, widok w stronę centrum Trysil i blisko do wyciągów, Turistsenteret, restauracji oraz sklepów. Parking bezpośrednio przy wejściu.\r\nSypialnie \u0026 łóżka:\r\n\r\nSypialnia 1: 2 łóżka piętrowe\r\nSypialnia 2: łóżko piętrowe + łóżko piętrowe (120 cm)\r\nSypialnia 3: rodzinne łóżko piętrowe (dolne 150 cm)\r\nSypialnia 4: rodzinne łóżko piętrowe",
+                                                                                   "pt-BR":  "Bem-vindo ao Ugla 917 – um chalé moderno e aconchegante de 105 m² em um único andar, perfeito para famílias e grupos que buscam conforto e praticidade. Acomodação com sala de estar iluminada com TV, cozinha completa, 2 banheiros com chuveiro e sauna privativa para relaxar após um dia de ski ou atividades na montanha. Com ski-in/ski-out, vista para o centro de Trysil e fácil acesso a teleféricos, Turistsenteret, restaurantes e lojas, é uma ótima base o ano inteiro. Estacionamento bem na porta.\r\nQuartos \u0026 camas:\r\n\r\nQuarto 1: 2 beliches\r\nQuarto 2: beliche + beliche (120 cm)\r\nQuarto 3: beliche família (cama de baixo 150 cm)\r\nQuarto 4: beliche família",
+                                                                                   "pt-PT":  "Bem-vindo ao Ugla 917 – um chalé moderno e acolhedor de 105 m² num só piso, ideal para famílias e grupos que valorizam conforto e praticidade. Dispõe de sala luminosa com TV, cozinha totalmente equipada, 2 casas de banho com duche e sauna privativa para relaxar após um dia de ski ou de montanha. Com ski-in/ski-out, vista para o centro de Trysil e fácil acesso a teleféricos, Turistsenteret, restaurantes e lojas, é uma excelente base todo o ano. Estacionamento à porta.\r\nQuartos \u0026 camas:\r\n\r\nQuarto 1: 2 beliches\r\nQuarto 2: beliche + beliche (120 cm)\r\nQuarto 3: beliche familiar (cama inferior 150 cm)\r\nQuarto 4: beliche familiar",
+                                                                                   "ru-RU":  "Добро пожаловать в Ugla 917 — современный и уютный домик 105 м² на одном уровне, идеальный для семей и компаний, которым важны комфорт и простая логистика. Здесь светлая гостиная с TV, полностью оборудованная кухня, 2 ванные комнаты с душем и частная сауна для отдыха после дня на склонах или в горах. Ski-in/ski-out, вид в сторону центра Трюсиля и удобная близость к подъёмникам, Turistsenteret, ресторанам и магазинам делают это отличной базой круглый год. Парковка прямо у входа.\r\nСпальни и кровати:\r\n\r\nСпальня 1: 2 двухъярусные кровати\r\nСпальня 2: двухъярусная кровать + двухъярусная кровать (120 см)\r\nСпальня 3: семейная двухъярусная кровать (нижняя 150 см)\r\nСпальня 4: семейная двухъярусная кровать",
+                                                                                   "sk-SK":  "Vitajte v Ugla 917 – modernom a útulnom ubytovaní s rozlohou 105 m² na jednom podlaží, ideálnom pre rodiny a skupiny, ktoré chcú pohodlie a jednoduchú logistiku. K dispozícii je svetlá obývačka s TV, plne vybavená kuchyňa, 2 kúpeľne so sprchou a súkromná sauna na relax po dni na lyžiach alebo v horách. Ski-in/ski-out, výhľad smerom na centrum Trysilu a blízko k vlekom, Turistsenteret, reštauráciám a obchodom. Parkovanie priamo pri dverách.\r\nSpálne \u0026 postele:\r\n\r\nSpálňa 1: 2 poschodové postele\r\nSpálňa 2: poschodová posteľ + poschodová posteľ (120 cm)\r\nSpálňa 3: rodinná poschodová posteľ (dole 150 cm)\r\nSpálňa 4: rodinná poschodová posteľ",
+                                                                                   "sv-SE":  "Välkommen till Ugla 917 – en modern och mysig stuga på 105 m² i ett plan, perfekt för familjer och grupper som vill ha komfort och smidig logistik. Här finns ett ljust vardagsrum med TV, fullt utrustat kök, 2 badrum med dusch och en egen bastu för skön avkoppling efter en dag i backen eller på fjället. Med ski-in/ski-out, fin utsikt mot Trysil centrum och nära till liftar, Turistsenteret, restauranger och butiker är detta en idealisk bas året runt. Parkering precis utanför dörren.\r\nSovrum \u0026 sängar:\r\n\r\nSovrum 1: 2 våningssängar\r\nSovrum 2: våningssäng + våningssäng (120 cm)\r\nSovrum 3: familjevåningssäng (150 cm nere)\r\nSovrum 4: familjevåningssäng",
+                                                                                   "ta-IN":  "Ugla 917-க்கு வரவேற்கிறோம் — Trysil-ல் ஒரே தளத்தில் அமைந்த 105 m² அளவுள்ள நவீனமான, வசதியான குடில். குடும்பங்கள் மற்றும் குழுக்கள் சுலபமான ஏற்பாடு, உயர் வசதி என்பவற்றை விரும்பினால் இது சிறந்த தேர்வு. ஒளிரும் லிவிங் ரூம் (TV), முழுமையாக உபகரணங்களுடன் கூடிய சமையலறை, ஷவருடன் 2 குளியலறைகள் மற்றும் நாள் முடிவில் ஓய்வெடுக்க தனிப்பட்ட சோனா உள்ளது. Ski-in/ski-out, Trysil நகர மையத்தை நோக்கிய காட்சி, மேலும் லிப்ட், Turistsenteret, உணவகங்கள், கடைகள் அருகாமை—வருடம் முழுவதும் சிறந்த தங்குமிடம். கதவின் முன் பார்க்கிங் வசதி.\r\nபடுக்கையறைகள் \u0026 படுக்கைகள்:\r\n\r\nஅறை 1: இரட்டை அடுக்கு படுக்கை ×2\r\nஅறை 2: இரட்டை அடுக்கு படுக்கை + இரட்டை அடுக்கு படுக்கை (120 செ.மீ)\r\nஅறை 3: குடும்ப இரட்டை அடுக்கு (கீழ் 150 செ.மீ)\r\nஅறை 4: குடும்ப இரட்டை அடுக்கு",
+                                                                                   "tr-TR":  "Ugla 917’ye hoş geldiniz – Trysil’de tek katlı, modern ve sıcak 105 m²’lik bir dağ evi. Konfor ve kolay lojistik isteyen aileler ve gruplar için idealdir. Aydınlık oturma alanı (TV), tam donanımlı mutfak, duşlu 2 banyo ve gün sonunda rahatlamak için özel sauna sunar. Ski-in/ski-out, Trysil merkezine doğru manzara ve teleferikler, Turistsenteret, restoranlar ve mağazalara yakın konumuyla yıl boyu harika bir üstür. Kapı önünde park imkânı vardır.\r\nYatak odaları \u0026 yataklar:\r\n\r\nOda 1: 2 ranza\r\nOda 2: ranza + ranza (120 cm)\r\nOda 3: aile ranzası (alt yatak 150 cm)\r\nOda 4: aile ranzası",
+                                                                                   "uk-UA":  "Ласкаво просимо до Ugla 917 — сучасного та затишного будинку 105 м² на одному рівні, ідеального для сімей і компаній, які цінують комфорт та просту логістику. Тут є світла вітальня з TV, повністю обладнана кухня, 2 ванні кімнати з душем і приватна сауна для відпочинку після дня на схилах або в горах. Ski-in/ski-out, краєвид у бік центру Трюсиля та близькість до підйомників, Turistsenteret, ресторанів і магазинів роблять це чудовою базою цілий рік. Паркування біля дверей.\r\nСпальні та ліжка:\r\n\r\nСпальня 1: 2 двоярусні ліжка\r\nСпальня 2: двоярусне ліжко + двоярусне ліжко (120 см)\r\nСпальня 3: сімейне двоярусне ліжко (нижнє 150 см)\r\nСпальня 4: сімейне двоярусне ліжко",
+                                                                                   "zh-CN":  "欢迎入住 Ugla 917——位于特里西尔（Trysil）的现代温馨 105㎡ 一层度假屋，非常适合家庭与团体出行。室内配有明亮客厅（TV）、设备齐全的厨房、带淋浴的 2 间卫浴，以及一天结束后放松身心的 私享桑拿。Ski-in/ski-out 出行便捷，可眺望特里西尔市中心方向景色，且靠近缆车、Turistsenteret、餐厅与商店，是四季皆宜的理想据点。门口可停车。\r\n卧室与床位分布：\r\n\r\n卧室1：双层床×2\r\n卧室2：双层床×1 + 双层床×1（宽120厘米）\r\n卧室3：家庭双层床（下铺150厘米）\r\n卧室4：家庭双层床",
+                                                                                   "en-US":  "Welcome to Ugla 917 — a modern, cozy 105 m² cabin on one level, perfect for families and groups who want comfort and easy logistics. It features a bright living area with TV, a fully equipped kitchen, two bathrooms with showers, and a private sauna to relax after skiing or mountain activities. With ski-in/ski-out, views toward Trysil center, and quick access to lifts, the Turistsenter, restaurants, and shops, it’s an excellent year-round base. Parking is right outside the door.\r\nBedrooms \u0026 beds:\r\n\r\nBedroom 1: 2 bunk beds\r\nBedroom 2: bunk bed + bunk bed (120 cm)\r\nBedroom 3: family bunk bed (150 cm lower)\r\nBedroom 4: family bunk bed"
+                                                                               },
+                                                              "Ordering":  0,
+                                                              "Capacity":  14,
+                                                              "ExtraCapacity":  0,
+                                                              "ExternalIdentifier":  null,
+                                                              "AccountingCategoryId":  "756e1768-c984-410d-ba9b-b30600bd0ae6"
+                                                          }
+                                                      ],
+                               "Cursor":  null
+                           },
+    "report":  [
+
+               ]
+}

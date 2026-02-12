@@ -1,0 +1,311 @@
+﻿{
+    "meta":  {
+                 "CheckIn":  "2026-02-10",
+                 "CheckOut":  "2026-02-12",
+                 "Nights":  2,
+                 "ServiceId":  "c4964b1d-2303-4ebd-9be8-b3140084d802",
+                 "EnterpriseId":  "f45553a6-6697-485a-a352-b30600bcfd4d",
+                 "RateId":  "2da4c186-b1bd-423d-831b-b31b00f250c4",
+                 "PriceMode":  "Agent",
+                 "Lang":  "nb",
+                 "IncludeSoldOut":  false,
+                 "GeneratedUtc":  "2026-02-05T16:03:32.0938218Z"
+             },
+    "availability":  {
+                         "DatesUtc":  [
+                                          "2026-02-09T23:00:00Z",
+                                          "2026-02-10T23:00:00Z",
+                                          "2026-02-11T23:00:00Z"
+                                      ],
+                         "TimeUnitStartsUtc":  [
+                                                   "2026-02-09T23:00:00Z",
+                                                   "2026-02-10T23:00:00Z",
+                                                   "2026-02-11T23:00:00Z"
+                                               ],
+                         "CategoryAvailabilities":  [
+                                                        {
+                                                            "CategoryId":  "7b6a63f0-f035-4248-8caf-b31b00c7b029",
+                                                            "Availabilities":  [
+                                                                                   0,
+                                                                                   0,
+                                                                                   0
+                                                                               ],
+                                                            "Adjustments":  [
+                                                                                0,
+                                                                                0,
+                                                                                0
+                                                                            ]
+                                                        }
+                                                    ]
+                     },
+    "pricing":  {
+                    "Currency":  "NOK",
+                    "DatesUtc":  [
+                                     "2026-02-09T23:00:00Z",
+                                     "2026-02-10T23:00:00Z",
+                                     "2026-02-11T23:00:00Z"
+                                 ],
+                    "TimeUnitStartsUtc":  [
+                                              "2026-02-09T23:00:00Z",
+                                              "2026-02-10T23:00:00Z",
+                                              "2026-02-11T23:00:00Z"
+                                          ],
+                    "BasePrices":  [
+                                       5814.00,
+                                       5814.00,
+                                       5814.00
+                                   ],
+                    "BaseAmountPrices":  [
+                                             {
+                                                 "Currency":  "NOK",
+                                                 "NetValue":  5814.00,
+                                                 "GrossValue":  5814.00,
+                                                 "TaxValues":  [
+                                                                   {
+                                                                       "Code":  "NO-2025-0%",
+                                                                       "Value":  0.00
+                                                                   }
+                                                               ],
+                                                 "Breakdown":  {
+                                                                   "Items":  [
+                                                                                 {
+                                                                                     "TaxRateCode":  "NO-2025-0%",
+                                                                                     "NetValue":  5814.00,
+                                                                                     "TaxValue":  0.00
+                                                                                 }
+                                                                             ]
+                                                               }
+                                             },
+                                             {
+                                                 "Currency":  "NOK",
+                                                 "NetValue":  5814.00,
+                                                 "GrossValue":  5814.00,
+                                                 "TaxValues":  [
+                                                                   {
+                                                                       "Code":  "NO-2025-0%",
+                                                                       "Value":  0.00
+                                                                   }
+                                                               ],
+                                                 "Breakdown":  {
+                                                                   "Items":  [
+                                                                                 {
+                                                                                     "TaxRateCode":  "NO-2025-0%",
+                                                                                     "NetValue":  5814.00,
+                                                                                     "TaxValue":  0.00
+                                                                                 }
+                                                                             ]
+                                                               }
+                                             },
+                                             {
+                                                 "Currency":  "NOK",
+                                                 "NetValue":  5814.00,
+                                                 "GrossValue":  5814.00,
+                                                 "TaxValues":  [
+                                                                   {
+                                                                       "Code":  "NO-2025-0%",
+                                                                       "Value":  0.00
+                                                                   }
+                                                               ],
+                                                 "Breakdown":  {
+                                                                   "Items":  [
+                                                                                 {
+                                                                                     "TaxRateCode":  "NO-2025-0%",
+                                                                                     "NetValue":  5814.00,
+                                                                                     "TaxValue":  0.00
+                                                                                 }
+                                                                             ]
+                                                               }
+                                             }
+                                         ],
+                    "CategoryPrices":  [
+                                           {
+                                               "CategoryId":  "7b6a63f0-f035-4248-8caf-b31b00c7b029",
+                                               "Prices":  [
+                                                              5814.00,
+                                                              5814.00,
+                                                              5814.00
+                                                          ],
+                                               "AmountPrices":  [
+                                                                    {
+                                                                        "Currency":  "NOK",
+                                                                        "NetValue":  5814.00,
+                                                                        "GrossValue":  5814.00,
+                                                                        "TaxValues":  [
+                                                                                          {
+                                                                                              "Code":  "NO-2025-0%",
+                                                                                              "Value":  0.00
+                                                                                          }
+                                                                                      ],
+                                                                        "Breakdown":  {
+                                                                                          "Items":  [
+                                                                                                        {
+                                                                                                            "TaxRateCode":  "NO-2025-0%",
+                                                                                                            "NetValue":  5814.00,
+                                                                                                            "TaxValue":  0.00
+                                                                                                        }
+                                                                                                    ]
+                                                                                      }
+                                                                    },
+                                                                    {
+                                                                        "Currency":  "NOK",
+                                                                        "NetValue":  5814.00,
+                                                                        "GrossValue":  5814.00,
+                                                                        "TaxValues":  [
+                                                                                          {
+                                                                                              "Code":  "NO-2025-0%",
+                                                                                              "Value":  0.00
+                                                                                          }
+                                                                                      ],
+                                                                        "Breakdown":  {
+                                                                                          "Items":  [
+                                                                                                        {
+                                                                                                            "TaxRateCode":  "NO-2025-0%",
+                                                                                                            "NetValue":  5814.00,
+                                                                                                            "TaxValue":  0.00
+                                                                                                        }
+                                                                                                    ]
+                                                                                      }
+                                                                    },
+                                                                    {
+                                                                        "Currency":  "NOK",
+                                                                        "NetValue":  5814.00,
+                                                                        "GrossValue":  5814.00,
+                                                                        "TaxValues":  [
+                                                                                          {
+                                                                                              "Code":  "NO-2025-0%",
+                                                                                              "Value":  0.00
+                                                                                          }
+                                                                                      ],
+                                                                        "Breakdown":  {
+                                                                                          "Items":  [
+                                                                                                        {
+                                                                                                            "TaxRateCode":  "NO-2025-0%",
+                                                                                                            "NetValue":  5814.00,
+                                                                                                            "TaxValue":  0.00
+                                                                                                        }
+                                                                                                    ]
+                                                                                      }
+                                                                    }
+                                                                ]
+                                           }
+                                       ],
+                    "CategoryAdjustments":  [
+                                                {
+                                                    "CategoryId":  "7b6a63f0-f035-4248-8caf-b31b00c7b029",
+                                                    "ParentCategoryId":  null,
+                                                    "AbsoluteValue":  0.00000000,
+                                                    "RelativeValue":  0.00000000
+                                                }
+                                            ],
+                    "AgeCategoryAdjustments":  [
+                                                   {
+                                                       "AgeCategoryId":  "b376e38f-7164-4fb0-b7ed-b3140084d846",
+                                                       "AbsoluteValue":  0.0000,
+                                                       "Type":  "ExtraOccupancyAdjustment"
+                                                   },
+                                                   {
+                                                       "AgeCategoryId":  "b376e38f-7164-4fb0-b7ed-b3140084d846",
+                                                       "AbsoluteValue":  0.0000,
+                                                       "Type":  "NegativeOccupancyAdjustment"
+                                                   }
+                                               ],
+                    "RelativeAdjustment":  0.0,
+                    "AbsoluteAdjustment":  0.0,
+                    "EmptyUnitAdjustment":  0.0000,
+                    "ExtraUnitAdjustment":  0.0000
+                },
+    "resourceCategories":  {
+                               "ResourceCategories":  [
+                                                          {
+                                                              "Id":  "7b6a63f0-f035-4248-8caf-b31b00c7b029",
+                                                              "EnterpriseId":  "f45553a6-6697-485a-a352-b30600bcfd4d",
+                                                              "ServiceId":  "c4964b1d-2303-4ebd-9be8-b3140084d802",
+                                                              "IsActive":  true,
+                                                              "Type":  "Apartment",
+                                                              "Classification":  null,
+                                                              "Names":  {
+                                                                            "cs-CZ":  "1181 Fagerhøy",
+                                                                            "da-DK":  "1181 Fagerhøy",
+                                                                            "de-CH":  "1181 Fagerhøy",
+                                                                            "de-DE":  "1181 Fagerhøy",
+                                                                            "el-GR":  "1181 Fagerhøy",
+                                                                            "en-GB":  "1181 Fagerhøy",
+                                                                            "ca-ES":  "1181 Fagerhøy",
+                                                                            "eu-ES":  "1181 Fagerhøy",
+                                                                            "es-ES":  "1181 Fagerhøy",
+                                                                            "et-EE":  "1181 Fagerhøy",
+                                                                            "fi-FI":  "1181 Fagerhøy",
+                                                                            "fr-CA":  "1181 Fagerhøy",
+                                                                            "fr-FR":  "1181 Fagerhøy",
+                                                                            "is-IS":  "1181 Fagerhøy",
+                                                                            "it-IT":  "1181 Fagerhøy",
+                                                                            "ja-JP":  "1181 Fagerhøy",
+                                                                            "ka-GE":  "1181 Fagerhøy",
+                                                                            "ko-KR":  "1181 Fagerhøy",
+                                                                            "lv-LV":  "1181 Fagerhøy",
+                                                                            "ms-MY":  "1181 Fagerhøy",
+                                                                            "nl-NL":  "1181 Fagerhøy",
+                                                                            "nb-NO":  "Fagerhøy 1181 ",
+                                                                            "pl-PL":  "1181 Fagerhøy",
+                                                                            "pt-BR":  "1181 Fagerhøy",
+                                                                            "pt-PT":  "1181 Fagerhøy",
+                                                                            "ru-RU":  "1181 Fagerhøy",
+                                                                            "sk-SK":  "1181 Fagerhøy",
+                                                                            "sv-SE":  "1181 Fagerhøy",
+                                                                            "ta-IN":  "1181 Fagerhøy",
+                                                                            "tr-TR":  "1181 Fagerhøy",
+                                                                            "uk-UA":  "1181 Fagerhøy",
+                                                                            "zh-CN":  "1181 Fagerhøy",
+                                                                            "en-US":  "1181 Fagerhøy"
+                                                                        },
+                                                              "ShortNames":  {
+
+                                                                             },
+                                                              "Descriptions":  {
+                                                                                   "cs-CZ":  "Vítejte ve Fagerhøy, prostorné rodinné chatě. Fagerhøy 1181 je prostorná rodinná chata o rozloze 113 m² s 10 lůžky, 3 ložnicemi, 2 obývacími pokoji a 2 koupelnami – jedna s saunou. Nachází se centrálně, ale chráněně v Trysil Høyfjellssenter. Ski in/ski out pro běžecké i sjezdové lyžování\r\n\r\nChata obsahuje:\r\n\r\n- Tři ložnice s 8 lůžky a rozkládací pohovku ve podkrovním obývacím pokoji\r\n- Světlý a prostorný obývací pokoj s pohodlným nábytkem a TV\r\n- Plně vybavená kuchyň – ideální pro vaření a společné jídlo\r\n- Dvě koupelny, jedna s vlastní saunou – perfektní po dni na svahu\r\n- Bezplatné parkování přímo u chaty\r\n- Terasa s výhledem na hory a přírodu",
+                                                                                   "da-DK":  "Velkommen til Fagerhøy, en rummelig familiehytte. Fagerhøy 1181 er en rummelig familiehytte på 113 m² med 10 sovepladser, 3 soveværelser, 2 stuer og 2 badeværelser – et med sauna. Centralt beliggende men afskærmet på Trysil Høyfjellssenter. Ski in/ski out til både langrend og alpint.\r\n\r\nHytten indeholder:\r\n\r\n- Tre soveværelser med 8 sovepladser og en sovesofa på hemsen\r\n- Lys og rummelig stue med komfortable møbler og TV\r\n- Fuldt udstyret køkken – ideelt til madlavning og hyggelige måltider\r\n- To badeværelser, hvoraf et med egen sauna – perfekt efter en dag i bakken\r\n- Gratis parkering lige ved hytten\r\n- Terrasse og god udsigt mod fjeld og natur\r\n",
+                                                                                   "de-CH":  "Willkommen in Fagerhøy, einer grosszügigen Familienhütte. Fagerhøy 1181 ist eine grosszügige Familienhütte mit 113 m², 10 Schlafplätzen, 3 Schlafzimmern, 2 Wohnstuben und 2 Bädern – eines mit Sauna. Zentral gelegen, aber abgeschirmt im Trysil Høyfjellssenter. Ski in/Ski out für Langlauf und Alpin.\r\n\r\nDie Hütte beinhaltet:\r\n\r\n- Drei Schlafzimmer mit 8 Schlafplätzen und ein Schlafsofa im Doppelwohnzimmer\r\n- Helle und geräumige Wohnstube mit bequemen Möbeln und TV\r\n- Voll ausgestattete Küche – ideal zum Kochen und gemeinsamen Essen\r\n- Zwei Bäder, eines davon mit eigener Sauna – perfekt nach einem Tag auf der Piste\r\n- Gratis Parkplätze direct bei der Hütte\r\n- Veranda und schöne Aussicht auf Berg und Natur",
+                                                                                   "de-DE":  "Willkommen in Fagerhøy, einer großzügigen Familienhütte. Fagerhøy 1181 ist eine großzügige Familienhütte mit 113 m², 10 Schlafplätzen, 3 Schlafzimmern, 2 Wohnzimmern und 2 Bädern – eines mit Sauna. Zentral gelegen, aber abgeschirmt im Trysil Høyfjellssenter. Ski in/Ski out für Langlauf und Alpinski.\r\n\r\nDie Hütte verfügt über:\r\n\r\n- Drei Schlafzimmer mit 8 Schlafplätzen und ein Schlafsofa im Dachgeschoss-Wohnzimmer\r\n- Helles und geräumiges Wohnzimmer mit bequemen Möbeln und TV\r\n- Voll ausgestattete Küche – ideal zum Kochen und gemeinsamen Essen\r\n- Zwei Bäder, eines davon mit eigener Sauna – perfekt nach einem Tag auf der Piste\r\n- Kostenlose Parkplätze direkt an der Hütte\r\n- Veranda und schöner Blick auf Berge und Natur",
+                                                                                   "el-GR":  "Καλώς ήρθατε στο Fagerhøy, ένα ευρύχωρο οικογενειακό κατάλυμα. Το Fagerhøy 1181 είναι ένα ευρύχωρο οικογενειακό σαλέ 113 τ.μ. με 10 κρεβάτια, 3 υπνοδωμάτια, 2 καθιστικά και 2 μπάνια – το ένα με σάουνα. Βρίσκεται σε κεντρικό αλλά ήσυχο σημείο στο Trysil Høyfjellssenter. Ski in/ski out για σκι αντοχής και κατάβασης.\r\n\r\nΤο σαλέ περιλαμβάνει:\r\n\r\n- Τρία υπνοδωμάτια με 8 κρεβάτια και έναν καναπέ-κρεβάτι στη σοφίτα\r\n- Φωτεινό και ευρύχωρο σαλόνι με άνετα έπιπλα και τηλεόραση\r\n- Πλήρως εξοπλισμένη κουζίνα – ιδανική για μαγείρεμα και γεύματα μαζί\r\n- Δύο μπάνια, το ένα με ιδιωτική σάουνα – τέλειο μετά το σκι\r\n- Δωρεάν χώρος στάθμευσης δίπλα στο σαλέ\r\n- Βεράντα με θέα στο βουνό και τη φύση",
+                                                                                   "en-GB":  "Welcome to Fagerhøy, a spacious family lodge. Fagerhøy 1181 is a spacious family lodge of 113 m² with 10 beds, 3 bedrooms, 2 living rooms and 2 bathrooms – one with a sauna. Centrally located yet sheltered at Trysil Høyfjellssenter. Ski in/ski out to both cross-country and alpine skiing.\r\n\r\nThe lodge features:\r\n\r\n- Three bedrooms with 8 beds, plus a sofa bed in the mezzanine lounge\r\n- Bright and roomy lounge with comfortable seating and TV\r\n- Fully equipped kitchen – ideal for cooking and enjoying meals together\r\n- Two bathrooms, one with its own sauna – perfect after a day on the slopes\r\n- Free parking right by the lodge\r\n- Veranda with excellent views of the mountains and nature\r\n",
+                                                                                   "ca-ES":  "Benvinguts a Fagerhøy, un ampli refugi familiar. Fagerhøy 1181 és un ampli refugi familiar de 113 m² amb 10 places per dormir, 3 habitacions, 2 sales d’estar i 2 banys – un amb sauna. Situat de manera central però resguardat a Trysil Høyfjellssenter. Ski in/ski out tant per esquí de fons com alpí.\r\n\r\nLa cabana disposa de:\r\n\r\n- Tres habitacions amb 8 places per dormir, i un sofà llit a la sala de sobretaula\r\n- Zona d’estar lluminosa i espaiosa amb mobles confortables i TV\r\n- Cuina completament equipada – ideal per cuinar i gaudir de menjar plegats\r\n- Dos banys, un dels quals amb sauna – perfecte després d’un dia a les pistes\r\n- Aparcament gratuït just a fora de la cabana\r\n- Porxo amb magnífiques vistes a la muntanya i la natura",
+                                                                                   "eu-ES":  "Ongietorri Fagerhøy-ra, familia kabina zabala. Fagerhøy 1181 113 m²-ko familia kabina zabala da, 10 logelekin, 3 logela, 2 egongela eta 2 komun – bat sauna batekin. Kokapen zentral baina babesgarria Trysil Høyfjellssenter-en. Ski in/ski out bai eski mendi bai ibilbideetan.\r\n\r\nKabina hau dauka:\r\n\r\n- Hiru logela 8 lekuak, eta loft egongelan ohe-sofa\r\n- Argitsu eta Zabala egongela altzarri erosoekin eta telebistarekin\r\n- Sukalde oso hornituta – janari prestatzeko eta afari atseginak egiteko egokia\r\n- Bi komun, bata saunarekin – pistetatik egun baten ondoren perfectua\r\n- Parkeatzeko doakoa kabina ondoan\r\n- Veranda eta mendien zein naturaren ikuspegi ona",
+                                                                                   "es-ES":  "Bienvenidos a Fagerhøy, una espaciosa cabaña familiar. Fagerhøy 1181 es una espaciosa cabaña familiar de 113 m² con 10 plazas, 3 dormitorios, 2 salas de estar y 2 baños – uno con sauna. Ubicada de forma central pero resguardada en Trysil Høyfjellssenter. Ski in/ski out para esquí de fondo y alpino.\r\n\r\nLa cabaña cuenta con:\r\n\r\n- Tres dormitorios con 8 plazas y un sofá-cama en el salón del ático\r\n- Sala luminosa y espaciosa con muebles cómodos y TV\r\n- Cocina completamente equipada – ideal para cocinar y disfrutar de las comidas\r\n- Dos baños, uno con sauna propia – perfecto tras un día en las pistas\r\n- Estacionamiento gratuito justo al lado de la cabaña\r\n- Terraza con Buena vista a la montaña y la naturaleza",
+                                                                                   "et-EE":  "Tere tulemast Fagerhøysse, avarasse perehütisse\r\nFagerhøy 1181 on avar perehütike 113 m², 10 magamiskohaga, 3 magamistoaga, 2 elutoaga ja 2 vannitoaga – üks neist saunaga. Asub tsentraalselt, ent privaatse asukohaga Trysil Høyfjellssenteris. Ski in/ski out nii suusatamiseks kui murdmaasuusatamiseks.\r\n\r\nHütis on:\r\n\r\n- Kolm magamistuba 8 magamiskohaga ja laiendatav diivan pööningus\r\n- Hele ja avar elutuba mugavate mööblite ja telekaga\r\n- Täielikult sisustatud köök – ideaalne kokkamiseks ja ühisteks toidukordadeks\r\n- Kaks vannituba, üks saunaga – ideaalne pärast päeva nõlvadel\r\n- Tasuta parkimine otse hütist\r\n- Verand ja suurepärane vaade mägedele ja loodusele",
+                                                                                   "fi-FI":  "Tervetuloa Fagerhøyhin, tilavaan perhemökkiin. Fagerhøy 1181 on tilava perhemökki, 113 m², jossa on 10 vuodepaikkaa, 3 makuuhuonetta, 2 olohuonetta ja 2 kylpyhuonetta – toisessa on sauna. Sijaitsee keskeisellä mutta rauhallisella paikalla Trysil Høyfjellssenterissä. Ski in/ski out maastohiihtoon ja lasketteluun.\r\n\r\nMökissä on:\r\n\r\n- Kolme makuuhuonetta, joissa 8 vuodepaikkaa, ja vuodesohva parvella\r\n- Valoisa ja avara olohuone mukavilla huonekaluilla ja televisiolla\r\n- Täysin varusteltu keittiö – ihanteellinen ruoanlaittoon ja yhdessä syömiseen\r\n- Kaksi kylpyhuonetta, joista toisessa oma sauna – täydellinen päivän jälkeen rinteillä\r\n- Ilmainen pysäköinti aivan mökin vieressä\r\n- Veranta ja hyvä näkymä vuoristoon ja luontoon",
+                                                                                   "fr-CA":  "Bienvenue à Fagerhøy, un chalet familial spacieux. Fagerhøy 1181 est un grand chalet familial de 113 m² pouvant accueillir 10 personnes, avec 3 chambres, 2 salons et 2 salles de bain – dont une avec sauna. Situé de façon centrale mais à l’abri au Trysil Høyfjellssenter. Ski in/ski out pour ski de fond et alpin.\r\n\r\nLe chalet comprend :\r\n\r\n- Trois chambres totalisant 8 lits, plus un divan-lit dans le salon mezzanine\r\n- Salon lumineux et spacieux avec meubles confortables et téléviseur\r\n- Cuisine toute équipée – parfaite pour cuisiner et partager des repas\r\n- Deux salles de bain, dont une avec sauna – parfaite après une journée sur les pentes\r\n- Stationnement gratuity juste devant le chalet\r\n- Véranda offrant une belle vue sur les montagnes et la nature",
+                                                                                   "fr-FR":  "Bienvenue à Fagerhøy, un chalet familial spacieux. Fagerhøy 1181 est un chalet familial spacieux de 113 m² avec 10 couchages, 3 chambres, 2 salons et 2 salles de bains – dont une avec sauna. Situé de façon centrale mais isolée au Trysil Høyfjellssenter. Ski in/ski out pour ski de fond et alpin.\r\n\r\nLe chalet comprend :\r\n\r\n- Trois chambres avec 8 couchages, et un canapé-lit dans le salon mezzanine\r\n- Un salon lumineux et spacieux avec mobilier comfortable et TV\r\n- Une cuisine entièrement équipée – idéale pour cuisiner et partager des repas\r\n- Deux salles de bains, dont une avec sauna – parfait après une journée sur les pistes\r\n- Parking gratuity juste à côté du chalet\r\n- Véranda avec belle vue sur la montagne et la nature",
+                                                                                   "is-IS":  "Velkomin/n til Fagerhøy, rúmgóðs fjölskylduhýbýlis. Fagerhøy 1181 er rúmgott fjölskylduhýbýli að stærð 113 m² með 10 svefnplássum, 3 svefnherbergjum, 2 setustofum og 2 baðherbergjum – eitt með gufubaði. Staðsett miðsvæðis en skjermað við Trysil Høyfjellssenter. Ski in/ski out fyrir bæði skíðagöngu og alpinkörfu.\r\n\r\nHýbýlið inniheldur:\r\n\r\n- Þrjú svefnherbergi með 8 svefnplássum og svefnsófa í loftstofu\r\n- Ljós og rúmgóð stofu með þægilegum húsgögnum og sjónvarpi\r\n- Fullbúnu eldhúsi – frábært til að elda og njóta máltíða saman\r\n- Tvö baðherbergi, þar af eitt með eigið gufubað – fullkomið eftir skíðadag\r\n- Ókeypis bílastæði við hýbýlið\r\n- Verönd með góðu útsýni til fjalla og náttúru",
+                                                                                   "it-IT":  "Benvenuti a Fagerhøy, una spaziosa casa vacanze per famiglie. Fagerhøy 1181 è una spaziosa casa vacanze di 113 m² con 10 posti letto, 3 camere da letto, 2 soggiorni e 2 bagni – uno con sauna. Situata in posizione centrale ma appartata presso Trysil Høyfjellssenter. Accesso diretto alle piste da sci di fondo e da discesa (ski in/ski out).\r\n\r\nLa casa include:\r\n\r\n- Tre camera da letto con 8 posti letto, più un divano letto nel soppalco\r\n- Soggiorno Luminoso e spazioso con mobili confortevoli e TV\r\n- Cucina completamente attrezzata – ideale per cucinare e pranzare in compagnia\r\n- Due bagni, uno con sauna privata – perfetto dopo una giornata sulle piste\r\n- Parcheggio gratuito Accanto alla casa\r\n- Veranda con splendida vista su montagne e natura",
+                                                                                   "ja-JP":  "Fagerhøyへようこそ。広々としたファミリーキャビンです。Fagerhøy 1181は、113㎡の広々としたファミリーキャビンで、10人分のベッド、3つの寝室、2つのリビングルーム、2つのバスルーム（うち1つはサウナ付き）を備えています。Trysil Høyfjellssenterの中心に位置しながらも静かな環境にあります。クロスカントリーおよびアルペンスキーのどちらにも対応したski in/ski outです。\r\n\r\nキャビンには以下が含まれます：\r\n\r\n8人用のベッドがある3つの寝室と、ロフトリビングにあるソファベッド\r\n\r\n明るく広々としたリビングルーム、快適な家具とテレビ付き\r\n\r\n完全装備のキッチン – 料理や食事に最適\r\n\r\n2つのバスルームのうち1つには専用サウナ付き – スキー後に最適\r\n\r\nキャビンのすぐそばに無料駐車場\r\n\r\n山と自然を一望できるベランダ",
+                                                                                   "ka-GE":  "მოგესალმებით ფაგერჰოიში — просторიან საოჯახო ქოხში. Fagerhøy 1181 არის 113 მ² ფართობის ფართო საოჯახო ქოხი, 10 საწოლით, 3 საძინებლით, 2 მისაღები ოთახით და 2 სველი წერტილით — ერთში საუნით. მდებარეობს Trysil Høyfjellssenter-ში — ცენტრალურად, მაგრამ დაცულ ადგილას. Ski in/ski out როგორც სამთო, ისე გრძელი მანძილის თხილამურებზე სრიალისთვის.\r\n\r\nქოხი მოიცავს:\r\n\r\n- სამი საძინებელი 8 საწოლით და მისაღებში მდგარი გადაშლადი დივანი\r\n- ნათელი და ფართო მისაღები ოთახი კომფორტული ავეჯითა და ტელევიზორით\r\n- სრულად აღჭურვილი სამზარეულო — იდეალური საჭმლის მოსამზადებლად და ერთობლივი ვახშმებისთვის\r\n- ორი სველი წერტილი, ერთ-ერთი პირადი საუნით — იდეალური დღის ბოლოს\r\n- უფასო პარკინგი პირდაპირ ქოხის გვერდით\r\n- ვერანდა მშვენიერი ხედით მთებსა და ბუნებაზე",
+                                                                                   "ko-KR":  "Fagerhøy에 오신 것을 환영합니다. 넓은 가족용 오두막입니다. Fagerhøy 1181은 113㎡ 규모의 넓은 가족용 오두막으로, 침대 10개, 침실 3개, 거실 2개, 욕실 2개(그중 하나는 사우나 포함)가 있습니다. Trysil Høyfjellssenter의 중심에 위치하지만 조용한 장소에 있습니다. 크로스컨트리 및 알파인 스키 모두에 ski in/ski out 가능합니다.\r\n\r\n오두막에는 다음이 포함됩니다:\r\n\r\n침대 8개가 있는 침실 3개와 다락방 거실에 있는 소파베드\r\n\r\n밝고 넓은 거실, 편안한 가구와 TV 포함\r\n\r\n완비된 주방 – 요리 및 식사에 이상적\r\n\r\n욕실 2개 중 하나는 개인 사우나 포함 – 스키 후 완벽\r\n\r\n오두막 바로 옆 무료 주차\r\n\r\n산과 자연 전망이 있는 베란다",
+                                                                                   "lv-LV":  "Laipni lūdzam Fagerhøy – plašā ģimenes atpūtas mājā. Fagerhøy 1181 ir plaša ģimenes atpūtas māja ar 113 m² platību, 10 guļvietām, 3 guļamistabām, 2 viesistabām un 2 vannasistabām – viena ar pirti. Atrašanās vieta – centrāla, bet klusa Trysil Høyfjellssenter. Tieša piekļuve distanču un kalnu slēpošanai.\r\n\r\nMājā ir:\r\n\r\n- Trīs guļamistabas ar 8 guļvietām un izvelkams dīvāns bēniņu viesistabā\r\n- Gaiša un plaša viesistaba ar ērtām mēbelēm un televizoru\r\n- Pilnībā aprīkota virtuve – ideāli piemērota ēdiena gatavošanai un maltītēm kopā\r\n- Divas vannasistabas, viena ar privātu pirti – ideāli pēc dienas kalnos\r\n- Bezmaksas autostāvvieta pie mājas\r\n- Veranda ar lielisku skatu uz kalniem un dabu",
+                                                                                   "ms-MY":  "Selamat datang ke Fagerhøy, kabin keluarga yang luas. Fagerhøy 1181 ialah kabin keluarga seluas 113 m² dengan 10 tempat tidur, 3 bilik tidur, 2 ruang tamu dan 2 bilik air – satu dengan sauna. Terletak secara strategik tetapi terlindung di Trysil Høyfjellssenter. Akses terus ski in/ski out untuk ski merentas desa dan alpine.\r\n\r\nKabin ini mengandungi:\r\n- Tiga bilik tidur dengan 8 tempat tidur, serta sofa katil di ruang loteng\r\n- Ruang tamu yang cerah dan luas dengan perabot selesa dan TV\r\n- Dapur lengkap – sesuai untuk memasak dan makan Bersama\r\n- Dua bilik air, salah satu dengan sauna peribadi – sempurna selepas seharian di lereng\r\n- Tempat letak kereta percuma bersebelahan kabin\r\n- Veranda dengan pemandangan indah ke gunung dan alam semula jadi",
+                                                                                   "nl-NL":  "Welkom bij Fagerhøy, een ruime familiehut. Fagerhøy 1181 is een ruime familiehut van 113 m² met 10 slaapplaatsen, 3 slaapkamers, 2 woonkamers en 2 badkamers – waarvan één met sauna. Gelegen op een centrale maar beschutte plek in Trysil Høyfjellssenter. Ski in/ski out voor zowel langlaufen als alpineskiën.\r\n\r\nDe hut beschikt over:\r\n- Drie slaapkamers met 8 slaapplaatsen, en een slaapbank op de zolderkamer\r\n- Heldere en ruime woonkamer met comfortabele meubels en tv\r\n- Volledig uitgeruste keuken – ideaal om te koken en samen te eten\r\n- Twee badkamers, waarvan één met eigen sauna – perfect na een dag op de piste\r\n- Gratis parkeren direct bij de hut\r\n- Veranda met prachtig uitzicht op de bergen en natuur",
+                                                                                   "nb-NO":  "Velkommen til Fagerhøy, en romslig familiehytte. Fagerhøy 1181 er en romslig familiehytte på 113 m² med 10 sengeplasser, 3 soverom, 2 stuer og 2 bad – ett med badstue. Beliggende sentralt men skjermet på Trysil Høyfjellssenter. Ski in/ski out til både langrenn og alpint.\r\n\r\nHytten inneholder:\r\n\r\n- Tre soverom med 8 sengeplasser, og en sovesofa på loftsstue\r\n- Lys og romslig stue med komfortable møbler og TV\r\n- Fullt utstyrt kjøkken – ideelt for matlaging og hyggelige måltider\r\n- To bad, hvorav ett med egen badstue – perfekt etter en dag i bakken\r\n- Gratis parkering rett ved hytten\r\n- Veranda og god utsikt mot fjell og natur ",
+                                                                                   "pl-PL":  "Witamy w Fagerhøy – przestronnym domku rodzinnym. Fagerhøy 1181 to przestronny domek rodzinny o powierzchni 113 m² z 10 miejscami do spania, 3 sypialniami, 2 salonami i 2 łazienkami – jedna z sauną. Położony centralnie, ale osłonięty, w Trysil Høyfjellssenter. Dostęp ski in/ski out do tras biegowych i zjazdowych.\r\n\r\nDomek zawiera:\r\n- Trzy sypialnie z 8 miejscami do spania i rozkładaną sofą na antresoli\r\n- Jasny i przestronny salon z wygodnymi meblami i telewizorem\r\n- W pełni wyposażona kuchnia – idealna do gotowania i wspólnych posiłków\r\n- Dwie łazienki, z czego jedna z prywatną sauną – doskonała po dniu na stoku\r\n- Darmowy parking bezpośrednio przy domku\r\n- Weranda z pięknym widokiem na góry i przyrodę",
+                                                                                   "pt-BR":  "Bem-vindo ao Fagerhøy, um espaçoso chalé familiar. Fagerhøy 1181 é um chalé familiar espaçoso de 113 m² com 10 camas, 3 quartos, 2 salas de estar e 2 banheiros – um deles com sauna. Localizado centralmente, mas em uma área reservada no Trysil Høyfjellssenter. Acesso ski in/ski out para esqui cross-country e alpino.\r\n\r\nO chalé inclui:\r\n\r\n- Três quartos com 8 camas e um sofá-cama no mezanino\r\n- Sala de estar ampla e iluminada com móveis confortáveis e TV\r\n- Cozinha totalmente equipada – ideal para cozinhar e compartilhar refeições\r\n- Dois banheiros, um com sauna privativa – perfeito após um dia nas pistas\r\n- Estacionamento gratuito ao lado do chalé\r\n- Varanda com bela vista para as montanhas e natureza",
+                                                                                   "pt-PT":  "Bem-vindo ao Fagerhøy, um espaçoso chalé familiar. O Fagerhøy 1181 é um chalé familiar espaçoso com 113 m², 10 camas, 3 quartos, 2 salas e 2 casas de banho – uma delas com sauna. Localizado de forma central, mas resguardado no Trysil Høyfjellssenter. Ski in/ski out tanto para esqui de fundo como alpino.\r\n\r\nO chalé inclui:\r\n\r\n- Três quartos com 8 camas e um sofá-cama na sala do sótão\r\n- Sala ampla e luminosa com mobiliário confortável e televisão\r\n- Cozinha totalmente equipada – ideal para cozinhar e desfrutar das refeições\r\n- Duas casas de banho, uma com sauna privativa – perfeita após um dia na neve\r\n- Estacionamento gratuito mesmo junto ao chalé\r\n- Varanda com excelente vista para as montanhas e a natureza",
+                                                                                   "ru-RU":  "Добро пожаловать в Фагерхёй — просторный семейный коттедж. Fagerhøy 1181 — это просторный семейный коттедж площадью 113 м², с 10 спальными местами, 3 спальнями, 2 гостиными и 2 ванными комнатами — одна с сауной. Расположен в центре, но уединённо, в Trysil Høyfjellssenter. Ski in/ski out как для беговых, так и для горных лыж.\r\n\r\nВ коттедже есть:\r\n\r\n- Три спальни с 8 кроватями и раскладной диван в мансарде\r\n- Светлая и просторная гостиная с удобной мебелью и телевизором\r\n- Полностью оборудованная кухня — идеально для готовки и семейных обедов\r\n- Две ванные комнаты, одна с собственной сауной — идеально после катания\r\n- Бесплатная парковка рядом с коттеджем\r\n- Терраса с прекрасным видом на горы и природу\r\n",
+                                                                                   "sk-SK":  "Vitajte vo Fagerhøy, priestrannej rodinnej chate. Fagerhøy 1181 je priestranná rodinná chata s rozlohou 113 m², s 10 lôžkami, 3 spálňami, 2 obývačkami a 2 kúpeľňami – jedna so saunou. Centrálne, no ticho situovaná v Trysil Høyfjellssenter. Priamy prístup na bežkárske aj zjazdové trate (ski in/ski out).\r\n\r\nChata obsahuje:\r\n\r\n- Tri spálne s 8 lôžkami a rozkladacou pohovkou v podkrovnej obývačke\r\n- Svetlá a priestranná obývačka s pohodlným nábytkom a televízorom\r\n- Plne vybavená kuchyňa – ideálna na varenie a spoločné stolovanie\r\n- Dve kúpeľne, jedna s vlastnou saunou – perfektné po dni na svahu\r\n- Bezplatné parkovanie priamo pri chate\r\n- Veranda s výhľadom na hory a prírodu",
+                                                                                   "sv-SE":  "Välkommen till Fagerhøy, en rymlig familjestuga. Fagerhøy 1181 är en rymlig familjestuga på 113 m² med 10 bäddar, 3 sovrum, 2 vardagsrum och 2 badrum – ett med bastu. Centralt men avskilt belägen vid Trysil Høyfjellssenter. Ski in/ski out till både längd- och alpinskidåkning.\r\n\r\nStugan innehåller:\r\n\r\n- Tre sovrum med 8 bäddar samt en bäddsoffa på loftet\r\n- Ljust och rymligt vardagsrum med bekväma möbler och TV\r\n- Fullt utrustat kök – perfekt för matlagning och gemensamma måltider\r\n- Två badrum, ett med egen bastu – perfekt efter en dag i backen\r\n- Gratis parkering precis vid stugan\r\n- Veranda med fin utsikt över fjäll och natur",
+                                                                                   "ta-IN":  "Fagerhøy-க்கு வரவேற்கிறோம் – இது ஒரு விசாலமான குடும்பக் குடிலாகும்.Fagerhøy 1181 என்பது 113 மீ² பரப்பளவிலான, 10 படுக்கையிடங்களுடன் கூடிய ஒரு விசாலமான குடும்பக் குடிலாகும். இதில் 3 படுக்கையறைகள், 2 வாசல் அறைகள் மற்றும் 2 குளியலறைகள் உள்ளன – ஒன்று சாவ்னாவுடன். Trysil Høyfjellssenter இல் மையமாகவே இருந்தாலும் அமைதியான இடத்தில் உள்ளது. நீளத்தோறும் மற்றும் மலையேறும் ஸ்கியுக்கான \u0027ski in/ski out\u0027 வசதியுடன்.\r\n\r\nகுடிலில் உள்ளவை:\r\n\r\n- 8 படுக்கையுடன் 3 அறைகள், மேலும் மேல்வாசலில் ஒரு மெத்தையுடன் கூடிய சோபா\r\n- ஒளி நிறைந்த, விசாலமான வாசலறை – வசதியான மரச்சாமான்களும் டிவியும் உள்ளன\r\n- முழுமையாக அமைக்கப்பட்ட சமையலறை – சமைக்கவும் சேர்ந்து உணவுசெய்யவும் சிறந்தது\r\n- இரண்டு குளியலறைகள், இதில் ஒன்று தனியுரிமையுடன் கூடிய சாவ்னாவுடன்\r\n- குடிலின் அருகிலேயே இலவச வாகனநிலையம்\r\n- மலையும் இயற்கையையும் நோக்கி அமைந்த விராங்களும்",
+                                                                                   "tr-TR":  "Fagerhøy\u0027a hoş geldiniz, geniş bir aile kabini. Fagerhøy 1181, 113 m² alana sahip, 10 yataklı, 3 yatak odalı, 2 oturma odalı ve 2 banyolu – birinde sauna bulunan geniş bir aile kabinidir. Trysil Høyfjellssenter\u0027de merkezi ama sakin bir konumda yer alır. Hem kayak hem de kayaklı koşu için ski in/ski out erişimi vardır.\r\n\r\nKabin şunları içerir:\r\n\r\n- 8 yataklı üç yatak odası ve çatı katı salonunda bir çekyat\r\n- Rahat mobilyalı, aydınlık ve ferah bir oturma odası ve TV\r\n- Tam donanımlı mutfak – yemek pişirmek ve keyifli yemekler için ideal\r\n- İki banyo, biri özel saunalı – kayak sonrası mükemmel\r\n- Kabinin hemen yanında ücretsiz otopark\r\n- Dağ ve doğa manzaralı veranda",
+                                                                                   "uk-UA":  "Ласкаво просимо до Fagerhøy — просторої сімейної хатини. Fagerhøy 1181 — це простора сімейна хатина площею 113 м² з 10 спальними місцями, 3 спальнями, 2 вітальнями та 2 ванними кімнатами — одна з яких має сауну. Розташована в центрі, але в тихому місці в Trysil Høyfjellssenter. Прямий доступ до трас для бігових та гірських лиж (ski in/ski out).\r\n\r\nУ хатині є:\r\n\r\n- Три спальні з 8 спальними місцями та розкладний диван у вітальні на мансарді\r\n- Світла та простора вітальня з зручними меблями та телевізором\r\n- Повністю обладнана кухня — ідеально підходить для приготування їжі та спільних трапез\r\n- Дві ванні кімнати, одна з власною сауною — чудово після катання\r\n- Безкоштовна парковка прямо біля хатини\r\n- Веранда з чудовим краєвидом на гори та природу",
+                                                                                   "zh-CN":  "欢迎来到 Fagerhøy，一间宽敞的家庭小屋 Fagerhøy 1181 是一间面积为 113 平方米的宽敞家庭小屋，设有 10 个床位、3 间卧室、2 个起居室和 2 间浴室（其中一间配有桑拿）。位于 Trysil Høyfjellssenter 的中心地段但位置安静。支持滑雪进出，适合越野和高山滑雪。\r\n\r\n小屋包括：\r\n\r\n三间卧室，配有 8 个床位，阁楼起居室配有沙发床\r\n\r\n明亮宽敞的客厅，配有舒适家具和电视\r\n\r\n设备齐全的厨房 – 非常适合做饭和共享用餐\r\n\r\n两间浴室，其中一间设有私人桑拿 – 滑雪后非常放松\r\n\r\n小屋旁提供免费停车位\r\n\r\n阳台可欣赏山景和自然风光",
+                                                                                   "en-US":  "Welcome to Fagerhøy, a spacious family cabin. Fagerhøy 1181 is a spacious family cabin spanning 113 m² with 10 beds, 3 bedrooms, 2 living rooms and 2 bathrooms – one featuring a sauna. Centrally located yet tucked away at Trysil Høyfjellssenter. Ski in/ski out for both cross-country and downhill skiing.\r\n\r\nThe cabin includes:\r\n\r\n- Three bedrooms with 8 beds, plus a sleeper sofa in the loft lounge\r\n- Bright and expansive living room with comfy furniture and TV\r\n- Fully equipped kitchen – perfect for cooking and cosy meals\r\n- Two bathrooms, one with its own sauna – ideal after a day on the slopes\r\n- Free parking right next to the cabin\r\n- Veranda with great views of the mountains and nature"
+                                                                               },
+                                                              "Ordering":  0,
+                                                              "Capacity":  10,
+                                                              "ExtraCapacity":  0,
+                                                              "ExternalIdentifier":  "122-22",
+                                                              "AccountingCategoryId":  "756e1768-c984-410d-ba9b-b30600bd0ae6"
+                                                          }
+                                                      ],
+                               "Cursor":  null
+                           },
+    "report":  [
+
+               ]
+}

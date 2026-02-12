@@ -1,0 +1,48 @@
+﻿**********************
+Windows PowerShell transcript start
+Start time: 20260123162221
+Username: DESKTOP-JT\jante
+RunAs User: DESKTOP-JT\jante
+Configuration Name: 
+Machine: DESKTOP-JT (Microsoft Windows NT 10.0.22621.0)
+Host Application: C:\WINDOWS\System32\WindowsPowerShell\v1.0\powershell.exe
+Process ID: 4736
+PSVersion: 5.1.22621.4249
+PSEdition: Desktop
+PSCompatibleVersions: 1.0, 2.0, 3.0, 4.0, 5.0, 5.1.22621.4249
+BuildVersion: 10.0.22621.4249
+CLRVersion: 4.0.30319.42000
+WSManStackVersion: 3.0
+PSRemotingProtocolVersion: 2.3
+SerializationVersion: 1.1.0.1
+**********************
+PS C:\Users\jante\bno-api> try {
+  Write-Host "== RUN MEWS SYNC =="
+
+  # Viktig: --yes hindrer npx fra å spørre interaktivt i enkelte tilfeller
+  npx --yes ts-node .\scripts\mews-sync-cleaning.ts
+
+  $code = $LASTEXITCODE
+  if ($code -ne 0) {
+    throw "mews-sync-cleaning.ts exit code: $code"
+  }
+
+  Write-Host "OK"
+  Stop-Transcript | Out-Null
+  exit 0
+}
+catch {
+  Write-Error $_
+  try { Stop-Transcript | Out-Null } catch {}
+  exit 1
+}
+== RUN MEWS SYNC ==
+Nye vask-oppdrag:        0
+Oppdaterte vask-oppdrag: 0
+Nye sengetøy-oppdrag:    0
+Oppdaterte sengetøy:     0
+OK
+**********************
+Windows PowerShell transcript end
+End time: 20260123163306
+**********************
