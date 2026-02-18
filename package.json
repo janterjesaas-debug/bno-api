@@ -7,14 +7,11 @@
   "scripts": {
     "dev": "dotenv -e .env -- ts-node server.ts",
     "dev:prod": "dotenv -e .env.prod -- ts-node server.ts",
-
     "build": "tsc -p tsconfig.json",
     "start": "node dist/server.js",
     "start:prod": "dotenv -e .env.prod -- node dist/server.js",
-
     "clean": "rimraf dist node_modules package-lock.json",
     "reinstall": "npm run clean && npm cache verify && npm install --registry=https://registry.npmjs.org/",
-
     "get:mews:prod-ids": "dotenv -e .env.prod -- ts-node lib/fetch-mews-prod-ids.ts",
     "mews:sync": "dotenv -e .env -- ts-node scripts/mews-sync.ts",
     "sync-once": "dotenv -e .env -- ts-node scripts/mews-sync.ts",
@@ -24,7 +21,7 @@
     "mews:sync:cleaning": "dotenv -e .env -- ts-node scripts/mews-sync-cleaning.ts"
   },
   "dependencies": {
-    "@supabase/supabase-js": "^2.86.0",
+    "@supabase/supabase-js": "^2.95.3",
     "axios": "^1.12.2",
     "cors": "^2.8.5",
     "dotenv": "^16.6.1",
