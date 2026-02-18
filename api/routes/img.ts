@@ -53,6 +53,30 @@ function cleanPath(p: string) {
   }
 }
 
+// --- JWT payload decode (uten verifisering) for debug ---
+function base64UrlToUtf8(b64url: string): string {
+  const b64 = b64url.replace(/-/g, "+").replace(/_/g, "/");
+  const pad = b64.length % 4 === 0 ? "" : "=".repeat(4 - (b64.length % 4));
+  return Buffer.from(b64 + pad, "base64").toString("utf8");
+}
+function getJwtRef(jwt: string): string | null {
+  try {
+    const parts = (jwt || "").split(".");
+    if (parts.length < 2) return null;
+    const payload = JSON.parse(base64UrlToUtf8(parts[1]));
+    return payload?.ref || null;
+  } catch {
+    return null;
+  }
+}
+function hostFromUrl(u: string): string | null {
+  try {
+    return new URL(u).host;
+  } catch {
+    return null;
+  }
+}
+
 // =========================
 // Debug: sjekk env på server
 // =========================
@@ -63,10 +87,14 @@ router.get("/img/_debug", (_req, res) => {
       hasUrl: !!IMAGES_URL,
       hasKey: !!IMAGES_KEY,
       bucketDefault: IMAGES_BUCKET_DEFAULT,
+      urlHost: hostFromUrl(IMAGES_URL),
+      keyRef: IMAGES_KEY ? getJwtRef(IMAGES_KEY) : null,
     },
     housekeeping: {
       hasUrl: !!HK_URL,
       hasKey: !!HK_KEY,
+      urlHost: hostFromUrl(HK_URL),
+      keyRef: HK_KEY ? getJwtRef(HK_KEY) : null,
     },
     ttlSeconds: TTL_SECONDS,
   });
@@ -96,26 +124,43 @@ router.get("/img/:bucket/:path(*)", async (req, res) => {
       });
     }
 
+    // 1) Forsøk signed URL
     const { data, error } = await client.storage
       .from(bucket)
       .createSignedUrl(objectPath, TTL_SECONDS);
 
-    if (error || !data?.signedUrl) {
-      console.warn("[img] createSignedUrl failed", {
-        bucket,
-        objectPath,
-        error: error?.message,
-      });
-      return res.status(404).json({
-        ok: false,
-        error: "Image not found (or could not sign URL)",
-        bucket,
-        path: objectPath,
-      });
+    if (!error && data?.signedUrl) {
+      res.setHeader("Cache-Control", "public, max-age=300");
+      return res.redirect(302, data.signedUrl);
     }
 
-    res.setHeader("Cache-Control", "public, max-age=300");
-    return res.redirect(302, data.signedUrl);
+    // 2) Fallback: public URL (fungerer hvis bucket er public)
+    const pub = client.storage.from(bucket).getPublicUrl(objectPath);
+    const publicUrl = pub?.data?.publicUrl;
+
+    if (publicUrl) {
+      console.warn("[img] signed failed, fallback to publicUrl", {
+        bucket,
+        objectPath,
+        signedError: error?.message,
+      });
+      res.setHeader("Cache-Control", "public, max-age=300");
+      return res.redirect(302, publicUrl);
+    }
+
+    console.warn("[img] createSignedUrl failed", {
+      bucket,
+      objectPath,
+      error: error?.message,
+    });
+
+    return res.status(404).json({
+      ok: false,
+      error: "Image not found (or could not sign URL)",
+      bucket,
+      path: objectPath,
+      signedError: error?.message || null,
+    });
   } catch (e: any) {
     console.error("[img] error", e?.message || e);
     return res.status(500).json({ ok: false, error: "Internal error" });
@@ -150,17 +195,31 @@ router.get("/img", async (req, res) => {
       .from(bucket)
       .createSignedUrl(objectPath, TTL_SECONDS);
 
-    if (error || !data?.signedUrl) {
-      return res.status(404).json({
-        ok: false,
-        error: "Image not found (or could not sign URL)",
-        bucket,
-        path: objectPath,
-      });
+    if (!error && data?.signedUrl) {
+      res.setHeader("Cache-Control", "public, max-age=300");
+      return res.redirect(302, data.signedUrl);
     }
 
-    res.setHeader("Cache-Control", "public, max-age=300");
-    return res.redirect(302, data.signedUrl);
+    const pub = client.storage.from(bucket).getPublicUrl(objectPath);
+    const publicUrl = pub?.data?.publicUrl;
+
+    if (publicUrl) {
+      console.warn("[img] (query) signed failed, fallback to publicUrl", {
+        bucket,
+        objectPath,
+        signedError: error?.message,
+      });
+      res.setHeader("Cache-Control", "public, max-age=300");
+      return res.redirect(302, publicUrl);
+    }
+
+    return res.status(404).json({
+      ok: false,
+      error: "Image not found (or could not sign URL)",
+      bucket,
+      path: objectPath,
+      signedError: error?.message || null,
+    });
   } catch (e: any) {
     console.error("[img] error (query)", e?.message || e);
     return res.status(500).json({ ok: false, error: "Internal error" });
