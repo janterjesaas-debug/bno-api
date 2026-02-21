@@ -1,0 +1,470 @@
+﻿[
+    {
+        "Id":  "9fb7987c-ed27-41fe-8a80-b31b00c5fde7",
+        "EnterpriseId":  "f45553a6-6697-485a-a352-b30600bcfd4d",
+        "IsActive":  true,
+        "ParentResourceId":  null,
+        "Name":  "1173 Trysilbua ",
+        "State":  "Dirty",
+        "Descriptions":  {
+
+                         },
+        "CreatedUtc":  "2025-07-15T12:00:51Z",
+        "UpdatedUtc":  "2026-02-16T09:01:47Z",
+        "Data":  {
+                     "Discriminator":  "Space",
+                     "Value":  {
+                                   "FloorNumber":  "1",
+                                   "LocationNotes":  null
+                               }
+                 },
+        "ExternalNames":  {
+
+                          },
+        "Directions":  {
+
+                       }
+    },
+    {
+        "Id":  "8cce2c8b-8ca5-489f-9c6a-b355008c8a93",
+        "EnterpriseId":  "f45553a6-6697-485a-a352-b30600bcfd4d",
+        "IsActive":  true,
+        "ParentResourceId":  null,
+        "Name":  "12A Trysiltunet ",
+        "State":  "Dirty",
+        "Descriptions":  {
+
+                         },
+        "CreatedUtc":  "2025-09-11T08:31:41Z",
+        "UpdatedUtc":  "2026-02-15T15:27:37Z",
+        "Data":  {
+                     "Discriminator":  "Space",
+                     "Value":  {
+                                   "FloorNumber":  "1",
+                                   "LocationNotes":  null
+                               }
+                 },
+        "ExternalNames":  {
+
+                          },
+        "Directions":  {
+
+                       }
+    },
+    {
+        "Id":  "d8cce4ac-c9aa-4f5a-b394-b31b00c867eb",
+        "EnterpriseId":  "f45553a6-6697-485a-a352-b30600bcfd4d",
+        "IsActive":  true,
+        "ParentResourceId":  null,
+        "Name":  "12B Trysiltunet ",
+        "State":  "Dirty",
+        "Descriptions":  {
+
+                         },
+        "CreatedUtc":  "2025-07-15T12:09:39Z",
+        "UpdatedUtc":  "2025-12-28T10:37:03Z",
+        "Data":  {
+                     "Discriminator":  "Space",
+                     "Value":  {
+                                   "FloorNumber":  "1",
+                                   "LocationNotes":  null
+                               }
+                 },
+        "ExternalNames":  {
+
+                          },
+        "Directions":  {
+
+                       }
+    },
+    {
+        "Id":  "53a65e20-c1e5-4b0c-83e6-b3bb00bb1da6",
+        "EnterpriseId":  "f45553a6-6697-485a-a352-b30600bcfd4d",
+        "IsActive":  true,
+        "ParentResourceId":  null,
+        "Name":  "14 Vestsidevegen ",
+        "State":  "Dirty",
+        "Descriptions":  {
+
+                         },
+        "CreatedUtc":  "2025-12-22T11:21:16Z",
+        "UpdatedUtc":  "2026-02-12T17:42:32Z",
+        "Data":  {
+                     "Discriminator":  "Space",
+                     "Value":  {
+                                   "FloorNumber":  "1",
+                                   "LocationNotes":  "14"
+                               }
+                 },
+        "ExternalNames":  {
+
+                          },
+        "Directions":  {
+
+                       }
+    },
+    {
+        "Id":  "155769ec-d725-4fdc-b001-b31b00c84d03",
+        "EnterpriseId":  "f45553a6-6697-485a-a352-b30600bcfd4d",
+        "IsActive":  true,
+        "ParentResourceId":  null,
+        "Name":  "16A Trysiltunet ",
+        "State":  "Dirty",
+        "Descriptions":  {
+
+                         },
+        "CreatedUtc":  "2025-07-15T12:09:16Z",
+        "UpdatedUtc":  "2025-11-14T03:12:34Z",
+        "Data":  {
+                     "Discriminator":  "Space",
+                     "Value":  {
+                                   "FloorNumber":  "1",
+                                   "LocationNotes":  null
+                               }
+                 },
+        "ExternalNames":  {
+
+                          },
+        "Directions":  {
+
+                       }
+    },
+    {
+        "Id":  "95e40a70-0e45-4c32-86ed-b31b00c8349d",
+        "EnterpriseId":  "f45553a6-6697-485a-a352-b30600bcfd4d",
+        "IsActive":  true,
+        "ParentResourceId":  null,
+        "Name":  "17A Bakkebygrenda ",
+        "State":  "Dirty",
+        "Descriptions":  {
+
+                         },
+        "CreatedUtc":  "2025-07-15T12:08:55Z",
+        "UpdatedUtc":  "2026-02-15T15:27:21Z",
+        "Data":  {
+                     "Discriminator":  "Space",
+                     "Value":  {
+                                   "FloorNumber":  "1",
+                                   "LocationNotes":  null
+                               }
+                 },
+        "ExternalNames":  {
+
+                          },
+        "Directions":  {
+
+                       }
+    },
+    {
+        "Id":  "d8b3982a-2f94-463c-baab-b31b00c8880b",
+        "EnterpriseId":  "f45553a6-6697-485a-a352-b30600bcfd4d",
+        "IsActive":  true,
+        "ParentResourceId":  null,
+        "Name":  "34B Trysil",
+        "State":  "Dirty",
+        "Descriptions":  {
+
+                         },
+        "CreatedUtc":  "2025-07-15T12:10:06Z",
+        "UpdatedUtc":  "2026-02-15T15:27:45Z",
+        "Data":  {
+                     "Discriminator":  "Space",
+                     "Value":  {
+                                   "FloorNumber":  "1",
+                                   "LocationNotes":  null
+                               }
+                 },
+        "ExternalNames":  {
+
+                          },
+        "Directions":  {
+
+                       }
+    },
+    {
+        "Id":  "9bd6bdf6-aad0-4364-af77-b355008d07f7",
+        "EnterpriseId":  "f45553a6-6697-485a-a352-b30600bcfd4d",
+        "IsActive":  true,
+        "ParentResourceId":  null,
+        "Name":  "981D Fageråsen (B2)",
+        "State":  "Dirty",
+        "Descriptions":  {
+
+                         },
+        "CreatedUtc":  "2025-09-11T08:33:28Z",
+        "UpdatedUtc":  "2026-02-15T15:27:56Z",
+        "Data":  {
+                     "Discriminator":  "Space",
+                     "Value":  {
+                                   "FloorNumber":  "2",
+                                   "LocationNotes":  null
+                               }
+                 },
+        "ExternalNames":  {
+
+                          },
+        "Directions":  {
+
+                       }
+    },
+    {
+        "Id":  "4bb026a9-be38-4de4-b3e0-b38d0095879d",
+        "EnterpriseId":  "f45553a6-6697-485a-a352-b30600bcfd4d",
+        "IsActive":  true,
+        "ParentResourceId":  null,
+        "Name":  "Bjønnåsen 64 ",
+        "State":  "Dirty",
+        "Descriptions":  {
+
+                         },
+        "CreatedUtc":  "2025-11-06T09:04:25Z",
+        "UpdatedUtc":  "2026-02-15T15:27:28Z",
+        "Data":  {
+                     "Discriminator":  "Space",
+                     "Value":  {
+                                   "FloorNumber":  "1",
+                                   "LocationNotes":  null
+                               }
+                 },
+        "ExternalNames":  {
+
+                          },
+        "Directions":  {
+
+                       }
+    },
+    {
+        "Id":  "b1d7a7e0-e410-409d-b180-b32c00a7dae2",
+        "EnterpriseId":  "f45553a6-6697-485a-a352-b30600bcfd4d",
+        "IsActive":  true,
+        "ParentResourceId":  null,
+        "Name":  "Demo: din hytte Högfjället",
+        "State":  "Dirty",
+        "Descriptions":  {
+
+                         },
+        "CreatedUtc":  "2025-08-01T10:11:08Z",
+        "UpdatedUtc":  "2025-08-09T02:10:12Z",
+        "Data":  {
+                     "Discriminator":  "Space",
+                     "Value":  {
+                                   "FloorNumber":  "1",
+                                   "LocationNotes":  null
+                               }
+                 },
+        "ExternalNames":  {
+
+                          },
+        "Directions":  {
+
+                       }
+    },
+    {
+        "Id":  "add23c30-d56e-493c-a112-b32c00a7b2ad",
+        "EnterpriseId":  "f45553a6-6697-485a-a352-b30600bcfd4d",
+        "IsActive":  true,
+        "ParentResourceId":  null,
+        "Name":  "Demo: din hytte Lindvallen",
+        "State":  "Dirty",
+        "Descriptions":  {
+
+                         },
+        "CreatedUtc":  "2025-08-01T10:10:34Z",
+        "UpdatedUtc":  "2025-08-09T02:10:12Z",
+        "Data":  {
+                     "Discriminator":  "Space",
+                     "Value":  {
+                                   "FloorNumber":  "1",
+                                   "LocationNotes":  null
+                               }
+                 },
+        "ExternalNames":  {
+
+                          },
+        "Directions":  {
+
+                       }
+    },
+    {
+        "Id":  "deb7cf50-b3a9-46f0-bca4-b32c00a7fafe",
+        "EnterpriseId":  "f45553a6-6697-485a-a352-b30600bcfd4d",
+        "IsActive":  true,
+        "ParentResourceId":  null,
+        "Name":  "Demo: din hytte Tandådalen",
+        "State":  "Dirty",
+        "Descriptions":  {
+
+                         },
+        "CreatedUtc":  "2025-08-01T10:11:35Z",
+        "UpdatedUtc":  "2025-08-09T02:10:12Z",
+        "Data":  {
+                     "Discriminator":  "Space",
+                     "Value":  {
+                                   "FloorNumber":  "1",
+                                   "LocationNotes":  null
+                               }
+                 },
+        "ExternalNames":  {
+
+                          },
+        "Directions":  {
+
+                       }
+    },
+    {
+        "Id":  "ca099e4f-0ce7-452c-bda3-b31b00c8abc0",
+        "EnterpriseId":  "f45553a6-6697-485a-a352-b30600bcfd4d",
+        "IsActive":  true,
+        "ParentResourceId":  null,
+        "Name":  "Fagerhøy 1181",
+        "State":  "Dirty",
+        "Descriptions":  {
+                             "nb-NO":  "Dette er en test for å se om info hentes herfra"
+                         },
+        "CreatedUtc":  "2025-07-15T12:10:37Z",
+        "UpdatedUtc":  "2026-02-15T17:28:59Z",
+        "Data":  {
+                     "Discriminator":  "Space",
+                     "Value":  {
+                                   "FloorNumber":  "1",
+                                   "LocationNotes":  null
+                               }
+                 },
+        "ExternalNames":  {
+
+                          },
+        "Directions":  {
+
+                       }
+    },
+    {
+        "Id":  "4e85c9cf-2964-4392-b8f9-b32c00a44910",
+        "EnterpriseId":  "f45553a6-6697-485a-a352-b30600bcfd4d",
+        "IsActive":  true,
+        "ParentResourceId":  null,
+        "Name":  "Lintunet 721B",
+        "State":  "Dirty",
+        "Descriptions":  {
+
+                         },
+        "CreatedUtc":  "2025-08-01T09:58:08Z",
+        "UpdatedUtc":  "2026-02-16T03:30:02Z",
+        "Data":  {
+                     "Discriminator":  "Space",
+                     "Value":  {
+                                   "FloorNumber":  "1",
+                                   "LocationNotes":  null
+                               }
+                 },
+        "ExternalNames":  {
+
+                          },
+        "Directions":  {
+
+                       }
+    },
+    {
+        "Id":  "2e50cd0b-8555-4466-b7d4-b34c006dfe07",
+        "EnterpriseId":  "f45553a6-6697-485a-a352-b30600bcfd4d",
+        "IsActive":  true,
+        "ParentResourceId":  null,
+        "Name":  "Room 726",
+        "State":  "Dirty",
+        "Descriptions":  {
+                             "nb-NO":  "Se om info hentes herfra\r\n"
+                         },
+        "CreatedUtc":  "2025-09-02T06:40:28Z",
+        "UpdatedUtc":  "2025-11-13T10:41:05Z",
+        "Data":  {
+                     "Discriminator":  "Space",
+                     "Value":  {
+                                   "FloorNumber":  "1",
+                                   "LocationNotes":  null
+                               }
+                 },
+        "ExternalNames":  {
+
+                          },
+        "Directions":  {
+
+                       }
+    },
+    {
+        "Id":  "bd06103f-184b-4e18-b522-b3f30094beb6",
+        "EnterpriseId":  "f45553a6-6697-485a-a352-b30600bcfd4d",
+        "IsActive":  true,
+        "ParentResourceId":  null,
+        "Name":  "Trysilbua 8 sengs",
+        "State":  "Dirty",
+        "Descriptions":  {
+
+                         },
+        "CreatedUtc":  "2026-02-16T09:01:33Z",
+        "UpdatedUtc":  "2026-02-16T15:59:47Z",
+        "Data":  {
+                     "Discriminator":  "Space",
+                     "Value":  {
+                                   "FloorNumber":  "1",
+                                   "LocationNotes":  null
+                               }
+                 },
+        "ExternalNames":  {
+
+                          },
+        "Directions":  {
+
+                       }
+    },
+    {
+        "Id":  "deeca9aa-de02-44fb-ad32-b38d0096590e",
+        "EnterpriseId":  "f45553a6-6697-485a-a352-b30600bcfd4d",
+        "IsActive":  true,
+        "ParentResourceId":  null,
+        "Name":  "Trysiltunet 6D",
+        "State":  "Dirty",
+        "Descriptions":  {
+
+                         },
+        "CreatedUtc":  "2025-11-06T09:07:23Z",
+        "UpdatedUtc":  "2026-01-10T16:46:47Z",
+        "Data":  {
+                     "Discriminator":  "Space",
+                     "Value":  {
+                                   "FloorNumber":  "2",
+                                   "LocationNotes":  null
+                               }
+                 },
+        "ExternalNames":  {
+
+                          },
+        "Directions":  {
+
+                       }
+    },
+    {
+        "Id":  "2c3a4ad5-1001-4214-bead-b32c00a547d2",
+        "EnterpriseId":  "f45553a6-6697-485a-a352-b30600bcfd4d",
+        "IsActive":  true,
+        "ParentResourceId":  null,
+        "Name":  "Ugla 917 Trysilfjell Hytteområde",
+        "State":  "Dirty",
+        "Descriptions":  {
+
+                         },
+        "CreatedUtc":  "2025-08-01T10:01:46Z",
+        "UpdatedUtc":  "2026-02-15T15:30:46Z",
+        "Data":  {
+                     "Discriminator":  "Space",
+                     "Value":  {
+                                   "FloorNumber":  "1",
+                                   "LocationNotes":  null
+                               }
+                 },
+        "ExternalNames":  {
+
+                          },
+        "Directions":  {
+
+                       }
+    }
+]
