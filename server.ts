@@ -8,9 +8,21 @@
  *      DOTENV_FILE=.env.prod
  *   eller fallback til ".env".
  *
- * Anbefalt i prod på Render:
- *   - bygg til dist/ (tsc)
- *   - start med: node dist/server.js
+ * Denne versjonen er DIN fil, men med 3 nødvendige tillegg slik at appen din fungerer:
+ *
+ * A) POST /api/booking/create
+ *    - brukes av app/(tabs)/overnatting/kort.tsx (BNO flow)
+ *    - returnerer { ok:true, data:{ nextUrl } }
+ *
+ * B) POST /api/stripe/fee/checkout
+ *    - brukes av Stranda-flowen i kort.tsx
+ *    - returnerer { ok:true, data:{ url } }
+ *
+ * C) GET /api/stripe/session?sessionId=cs_...
+ *    - brukes av stranda-fee-return.tsx
+ *    - returnerer { ok:true, data:{ session } }
+ *
+ * Alt annet er beholdt uendret i logikk og ruteoppsett.
  */
 
 import * as dotenv from 'dotenv';
@@ -48,6 +60,8 @@ console.log('[BOOT] dotenv loaded', {
   portEnv: process.env.PORT,
   hasMEWS_BASE_URL: !!process.env.MEWS_BASE_URL,
   MEWS_DISTRIBUTION_CONFIGURATION_ID: process.env.MEWS_DISTRIBUTION_CONFIGURATION_ID || null,
+  MEWS_CONFIGURATION_ID: process.env.MEWS_CONFIGURATION_ID || null,
+  hasMEWS_SERVICE_IDS: !!(process.env.MEWS_SERVICE_IDS || '').trim(),
 });
 
 // ======================
@@ -59,13 +73,15 @@ import axios, { AxiosRequestConfig } from 'axios';
 import bodyParser from 'body-parser';
 import http from 'http';
 import https from 'https';
+import Stripe from 'stripe';
 
 import mews from './lib/mews';
 import { fetchPrices as fetchConnectorPrices } from './lib/prices';
 import { mewsWebhookHandler } from './mews-webhook';
 import { fetchSiteMinderAvailability } from './lib/siteminder';
-import { getMewsConfigForArea } from './lib/mews-config'; // beholdt import
+import { getMewsConfigForArea } from './lib/mews-config'; // beholdt import (kan være brukt andre steder)
 import registerHousekeepingRoutes from './lib/housekeepingRoutes';
+import registerStripeRoutes from './lib/stripeRoutes';
 
 import { getImagesForResourceCategory } from './lib/imageMap';
 import { pickLocalizedText } from './lib/mewsLocalization';
@@ -73,7 +89,7 @@ import { pickLocalizedText } from './lib/mewsLocalization';
 // =============================================================
 // BOOT DIAGNOSTIKK
 // =============================================================
-const BOOT_TAG = 'BNO-API-BOOT-2026-02-12T00:00Z';
+const BOOT_TAG = 'BNO-API-BOOT-2026-02-23T00:00Z';
 console.log(`[BOOT] ${BOOT_TAG} server.ts loaded`, {
   cwd: process.cwd(),
   node: process.version,
@@ -112,6 +128,22 @@ function maskToken(t: string) {
   if (!s) return '';
   if (s.length <= 10) return `${s.slice(0, 2)}...${s.slice(-2)}`;
   return `${s.slice(0, 6)}...${s.slice(-4)}`;
+}
+
+function mustEnv(name: string): string {
+  const v = (process.env[name] || '').trim();
+  if (!v) throw new Error(`missing_env_${name}`);
+  return v;
+}
+
+function ymd(v: any): string {
+  return String(v || '').slice(0, 10);
+}
+
+function safeNum(v: any): number | null {
+  if (v == null) return null;
+  const n = Number(v);
+  return Number.isFinite(n) ? n : null;
 }
 
 // ===== ENV =====
@@ -269,66 +301,152 @@ const MEWS_RATE_ID_LINDVALLEN_SALEN = (process.env.MEWS_RATE_ID_LINDVALLEN_SALEN
 const MEWS_RATE_ID_TRYSIL_SENTRUM = (process.env.MEWS_RATE_ID_TRYSIL_SENTRUM || '').trim();
 const MEWS_RATE_ID_STRANDA = (process.env.MEWS_RATE_ID_STRANDA || '').trim();
 
-/** Liste over alle områder */
-const MEWS_SERVICES_ALL: ServiceConfig[] = [
-  {
-    id: MEWS_SERVICE_ID_TRYSIL_TURISTSENTER,
-    name: 'Trysil Turistsenter',
-    rateId: MEWS_RATE_ID_TRYSIL_TURISTSENTER || null,
-    adultAgeCategoryId: MEWS_ADULT_AGE_CATEGORY_ID_TRYSIL_TURISTSENTER || MEWS_ADULT_AGE_CATEGORY_ID || null,
-    credsKey: CREDS_DEFAULT,
-  },
-  {
-    id: MEWS_SERVICE_ID_TRYSIL_HOYFJELLSSENTER,
-    name: 'Trysil Høyfjellssenter',
-    rateId: MEWS_RATE_ID_TRYSIL_HOYFJELLSSENTER || null,
-    adultAgeCategoryId: MEWS_ADULT_AGE_CATEGORY_ID_TRYSIL_HOYFJELLSSENTER || MEWS_ADULT_AGE_CATEGORY_ID || null,
-    credsKey: CREDS_DEFAULT,
-  },
-  {
-    id: MEWS_SERVICE_ID_TRYSILFJELL_HYTTEOMRADE,
-    name: 'Trysilfjell Hytteområde',
-    rateId: MEWS_RATE_ID_TRYSILFJELL_HYTTEOMRADE || null,
-    adultAgeCategoryId: MEWS_ADULT_AGE_CATEGORY_ID_TRYSILFJELL_HYTTEOMRADE || MEWS_ADULT_AGE_CATEGORY_ID || null,
-    credsKey: CREDS_DEFAULT,
-  },
-  {
-    id: MEWS_SERVICE_ID_TRYSIL_SENTRUM,
-    name: 'Trysil Sentrum',
-    rateId: MEWS_RATE_ID_TRYSIL_SENTRUM || null,
-    adultAgeCategoryId: MEWS_ADULT_AGE_CATEGORY_ID_TRYSIL_SENTRUM || MEWS_ADULT_AGE_CATEGORY_ID || null,
-    credsKey: CREDS_DEFAULT,
-  },
-  {
-    id: MEWS_SERVICE_ID_TANDADALEN_SALEN,
-    name: 'Tandådalen Sälen',
-    rateId: MEWS_RATE_ID_TANDADALEN_SALEN || null,
-    adultAgeCategoryId: MEWS_ADULT_AGE_CATEGORY_ID_TANDADALEN_SALEN || MEWS_ADULT_AGE_CATEGORY_ID || null,
-    credsKey: CREDS_DEFAULT,
-  },
-  {
-    id: MEWS_SERVICE_ID_HOGFJALLET_SALEN,
-    name: 'Högfjället Sälen',
-    rateId: MEWS_RATE_ID_HOGFJALLET_SALEN || null,
-    adultAgeCategoryId: MEWS_ADULT_AGE_CATEGORY_ID_HOGFJALLET_SALEN || MEWS_ADULT_AGE_CATEGORY_ID || null,
-    credsKey: CREDS_DEFAULT,
-  },
-  {
-    id: MEWS_SERVICE_ID_LINDVALLEN_SALEN,
-    name: 'Lindvallen Sälen',
-    rateId: MEWS_RATE_ID_LINDVALLEN_SALEN || null,
-    adultAgeCategoryId: MEWS_ADULT_AGE_CATEGORY_ID_LINDVALLEN_SALEN || MEWS_ADULT_AGE_CATEGORY_ID || null,
-    credsKey: CREDS_DEFAULT,
-  },
-  {
-    id: MEWS_SERVICE_ID_STRANDA,
-    name: 'Stranda',
-    rateId: MEWS_RATE_ID_STRANDA || null,
-    adultAgeCategoryId: MEWS_ADULT_AGE_CATEGORY_ID_STRANDA || null,
-    credsKey: CREDS_STRANDA,
-  },
-].filter((s) => !!s.id);
+/**
+ * Parsing av MEWS_SERVICE_IDS (komma-separert) for units + cleaning-sync + generell bredde.
+ * Viktig: Her inkluderer vi ALLE ids fra MEWS_SERVICE_IDS, men vi setter credsKey=STRANDA
+ * kun dersom serviceId matcher MEWS_SERVICE_ID_STRANDA (ellers DEFAULT).
+ */
+function parseCommaList(v: string | undefined | null): string[] {
+  return String(v || '')
+    .split(',')
+    .map((x) => x.trim())
+    .filter(Boolean);
+}
 
+const MEWS_SERVICE_IDS_LIST = parseCommaList(process.env.MEWS_SERVICE_IDS);
+
+// lookup: id -> “område-name” hvis vi kjenner den
+function guessServiceNameById(id: string): string {
+  const map: Record<string, string> = {};
+  if (MEWS_SERVICE_ID_TRYSIL_TURISTSENTER) map[MEWS_SERVICE_ID_TRYSIL_TURISTSENTER] = 'Trysil Turistsenter';
+  if (MEWS_SERVICE_ID_TRYSIL_HOYFJELLSSENTER) map[MEWS_SERVICE_ID_TRYSIL_HOYFJELLSSENTER] = 'Trysil Høyfjellssenter';
+  if (MEWS_SERVICE_ID_TRYSILFJELL_HYTTEOMRADE) map[MEWS_SERVICE_ID_TRYSILFJELL_HYTTEOMRADE] = 'Trysilfjell Hytteområde';
+  if (MEWS_SERVICE_ID_TRYSIL_SENTRUM) map[MEWS_SERVICE_ID_TRYSIL_SENTRUM] = 'Trysil Sentrum';
+  if (MEWS_SERVICE_ID_TANDADALEN_SALEN) map[MEWS_SERVICE_ID_TANDADALEN_SALEN] = 'Tandådalen Sälen';
+  if (MEWS_SERVICE_ID_HOGFJALLET_SALEN) map[MEWS_SERVICE_ID_HOGFJALLET_SALEN] = 'Högfjället Sälen';
+  if (MEWS_SERVICE_ID_LINDVALLEN_SALEN) map[MEWS_SERVICE_ID_LINDVALLEN_SALEN] = 'Lindvallen Sälen';
+  if (MEWS_SERVICE_ID_STRANDA) map[MEWS_SERVICE_ID_STRANDA] = 'Stranda';
+
+  return map[id] || `Service ${id.slice(0, 8)}…`;
+}
+
+function pickAdultAgeCategoryByServiceId(id: string): string | null {
+  if (id === MEWS_SERVICE_ID_TRYSIL_TURISTSENTER) return MEWS_ADULT_AGE_CATEGORY_ID_TRYSIL_TURISTSENTER || MEWS_ADULT_AGE_CATEGORY_ID || null;
+  if (id === MEWS_SERVICE_ID_TRYSIL_HOYFJELLSSENTER) return MEWS_ADULT_AGE_CATEGORY_ID_TRYSIL_HOYFJELLSSENTER || MEWS_ADULT_AGE_CATEGORY_ID || null;
+  if (id === MEWS_SERVICE_ID_TRYSILFJELL_HYTTEOMRADE) return MEWS_ADULT_AGE_CATEGORY_ID_TRYSILFJELL_HYTTEOMRADE || MEWS_ADULT_AGE_CATEGORY_ID || null;
+  if (id === MEWS_SERVICE_ID_TRYSIL_SENTRUM) return MEWS_ADULT_AGE_CATEGORY_ID_TRYSIL_SENTRUM || MEWS_ADULT_AGE_CATEGORY_ID || null;
+  if (id === MEWS_SERVICE_ID_TANDADALEN_SALEN) return MEWS_ADULT_AGE_CATEGORY_ID_TANDADALEN_SALEN || MEWS_ADULT_AGE_CATEGORY_ID || null;
+  if (id === MEWS_SERVICE_ID_HOGFJALLET_SALEN) return MEWS_ADULT_AGE_CATEGORY_ID_HOGFJALLET_SALEN || MEWS_ADULT_AGE_CATEGORY_ID || null;
+  if (id === MEWS_SERVICE_ID_LINDVALLEN_SALEN) return MEWS_ADULT_AGE_CATEGORY_ID_LINDVALLEN_SALEN || MEWS_ADULT_AGE_CATEGORY_ID || null;
+  if (id === MEWS_SERVICE_ID_STRANDA) return MEWS_ADULT_AGE_CATEGORY_ID_STRANDA || null;
+  return MEWS_ADULT_AGE_CATEGORY_ID || null;
+}
+
+function pickRateIdByServiceId(id: string): string | null {
+  if (id === MEWS_SERVICE_ID_TRYSIL_TURISTSENTER) return MEWS_RATE_ID_TRYSIL_TURISTSENTER || null;
+  if (id === MEWS_SERVICE_ID_TRYSIL_HOYFJELLSSENTER) return MEWS_RATE_ID_TRYSIL_HOYFJELLSSENTER || null;
+  if (id === MEWS_SERVICE_ID_TRYSILFJELL_HYTTEOMRADE) return MEWS_RATE_ID_TRYSILFJELL_HYTTEOMRADE || null;
+  if (id === MEWS_SERVICE_ID_TRYSIL_SENTRUM) return MEWS_RATE_ID_TRYSIL_SENTRUM || null;
+  if (id === MEWS_SERVICE_ID_TANDADALEN_SALEN) return MEWS_RATE_ID_TANDADALEN_SALEN || null;
+  if (id === MEWS_SERVICE_ID_HOGFJALLET_SALEN) return MEWS_RATE_ID_HOGFJALLET_SALEN || null;
+  if (id === MEWS_SERVICE_ID_LINDVALLEN_SALEN) return MEWS_RATE_ID_LINDVALLEN_SALEN || null;
+  if (id === MEWS_SERVICE_ID_STRANDA) return MEWS_RATE_ID_STRANDA || null;
+  return null;
+}
+
+/**
+ * Bygg “alle services” robust:
+ * - Starter med “område-keys” (hvis de finnes)
+ * - Legger på MEWS_SERVICE_IDS-listen (hvis den finnes)
+ * - Deduper på id
+ */
+function buildServicesAll(): ServiceConfig[] {
+  const base: ServiceConfig[] = [
+    {
+      id: MEWS_SERVICE_ID_TRYSIL_TURISTSENTER,
+      name: 'Trysil Turistsenter',
+      rateId: MEWS_RATE_ID_TRYSIL_TURISTSENTER || null,
+      adultAgeCategoryId: MEWS_ADULT_AGE_CATEGORY_ID_TRYSIL_TURISTSENTER || MEWS_ADULT_AGE_CATEGORY_ID || null,
+      credsKey: CREDS_DEFAULT,
+    },
+    {
+      id: MEWS_SERVICE_ID_TRYSIL_HOYFJELLSSENTER,
+      name: 'Trysil Høyfjellssenter',
+      rateId: MEWS_RATE_ID_TRYSIL_HOYFJELLSSENTER || null,
+      adultAgeCategoryId: MEWS_ADULT_AGE_CATEGORY_ID_TRYSIL_HOYFJELLSSENTER || MEWS_ADULT_AGE_CATEGORY_ID || null,
+      credsKey: CREDS_DEFAULT,
+    },
+    {
+      id: MEWS_SERVICE_ID_TRYSILFJELL_HYTTEOMRADE,
+      name: 'Trysilfjell Hytteområde',
+      rateId: MEWS_RATE_ID_TRYSILFJELL_HYTTEOMRADE || null,
+      adultAgeCategoryId: MEWS_ADULT_AGE_CATEGORY_ID_TRYSILFJELL_HYTTEOMRADE || MEWS_ADULT_AGE_CATEGORY_ID || null,
+      credsKey: CREDS_DEFAULT,
+    },
+    {
+      id: MEWS_SERVICE_ID_TRYSIL_SENTRUM,
+      name: 'Trysil Sentrum',
+      rateId: MEWS_RATE_ID_TRYSIL_SENTRUM || null,
+      adultAgeCategoryId: MEWS_ADULT_AGE_CATEGORY_ID_TRYSIL_SENTRUM || MEWS_ADULT_AGE_CATEGORY_ID || null,
+      credsKey: CREDS_DEFAULT,
+    },
+    {
+      id: MEWS_SERVICE_ID_TANDADALEN_SALEN,
+      name: 'Tandådalen Sälen',
+      rateId: MEWS_RATE_ID_TANDADALEN_SALEN || null,
+      adultAgeCategoryId: MEWS_ADULT_AGE_CATEGORY_ID_TANDADALEN_SALEN || MEWS_ADULT_AGE_CATEGORY_ID || null,
+      credsKey: CREDS_DEFAULT,
+    },
+    {
+      id: MEWS_SERVICE_ID_HOGFJALLET_SALEN,
+      name: 'Högfjället Sälen',
+      rateId: MEWS_RATE_ID_HOGFJALLET_SALEN || null,
+      adultAgeCategoryId: MEWS_ADULT_AGE_CATEGORY_ID_HOGFJALLET_SALEN || MEWS_ADULT_AGE_CATEGORY_ID || null,
+      credsKey: CREDS_DEFAULT,
+    },
+    {
+      id: MEWS_SERVICE_ID_LINDVALLEN_SALEN,
+      name: 'Lindvallen Sälen',
+      rateId: MEWS_RATE_ID_LINDVALLEN_SALEN || null,
+      adultAgeCategoryId: MEWS_ADULT_AGE_CATEGORY_ID_LINDVALLEN_SALEN || MEWS_ADULT_AGE_CATEGORY_ID || null,
+      credsKey: CREDS_DEFAULT,
+    },
+    {
+      id: MEWS_SERVICE_ID_STRANDA,
+      name: 'Stranda',
+      rateId: MEWS_RATE_ID_STRANDA || null,
+      adultAgeCategoryId: MEWS_ADULT_AGE_CATEGORY_ID_STRANDA || null,
+      credsKey: CREDS_STRANDA,
+    },
+  ].filter((s) => !!s.id);
+
+  // Legg på MEWS_SERVICE_IDS (kan inneholde “ekstra” services for sync)
+  const fromList: ServiceConfig[] = (MEWS_SERVICE_IDS_LIST || []).map((id) => {
+    const isStranda = !!MEWS_SERVICE_ID_STRANDA && id === MEWS_SERVICE_ID_STRANDA;
+    return {
+      id,
+      name: guessServiceNameById(id),
+      rateId: pickRateIdByServiceId(id),
+      adultAgeCategoryId: pickAdultAgeCategoryByServiceId(id),
+      credsKey: isStranda ? CREDS_STRANDA : CREDS_DEFAULT,
+    };
+  });
+
+  const merged = [...base, ...fromList];
+
+  // Dedup by id
+  const out: ServiceConfig[] = [];
+  const seen = new Set<string>();
+  for (const s of merged) {
+    if (!s.id) continue;
+    if (seen.has(s.id)) continue;
+    seen.add(s.id);
+    out.push(s);
+  }
+  return out;
+}
+
+const MEWS_SERVICES_ALL: ServiceConfig[] = buildServicesAll();
 console.log('MEWS_SERVICES_ALL =', MEWS_SERVICES_ALL);
 
 // =============================================================
@@ -357,7 +475,13 @@ function getBookingUrlOverrideForArea(areaKey: string | null): string | null {
   return v || null;
 }
 
-function buildMewsDistributorUrl(opts: { base: string; configId: string; from?: string; to?: string; adults?: number }): string {
+function buildMewsDistributorUrl(opts: {
+  base: string;
+  configId: string;
+  from?: string;
+  to?: string;
+  adults?: number;
+}): string {
   const base = (opts.base || '').replace(/\/$/, '');
   const configId = (opts.configId || '').trim();
   if (!base || !configId) return '';
@@ -588,12 +712,6 @@ function firstLang(obj: any, locale: string) {
   return keys.length ? obj[keys[0]] ?? '' : '';
 }
 
-function safeNum(v: any): number | null {
-  if (v == null) return null;
-  const n = Number(v);
-  return Number.isFinite(n) ? n : null;
-}
-
 function sumNumbersSafe(list: Array<number | null | undefined>): number {
   let acc = 0;
   for (const v of list || []) acc += Number(v || 0);
@@ -814,34 +932,170 @@ app.use(cors());
 app.use(bodyParser.json({ limit: '1mb' }));
 
 registerHousekeepingRoutes(app);
+registerStripeRoutes(app);
+
+// =============================================================
+// ✅ NYTT: APP-KOMPAT ROUTES (uten å røre eksisterende)
+// =============================================================
+
+/**
+ * POST /api/booking/create
+ * Forventet av app/(tabs)/overnatting/kort.tsx
+ * Return: { ok:true, data:{ nextUrl } }
+ */
+app.post('/api/booking/create', (req, res) => {
+  try {
+    const startYmd = ymd(req.body?.startYmd);
+    const endYmd = ymd(req.body?.endYmd);
+    const adults = Math.max(1, Number(req.body?.adults || 1));
+    const areaSlugRaw = req.body?.area ? String(req.body.area) : '';
+
+    if (!startYmd || !endYmd) {
+      return res.status(400).json({ ok: false, error: 'missing_startYmd_endYmd' });
+    }
+
+    const { areaKey } = resolveServicesForArea(areaSlugRaw);
+
+    const configId = getDistributionConfigIdForArea(areaKey);
+    const overrideUrl = getBookingUrlOverrideForArea(areaKey);
+
+    const nextUrl =
+      overrideUrl ||
+      buildMewsDistributorUrl({
+        base: MEWS_DISTRIBUTOR_BASE,
+        configId,
+        from: startYmd,
+        to: endYmd,
+        adults,
+      });
+
+    if (!nextUrl) {
+      return res.status(500).json({
+        ok: false,
+        error: 'booking_link_missing',
+        detail: 'Mangler configId/overrideUrl for dette området',
+      });
+    }
+
+    return res.json({ ok: true, data: { nextUrl } });
+  } catch (e: any) {
+    return res.status(500).json({ ok: false, error: 'booking_create_failed', detail: e?.message || String(e) });
+  }
+});
+
+/**
+ * POST /api/stripe/fee/checkout
+ * Forventet av kort.tsx Stranda-flow
+ * Return: { ok:true, data:{ url } }
+ */
+app.post('/api/stripe/fee/checkout', async (req, res) => {
+  try {
+    const stripeKey = mustEnv('STRIPE_SECRET_KEY');
+    // Ikke sett apiVersion (samme prinsipp som i deres stripeRoutes.ts)
+    const stripe = new Stripe(stripeKey);
+
+    const priceTotal = safeNum(req.body?.priceTotal);
+    const currency = String(req.body?.currency || 'NOK').toLowerCase();
+
+    const feePercent = safeNum(req.body?.feePercent);
+    const feeFixedNok = safeNum(req.body?.feeFixedNok);
+    const returnUrl = String(req.body?.returnUrl || '').trim();
+
+    const metadataIn = (req.body?.metadata || {}) as Record<string, any>;
+
+    if (priceTotal == null || priceTotal <= 0) return res.status(400).json({ ok: false, error: 'invalid_priceTotal' });
+    if (feePercent == null || feePercent <= 0) return res.status(400).json({ ok: false, error: 'invalid_feePercent' });
+    if (feeFixedNok == null || feeFixedNok < 0) return res.status(400).json({ ok: false, error: 'invalid_feeFixedNok' });
+    if (!returnUrl) return res.status(400).json({ ok: false, error: 'missing_returnUrl' });
+
+    const depositNok = Math.round(priceTotal * feePercent);
+    const amountNok = depositNok + Math.round(feeFixedNok);
+
+    // Stripe: minor units
+    const unitAmount = Math.max(0, Math.round(amountNok * 100));
+
+    // Returskjermen i appen leser:
+    // - success: ?session_id=...
+    // - cancel:  ?canceled=1
+    const successUrl = `${returnUrl}?session_id={CHECKOUT_SESSION_ID}`;
+    const cancelUrl = `${returnUrl}?canceled=1`;
+
+    // Stripe metadata må være string-string
+    const metadata: Record<string, string> = {};
+    for (const [k, v] of Object.entries(metadataIn)) {
+      metadata[String(k)] = v == null ? '' : String(v);
+    }
+
+    const session = await stripe.checkout.sessions.create({
+      mode: 'payment',
+      success_url: successUrl,
+      cancel_url: cancelUrl,
+      payment_method_types: ['card'],
+      line_items: [
+        {
+          quantity: 1,
+          price_data: {
+            currency,
+            unit_amount: unitAmount,
+            product_data: {
+              name: 'Stranda depositum + gebyr',
+              description: `Depositum ${depositNok} NOK + gebyr ${feeFixedNok} NOK`,
+            },
+          },
+        },
+      ],
+      metadata,
+    });
+
+    const url = session.url || '';
+    if (!url) return res.status(500).json({ ok: false, error: 'stripe_session_missing_url' });
+
+    return res.json({ ok: true, data: { url } });
+  } catch (e: any) {
+    return res.status(500).json({ ok: false, error: 'stripe_fee_checkout_failed', detail: e?.message || String(e) });
+  }
+});
+
+/**
+ * GET /api/stripe/session?sessionId=cs_...
+ * Forventet av stranda-fee-return.tsx
+ * Return: { ok:true, data:{ session } }
+ */
+app.get('/api/stripe/session', async (req, res) => {
+  try {
+    const stripeKey = mustEnv('STRIPE_SECRET_KEY');
+    const stripe = new Stripe(stripeKey);
+
+    const sessionId = String(req.query.sessionId || '').trim();
+    if (!sessionId) return res.status(400).json({ ok: false, error: 'missing_sessionId' });
+
+    const session = await stripe.checkout.sessions.retrieve(sessionId);
+
+    return res.json({ ok: true, data: { session } });
+  } catch (e: any) {
+    return res.status(500).json({ ok: false, error: 'stripe_session_failed', detail: e?.message || String(e) });
+  }
+});
 
 // =============================================================
 // SUPABASE IMAGE PROXY
-// - Supports:
-//    GET/HEAD /api/img/<key>
-//    GET/HEAD /api/img/<bucket>/<key>   (bucket is stripped if it matches env bucket)
-// - Avoids double-encoding and double-bucket bugs
 // =============================================================
 const SUPABASE_IMAGES_URL = String(process.env.SUPABASE_IMAGES_URL || '').trim().replace(/\/$/, '');
 const SUPABASE_IMAGES_BUCKET = String(process.env.SUPABASE_IMAGES_BUCKET || '').trim();
 
 function normalizeImgKey(rawKey: string): { key: string; hadBucketPrefix: boolean } {
   let k = String(rawKey || '').trim();
-
-  // Express wildcard can include leading slash
   k = k.replace(/^\/+/, '');
 
-  // Try decode once (if already decoded, decodeURIComponent might throw on stray %)
   let decoded = k;
   try {
     decoded = decodeURIComponent(k);
   } catch {
-    decoded = k; // keep as-is
+    decoded = k;
   }
 
   decoded = decoded.replace(/^\/+/, '');
 
-  // If caller includes bucket as first path segment, strip it when it matches env bucket
   let hadBucketPrefix = false;
   if (SUPABASE_IMAGES_BUCKET) {
     const bucketPrefix = `${SUPABASE_IMAGES_BUCKET.replace(/^\/+|\/+$/g, '')}/`;
@@ -851,7 +1105,6 @@ function normalizeImgKey(rawKey: string): { key: string; hadBucketPrefix: boolea
     }
   }
 
-  // Re-encode safely segment-by-segment (prevents % becoming %25)
   const encoded = decoded
     .split('/')
     .filter(Boolean)
@@ -862,7 +1115,6 @@ function normalizeImgKey(rawKey: string): { key: string; hadBucketPrefix: boolea
 }
 
 function buildSupabasePublicObjectUrl(encodedKey: string): string {
-  // https://<project>.supabase.co/storage/v1/object/public/<bucket>/<encodedKey>
   return `${SUPABASE_IMAGES_URL}/storage/v1/object/public/${encodeURIComponent(SUPABASE_IMAGES_BUCKET)}/${encodedKey}`;
 }
 
@@ -876,7 +1128,7 @@ async function handleImgProxy(req: express.Request, res: express.Response) {
       });
     }
 
-    const raw = (req.params as any)[0] || ''; // wildcard from /api/img/*
+    const raw = (req.params as any)[0] || '';
     if (!raw) {
       return res.status(400).json({ ok: false, error: 'img_missing_key', detail: 'Mangler filsti etter /api/img/' });
     }
@@ -971,6 +1223,12 @@ app.get('/api/health', (_req, res) =>
       envFile: envPick.file,
       MEWS_DISTRIBUTION_CONFIGURATION_ID: process.env.MEWS_DISTRIBUTION_CONFIGURATION_ID || '',
       MEWS_CONFIGURATION_ID: process.env.MEWS_CONFIGURATION_ID || '',
+      MEWS_SERVICE_IDS: (process.env.MEWS_SERVICE_IDS || '').trim() || null,
+    },
+    services: {
+      total: MEWS_SERVICES_ALL.length,
+      defaultCount: MEWS_SERVICES_ALL.filter((s) => (s.credsKey || 'DEFAULT') === 'DEFAULT').length,
+      strandaCount: MEWS_SERVICES_ALL.filter((s) => (s.credsKey || 'DEFAULT') === 'STRANDA').length,
     },
   })
 );
@@ -1012,6 +1270,49 @@ app.get('/api/mews/booking-link', (req, res) => {
       overrideUrl: overrideUrl || null,
     },
     url: url || null,
+  });
+});
+
+/**
+ * BNO Travel “Steg 3” lenker for ALLE områder unntatt STRANDA.
+ * GET /api/mews/booking-links?from=YYYY-MM-DD&to=YYYY-MM-DD&adults=2
+ */
+app.get('/api/mews/booking-links', (req, res) => {
+  const from = req.query.from ? String(req.query.from).slice(0, 10) : '';
+  const to = req.query.to ? String(req.query.to).slice(0, 10) : '';
+  const adults = req.query.adults ? Number(req.query.adults) : 2;
+
+  // Disse areaKey-ene er de som har egne MEWS_DISTRIBUTION_CONFIGURATION_ID_* i env (unntatt STRANDA)
+  const areaKeys = [
+    'TRYSIL_TURISTSENTER',
+    'TRYSIL_HOYFJELLSSENTER',
+    'TRYSILFJELL_HYTTEOMRADE',
+    'TRYSIL_SENTRUM',
+    'TANDADALEN_SALEN',
+    'HOGFJALLET_SALEN',
+    'LINDVALLEN_SALEN',
+  ];
+
+  const links = areaKeys.map((k) => {
+    const configId = getDistributionConfigIdForArea(k);
+    const overrideUrl = getBookingUrlOverrideForArea(k);
+    const url =
+      overrideUrl ||
+      buildMewsDistributorUrl({
+        base: MEWS_DISTRIBUTOR_BASE,
+        configId,
+        from: from || undefined,
+        to: to || undefined,
+        adults: Number.isFinite(adults) ? adults : 2,
+      });
+    return { areaKey: k, configId: configId || null, url: url || null };
+  });
+
+  return res.json({
+    ok: true,
+    input: { from: from || null, to: to || null, adults },
+    count: links.length,
+    data: links,
   });
 });
 
@@ -1634,11 +1935,13 @@ app.post('/webhooks/mews', mewsWebhookHandler);
 // (Valgfritt) server-side create reservation (bak feature flag)
 // =============================================================
 if (ENABLE_SERVER_RESERVATION) {
-  app.post('/api/mews/reservation', async (req, res) => {
+  app.post('/api/mews/reservation', async (_req, res) => {
     try {
-      // Her kan du implementere create-reservation når du er klar,
-      // uten å påvirke andre endepunkt. Foreløpig returnerer vi "not implemented".
-      return res.status(501).json({ ok: false, error: 'not_implemented', detail: 'ENABLE_SERVER_RESERVATION=1 men endpoint er ikke implementert ennå' });
+      return res.status(501).json({
+        ok: false,
+        error: 'not_implemented',
+        detail: 'ENABLE_SERVER_RESERVATION=1 men endpoint er ikke implementert ennå',
+      });
     } catch (e: any) {
       return res.status(500).json({ ok: false, error: 'server_error', detail: e?.message || String(e) });
     }
