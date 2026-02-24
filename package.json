@@ -29,7 +29,8 @@
     "lru-cache": "^11.2.5",
     "morgan": "^1.10.1",
     "node-cron": "^4.2.1",
-    "node-fetch": "^2.7.0"
+    "node-fetch": "^2.7.0",
+    "stripe": "^20.3.1"
   },
   "devDependencies": {
     "@types/cors": "^2.8.17",
