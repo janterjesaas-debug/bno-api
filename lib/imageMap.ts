@@ -328,7 +328,7 @@ export const RESOURCE_CATEGORY_IMAGES: Record<string, string[]> = {
   ],
 
   // Røde Kors ground floor (og Røde Kors)
-  "04e0d66c-1c9f-4168-857b-b15a007ef02f": [
+  "867c3e6f-7646-4240-84c4-b15a007ef02f": [
     "https://qcjpfiwootjfqpxhtldm.supabase.co/storage/v1/object/public/bno-images/Rode%20kors%20groud%20floor.jpg",
     "https://qcjpfiwootjfqpxhtldm.supabase.co/storage/v1/object/public/bno-images/Rode%20kors%20groud%20floor%201.jpg",
     "https://qcjpfiwootjfqpxhtldm.supabase.co/storage/v1/object/public/bno-images/Rode%20kors%20groud%20floor%202.jpg",

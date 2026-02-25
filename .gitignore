@@ -1,2 +1,9 @@
 node_modules
 .vercel
+
+# Local secrets / noise
+.env
+.env.*
+logs/
+server.ts.bak_*
+
