@@ -486,7 +486,8 @@ function resolveDistributionConfigForArea(areaKey: string | null): DistributionC
 }
 
 function getDistributionConfigIdForArea(areaKey: string | null): string {
-  return getDistributionConfigForArea(areaKey).configId;
+  // VIKTIG: Ikke kall getDistributionConfigForArea her (det gir rekursjon).
+  return resolveDistributionConfigForArea(areaKey).configId;
 }
 
 function getBookingUrlOverrideForArea(areaKey: string | null): string | null {
@@ -499,150 +500,63 @@ function getBookingUrlOverrideForArea(areaKey: string | null): string | null {
 function buildMewsDistributorUrl(opts: {
   base: string;
   configId: string;
+
   from?: string;
   to?: string;
   adults?: number;
-  promo?: string | null;
+
+  // Deeplink controls
+  route?: string | null; // e.g. 'rates'
+  roomId?: string | null; // ResourceCategoryId
+  promo?: string | null; // e.g. 'bnotravel'
+
   language?: string | null;
   currency?: string | null;
-
-  // Booking Engine deeplink controls
-  route?: 'rooms' | 'rates' | 'hotels' | string;
-  roomId?: string | null; // ResourceCategoryId / RoomCategoryId
-  cityId?: string | null; // multi-enterprise only
-  hotelId?: string | null; // multi-enterprise only
 }): string {
-  const base = String(opts.base || '').trim().replace(/\/$/, '');
+  const base = String(opts.base || '')
+    .trim()
+    .replace(/\/$/, '');
   const configId = String(opts.configId || '').trim();
 
-// =============================================================
-// AreaKey-resolver: serviceId -> areaKey (for riktig configId)
-// =============================================================
-function areaKeyFromServiceId(serviceIdRaw: any): string | null {
-  const id = String(serviceIdRaw || '').trim();
-  if (!id) return null;
-
-  if (MEWS_SERVICE_ID_STRANDA && id === MEWS_SERVICE_ID_STRANDA) return 'STRANDA';
-
-  if (MEWS_SERVICE_ID_TRYSIL_TURISTSENTER && id === MEWS_SERVICE_ID_TRYSIL_TURISTSENTER) return 'TRYSIL_TURISTSENTER';
-  if (MEWS_SERVICE_ID_TRYSIL_HOYFJELLSSENTER && id === MEWS_SERVICE_ID_TRYSIL_HOYFJELLSSENTER) return 'TRYSIL_HOYFJELLSSENTER';
-  if (MEWS_SERVICE_ID_TRYSILFJELL_HYTTEOMRADE && id === MEWS_SERVICE_ID_TRYSILFJELL_HYTTEOMRADE) return 'TRYSILFJELL_HYTTEOMRADE';
-  if (MEWS_SERVICE_ID_TRYSIL_SENTRUM && id === MEWS_SERVICE_ID_TRYSIL_SENTRUM) return 'TRYSIL_SENTRUM';
-
-  if (MEWS_SERVICE_ID_TANDADALEN_SALEN && id === MEWS_SERVICE_ID_TANDADALEN_SALEN) return 'TANDADALEN_SALEN';
-  if (MEWS_SERVICE_ID_HOGFJALLET_SALEN && id === MEWS_SERVICE_ID_HOGFJALLET_SALEN) return 'HOGFJALLET_SALEN';
-  if (MEWS_SERVICE_ID_LINDVALLEN_SALEN && id === MEWS_SERVICE_ID_LINDVALLEN_SALEN) return 'LINDVALLEN_SALEN';
-
-  return null;
-}
-
-function isStrandaArea(areaKey: string | null): boolean {
-  return normAreaKey(areaKey) === 'STRANDA';
-}
-
-// =============================================================
-// Distribution config resolver with debug info
-// (og tåler typoen TRYSIL_SENTRUM hvis den finnes i Render)
-// =============================================================
-// =============================================================
-// Distribution config resolver with debug info
-// (tåler fallback + en kjent typo i Render: TRYSIL_SENTRU)
-// =============================================================
-function getDistributionConfigForArea(areaKey: string | null): {
-  configId: string;
-  source: 'area' | 'fallback' | 'missing';
-  envKey: string | null;
-} {
-  const fallback = (MEWS_CONFIGURATION_ID || '').trim();
-  const k = normAreaKey(areaKey);
-
-  if (!k) {
-    return { configId: fallback, source: fallback ? 'fallback' : 'missing', envKey: null };
-  }
-
-  // normal key
-  const normalKey = `MEWS_DISTRIBUTION_CONFIGURATION_ID_${k}`;
-  let v = (process.env[normalKey] || '').trim();
-  let usedKey: string = normalKey;
-
-  // Tolerér en kjent typo i Render (du hadde: MEWS_DISTRIBUTION_CONFIGURATION_ID_TRYSIL_SENTRU)
-  if (!v && k === 'TRYSIL_SENTRUM') {
-    const typoKey = 'MEWS_DISTRIBUTION_CONFIGURATION_ID_TRYSIL_SENTRU'; // <--- uten M
-    const typoVal = (process.env[typoKey] || '').trim();
-    if (typoVal) {
-      v = typoVal;
-      usedKey = typoKey;
-    }
-  }
-
-  const configId = v || fallback;
-  const source: 'area' | 'fallback' | 'missing' = v ? 'area' : configId ? 'fallback' : 'missing';
-
-  return { configId, source, envKey: usedKey };
-}
-function pickRoomIdFromAny(raw: any): string | null {
-  const v =
-    (raw?.roomId ??
-      raw?.RoomId ??
-      raw?.resourceCategoryId ??
-      raw?.ResourceCategoryId ??
-      raw?.RoomCategoryId ??
-      raw?.categoryId ??
-      raw?.CategoryId ??
-      '') as any;
-  const s = String(v || '').trim();
-  return s ? s : null;
-}
-
-function pickRouteForStep3(routeRaw: any, stepRaw: any, roomId: string | null): string | null {
-  const route = String(routeRaw || '').trim().toLowerCase();
-  const step = String(stepRaw || '').trim();
-
-  // eksplisitt route vinner
-  if (route) return route;
-
-  // step=3 => rates (krever roomId for at Mews faktisk går til steg 3)
-  if (step === '3') return 'rates';
-
-  // hvis vi har roomId, antar vi at vi ønsker steg 3
-  if (roomId) return 'rates';
-
-  return null;
-}
-
-  // ✅ Viktig: aldri bygg URL med tom configId (gir ofte "Invalid PrimaryId...")
+  // Aldri bygg URL med tom configId (gir ofte “Invalid PrimaryId …” i Mews)
   if (!base || !configId) return '';
 
   const params = new URLSearchParams();
 
-  // Recommended deeplink params
-  if (opts.from) params.set('mewsStart', opts.from);
-  if (opts.to) params.set('mewsEnd', opts.to);
-  if (typeof opts.adults === 'number' && Number.isFinite(opts.adults)) {
-    params.set('mewsAdultCount', String(Math.max(1, Math.floor(opts.adults))));
-  }
+  const from = String(opts.from || '').slice(0, 10);
+  const to = String(opts.to || '').slice(0, 10);
+  const adults =
+    typeof opts.adults === 'number' && Number.isFinite(opts.adults)
+      ? String(Math.max(1, Math.floor(opts.adults)))
+      : '2';
 
-  if (opts.promo) params.set('mewsVoucherCode', opts.promo);
-  if (opts.route) params.set('mewsRoute', opts.route);
-  if (opts.roomId) params.set('mewsRoom', opts.roomId);
+  // Mews deeplink params
+  if (from) params.set('mewsStart', from);
+  if (to) params.set('mewsEnd', to);
+  params.set('mewsAdultCount', adults);
 
-  // Multi-enterprise support
-  if (opts.cityId) params.set('mewsCityId', opts.cityId);
-  if (opts.hotelId) params.set('mewsHotel', opts.hotelId);
+  const route = String(opts.route || '').trim();
+  if (route) params.set('mewsRoute', route);
 
-  if (opts.language) params.set('language', opts.language);
-  if (opts.currency) params.set('currency', opts.currency);
+  const roomId = String(opts.roomId || '').trim();
+  if (roomId) params.set('mewsRoom', roomId);
 
-  // Legacy params (bakoverkompat)
-  if (opts.from) params.set('from', opts.from);
-  if (opts.to) params.set('to', opts.to);
-  if (typeof opts.adults === 'number' && Number.isFinite(opts.adults)) {
-    params.set('adults', String(Math.max(1, Math.floor(opts.adults))));
-  }
+  const promo = String(opts.promo || '').trim();
+  if (promo) params.set('mewsVoucherCode', promo);
+
+  const language = String(opts.language || '').trim();
+  if (language) params.set('language', language);
+
+  const currency = String(opts.currency || '').trim();
+  if (currency) params.set('currency', currency);
+
+  // Legacy params (harmløse – men greit for bakoverkompat)
+  if (from) params.set('from', from);
+  if (to) params.set('to', to);
+  params.set('adults', adults);
 
   return `${base}/${configId}?${params.toString()}`;
 }
-
 function resolveServicesForArea(areaSlugRaw: string | undefined | null): { services: ServiceConfig[]; areaKey: string | null } {
   const slug = (areaSlugRaw || '').toLowerCase().trim();
 
@@ -1713,84 +1627,85 @@ function bookingLink_resolveAreaKeyFromServiceId(serviceIdRaw: any): string | nu
 }
 
 app.get(['/api/mews/booking-link', '/mews/booking-link'], (req, res) => {
-  try {
-    const areaSlugRaw = req.query.area ? String(req.query.area) : '';
-    const from = req.query.from ? String(req.query.from).slice(0, 10) : '';
-    const to = req.query.to ? String(req.query.to).slice(0, 10) : '';
-    const adults = req.query.adults ? Number(req.query.adults) : 2;
+  const startedAt = Date.now();
 
+  try {
+    const areaSlugRaw = req.query.area ? String(req.query.area).trim() : '';
     const serviceId = req.query.serviceId ? String(req.query.serviceId).trim() : '';
     const roomId = req.query.roomId ? String(req.query.roomId).trim() : '';
+
+    const from = req.query.from ? String(req.query.from).trim() : '';
+    const to = req.query.to ? String(req.query.to).trim() : '';
+    const adults = req.query.adults ? Number(req.query.adults) : 2;
+
+    // Default: rates (for å hoppe forbi "Datoer" når roomId er med)
+    const route = req.query.route ? String(req.query.route).trim() : 'rates';
+
+    // voucher/promo
     const promo = req.query.promo ? String(req.query.promo).trim() : '';
-    const routeRaw = req.query.route ? String(req.query.route).trim() : '';
 
-    // Default route:
-    // Hvis du sender roomId (dvs klikker på en konkret bolig), er det naturlig å hoppe til rates (steg 3)
-    const route = routeRaw || (roomId ? 'rates' : '');
-
-    // Resolve areaKey:
-    // 1) fra slug (area=...)
-    // 2) fra serviceId
-    // 3) null (fallback)
-    const fromSlug = areaSlugRaw ? resolveServicesForArea(areaSlugRaw).areaKey : null;
-    const fromService = serviceId ? bookingLink_resolveAreaKeyFromServiceId(serviceId) : null;
-    const areaKey = fromSlug || fromService || null;
+    // 1) Finn areaKey
+    const areaKeyFromArea = areaSlugRaw ? resolveServicesForArea(areaSlugRaw).areaKey : null;
+  const areaKeyFromService = serviceId ? bookingLink_resolveAreaKeyFromServiceId(serviceId) : null;
+    const areaKey = areaKeyFromService || areaKeyFromArea;
 
     const normalizedAreaKey = normAreaKey(areaKey);
-    const envKey = normalizedAreaKey ? `MEWS_DISTRIBUTION_CONFIGURATION_ID_${normalizedAreaKey}` : null;
 
-    const configId = getDistributionConfigIdForArea(areaKey);
-    const overrideUrl = getBookingUrlOverrideForArea(areaKey);
+    // 2) Finn config/override
+    const overrideUrl = getBookingUrlOverrideForArea(normalizedAreaKey);
+  const cfg = getDistributionConfigForArea(normalizedAreaKey);
 
     const depositRequired = normalizedAreaKey === 'STRANDA';
 
-    if (!overrideUrl && !configId) {
-      return res.status(500).json({
-        ok: false,
-        error: 'booking_link_missing',
-        detail: 'Mangler distribution configId/overrideUrl for dette området',
-        resolved: { areaKey, normalizedAreaKey, envKey },
-      });
-    }
-
+    // 3) Bygg URL
     const url =
       overrideUrl ||
-      buildMewsDistributorUrl({
-        base: MEWS_DISTRIBUTOR_BASE,
-        configId,
-        from: from || undefined,
-        to: to || undefined,
-        adults: Number.isFinite(adults) ? adults : 2,
-        promo: promo || null,
-        route: route || undefined,
-        roomId: roomId || null,
-      });
+      (cfg.configId
+        ? buildMewsDistributorUrl({
+            base: MEWS_DISTRIBUTOR_BASE,
+            configId: cfg.configId,
+            from,
+            to,
+            adults,
+            route,
+            roomId,
+            promo,
+            language: 'nb-NO',
+          })
+        : null);
 
-    return res.json({
-      ok: true,
-      input: {
-        area: areaSlugRaw || null,
-        serviceId: serviceId || null,
-        roomId: roomId || null,
-        route: route || null,
-        promo: promo || null,
-        from: from || null,
-        to: to || null,
-        adults: Number.isFinite(adults) ? adults : 2,
-      },
+    // 4) Returnér alltid JSON (ingen “stum 500”)
+    const out: any = {
+      ok: Boolean(url),
+      ms: Date.now() - startedAt,
+      input: { area: areaSlugRaw || null, serviceId: serviceId || null, roomId: roomId || null, route, from, to, adults },
       resolved: {
-        areaKey,
-        normalizedAreaKey,
-        envKey,
-        configId: configId || null,
-        overrideUrl: overrideUrl || null,
+        areaKey: areaKey || null,
+        normalizedAreaKey: normalizedAreaKey || null,
         distributionBase: MEWS_DISTRIBUTOR_BASE,
+        overrideUrl: overrideUrl || null,
+        config: cfg,
         depositRequired,
       },
-      url: url || null,
-    });
+      url,
+    };
+
+    if (!url) out.error = 'booking_link_missing_config_or_override';
+
+    return res.json(out);
   } catch (e: any) {
-    return res.status(500).json({ ok: false, error: 'booking_link_failed', detail: e?.message || String(e) });
+    console.error('[BOOKING-LINK] failed', {
+      message: e?.message,
+      stack: e?.stack,
+      query: req.query,
+    });
+
+    // Viktig: returnér JSON, så PowerShell/klient ser hva som skjedde
+    return res.json({
+      ok: false,
+      error: 'booking_link_failed',
+      message: e?.message || String(e),
+    });
   }
 });
 app.post('/api/booking/create', (req, res) => {
