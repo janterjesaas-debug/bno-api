@@ -1686,6 +1686,113 @@ app.get('/api/debug/mews/availability-raw', async (req, res) => {
 // Booking-link endpoint (per område)
 // GET /api/mews/booking-link?area=trysil-turistsenter&from=YYYY-MM-DD&to=YYYY-MM-DD&adults=2
 // =============================================================
+// =============================================================
+// Booking-link endpoint (per enhet / step3 deeplink)
+// GET /api/mews/booking-link?serviceId=...&roomId=...&route=rates&promo=bnotravel&from=YYYY-MM-DD&to=YYYY-MM-DD&adults=2
+// (alternativ) ...?area=trysil-turistsenter&from=...&to=...&adults=...
+// =============================================================
+
+function bookingLink_resolveAreaKeyFromServiceId(serviceIdRaw: any): string | null {
+  const id = String(serviceIdRaw || '').trim();
+  if (!id) return null;
+
+  // Stranda
+  if (MEWS_SERVICE_ID_STRANDA && id === MEWS_SERVICE_ID_STRANDA) return 'STRANDA';
+
+  // Trysil / Sälen
+  if (MEWS_SERVICE_ID_TRYSIL_TURISTSENTER && id === MEWS_SERVICE_ID_TRYSIL_TURISTSENTER) return 'TRYSIL_TURISTSENTER';
+  if (MEWS_SERVICE_ID_TRYSIL_HOYFJELLSSENTER && id === MEWS_SERVICE_ID_TRYSIL_HOYFJELLSSENTER) return 'TRYSIL_HOYFJELLSSENTER';
+  if (MEWS_SERVICE_ID_TRYSILFJELL_HYTTEOMRADE && id === MEWS_SERVICE_ID_TRYSILFJELL_HYTTEOMRADE) return 'TRYSILFJELL_HYTTEOMRADE';
+  if (MEWS_SERVICE_ID_TRYSIL_SENTRUM && id === MEWS_SERVICE_ID_TRYSIL_SENTRUM) return 'TRYSIL_SENTRUM';
+
+  if (MEWS_SERVICE_ID_TANDADALEN_SALEN && id === MEWS_SERVICE_ID_TANDADALEN_SALEN) return 'TANDADALEN_SALEN';
+  if (MEWS_SERVICE_ID_HOGFJALLET_SALEN && id === MEWS_SERVICE_ID_HOGFJALLET_SALEN) return 'HOGFJALLET_SALEN';
+  if (MEWS_SERVICE_ID_LINDVALLEN_SALEN && id === MEWS_SERVICE_ID_LINDVALLEN_SALEN) return 'LINDVALLEN_SALEN';
+
+  return null;
+}
+
+app.get(['/api/mews/booking-link', '/mews/booking-link'], (req, res) => {
+  try {
+    const areaSlugRaw = req.query.area ? String(req.query.area) : '';
+    const from = req.query.from ? String(req.query.from).slice(0, 10) : '';
+    const to = req.query.to ? String(req.query.to).slice(0, 10) : '';
+    const adults = req.query.adults ? Number(req.query.adults) : 2;
+
+    const serviceId = req.query.serviceId ? String(req.query.serviceId).trim() : '';
+    const roomId = req.query.roomId ? String(req.query.roomId).trim() : '';
+    const promo = req.query.promo ? String(req.query.promo).trim() : '';
+    const routeRaw = req.query.route ? String(req.query.route).trim() : '';
+
+    // Default route:
+    // Hvis du sender roomId (dvs klikker på en konkret bolig), er det naturlig å hoppe til rates (steg 3)
+    const route = routeRaw || (roomId ? 'rates' : '');
+
+    // Resolve areaKey:
+    // 1) fra slug (area=...)
+    // 2) fra serviceId
+    // 3) null (fallback)
+    const fromSlug = areaSlugRaw ? resolveServicesForArea(areaSlugRaw).areaKey : null;
+    const fromService = serviceId ? bookingLink_resolveAreaKeyFromServiceId(serviceId) : null;
+    const areaKey = fromSlug || fromService || null;
+
+    const normalizedAreaKey = normAreaKey(areaKey);
+    const envKey = normalizedAreaKey ? `MEWS_DISTRIBUTION_CONFIGURATION_ID_${normalizedAreaKey}` : null;
+
+    const configId = getDistributionConfigIdForArea(areaKey);
+    const overrideUrl = getBookingUrlOverrideForArea(areaKey);
+
+    const depositRequired = normalizedAreaKey === 'STRANDA';
+
+    if (!overrideUrl && !configId) {
+      return res.status(500).json({
+        ok: false,
+        error: 'booking_link_missing',
+        detail: 'Mangler distribution configId/overrideUrl for dette området',
+        resolved: { areaKey, normalizedAreaKey, envKey },
+      });
+    }
+
+    const url =
+      overrideUrl ||
+      buildMewsDistributorUrl({
+        base: MEWS_DISTRIBUTOR_BASE,
+        configId,
+        from: from || undefined,
+        to: to || undefined,
+        adults: Number.isFinite(adults) ? adults : 2,
+        promo: promo || null,
+        route: route || undefined,
+        roomId: roomId || null,
+      });
+
+    return res.json({
+      ok: true,
+      input: {
+        area: areaSlugRaw || null,
+        serviceId: serviceId || null,
+        roomId: roomId || null,
+        route: route || null,
+        promo: promo || null,
+        from: from || null,
+        to: to || null,
+        adults: Number.isFinite(adults) ? adults : 2,
+      },
+      resolved: {
+        areaKey,
+        normalizedAreaKey,
+        envKey,
+        configId: configId || null,
+        overrideUrl: overrideUrl || null,
+        distributionBase: MEWS_DISTRIBUTOR_BASE,
+        depositRequired,
+      },
+      url: url || null,
+    });
+  } catch (e: any) {
+    return res.status(500).json({ ok: false, error: 'booking_link_failed', detail: e?.message || String(e) });
+  }
+});
 app.post('/api/booking/create', (req, res) => {
   try {
     // støtte både startYmd/endYmd og from/to
