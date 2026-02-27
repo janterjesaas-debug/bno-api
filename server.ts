@@ -1256,7 +1256,7 @@ app.get('/api/stripe/session', async (req, res) => {
       apiVersion: (process.env.STRIPE_API_VERSION as any) || ('2023-10-16' as any),
     });
 
-    const sessionId = String(req.query.sessionId || '').trim();
+    const sessionId = String((req.query.sessionId || req.query.session_id || '')).trim();
     if (!sessionId) return res.status(400).json({ ok: false, error: 'missing_sessionId' });
 
     const session = await stripe.checkout.sessions.retrieve(sessionId);
@@ -1287,9 +1287,8 @@ app.get('/api/stripe/session', async (req, res) => {
 
       const session = await stripe.checkout.sessions.retrieve(sessionId);
 
+      // Bruk payment_status (denne er stabil og er det vi faktisk bryr oss om).
       const paid = session.payment_status === 'paid';
-
-
       if (!paid) {
         return res.status(400).json({
           ok: false,
@@ -1303,6 +1302,7 @@ app.get('/api/stripe/session', async (req, res) => {
       const from = md.from || '';
       const to = md.to || '';
       const adults = Number(md.adults || '2') || 2;
+
       const serviceId = md.serviceId || '';
       const roomId = md.roomId || '';
 
@@ -1322,7 +1322,7 @@ app.get('/api/stripe/session', async (req, res) => {
         });
       }
 
-      // Voucher-kode (kan styres via env, men fallback er bnotravel)
+      // Voucher-kode (env-styrt, fallback til bnotravel)
       const voucherCode =
         (process.env.MEWS_VOUCHER_CODE_STRANDA || 'bnotravel').trim() || 'bnotravel';
 
@@ -1368,8 +1368,6 @@ app.get('/api/stripe/session', async (req, res) => {
       const session = await stripe.checkout.sessions.retrieve(sessionId);
 
       const paid = session.payment_status === 'paid';
-    
-
       if (!paid) return res.status(400).send('Not paid');
 
       const md = (session.metadata || {}) as Record<string, string>;
@@ -1380,6 +1378,8 @@ app.get('/api/stripe/session', async (req, res) => {
 
       const areaKey = 'STRANDA';
       const config = getDistributionConfigForArea(areaKey);
+
+      if (!config.configId) return res.status(500).send('Missing Stranda distribution config');
 
       const voucherCode =
         (process.env.MEWS_VOUCHER_CODE_STRANDA || 'bnotravel').trim() || 'bnotravel';
