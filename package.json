@@ -21,6 +21,7 @@
     "mews:sync:cleaning": "dotenv -e .env -- ts-node scripts/mews-sync-cleaning.ts"
   },
   "dependencies": {
+    "@duffel/api": "^4.21.5",
     "@supabase/supabase-js": "^2.95.3",
     "axios": "^1.12.2",
     "cors": "^2.8.5",

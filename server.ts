@@ -73,6 +73,7 @@ import { mewsWebhookHandler } from './mews-webhook';
 import { fetchSiteMinderAvailability } from './lib/siteminder';
 import registerHousekeepingRoutes from './lib/housekeepingRoutes';
 import registerStripeRoutes from './lib/stripeRoutes';
+import flightsRouter from './routes/flights';
 
 import { getImagesForResourceCategory } from './lib/imageMap';
 import { pickLocalizedText } from './lib/mewsLocalization';
@@ -1091,6 +1092,7 @@ app.use(bodyParser.json({ limit: '1mb' }));
 
 registerHousekeepingRoutes(app);
 registerStripeRoutes(app);
+app.use('/api/flights', flightsRouter);
 
 // =============================================================
 // ✅ APP-KOMPAT ROUTES

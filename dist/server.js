@@ -1119,7 +1119,7 @@ app.get('/api/stripe/session', async (req, res) => {
         const stripe = new stripe_1.default(stripeKey, {
             apiVersion: process.env.STRIPE_API_VERSION || '2023-10-16',
         });
-        const sessionId = String(req.query.sessionId || '').trim();
+        const sessionId = String((req.query.sessionId || req.query.session_id || '')).trim();
         if (!sessionId)
             return res.status(400).json({ ok: false, error: 'missing_sessionId' });
         const session = await stripe.checkout.sessions.retrieve(sessionId);
@@ -1130,9 +1130,12 @@ app.get('/api/stripe/session', async (req, res) => {
     }
 });
 /**
- * GET /api/stripe/fee/continue?sessionId=cs_...
- * Leser Stripe session metadata og returnerer nextUrl til STRANDA
- * på steg 3 (rates) med voucher bnotravel.
+ * Fortsetter etter Stripe-betaling.
+ * Returnerer JSON med nextUrl (Mews steg 3).
+ *
+ * Støtter både:
+ *  - /api/stripe/fee/continue?sessionId=cs_...
+ *  - /api/stripe/fee/continue?session_id=cs_...
  */
 app.get('/api/stripe/fee/continue', async (req, res) => {
     try {
@@ -1140,44 +1143,107 @@ app.get('/api/stripe/fee/continue', async (req, res) => {
         const stripe = new stripe_1.default(stripeKey, {
             apiVersion: process.env.STRIPE_API_VERSION || '2023-10-16',
         });
-        const sessionId = String(req.query.sessionId || '').trim();
+        const sessionId = String((req.query.sessionId || req.query.session_id || '')).trim();
         if (!sessionId)
             return res.status(400).json({ ok: false, error: 'missing_sessionId' });
         const session = await stripe.checkout.sessions.retrieve(sessionId);
-        // Stripe Checkout: sjekk at betalt
-        const paid = session?.payment_status === 'paid' || session?.status === 'complete';
+        // Bruk payment_status (denne er stabil og er det vi faktisk bryr oss om).
+        const paid = session.payment_status === 'paid';
         if (!paid) {
-            return res.status(400).json({ ok: false, error: 'not_paid', detail: { status: session?.status, payment_status: session?.payment_status } });
+            return res.status(400).json({
+                ok: false,
+                error: 'not_paid',
+                detail: { status: session.status, payment_status: session.payment_status },
+            });
         }
         const md = (session.metadata || {});
-        const from = String(md.from || md.startYmd || '').slice(0, 10);
-        const to = String(md.to || md.endYmd || '').slice(0, 10);
-        const adults = Number(md.adults || '2');
-        const serviceId = String(md.serviceId || MEWS_SERVICE_ID_STRANDA || '').trim();
-        const roomId = String(md.roomId || md.ResourceCategoryId || md.RoomCategoryId || '').trim() || null;
-        const areaKey = areaKeyFromServiceId(serviceId) || 'STRANDA';
+        const from = md.from || '';
+        const to = md.to || '';
+        const adults = Number(md.adults || '2') || 2;
+        const serviceId = md.serviceId || '';
+        const roomId = md.roomId || '';
+        if (!serviceId) {
+            return res.status(400).json({ ok: false, error: 'missing_serviceId_in_metadata' });
+        }
+        // STRANDA: alltid Stranda-config + voucher
+        const areaKey = 'STRANDA';
         const config = getDistributionConfigForArea(areaKey);
-        if (!config.configId)
-            return res.status(500).json({ ok: false, error: 'missing_distribution_config_stranda' });
+        if (!config.configId) {
+            return res.status(500).json({
+                ok: false,
+                error: 'missing_distribution_config_stranda',
+                detail: { areaKey, envKey: config.envKey, source: config.source },
+            });
+        }
+        // Voucher-kode (env-styrt, fallback til bnotravel)
+        const voucherCode = (process.env.MEWS_VOUCHER_CODE_STRANDA || 'bnotravel').trim() || 'bnotravel';
         const url = buildMewsDistributorUrl({
             base: MEWS_DISTRIBUTOR_BASE,
             configId: config.configId,
-            from: from || undefined,
-            to: to || undefined,
-            adults: Number.isFinite(adults) ? adults : 2,
-            promo: 'bnotravel',
-            route: roomId ? 'rates' : undefined,
+            from,
+            to,
+            adults,
+            promo: voucherCode, // => mewsVoucherCode=bnotravel
+            route: 'rates',
             roomId: roomId || undefined,
+            language: 'nb-NO',
+            currency: 'NOK',
         });
-        return res.json({
-            ok: true,
-            data: {
-                nextUrl: url,
-            },
-        });
+        return res.json({ ok: true, data: { nextUrl: url } });
     }
     catch (e) {
-        return res.status(500).json({ ok: false, error: 'stripe_fee_continue_failed', detail: e?.message || String(e) });
+        return res.status(500).json({
+            ok: false,
+            error: 'stripe_fee_continue_failed',
+            detail: String(e?.message || e),
+        });
+    }
+});
+/**
+ * Praktisk redirect-endpoint du kan bruke direkte som Stripe success_url-base:
+ * success_url = .../api/stripe/fee/return?session_id={CHECKOUT_SESSION_ID}
+ *
+ * Den verifiserer betaling og redirecter (302) rett til Mews steg 3.
+ */
+app.get('/api/stripe/fee/return', async (req, res) => {
+    try {
+        const stripeKey = mustEnv('STRIPE_SECRET_KEY');
+        const stripe = new stripe_1.default(stripeKey, {
+            apiVersion: process.env.STRIPE_API_VERSION || '2023-10-16',
+        });
+        const sessionId = String((req.query.session_id || req.query.sessionId || '')).trim();
+        if (!sessionId)
+            return res.status(400).send('Missing session_id');
+        const session = await stripe.checkout.sessions.retrieve(sessionId);
+        const paid = session.payment_status === 'paid';
+        if (!paid)
+            return res.status(400).send('Not paid');
+        const md = (session.metadata || {});
+        const from = md.from || '';
+        const to = md.to || '';
+        const adults = Number(md.adults || '2') || 2;
+        const roomId = md.roomId || '';
+        const areaKey = 'STRANDA';
+        const config = getDistributionConfigForArea(areaKey);
+        if (!config.configId)
+            return res.status(500).send('Missing Stranda distribution config');
+        const voucherCode = (process.env.MEWS_VOUCHER_CODE_STRANDA || 'bnotravel').trim() || 'bnotravel';
+        const url = buildMewsDistributorUrl({
+            base: MEWS_DISTRIBUTOR_BASE,
+            configId: config.configId,
+            from,
+            to,
+            adults,
+            promo: voucherCode,
+            route: 'rates',
+            roomId: roomId || undefined,
+            language: 'nb-NO',
+            currency: 'NOK',
+        });
+        return res.redirect(302, url);
+    }
+    catch (e) {
+        return res.status(500).send(String(e?.message || e));
     }
 });
 // =============================================================
@@ -1463,8 +1529,8 @@ app.get(['/api/mews/booking-link', '/mews/booking-link'], (req, res) => {
         const adults = req.query.adults ? Number(req.query.adults) : 2;
         // Default: rates (for å hoppe forbi "Datoer" når roomId er med)
         const route = req.query.route ? String(req.query.route).trim() : 'rates';
-        // voucher/promo
-        const promo = req.query.promo ? String(req.query.promo).trim() : '';
+        // voucher/promo (STRANDA: settes kun etter Stripe-betaling via /api/stripe/fee/continue)
+        const promoFromQuery = req.query.promo ? String(req.query.promo).trim() : '';
         // 1) Finn areaKey
         const areaKeyFromArea = areaSlugRaw ? resolveServicesForArea(areaSlugRaw).areaKey : null;
         const areaKeyFromService = serviceId ? bookingLink_resolveAreaKeyFromServiceId(serviceId) : null;
@@ -1474,6 +1540,7 @@ app.get(['/api/mews/booking-link', '/mews/booking-link'], (req, res) => {
         const overrideUrl = getBookingUrlOverrideForArea(normalizedAreaKey);
         const cfg = getDistributionConfigForArea(normalizedAreaKey);
         const depositRequired = normalizedAreaKey === 'STRANDA';
+        const promo = depositRequired ? '' : promoFromQuery;
         // 3) Bygg URL
         const url = overrideUrl ||
             (cfg.configId
@@ -1520,61 +1587,6 @@ app.get(['/api/mews/booking-link', '/mews/booking-link'], (req, res) => {
             error: 'booking_link_failed',
             message: e?.message || String(e),
         });
-    }
-});
-app.post('/api/booking/create', (req, res) => {
-    try {
-        // støtte både startYmd/endYmd og from/to
-        const startYmd = ymd(req.body?.startYmd || req.body?.from);
-        const endYmd = ymd(req.body?.endYmd || req.body?.to);
-        const adults = Math.max(1, Number(req.body?.adults || 1));
-        const areaSlugRaw = req.body?.area ? String(req.body.area) : '';
-        const serviceId = req.body?.serviceId ? String(req.body.serviceId).trim() : '';
-        const roomId = pickRoomIdFromAny(req.body);
-        const route = pickRouteForStep3(req.body?.route, req.body?.step, roomId);
-        const promo = (req.body?.promo ? String(req.body.promo) : '') ||
-            (req.body?.voucher ? String(req.body.voucher) : '') ||
-            (req.body?.mewsVoucherCode ? String(req.body.mewsVoucherCode) : '');
-        const promoTrim = String(promo || '').trim() || null;
-        if (!startYmd || !endYmd) {
-            return res.status(400).json({ ok: false, error: 'missing_startYmd_endYmd' });
-        }
-        const areaKeyFromSvc = areaKeyFromServiceId(serviceId);
-        const areaKeyFromArea = resolveServicesForArea(areaSlugRaw).areaKey;
-        const areaKey = areaKeyFromSvc || areaKeyFromArea;
-        const overrideUrl = getBookingUrlOverrideForArea(areaKey);
-        const config = getDistributionConfigForArea(areaKey);
-        if (!overrideUrl && !config.configId) {
-            return res.status(500).json({
-                ok: false,
-                error: 'missing_distribution_config',
-                detail: `Mangler configId. Sett ${config.envKey || 'MEWS_CONFIGURATION_ID'} i Render.`,
-            });
-        }
-        const safeRoute = route === 'rates' && !roomId ? null : route;
-        const nextUrl = overrideUrl ||
-            buildMewsDistributorUrl({
-                base: MEWS_DISTRIBUTOR_BASE,
-                configId: config.configId,
-                from: startYmd,
-                to: endYmd,
-                adults,
-                promo: promoTrim,
-                route: safeRoute || undefined,
-                roomId: roomId || undefined,
-            });
-        return res.json({
-            ok: true,
-            data: {
-                nextUrl,
-                depositRequired: isStrandaArea(areaKey),
-                areaKey: areaKey || null,
-                configId: config.configId || null,
-            },
-        });
-    }
-    catch (e) {
-        return res.status(500).json({ ok: false, error: 'booking_create_failed', detail: e?.message || String(e) });
     }
 });
 /**
