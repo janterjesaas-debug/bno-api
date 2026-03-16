@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+﻿/* eslint-disable @typescript-eslint/no-explicit-any */
 /**
  * server.ts (BNO API)
  *
@@ -74,6 +74,7 @@ import { fetchSiteMinderAvailability } from './lib/siteminder';
 import registerHousekeepingRoutes from './lib/housekeepingRoutes';
 import registerStripeRoutes from './lib/stripeRoutes';
 import flightsRouter from './routes/flights';
+import flightAirportsRouter from './routes/flightAirports';
 
 import { getImagesForResourceCategory } from './lib/imageMap';
 import { pickLocalizedText } from './lib/mewsLocalization';
@@ -1093,6 +1094,7 @@ app.use(bodyParser.json({ limit: '1mb' }));
 registerHousekeepingRoutes(app);
 registerStripeRoutes(app);
 app.use('/api/flights', flightsRouter);
+app.use('/api/flights', flightAirportsRouter);
 
 // =============================================================
 // ✅ APP-KOMPAT ROUTES
