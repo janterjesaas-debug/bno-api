@@ -63,12 +63,15 @@ router.post('/search', async (req, res) => {
   } catch (e: any) {
     console.error('[DUFFEL] search failed', e?.errors || e?.message || e);
 
-    return res.status(500).json({
-      ok: false,
-      error: 'duffel_search_failed',
-      detail: e?.message || 'Duffel search failed',
-      errors: e?.errors || null,
-    });
+    return res.status(400).json({
+  ok: false,
+  error: 'duffel_search_failed',
+  detail:
+    e?.errors?.[0]?.message ||
+    e?.message ||
+    'Duffel search failed',
+  errors: e?.errors || null,
+});
   }
 });
 

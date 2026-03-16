@@ -3,6 +3,67 @@ import { duffel } from '../lib/duffel';
 
 const router = Router();
 
+type AirportLike = {
+  id?: string;
+  iataCode: string;
+  name: string;
+  cityName: string;
+  countryName?: string;
+};
+
+const FALLBACK_AIRPORTS: AirportLike[] = [
+  { iataCode: 'OSL', name: 'Gardermoen', cityName: 'Oslo', countryName: 'Norge' },
+  { iataCode: 'TRD', name: 'Værnes', cityName: 'Trondheim', countryName: 'Norge' },
+  { iataCode: 'BGO', name: 'Flesland', cityName: 'Bergen', countryName: 'Norge' },
+  { iataCode: 'AES', name: 'Vigra', cityName: 'Ålesund', countryName: 'Norge' },
+  { iataCode: 'SCR', name: 'Scandinavian Mountains Airport', cityName: 'Sälen', countryName: 'Sverige' },
+  { iataCode: 'ARN', name: 'Arlanda', cityName: 'Stockholm', countryName: 'Sverige' },
+  { iataCode: 'CPH', name: 'Kastrup', cityName: 'København', countryName: 'Danmark' },
+  { iataCode: 'AMS', name: 'Schiphol', cityName: 'Amsterdam', countryName: 'Nederland' },
+  { iataCode: 'LGW', name: 'Gatwick', cityName: 'London', countryName: 'Storbritannia' },
+  { iataCode: 'LHR', name: 'Heathrow', cityName: 'London', countryName: 'Storbritannia' },
+  { iataCode: 'HEL', name: 'Helsinki Airport', cityName: 'Helsinki', countryName: 'Finland' },
+  { iataCode: 'JFK', name: 'John F. Kennedy', cityName: 'New York', countryName: 'USA' },
+  { iataCode: 'LAX', name: 'Los Angeles International', cityName: 'Los Angeles', countryName: 'USA' },
+  { iataCode: 'MIA', name: 'Miami International', cityName: 'Miami', countryName: 'USA' },
+  { iataCode: 'BOS', name: 'Logan International', cityName: 'Boston', countryName: 'USA' },
+];
+
+function normalizeAirport(airport: any) {
+  return {
+    id: airport.id,
+    iataCode: airport.iata_code || '',
+    name: airport.name || '',
+    cityName: airport.city_name || airport.city?.name || '',
+    cityIataCode: airport.iata_city_code || airport.city?.iata_code || '',
+    countryName: airport.iata_country_code || airport.country_name || '',
+    displayName: [
+      airport.city_name || airport.city?.name || '',
+      airport.name || '',
+      airport.iata_code ? `(${airport.iata_code})` : '',
+    ]
+      .filter(Boolean)
+      .join(' – '),
+  };
+}
+
+function fallbackSearch(query: string) {
+  const q = query.trim().toLowerCase();
+
+  return FALLBACK_AIRPORTS.filter((airport) => {
+    const hay = `${airport.cityName} ${airport.name} ${airport.iataCode} ${airport.countryName || ''}`.toLowerCase();
+    return hay.includes(q);
+  }).map((airport) => ({
+    id: `fallback_${airport.iataCode.toLowerCase()}`,
+    iataCode: airport.iataCode,
+    name: airport.name,
+    cityName: airport.cityName,
+    cityIataCode: '',
+    countryName: airport.countryName,
+    displayName: `${airport.cityName} – ${airport.name} (${airport.iataCode})`,
+  }));
+}
+
 router.get('/airports', async (req, res) => {
   try {
     const q = String(req.query.q || '').trim();
@@ -14,30 +75,36 @@ router.get('/airports', async (req, res) => {
       });
     }
 
-    const result = await duffel.airports.list({
-      limit: 10,
-      name: q,
-    } as any);
+    let items: any[] = [];
 
-    const items = (result?.data || []).map((airport: any) => ({
-      id: airport.id,
-      iataCode: airport.iata_code || '',
-      name: airport.name || '',
-      cityName: airport.city_name || '',
-      cityIataCode: airport.city?.iata_code || '',
-      countryName: airport.country_name || '',
-      displayName: [
-        airport.city_name || '',
-        airport.name || '',
-        airport.iata_code ? `(${airport.iata_code})` : '',
-      ]
-        .filter(Boolean)
-        .join(' – '),
-    }));
+    try {
+      const result = await duffel.airports.list({
+        limit: 20,
+        name: q,
+      } as any);
+
+      items = (result?.data || []).map(normalizeAirport);
+    } catch (apiError: any) {
+      console.error('[DUFFEL] airport search failed', apiError?.errors || apiError?.message || apiError);
+    }
+
+    const fallbackItems = fallbackSearch(q);
+
+    const mergedMap = new Map<string, any>();
+
+    for (const item of [...items, ...fallbackItems]) {
+      const key = String(item.iataCode || '').trim().toUpperCase();
+      if (!key) continue;
+      if (!mergedMap.has(key)) {
+        mergedMap.set(key, item);
+      }
+    }
+
+    const merged = Array.from(mergedMap.values());
 
     return res.json({
       ok: true,
-      data: items,
+      data: merged,
     });
   } catch (e: any) {
     console.error('[DUFFEL] airport search failed', e?.errors || e?.message || e);
