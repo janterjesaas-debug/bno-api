@@ -78,6 +78,7 @@ import flightAirportsRouter from './routes/flightAirports';
 
 import { getImagesForResourceCategory } from './lib/imageMap';
 import { pickLocalizedText } from './lib/mewsLocalization';
+import { getSupabaseDescriptionForResourceCategory } from './lib/supabaseContent';
 
 // =============================================================
 // BOOT DIAGNOSTIKK
@@ -2002,10 +2003,25 @@ async function getResourceCategoriesForServiceCached(
     if (!rc?.Id) continue;
     const rcId = String(rc.Id);
 
-    const localizedName = pickLocalizedText(rc.Names, requestedLang, [LOCALE]) || rc.Name || rc.ExternalIdentifier || 'Rom';
-    const cap = typeof rc.Capacity === 'number' ? (rc.Capacity as number) : null;
-    const description = pickLocalizedText(rc.Descriptions, requestedLang, [LOCALE]) || rc.Description || null;
+   const mewsName =
+  pickLocalizedText(rc.Names, requestedLang, [LOCALE]) ||
+  rc.Name ||
+  rc.ExternalIdentifier ||
+  null;
 
+const cap = typeof rc.Capacity === 'number' ? (rc.Capacity as number) : null;
+
+const mewsDescription =
+  pickLocalizedText(rc.Descriptions, requestedLang, [LOCALE]) ||
+  rc.Description ||
+  null;
+
+const supabaseContent = !mewsDescription
+  ? await getSupabaseDescriptionForResourceCategory(rcId, requestedLang)
+  : null;
+
+const localizedName = mewsName || supabaseContent?.title || 'Rom';
+const description = mewsDescription || supabaseContent?.description || null;
     const mappedImages = getImagesForResourceCategory(rcId);
     const primaryMappedImage = mappedImages[0] ?? null;
 

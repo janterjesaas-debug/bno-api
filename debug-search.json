@@ -1,0 +1,31 @@
+﻿{
+    "ok":  true,
+    "data":  {
+                 "availability":  {
+                                      "ResourceCategoryAvailabilities":  [
+
+                                                                         ]
+                                  },
+                 "params":  {
+                                "from":  "2026-01-15",
+                                "to":  "2026-01-18",
+                                "nights":  3,
+                                "adults":  2,
+                                "area":  "STRANDA",
+                                "lang":  "en",
+                                "includeUnavailable":  true,
+                                "src":  "mews_services_getAvailability+resourceCategories_getAll(cached)+reservations_price(optional)",
+                                "priceFallbackMaxPerService":  20,
+                                "warn":  "mews_search_failed",
+                                "serviceErrors":  [
+                                                      {
+                                                          "serviceId":  "11f4b043-fefc-496f-9680-b15a007eea68",
+                                                          "name":  "Stranda",
+                                                          "credsKey":  "STRANDA",
+                                                          "status":  null,
+                                                          "detail":  "(0 , imageMap_1.getImagesForResourceCategory) is not a function"
+                                                      }
+                                                  ]
+                            }
+             }
+}

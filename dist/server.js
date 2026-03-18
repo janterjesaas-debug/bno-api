@@ -102,8 +102,11 @@ const mews_webhook_1 = require("./mews-webhook");
 const siteminder_1 = require("./lib/siteminder");
 const housekeepingRoutes_1 = __importDefault(require("./lib/housekeepingRoutes"));
 const stripeRoutes_1 = __importDefault(require("./lib/stripeRoutes"));
+const flights_1 = __importDefault(require("./routes/flights"));
+const flightAirports_1 = __importDefault(require("./routes/flightAirports"));
 const imageMap_1 = require("./lib/imageMap");
 const mewsLocalization_1 = require("./lib/mewsLocalization");
+const supabaseContent_1 = require("./lib/supabaseContent");
 // =============================================================
 // BOOT DIAGNOSTIKK
 // =============================================================
@@ -972,6 +975,8 @@ app.use((0, cors_1.default)());
 app.use(body_parser_1.default.json({ limit: '1mb' }));
 (0, housekeepingRoutes_1.default)(app);
 (0, stripeRoutes_1.default)(app);
+app.use('/api/flights', flights_1.default);
+app.use('/api/flights', flightAirports_1.default);
 // =============================================================
 // ✅ APP-KOMPAT ROUTES
 // =============================================================
@@ -1775,9 +1780,19 @@ async function getResourceCategoriesForServiceCached(credsKey, serviceId, reques
         if (!rc?.Id)
             continue;
         const rcId = String(rc.Id);
-        const localizedName = (0, mewsLocalization_1.pickLocalizedText)(rc.Names, requestedLang, [LOCALE]) || rc.Name || rc.ExternalIdentifier || 'Rom';
+        const mewsName = (0, mewsLocalization_1.pickLocalizedText)(rc.Names, requestedLang, [LOCALE]) ||
+            rc.Name ||
+            rc.ExternalIdentifier ||
+            null;
         const cap = typeof rc.Capacity === 'number' ? rc.Capacity : null;
-        const description = (0, mewsLocalization_1.pickLocalizedText)(rc.Descriptions, requestedLang, [LOCALE]) || rc.Description || null;
+        const mewsDescription = (0, mewsLocalization_1.pickLocalizedText)(rc.Descriptions, requestedLang, [LOCALE]) ||
+            rc.Description ||
+            null;
+        const supabaseContent = !mewsDescription
+            ? await (0, supabaseContent_1.getSupabaseDescriptionForResourceCategory)(rcId, requestedLang)
+            : null;
+        const localizedName = mewsName || supabaseContent?.title || 'Rom';
+        const description = mewsDescription || supabaseContent?.description || null;
         const mappedImages = (0, imageMap_1.getImagesForResourceCategory)(rcId);
         const primaryMappedImage = mappedImages[0] ?? null;
         const fallbackImageFromMews = Array.isArray(rc.ImageIds) && rc.ImageIds.length
