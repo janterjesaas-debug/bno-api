@@ -70,47 +70,59 @@ function setLocalCache(key: string, data: any, ttlSec = 300) {
 }
 
 export async function getSupabaseDescriptionForResourceCategory(
-  resourceCategoryId: string,
-  requestedLang: string
-): Promise<{
-  title: string | null;
-  description: string | null;
-  localeUsed: string | null;
-} | null> {
-  const rcId = String(resourceCategoryId || '').trim();
-  if (!rcId || !supabase) return null;
+  rcId: string,
+  lang: string
+): Promise<{ title: string; description: string } | null> {
+  try {
+    if (!rcId) return null;
+    if (!supabase) return null;
 
-  const langs = localeFallbacks(requestedLang);
-  const cacheKey = `supabase_rc_desc:${rcId}:${langs.join('|')}`;
-  const cached = getLocalCache(cacheKey);
-  if (cached) return cached;
+    const client = supabase;
+    const locale = (lang || 'en').toLowerCase();
 
-  const { data, error } = await supabase
-    .from('resource_category_translations')
-    .select('resource_category_id, locale, title, short_description')
-    .eq('resource_category_id', rcId)
-    .in('locale', langs);
+    let { data, error } = await client
+      .from('resource_category_translations')
+      .select('title, short_description, locale')
+      .eq('resource_category_id', rcId)
+      .eq('locale', locale)
+      .limit(1)
+      .maybeSingle();
 
-  if (error || !data || !data.length) {
-    setLocalCache(cacheKey, null, 120);
+    if (error) {
+      console.error('Supabase error (locale):', error);
+    }
+
+    if (!data) {
+      const res = await client
+        .from('resource_category_translations')
+        .select('title, short_description, locale')
+        .eq('resource_category_id', rcId)
+        .eq('locale', 'en')
+        .limit(1)
+        .maybeSingle();
+
+      data = res.data;
+    }
+
+    if (!data) {
+      const res = await client
+        .from('resource_category_translations')
+        .select('title, short_description, locale')
+        .eq('resource_category_id', rcId)
+        .limit(1)
+        .maybeSingle();
+
+      data = res.data;
+    }
+
+    if (!data) return null;
+
+    return {
+      title: data.title,
+      description: data.short_description,
+    };
+  } catch (e) {
+    console.error('Supabase fetch failed:', e);
     return null;
   }
-
-  const rows = data as ResourceTranslationRow[];
-
-  for (const lang of langs) {
-    const row = rows.find((r) => normalizeLocale(r.locale) === lang);
-    if (row && (row.short_description || row.title)) {
-      const result = {
-        title: row.title ?? null,
-        description: row.short_description ?? null,
-        localeUsed: row.locale ?? null,
-      };
-      setLocalCache(cacheKey, result, 300);
-      return result;
-    }
-  }
-
-  setLocalCache(cacheKey, null, 120);
-  return null;
 }
