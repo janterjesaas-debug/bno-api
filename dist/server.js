@@ -1390,6 +1390,33 @@ app.get('/api/health', (_req, res) => res.json({
         strandaCount: MEWS_SERVICES_ALL.filter((s) => (s.credsKey || CREDS_DEFAULT) === CREDS_STRANDA).length,
     },
 }));
+app.get('/api/debug/supabase-description', async (req, res) => {
+    try {
+        const rcId = String(req.query.rcId || '').trim();
+        const lang = String(req.query.lang || 'en').trim();
+        if (!rcId) {
+            return res.status(400).json({ ok: false, error: 'missing_rcId' });
+        }
+        const data = await (0, supabaseContent_1.getSupabaseDescriptionForResourceCategory)(rcId, lang);
+        return res.json({
+            ok: true,
+            rcId,
+            lang,
+            data,
+            env: {
+                hasSUPABASE_URL: !!String(process.env.SUPABASE_URL || '').trim(),
+                hasSUPABASE_SERVICE_ROLE_KEY: !!String(process.env.SUPABASE_SERVICE_ROLE_KEY || '').trim(),
+            },
+        });
+    }
+    catch (e) {
+        return res.status(500).json({
+            ok: false,
+            error: 'supabase_debug_failed',
+            detail: e?.message || String(e),
+        });
+    }
+});
 // =============================================================
 // DEBUG: Validér at våre konfigurerte serviceId-er faktisk finnes i Mews
 // GET /api/debug/mews/validate-services
