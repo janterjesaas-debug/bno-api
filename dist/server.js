@@ -1398,11 +1398,28 @@ app.get('/api/debug/supabase-description', async (req, res) => {
             return res.status(400).json({ ok: false, error: 'missing_rcId' });
         }
         const data = await (0, supabaseContent_1.getSupabaseDescriptionForResourceCategory)(rcId, lang);
+        let rawRows = null;
+        let rawError = null;
+        try {
+            const { createClient } = await Promise.resolve().then(() => __importStar(require('@supabase/supabase-js')));
+            const dbg = createClient(String(process.env.SUPABASE_URL || '').trim(), String(process.env.SUPABASE_SERVICE_ROLE_KEY || '').trim());
+            const q = await dbg
+                .from('resource_category_translations')
+                .select('resource_category_id, locale, title, short_description')
+                .eq('resource_category_id', rcId);
+            rawRows = q.data || null;
+            rawError = q.error || null;
+        }
+        catch (e) {
+            rawError = e?.message || String(e);
+        }
         return res.json({
             ok: true,
             rcId,
             lang,
             data,
+            rawRows,
+            rawError,
             env: {
                 hasSUPABASE_URL: !!String(process.env.SUPABASE_URL || '').trim(),
                 hasSUPABASE_SERVICE_ROLE_KEY: !!String(process.env.SUPABASE_SERVICE_ROLE_KEY || '').trim(),

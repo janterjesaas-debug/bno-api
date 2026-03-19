@@ -1576,11 +1576,34 @@ app.get('/api/debug/supabase-description', async (req, res) => {
 
     const data = await getSupabaseDescriptionForResourceCategory(rcId, lang);
 
+    let rawRows: any[] | null = null;
+    let rawError: any = null;
+
+    try {
+      const { createClient } = await import('@supabase/supabase-js');
+      const dbg = createClient(
+        String(process.env.SUPABASE_URL || '').trim(),
+        String(process.env.SUPABASE_SERVICE_ROLE_KEY || '').trim()
+      );
+
+      const q = await dbg
+        .from('resource_category_translations')
+        .select('resource_category_id, locale, title, short_description')
+        .eq('resource_category_id', rcId);
+
+      rawRows = q.data || null;
+      rawError = q.error || null;
+    } catch (e: any) {
+      rawError = e?.message || String(e);
+    }
+
     return res.json({
       ok: true,
       rcId,
       lang,
       data,
+      rawRows,
+      rawError,
       env: {
         hasSUPABASE_URL: !!String(process.env.SUPABASE_URL || '').trim(),
         hasSUPABASE_SERVICE_ROLE_KEY: !!String(process.env.SUPABASE_SERVICE_ROLE_KEY || '').trim(),
