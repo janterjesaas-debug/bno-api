@@ -1835,8 +1835,13 @@ async function getResourceCategoriesForServiceCached(credsKey, serviceId, reques
         const supabaseContent = !mewsDescription
             ? await (0, supabaseContent_1.getSupabaseDescriptionForResourceCategory)(rcId, requestedLang)
             : null;
-        const localizedName = mewsName || supabaseContent?.title || 'Rom';
-        const description = mewsDescription || supabaseContent?.description || null;
+        const preferSupabaseText = credsKey === CREDS_STRANDA;
+        const localizedName = preferSupabaseText
+            ? (supabaseContent?.title || mewsName || 'Rom')
+            : (mewsName || supabaseContent?.title || 'Rom');
+        const description = preferSupabaseText
+            ? (supabaseContent?.description || mewsDescription || null)
+            : (mewsDescription || supabaseContent?.description || null);
         const mappedImages = (0, imageMap_1.getImagesForResourceCategory)(rcId);
         const primaryMappedImage = mappedImages[0] ?? null;
         const fallbackImageFromMews = Array.isArray(rc.ImageIds) && rc.ImageIds.length

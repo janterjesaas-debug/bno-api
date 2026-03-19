@@ -2071,8 +2071,15 @@ const supabaseContent = !mewsDescription
   ? await getSupabaseDescriptionForResourceCategory(rcId, requestedLang)
   : null;
 
-const localizedName = mewsName || supabaseContent?.title || 'Rom';
-const description = mewsDescription || supabaseContent?.description || null;
+const preferSupabaseText = credsKey === CREDS_STRANDA;
+
+const localizedName = preferSupabaseText
+  ? (supabaseContent?.title || mewsName || 'Rom')
+  : (mewsName || supabaseContent?.title || 'Rom');
+
+const description = preferSupabaseText
+  ? (supabaseContent?.description || mewsDescription || null)
+  : (mewsDescription || supabaseContent?.description || null);
     const mappedImages = getImagesForResourceCategory(rcId);
     const primaryMappedImage = mappedImages[0] ?? null;
 
