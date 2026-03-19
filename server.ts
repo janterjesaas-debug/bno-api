@@ -2067,9 +2067,7 @@ const mewsDescription =
   rc.Description ||
   null;
 
-const supabaseContent = !mewsDescription
-  ? await getSupabaseDescriptionForResourceCategory(rcId, requestedLang)
-  : null;
+const supabaseContent = await getSupabaseDescriptionForResourceCategory(rcId, requestedLang);
 
 const preferSupabaseText = credsKey === CREDS_STRANDA;
 

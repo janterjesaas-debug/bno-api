@@ -1832,9 +1832,7 @@ async function getResourceCategoriesForServiceCached(credsKey, serviceId, reques
         const mewsDescription = (0, mewsLocalization_1.pickLocalizedText)(rc.Descriptions, requestedLang, [LOCALE]) ||
             rc.Description ||
             null;
-        const supabaseContent = !mewsDescription
-            ? await (0, supabaseContent_1.getSupabaseDescriptionForResourceCategory)(rcId, requestedLang)
-            : null;
+        const supabaseContent = await (0, supabaseContent_1.getSupabaseDescriptionForResourceCategory)(rcId, requestedLang);
         const preferSupabaseText = credsKey === CREDS_STRANDA;
         const localizedName = preferSupabaseText
             ? (supabaseContent?.title || mewsName || 'Rom')
