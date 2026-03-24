@@ -153,9 +153,6 @@ async function createDuffelOrder(input: {
   return data?.data || null;
 }
 
-/**
- * POST /api/payments/create-intent
- */
 router.post('/api/payments/create-intent', async (req, res) => {
   try {
     const stripe = getStripe();
@@ -269,9 +266,6 @@ router.post('/api/payments/create-intent', async (req, res) => {
   }
 });
 
-/**
- * POST /api/bookings/confirm
- */
 router.post('/api/bookings/confirm', async (req, res) => {
   try {
     const stripe = getStripe();
