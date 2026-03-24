@@ -5,6 +5,7 @@ type PassengerInput = {
   family_name: string;
   born_on: string;
   email: string;
+  phone_number: string;
 };
 
 type CreateFlightBookingInput = {
@@ -63,6 +64,7 @@ export async function createFlightBooking(input: CreateFlightBookingInput) {
     given_name: input.passenger.given_name,
     family_name: input.passenger.family_name,
     born_on: input.passenger.born_on || null,
+    phone_number: input.passenger.phone_number || null,
 
     duffel_order_id: input.order?.id || null,
     duffel_offer_id: input.offerId,

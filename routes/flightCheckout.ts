@@ -14,6 +14,7 @@ type PassengerInput = {
   family_name: string;
   born_on: string;
   email: string;
+  phone_number: string;
 };
 
 type BookingDraft = {
@@ -125,6 +126,7 @@ async function createDuffelOrder(input: {
           family_name: input.passenger.family_name,
           born_on: input.passenger.born_on,
           email: input.passenger.email,
+          phone_number: input.passenger.phone_number,
         },
       ],
     },
@@ -181,7 +183,8 @@ router.post('/api/payments/create-intent', async (req, res) => {
       !passenger?.given_name ||
       !passenger?.family_name ||
       !passenger?.born_on ||
-      !passenger?.email
+      !passenger?.email ||
+      !passenger?.phone_number
     ) {
       return res.status(400).json({
         ok: false,
@@ -192,6 +195,7 @@ router.post('/api/payments/create-intent', async (req, res) => {
     console.log('[FLIGHT PAY] create-intent start', {
       offerId,
       email: passenger.email,
+      hasPhone: !!passenger.phone_number,
     });
 
     const offerResult = await duffel.offers.get(String(offerId));
@@ -326,28 +330,28 @@ router.post('/api/bookings/confirm', async (req, res) => {
     });
 
     const booking = await createFlightBooking({
-  bookingDraftId: String(bookingDraftId),
-  paymentIntentId: draft.paymentIntentId,
-  paymentStatus: paymentIntent.status,
-  offerId: draft.offerId,
-  flightAmount: draft.offerAmount,
-  serviceFee: draft.serviceFee,
-  totalAmount: draft.totalAmount,
-  currency: draft.offerCurrency,
-  passenger: draft.passenger,
-  order,
-});
+      bookingDraftId: String(bookingDraftId),
+      paymentIntentId: draft.paymentIntentId,
+      paymentStatus: paymentIntent.status,
+      offerId: draft.offerId,
+      flightAmount: draft.offerAmount,
+      serviceFee: draft.serviceFee,
+      totalAmount: draft.totalAmount,
+      currency: draft.offerCurrency,
+      passenger: draft.passenger,
+      order,
+    });
 
-bookingId = String(booking.id || '');
+    bookingId = String(booking.id || '');
 
     if (paymentIntent.status === 'requires_capture') {
       try {
         await stripe.paymentIntents.capture(paymentIntent.id);
       } catch (captureError: any) {
         await markFlightBookingCaptureFailed({
-  bookingId: String(bookingId),
-  note: captureError?.message || 'Capture failed',
-});
+          bookingId: String(bookingId),
+          note: captureError?.message || 'Capture failed',
+        });
 
         throw new Error(
           `Duffel order opprettet, men Stripe capture feilet: ${captureError?.message || 'ukjent feil'}`
@@ -356,9 +360,9 @@ bookingId = String(booking.id || '');
     }
 
     const confirmedBooking = await markFlightBookingConfirmed({
-  bookingId: String(bookingId),
-  paymentIntentId: paymentIntent.id,
-});
+      bookingId: String(bookingId),
+      paymentIntentId: paymentIntent.id,
+    });
 
     bookingDrafts.delete(String(bookingDraftId));
 
