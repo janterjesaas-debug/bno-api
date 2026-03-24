@@ -15,6 +15,8 @@ type PassengerInput = {
   born_on: string;
   email: string;
   phone_number: string;
+  gender: string;
+  title: string;
 };
 
 type BookingDraft = {
@@ -121,7 +123,8 @@ async function createDuffelOrder(input: {
       ],
       passengers: [
         {
-          title: 'mr',
+          title: input.passenger.title,
+          gender: input.passenger.gender,
           given_name: input.passenger.given_name,
           family_name: input.passenger.family_name,
           born_on: input.passenger.born_on,
@@ -184,7 +187,9 @@ router.post('/api/payments/create-intent', async (req, res) => {
       !passenger?.family_name ||
       !passenger?.born_on ||
       !passenger?.email ||
-      !passenger?.phone_number
+      !passenger?.phone_number ||
+      !passenger?.gender ||
+      !passenger?.title
     ) {
       return res.status(400).json({
         ok: false,
@@ -196,6 +201,8 @@ router.post('/api/payments/create-intent', async (req, res) => {
       offerId,
       email: passenger.email,
       hasPhone: !!passenger.phone_number,
+      gender: passenger.gender,
+      title: passenger.title,
     });
 
     const offerResult = await duffel.offers.get(String(offerId));
