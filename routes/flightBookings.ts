@@ -17,7 +17,7 @@ router.get('/api/flight-bookings', async (req, res) => {
     const { data, error } = await supabase
       .from('flight_bookings')
       .select('*')
-      .ilike('passenger_email', email)
+      .eq('passenger_email', email)
       .order('created_at', { ascending: false });
 
     if (error) {

@@ -7,6 +7,7 @@ const express_1 = __importDefault(require("express"));
 const stripe_1 = __importDefault(require("stripe"));
 const duffel_1 = require("../lib/duffel");
 const flightBookings_1 = require("../lib/flightBookings");
+const flightEmails_1 = require("../lib/flightEmails");
 const router = express_1.default.Router();
 const bookingDrafts = new Map();
 function getDuffelErrorMessage(e) {
@@ -210,6 +211,7 @@ router.post('/api/payments/create-intent', async (req, res) => {
             passenger: {
                 ...passenger,
                 id: offerPassengerId,
+                locale: String(passenger?.locale || 'nb').trim(),
             },
             paymentIntentId: paymentIntent.id,
             createdAt: Date.now(),
@@ -317,6 +319,27 @@ router.post('/api/bookings/confirm', async (req, res) => {
             bookingId: String(bookingId),
             paymentIntentId: paymentIntent.id,
         });
+        try {
+            await (0, flightEmails_1.sendFlightBookingConfirmationEmail)({
+                to: draft.passenger.email,
+                locale: draft.passenger.locale || 'nb',
+                givenName: draft.passenger.given_name,
+                bnoBookingRef: confirmedBooking?.bno_booking_ref || String(confirmedBooking?.id || ''),
+                orderId: order?.id || null,
+                airline: order?.slices?.[0]?.segments?.[0]?.marketing_carrier?.name || null,
+                origin: order?.slices?.[0]?.segments?.[0]?.origin?.iata_code || null,
+                destination: order?.slices?.[0]?.segments?.[order?.slices?.[0]?.segments?.length - 1]?.destination?.iata_code || null,
+                outboundDeparture: order?.slices?.[0]?.segments?.[0]?.departing_at || null,
+                outboundArrival: order?.slices?.[0]?.segments?.[order?.slices?.[0]?.segments?.length - 1]?.arriving_at || null,
+                returnDeparture: order?.slices?.[1]?.segments?.[0]?.departing_at || null,
+                returnArrival: order?.slices?.[1]?.segments?.[order?.slices?.[1]?.segments?.length - 1]?.arriving_at || null,
+            });
+        }
+        catch (emailError) {
+            console.error('[FLIGHT PAY] confirmation email failed', {
+                message: emailError?.message || String(emailError),
+            });
+        }
         bookingDrafts.delete(String(bookingDraftId));
         console.log('[FLIGHT PAY] confirm success', {
             bookingDraftId,

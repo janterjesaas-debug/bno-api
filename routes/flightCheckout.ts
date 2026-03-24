@@ -6,6 +6,7 @@ import {
   markFlightBookingCaptureFailed,
   markFlightBookingConfirmed,
 } from '../lib/flightBookings';
+import { sendFlightBookingConfirmationEmail } from '../lib/flightEmails';
 
 const router = express.Router();
 
@@ -18,6 +19,7 @@ type PassengerInput = {
   phone_number: string;
   gender: string;
   title: string;
+  locale?: string;
 };
 
 type BookingDraft = {
@@ -275,9 +277,10 @@ router.post('/api/payments/create-intent', async (req, res) => {
       offerCurrency: currencyUpper,
       serviceFee,
       totalAmount,
-      passenger: {
+        passenger: {
         ...passenger,
         id: offerPassengerId,
+        locale: String(passenger?.locale || 'nb').trim(),
       },
       paymentIntentId: paymentIntent.id,
       createdAt: Date.now(),
@@ -402,10 +405,34 @@ router.post('/api/bookings/confirm', async (req, res) => {
       }
     }
 
-    const confirmedBooking = await markFlightBookingConfirmed({
+        const confirmedBooking = await markFlightBookingConfirmed({
       bookingId: String(bookingId),
       paymentIntentId: paymentIntent.id,
     });
+
+    try {
+      await sendFlightBookingConfirmationEmail({
+        to: draft.passenger.email,
+        locale: draft.passenger.locale || 'nb',
+        givenName: draft.passenger.given_name,
+        bnoBookingRef: confirmedBooking?.bno_booking_ref || String(confirmedBooking?.id || ''),
+        orderId: order?.id || null,
+        airline: order?.slices?.[0]?.segments?.[0]?.marketing_carrier?.name || null,
+        origin: order?.slices?.[0]?.segments?.[0]?.origin?.iata_code || null,
+        destination:
+          order?.slices?.[0]?.segments?.[order?.slices?.[0]?.segments?.length - 1]?.destination?.iata_code || null,
+        outboundDeparture: order?.slices?.[0]?.segments?.[0]?.departing_at || null,
+        outboundArrival:
+          order?.slices?.[0]?.segments?.[order?.slices?.[0]?.segments?.length - 1]?.arriving_at || null,
+        returnDeparture: order?.slices?.[1]?.segments?.[0]?.departing_at || null,
+        returnArrival:
+          order?.slices?.[1]?.segments?.[order?.slices?.[1]?.segments?.length - 1]?.arriving_at || null,
+      });
+    } catch (emailError: any) {
+      console.error('[FLIGHT PAY] confirmation email failed', {
+        message: emailError?.message || String(emailError),
+      });
+    }
 
     bookingDrafts.delete(String(bookingDraftId));
 
