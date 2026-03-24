@@ -76,6 +76,7 @@ import registerStripeRoutes from './lib/stripeRoutes';
 import flightsRouter from './routes/flights';
 import flightAirportsRouter from './routes/flightAirports';
 import flightCheckoutRouter from './routes/flightCheckout';
+import flightBookingsRouter from './routes/flightBookings';
 
 import { getImagesForResourceCategory } from './lib/imageMap';
 import { pickLocalizedText } from './lib/mewsLocalization';
@@ -1098,6 +1099,7 @@ registerStripeRoutes(app);
 app.use('/api/flights', flightsRouter);
 app.use('/api/flights', flightAirportsRouter);
 app.use(flightCheckoutRouter);
+app.use(flightBookingsRouter);
 
 // =============================================================
 // ✅ APP-KOMPAT ROUTES

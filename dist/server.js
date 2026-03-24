@@ -104,6 +104,8 @@ const housekeepingRoutes_1 = __importDefault(require("./lib/housekeepingRoutes")
 const stripeRoutes_1 = __importDefault(require("./lib/stripeRoutes"));
 const flights_1 = __importDefault(require("./routes/flights"));
 const flightAirports_1 = __importDefault(require("./routes/flightAirports"));
+const flightCheckout_1 = __importDefault(require("./routes/flightCheckout"));
+const flightBookings_1 = __importDefault(require("./routes/flightBookings"));
 const imageMap_1 = require("./lib/imageMap");
 const mewsLocalization_1 = require("./lib/mewsLocalization");
 const supabaseContent_1 = require("./lib/supabaseContent");
@@ -977,6 +979,8 @@ app.use(body_parser_1.default.json({ limit: '1mb' }));
 (0, stripeRoutes_1.default)(app);
 app.use('/api/flights', flights_1.default);
 app.use('/api/flights', flightAirports_1.default);
+app.use(flightCheckout_1.default);
+app.use(flightBookings_1.default);
 // =============================================================
 // ✅ APP-KOMPAT ROUTES
 // =============================================================
@@ -1390,6 +1394,15 @@ app.get('/api/health', (_req, res) => res.json({
         strandaCount: MEWS_SERVICES_ALL.filter((s) => (s.credsKey || CREDS_DEFAULT) === CREDS_STRANDA).length,
     },
 }));
+app.get('/api/debug/stripe-env', (_req, res) => {
+    const key = String(process.env.STRIPE_SECRET_KEY || '').trim();
+    return res.json({
+        ok: true,
+        hasStripeKey: !!key,
+        prefix: key ? key.slice(0, 7) : null,
+        length: key ? key.length : 0,
+    });
+});
 app.get('/api/debug/supabase-description', async (req, res) => {
     try {
         const rcId = String(req.query.rcId || '').trim();

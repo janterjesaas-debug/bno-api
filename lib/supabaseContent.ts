@@ -8,121 +8,65 @@ const supabase =
     ? createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY)
     : null;
 
-type ResourceTranslationRow = {
-  resource_category_id: string;
-  locale: string;
-  unit_name?: string | null;
-  area_slug?: string | null;
-  area_name?: string | null;
-  municipality?: string | null;
-  title?: string | null;
-  short_description?: string | null;
-};
-
-function normalizeLocale(input: string): string {
-  const s = String(input || '').trim().toLowerCase();
-
-  if (!s) return 'nb';
-  if (s === 'nb-no' || s === 'no-no' || s === 'no') return 'nb';
-  if (s === 'en-us' || s === 'en-gb') return 'en';
-  if (s === 'de-de') return 'de';
-  if (s === 'fr-fr') return 'fr';
-  if (s === 'es-es') return 'es';
-  if (s === 'pt-pt' || s === 'pt-br') return 'pt';
-  if (s === 'nl-nl') return 'nl';
-  if (s === 'pl-pl') return 'pl';
-  if (s === 'fi-fi') return 'fi';
-  if (s === 'sv-se') return 'sv';
-  if (s === 'da-dk') return 'da';
-  if (s === 'is-is') return 'is';
-  if (s === 'zh-cn' || s === 'zh-hans' || s === 'zh-hant') return 'zh';
-
-  return s;
-}
-
-function localeFallbacks(requestedLang: string): string[] {
-  const primary = normalizeLocale(requestedLang);
-  const out = [primary];
-
-  if (!out.includes('en')) out.push('en');
-  if (!out.includes('nb')) out.push('nb');
-
-  return out;
-}
-
-const localCache: Record<string, { expires: number; data: any }> = {};
-
-function getLocalCache(key: string) {
-  const hit = localCache[key];
-  if (!hit) return null;
-  if (Date.now() > hit.expires) {
-    delete localCache[key];
-    return null;
-  }
-  return hit.data;
-}
-
-function setLocalCache(key: string, data: any, ttlSec = 300) {
-  localCache[key] = {
-    expires: Date.now() + ttlSec * 1000,
-    data,
-  };
-}
-
 export async function getSupabaseDescriptionForResourceCategory(
   rcId: string,
   lang: string
-): Promise<{ title: string; description: string } | null> {
+): Promise<{ title: string; description: string; localeUsed: string } | null> {
   try {
-    if (!rcId) return null;
+    const id = String(rcId || '').trim().toLowerCase();
+    const requested = String(lang || 'en').trim().toLowerCase();
+
+    if (!id) return null;
     if (!supabase) return null;
 
     const client = supabase;
-    const locale = (lang || 'en').toLowerCase();
 
-    let { data, error } = await client
+    // 1) Hent alle rader for denne resource_category_id
+    const { data: rows, error } = await client
       .from('resource_category_translations')
-      .select('title, short_description, locale')
-      .eq('resource_category_id', rcId)
-      .eq('locale', locale)
-      .limit(1)
-      .maybeSingle();
+      .select('resource_category_id, locale, title, short_description')
+      .eq('resource_category_id', id);
 
     if (error) {
-      console.error('Supabase error (locale):', error);
+      console.error('[SUPABASE CONTENT] query error', {
+        rcId: id,
+        lang: requested,
+        error,
+      });
+      return null;
     }
 
-    if (!data) {
-      const res = await client
-        .from('resource_category_translations')
-        .select('title, short_description, locale')
-        .eq('resource_category_id', rcId)
-        .eq('locale', 'en')
-        .limit(1)
-        .maybeSingle();
-
-      data = res.data;
+    if (!rows || rows.length === 0) {
+      console.warn('[SUPABASE CONTENT] no rows found', {
+        rcId: id,
+        lang: requested,
+      });
+      return null;
     }
 
-    if (!data) {
-      const res = await client
-        .from('resource_category_translations')
-        .select('title, short_description, locale')
-        .eq('resource_category_id', rcId)
-        .limit(1)
-        .maybeSingle();
+    const normalizedRows = rows.map((r: any) => ({
+      resource_category_id: String(r.resource_category_id || '').trim().toLowerCase(),
+      locale: String(r.locale || '').trim().toLowerCase(),
+      title: r.title == null ? '' : String(r.title),
+      short_description: r.short_description == null ? '' : String(r.short_description),
+    }));
 
-      data = res.data;
-    }
+    // 2) Prøv eksakt språk
+    let row =
+      normalizedRows.find((r) => r.locale === requested) ||
+      normalizedRows.find((r) => r.locale === 'en') ||
+      normalizedRows.find((r) => r.locale === 'nb') ||
+      normalizedRows[0];
 
-    if (!data) return null;
+    if (!row) return null;
 
     return {
-      title: data.title,
-      description: data.short_description,
+      title: row.title || '',
+      description: row.short_description || '',
+      localeUsed: row.locale,
     };
   } catch (e) {
-    console.error('Supabase fetch failed:', e);
+    console.error('[SUPABASE CONTENT] unexpected error', e);
     return null;
   }
 }
