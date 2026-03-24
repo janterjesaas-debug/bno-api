@@ -1,6 +1,11 @@
 import express from 'express';
 import Stripe from 'stripe';
 import { duffel } from '../lib/duffel';
+import {
+  createFlightBooking,
+  markFlightBookingCaptureFailed,
+  markFlightBookingConfirmed,
+} from '../lib/flightBookings';
 
 const router = express.Router();
 
@@ -273,6 +278,8 @@ router.post('/api/payments/create-intent', async (req, res) => {
 });
 
 router.post('/api/bookings/confirm', async (req, res) => {
+  let bookingId = '';
+
   try {
     const stripe = getStripe();
     const { bookingDraftId } = req.body || {};
@@ -318,26 +325,62 @@ router.post('/api/bookings/confirm', async (req, res) => {
       passenger: draft.passenger,
     });
 
+    const booking = await createFlightBooking({
+  bookingDraftId: String(bookingDraftId),
+  paymentIntentId: draft.paymentIntentId,
+  paymentStatus: paymentIntent.status,
+  offerId: draft.offerId,
+  flightAmount: draft.offerAmount,
+  serviceFee: draft.serviceFee,
+  totalAmount: draft.totalAmount,
+  currency: draft.offerCurrency,
+  passenger: draft.passenger,
+  order,
+});
+
+bookingId = String(booking.id || '');
+
     if (paymentIntent.status === 'requires_capture') {
-      await stripe.paymentIntents.capture(paymentIntent.id);
+      try {
+        await stripe.paymentIntents.capture(paymentIntent.id);
+      } catch (captureError: any) {
+        await markFlightBookingCaptureFailed({
+  bookingId: String(bookingId),
+  note: captureError?.message || 'Capture failed',
+});
+
+        throw new Error(
+          `Duffel order opprettet, men Stripe capture feilet: ${captureError?.message || 'ukjent feil'}`
+        );
+      }
     }
+
+    const confirmedBooking = await markFlightBookingConfirmed({
+  bookingId: String(bookingId),
+  paymentIntentId: paymentIntent.id,
+});
 
     bookingDrafts.delete(String(bookingDraftId));
 
     console.log('[FLIGHT PAY] confirm success', {
       bookingDraftId,
       orderId: order?.id || null,
+      bookingId: confirmedBooking?.id || null,
+      bnoBookingRef: confirmedBooking?.bno_booking_ref || null,
     });
 
     return res.json({
       ok: true,
       orderId: order?.id || null,
       order,
+      bookingId: confirmedBooking?.id || null,
+      bnoBookingRef: confirmedBooking?.bno_booking_ref || null,
     });
   } catch (e: any) {
     console.error('[FLIGHT PAY] confirm failed', {
       message: e?.message || String(e),
       duffel: e?.duffel || null,
+      bookingId,
     });
 
     try {
