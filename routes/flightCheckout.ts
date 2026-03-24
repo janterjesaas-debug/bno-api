@@ -71,6 +71,12 @@ function toMinorUnits(amount: number) {
 function getStripe() {
   const stripeSecretKey = String(process.env.STRIPE_SECRET_KEY || '').trim();
 
+  console.log('[FLIGHT PAY] STRIPE_SECRET_KEY status', {
+    exists: !!stripeSecretKey,
+    prefix: stripeSecretKey ? stripeSecretKey.slice(0, 7) : null,
+    length: stripeSecretKey ? stripeSecretKey.length : 0,
+  });
+
   if (!stripeSecretKey) {
     throw new Error('STRIPE_SECRET_KEY mangler på serveren');
   }

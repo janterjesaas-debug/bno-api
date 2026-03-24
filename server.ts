@@ -1567,6 +1567,16 @@ app.get('/api/health', (_req, res) =>
     },
   })
 );
+app.get('/api/debug/stripe-env', (_req, res) => {
+  const key = String(process.env.STRIPE_SECRET_KEY || '').trim();
+
+  return res.json({
+    ok: true,
+    hasStripeKey: !!key,
+    prefix: key ? key.slice(0, 7) : null,
+    length: key ? key.length : 0,
+  });
+});
 app.get('/api/debug/supabase-description', async (req, res) => {
   try {
     const rcId = String(req.query.rcId || '').trim();
