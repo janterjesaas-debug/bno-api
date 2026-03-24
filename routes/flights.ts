@@ -3,6 +3,62 @@ import { duffel } from '../lib/duffel';
 
 const router = express.Router();
 
+function getDuffelErrorMessage(e: any): string {
+  return (
+    e?.errors?.[0]?.message ||
+    e?.errors?.[0]?.title ||
+    e?.message ||
+    'Duffel request failed'
+  );
+}
+
+function isDuffelOfferGoneMessage(message: string): boolean {
+  const m = String(message || '').toLowerCase();
+
+  return (
+    m.includes('offer no longer available') ||
+    m.includes('offer is no longer available') ||
+    m.includes('offer has expired') ||
+    m.includes('expired') ||
+    m.includes('not found') ||
+    m.includes('invalid offer')
+  );
+}
+
+function getServiceFee(amount: number, currency: string) {
+  if (currency === 'EUR') {
+    if (amount >= 400) return 25;
+    if (amount >= 200) return 20;
+    return 15;
+  }
+
+  if (currency === 'GBP') {
+    if (amount >= 350) return 20;
+    if (amount >= 180) return 15;
+    return 10;
+  }
+
+  if (amount >= 5000) return 149;
+  if (amount >= 2500) return 99;
+  return 69;
+}
+
+function buildOfferPayload(offer: any) {
+  const totalAmount = Number(offer?.total_amount || 0);
+  const totalCurrency = String(offer?.total_currency || 'EUR').toUpperCase();
+  const serviceFee = getServiceFee(totalAmount, totalCurrency);
+  const totalWithFee = totalAmount + serviceFee;
+
+  return {
+    ...offer,
+    service_fee_amount: serviceFee,
+    total_with_fee: totalWithFee,
+  };
+}
+
+/**
+ * POST /api/flights/search
+ */
 router.post('/search', async (req, res) => {
   try {
     const {
@@ -43,6 +99,14 @@ router.post('/search', async (req, res) => {
       });
     }
 
+    console.log('[DUFFEL] search request', {
+      origin: String(origin).trim().toUpperCase(),
+      destination: String(destination).trim().toUpperCase(),
+      departureDate: String(departureDate).slice(0, 10),
+      returnDate: returnDate ? String(returnDate).slice(0, 10) : null,
+      adults: passengerCount,
+    });
+
     const result = await duffel.offerRequests.create({
       slices,
       passengers,
@@ -53,6 +117,11 @@ router.post('/search', async (req, res) => {
     const offerRequest = result.data;
     const offers = 'offers' in offerRequest ? offerRequest.offers || [] : [];
 
+    console.log('[DUFFEL] search success', {
+      offerRequestId: offerRequest?.id || null,
+      offerCount: offers.length,
+    });
+
     return res.json({
       ok: true,
       data: {
@@ -61,17 +130,86 @@ router.post('/search', async (req, res) => {
       },
     });
   } catch (e: any) {
-    console.error('[DUFFEL] search failed', e?.errors || e?.message || e);
+    console.error('[DUFFEL] search failed', {
+      message: getDuffelErrorMessage(e),
+      errors: e?.errors || null,
+    });
 
     return res.status(400).json({
-  ok: false,
-  error: 'duffel_search_failed',
-  detail:
-    e?.errors?.[0]?.message ||
-    e?.message ||
-    'Duffel search failed',
-  errors: e?.errors || null,
+      ok: false,
+      error: 'duffel_search_failed',
+      detail: getDuffelErrorMessage(e),
+      errors: e?.errors || null,
+    });
+  }
 });
+
+/**
+ * GET /api/flights/offers/:offerId
+ *
+ * Denne er nødvendig for checkout.tsx:
+ * fetch(`${API_BASE}/api/flights/offers/${offerId}`)
+ */
+router.get('/offers/:offerId', async (req, res) => {
+  try {
+    const { offerId } = req.params;
+
+    if (!offerId) {
+      return res.status(400).json({
+        ok: false,
+        error: 'missing_offer_id',
+      });
+    }
+
+    console.log('[DUFFEL] get offer', { offerId });
+
+    const result = await duffel.offers.get(offerId as string);
+    const offer = result?.data;
+
+    if (!offer) {
+      return res.status(404).json({
+        ok: false,
+        error: 'offer_no_longer_available',
+        detail: 'Fant ikke offer hos Duffel',
+      });
+    }
+
+    const payload = buildOfferPayload(offer);
+
+    console.log('[DUFFEL] get offer success', {
+      offerId,
+      total_amount: payload?.total_amount || null,
+      total_currency: payload?.total_currency || null,
+    });
+
+    return res.json({
+      ok: true,
+      offer: payload,
+    });
+  } catch (e: any) {
+    const message = getDuffelErrorMessage(e);
+
+    console.error('[DUFFEL] get offer failed', {
+      offerId: req.params?.offerId || null,
+      message,
+      errors: e?.errors || null,
+    });
+
+    if (isDuffelOfferGoneMessage(message)) {
+      return res.status(404).json({
+        ok: false,
+        error: 'offer_no_longer_available',
+        detail: message,
+        errors: e?.errors || null,
+      });
+    }
+
+    return res.status(500).json({
+      ok: false,
+      error: 'duffel_offer_fetch_failed',
+      detail: message,
+      errors: e?.errors || null,
+    });
   }
 });
 
