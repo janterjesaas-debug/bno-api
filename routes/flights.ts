@@ -146,9 +146,6 @@ router.post('/search', async (req, res) => {
 
 /**
  * GET /api/flights/offers/:offerId
- *
- * Denne er nødvendig for checkout.tsx:
- * fetch(`${API_BASE}/api/flights/offers/${offerId}`)
  */
 router.get('/offers/:offerId', async (req, res) => {
   try {
