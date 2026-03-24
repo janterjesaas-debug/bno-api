@@ -10,6 +10,7 @@ import {
 const router = express.Router();
 
 type PassengerInput = {
+  id?: string;
   given_name: string;
   family_name: string;
   born_on: string;
@@ -102,6 +103,19 @@ function getDuffelToken() {
   return token;
 }
 
+function getFirstOfferPassengerId(offer: any): string {
+  const offerPassengerId =
+    offer?.passengers?.[0]?.id ||
+    offer?.passengers?.[0]?.passenger_id ||
+    '';
+
+  if (!offerPassengerId) {
+    throw new Error('Mangler Duffel passenger id på offeret');
+  }
+
+  return String(offerPassengerId);
+}
+
 async function createDuffelOrder(input: {
   offerId: string;
   offerAmount: number;
@@ -109,6 +123,10 @@ async function createDuffelOrder(input: {
   passenger: PassengerInput;
 }) {
   const token = getDuffelToken();
+
+  if (!input.passenger.id) {
+    throw new Error('Mangler Duffel passenger id for ordreopprettelse');
+  }
 
   const orderBody = {
     data: {
@@ -123,6 +141,7 @@ async function createDuffelOrder(input: {
       ],
       passengers: [
         {
+          id: input.passenger.id,
           title: input.passenger.title,
           gender: input.passenger.gender,
           given_name: input.passenger.given_name,
@@ -134,6 +153,15 @@ async function createDuffelOrder(input: {
       ],
     },
   };
+
+  console.log('[FLIGHT PAY] createDuffelOrder payload', {
+    offerId: input.offerId,
+    passengerId: input.passenger.id,
+    title: input.passenger.title,
+    gender: input.passenger.gender,
+    email: input.passenger.email,
+    hasPhone: !!input.passenger.phone_number,
+  });
 
   const res = await fetch('https://api.duffel.com/air/orders', {
     method: 'POST',
@@ -215,6 +243,8 @@ router.post('/api/payments/create-intent', async (req, res) => {
       });
     }
 
+    const offerPassengerId = getFirstOfferPassengerId(offer);
+
     const flightAmount = Number(offer.total_amount || 0);
     const currencyUpper = String(offer.total_currency || 'EUR').toUpperCase();
     const currencyLower = currencyUpper.toLowerCase();
@@ -231,6 +261,7 @@ router.post('/api/payments/create-intent', async (req, res) => {
       metadata: {
         offerId: String(offer.id || offerId),
         passengerEmail: String(passenger.email),
+        offerPassengerId,
       },
     });
 
@@ -244,7 +275,10 @@ router.post('/api/payments/create-intent', async (req, res) => {
       offerCurrency: currencyUpper,
       serviceFee,
       totalAmount,
-      passenger,
+      passenger: {
+        ...passenger,
+        id: offerPassengerId,
+      },
       paymentIntentId: paymentIntent.id,
       createdAt: Date.now(),
     });
@@ -254,6 +288,7 @@ router.post('/api/payments/create-intent', async (req, res) => {
       bookingDraftId,
       totalAmount,
       currency: currencyUpper,
+      offerPassengerId,
     });
 
     return res.json({
@@ -327,6 +362,7 @@ router.post('/api/bookings/confirm', async (req, res) => {
       bookingDraftId,
       offerId: draft.offerId,
       paymentIntentStatus: paymentIntent.status,
+      offerPassengerId: draft.passenger.id || null,
     });
 
     const order = await createDuffelOrder({
