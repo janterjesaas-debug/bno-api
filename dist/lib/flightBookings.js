@@ -36,6 +36,7 @@ async function createFlightBooking(input) {
     const insertPayload = {
         bno_booking_ref: generateBnoBookingRef(),
         status: 'order_created',
+        user_id: input.userId || null,
         customer_email: normalizedEmail,
         passenger_email: normalizedEmail,
         given_name: input.passenger.given_name,

@@ -277,7 +277,7 @@ router.post('/api/payments/create-intent', async (req, res) => {
       offerCurrency: currencyUpper,
       serviceFee,
       totalAmount,
-        passenger: {
+      passenger: {
         ...passenger,
         id: offerPassengerId,
         locale: String(passenger?.locale || 'nb').trim(),
@@ -331,7 +331,7 @@ router.post('/api/bookings/confirm', async (req, res) => {
 
   try {
     const stripe = getStripe();
-    const { bookingDraftId } = req.body || {};
+    const { bookingDraftId, userId } = req.body || {};
 
     if (!bookingDraftId) {
       return res.status(400).json({
@@ -366,6 +366,7 @@ router.post('/api/bookings/confirm', async (req, res) => {
       offerId: draft.offerId,
       paymentIntentStatus: paymentIntent.status,
       offerPassengerId: draft.passenger.id || null,
+      userId: userId || null,
     });
 
     const order = await createDuffelOrder({
@@ -386,6 +387,7 @@ router.post('/api/bookings/confirm', async (req, res) => {
       currency: draft.offerCurrency,
       passenger: draft.passenger,
       order,
+      userId: userId ? String(userId) : null,
     });
 
     bookingId = String(booking.id || '');
@@ -405,7 +407,7 @@ router.post('/api/bookings/confirm', async (req, res) => {
       }
     }
 
-        const confirmedBooking = await markFlightBookingConfirmed({
+    const confirmedBooking = await markFlightBookingConfirmed({
       bookingId: String(bookingId),
       paymentIntentId: paymentIntent.id,
     });
