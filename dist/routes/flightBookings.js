@@ -9,17 +9,24 @@ const router = express_1.default.Router();
 router.get('/api/flight-bookings', async (req, res) => {
     try {
         const userId = String(req.query.userId || '').trim();
-        if (!userId) {
+        const email = String(req.query.email || '').trim().toLowerCase();
+        if (!userId && !email) {
             return res.status(400).json({
                 ok: false,
-                error: 'userId mangler',
+                error: 'userId eller email mangler',
             });
         }
-        const { data, error } = await supabase_1.supabase
+        let query = supabase_1.supabase
             .from('flight_bookings')
             .select('*')
-            .eq('user_id', userId)
             .order('created_at', { ascending: false });
+        if (userId) {
+            query = query.eq('user_id', userId);
+        }
+        else {
+            query = query.ilike('customer_email', email);
+        }
+        const { data, error } = await query;
         if (error) {
             throw error;
         }

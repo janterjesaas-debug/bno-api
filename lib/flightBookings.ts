@@ -58,14 +58,14 @@ function getDuffelBookingReference(order: any): string | null {
 export async function createFlightBooking(input: CreateFlightBookingInput) {
   const outbound = getSliceSummary(input.order?.slices?.[0]);
   const ret = getSliceSummary(input.order?.slices?.[1]);
-  const normalizedEmail = String(input.passenger.email || '').trim().toLowerCase();
 
   const insertPayload = {
     bno_booking_ref: generateBnoBookingRef(),
     status: 'order_created',
+
     user_id: input.userId || null,
-    customer_email: normalizedEmail,
-    passenger_email: normalizedEmail,
+
+    customer_email: input.passenger.email,
     given_name: input.passenger.given_name,
     family_name: input.passenger.family_name,
     born_on: input.passenger.born_on || null,
