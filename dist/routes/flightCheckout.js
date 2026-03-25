@@ -51,6 +51,11 @@ function toMinorUnits(amount) {
 }
 function getStripe() {
     const stripeSecretKey = String(process.env.STRIPE_SECRET_KEY || '').trim();
+    console.log('[FLIGHT PAY] STRIPE_SECRET_KEY status', {
+        exists: !!stripeSecretKey,
+        prefix: stripeSecretKey ? stripeSecretKey.slice(0, 7) : null,
+        length: stripeSecretKey ? stripeSecretKey.length : 0,
+    });
     if (!stripeSecretKey) {
         throw new Error('STRIPE_SECRET_KEY mangler på serveren');
     }
@@ -102,6 +107,14 @@ async function createDuffelOrder(input) {
             ],
         },
     };
+    console.log('[FLIGHT PAY] createDuffelOrder payload', {
+        offerId: input.offerId,
+        passengerId: input.passenger.id,
+        title: input.passenger.title,
+        gender: input.passenger.gender,
+        email: input.passenger.email,
+        hasPhone: !!input.passenger.phone_number,
+    });
     const res = await fetch('https://api.duffel.com/air/orders', {
         method: 'POST',
         headers: {
@@ -133,7 +146,7 @@ async function createDuffelOrder(input) {
 router.post('/api/payments/create-intent', async (req, res) => {
     try {
         const stripe = getStripe();
-        const { offerId, passenger, userId } = req.body || {};
+        const { offerId, passenger } = req.body || {};
         if (!offerId) {
             return res.status(400).json({
                 ok: false,
@@ -152,6 +165,13 @@ router.post('/api/payments/create-intent', async (req, res) => {
                 error: 'Passasjerinformasjon mangler',
             });
         }
+        console.log('[FLIGHT PAY] create-intent start', {
+            offerId,
+            email: passenger.email,
+            hasPhone: !!passenger.phone_number,
+            gender: passenger.gender,
+            title: passenger.title,
+        });
         const offerResult = await duffel_1.duffel.offers.get(String(offerId));
         const offer = offerResult?.data;
         if (!offer) {
@@ -177,7 +197,6 @@ router.post('/api/payments/create-intent', async (req, res) => {
                 offerId: String(offer.id || offerId),
                 passengerEmail: String(passenger.email),
                 offerPassengerId,
-                userId: userId ? String(userId) : '',
             },
         });
         const bookingDraftId = `draft_${Date.now()}_${Math.random()
@@ -196,7 +215,13 @@ router.post('/api/payments/create-intent', async (req, res) => {
             },
             paymentIntentId: paymentIntent.id,
             createdAt: Date.now(),
-            userId: userId ? String(userId) : null,
+        });
+        console.log('[FLIGHT PAY] create-intent success', {
+            offerId: String(offer.id || offerId),
+            bookingDraftId,
+            totalAmount,
+            currency: currencyUpper,
+            offerPassengerId,
         });
         return res.json({
             ok: true,
@@ -209,6 +234,10 @@ router.post('/api/payments/create-intent', async (req, res) => {
     }
     catch (e) {
         const message = getDuffelErrorMessage(e);
+        console.error('[FLIGHT PAY] create-intent failed', {
+            message,
+            errors: e?.errors || e?.duffel || null,
+        });
         if (isDuffelOfferGoneMessage(message)) {
             return res.status(404).json({
                 ok: false,
@@ -226,6 +255,10 @@ router.post('/api/payments/create-intent', async (req, res) => {
 router.post('/api/bookings/confirm', async (req, res) => {
     let bookingId = '';
     try {
+        console.log('[FLIGHT PAY] confirm request body', {
+            bookingDraftId: req.body?.bookingDraftId || null,
+            userId: req.body?.userId || null,
+        });
         const stripe = getStripe();
         const { bookingDraftId, userId } = req.body || {};
         if (!bookingDraftId) {
@@ -249,6 +282,13 @@ router.post('/api/bookings/confirm', async (req, res) => {
                 error: `Betalingen er ikke klar. Stripe-status: ${paymentIntent.status}`,
             });
         }
+        console.log('[FLIGHT PAY] confirm start', {
+            bookingDraftId,
+            offerId: draft.offerId,
+            paymentIntentStatus: paymentIntent.status,
+            offerPassengerId: draft.passenger.id || null,
+            userId: userId || null,
+        });
         const order = await createDuffelOrder({
             offerId: draft.offerId,
             offerAmount: draft.offerAmount,
@@ -307,6 +347,13 @@ router.post('/api/bookings/confirm', async (req, res) => {
             });
         }
         bookingDrafts.delete(String(bookingDraftId));
+        console.log('[FLIGHT PAY] confirm success', {
+            bookingDraftId,
+            orderId: order?.id || null,
+            bookingId: confirmedBooking?.id || null,
+            bnoBookingRef: confirmedBooking?.bno_booking_ref || null,
+            userId: userId || null,
+        });
         return res.json({
             ok: true,
             orderId: order?.id || null,

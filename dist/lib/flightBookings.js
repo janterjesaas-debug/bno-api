@@ -32,10 +32,14 @@ function getDuffelBookingReference(order) {
 async function createFlightBooking(input) {
     const outbound = getSliceSummary(input.order?.slices?.[0]);
     const ret = getSliceSummary(input.order?.slices?.[1]);
+    console.log('[FLIGHT BOOKINGS] insert payload identity', {
+        email: input.passenger.email,
+        userId: input.userId || null,
+        offerId: input.offerId,
+    });
     const insertPayload = {
         bno_booking_ref: generateBnoBookingRef(),
         status: 'order_created',
-        user_id: input.userId || null,
         customer_email: input.passenger.email,
         given_name: input.passenger.given_name,
         family_name: input.passenger.family_name,
@@ -43,6 +47,7 @@ async function createFlightBooking(input) {
         phone_number: input.passenger.phone_number || null,
         gender: input.passenger.gender || null,
         title: input.passenger.title || null,
+        user_id: input.userId || null,
         duffel_order_id: input.order?.id || null,
         duffel_offer_id: input.offerId,
         duffel_booking_reference: getDuffelBookingReference(input.order),
