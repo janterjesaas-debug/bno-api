@@ -227,7 +227,7 @@ router.post('/api/bookings/confirm', async (req, res) => {
     let bookingId = '';
     try {
         const stripe = getStripe();
-        const { bookingDraftId } = req.body || {};
+        const { bookingDraftId, userId } = req.body || {};
         if (!bookingDraftId) {
             return res.status(400).json({
                 ok: false,
@@ -266,7 +266,7 @@ router.post('/api/bookings/confirm', async (req, res) => {
             currency: draft.offerCurrency,
             passenger: draft.passenger,
             order,
-            userId: draft.userId,
+            userId: userId ? String(userId) : null,
         });
         bookingId = String(booking.id || '');
         if (paymentIntent.status === 'requires_capture') {

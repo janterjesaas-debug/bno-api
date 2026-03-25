@@ -298,7 +298,7 @@ router.post('/api/bookings/confirm', async (req, res) => {
 
   try {
     const stripe = getStripe();
-    const { bookingDraftId } = req.body || {};
+    const { bookingDraftId, userId } = req.body || {};
 
     if (!bookingDraftId) {
       return res.status(400).json({
@@ -336,18 +336,18 @@ router.post('/api/bookings/confirm', async (req, res) => {
     });
 
     const booking = await createFlightBooking({
-      bookingDraftId: String(bookingDraftId),
-      paymentIntentId: draft.paymentIntentId,
-      paymentStatus: paymentIntent.status,
-      offerId: draft.offerId,
-      flightAmount: draft.offerAmount,
-      serviceFee: draft.serviceFee,
-      totalAmount: draft.totalAmount,
-      currency: draft.offerCurrency,
-      passenger: draft.passenger,
-      order,
-      userId: draft.userId,
-    });
+  bookingDraftId: String(bookingDraftId),
+  paymentIntentId: draft.paymentIntentId,
+  paymentStatus: paymentIntent.status,
+  offerId: draft.offerId,
+  flightAmount: draft.offerAmount,
+  serviceFee: draft.serviceFee,
+  totalAmount: draft.totalAmount,
+  currency: draft.offerCurrency,
+  passenger: draft.passenger,
+  order,
+  userId: userId ? String(userId) : null,
+});
 
     bookingId = String(booking.id || '');
 
