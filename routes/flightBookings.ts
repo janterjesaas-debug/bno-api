@@ -18,6 +18,7 @@ router.get('/api/flight-bookings', async (req, res) => {
     let query = supabase
       .from('flight_bookings')
       .select('*')
+      .order('outbound_departure_at', { ascending: true, nullsFirst: false })
       .order('created_at', { ascending: false });
 
     if (userId) {
@@ -32,9 +33,31 @@ router.get('/api/flight-bookings', async (req, res) => {
       throw error;
     }
 
+    const now = new Date();
+
+    const list = Array.isArray(data) ? data : [];
+
+    const upcoming = list
+      .filter((item) => {
+        const departure = item?.outbound_departure_at
+          ? new Date(item.outbound_departure_at)
+          : null;
+
+        return !!departure && !Number.isNaN(departure.getTime()) && departure >= now;
+      })
+      .sort((a, b) => {
+        const aTime = new Date(a.outbound_departure_at).getTime();
+        const bTime = new Date(b.outbound_departure_at).getTime();
+        return aTime - bTime;
+      });
+
     return res.json({
       ok: true,
-      data: data || [],
+      data: list,
+      meta: {
+        total: list.length,
+        nextTrip: upcoming[0] || null,
+      },
     });
   } catch (e: any) {
     console.error('[FLIGHT BOOKINGS] list failed', e);

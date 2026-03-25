@@ -18,7 +18,11 @@ function getSliceSummary(slice) {
     const last = segments[segments.length - 1];
     return {
         origin: first?.origin?.iata_code || '',
+        originCity: first?.origin?.city_name || first?.origin?.city?.name || '',
+        originAirport: first?.origin?.name || '',
         destination: last?.destination?.iata_code || '',
+        destinationCity: last?.destination?.city_name || last?.destination?.city?.name || '',
+        destinationAirport: last?.destination?.name || '',
         departure: first?.departing_at || null,
         arrival: last?.arriving_at || null,
     };
@@ -58,13 +62,23 @@ async function createFlightBooking(input) {
         flight_amount: input.flightAmount,
         service_fee: input.serviceFee,
         total_amount: input.totalAmount,
-        airline_name: input.order?.owner?.name || null,
+        airline_name: input.order?.owner?.name ||
+            input.order?.slices?.[0]?.segments?.[0]?.marketing_carrier?.name ||
+            null,
         outbound_origin: outbound.origin || null,
+        outbound_origin_city: outbound.originCity || null,
+        outbound_origin_airport: outbound.originAirport || null,
         outbound_destination: outbound.destination || null,
+        outbound_destination_city: outbound.destinationCity || null,
+        outbound_destination_airport: outbound.destinationAirport || null,
         outbound_departure_at: outbound.departure,
         outbound_arrival_at: outbound.arrival,
         return_origin: ret.origin || null,
+        return_origin_city: ret.originCity || null,
+        return_origin_airport: ret.originAirport || null,
         return_destination: ret.destination || null,
+        return_destination_city: ret.destinationCity || null,
+        return_destination_airport: ret.destinationAirport || null,
         return_departure_at: ret.departure,
         return_arrival_at: ret.arrival,
         duffel_order_json: input.order || null,

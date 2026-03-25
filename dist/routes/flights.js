@@ -53,12 +53,37 @@ function buildOfferPayload(offer) {
         total_with_fee: totalWithFee,
     };
 }
+function normalizeCabinClass(value) {
+    const allowed = [
+        'economy',
+        'premium_economy',
+        'business',
+        'first',
+    ];
+    const normalized = String(value || 'economy').trim().toLowerCase();
+    if (allowed.includes(normalized)) {
+        return normalized;
+    }
+    return 'economy';
+}
+function toPositiveInt(value, fallback = 0) {
+    const n = Number(value);
+    if (!Number.isFinite(n) || n < 0)
+        return fallback;
+    return Math.floor(n);
+}
+function buildPassengers(adultsRaw) {
+    const adults = Math.max(1, toPositiveInt(adultsRaw, 1));
+    return Array.from({ length: adults }).map(() => ({
+        type: 'adult',
+    }));
+}
 /**
  * POST /api/flights/search
  */
 router.post('/search', async (req, res) => {
     try {
-        const { origin, destination, departureDate, returnDate, adults, } = req.body || {};
+        const { origin, destination, departureDate, returnDate, adults, cabinClass, directOnly, } = req.body || {};
         if (!origin || !destination || !departureDate) {
             return res.status(400).json({
                 ok: false,
@@ -66,39 +91,45 @@ router.post('/search', async (req, res) => {
                 detail: 'origin, destination og departureDate er påkrevd',
             });
         }
-        const passengerCount = Math.max(1, Number(adults || 1));
-        const passengers = Array.from({ length: passengerCount }).map(() => ({
-            type: 'adult',
-        }));
+        const normalizedOrigin = String(origin).trim().toUpperCase();
+        const normalizedDestination = String(destination).trim().toUpperCase();
+        const normalizedCabinClass = normalizeCabinClass(cabinClass);
+        const normalizedDirectOnly = directOnly === true || directOnly === 'true' || directOnly === 1 || directOnly === '1';
+        const passengers = buildPassengers(adults);
         const slices = [
             {
-                origin: String(origin).trim().toUpperCase(),
-                destination: String(destination).trim().toUpperCase(),
+                origin: normalizedOrigin,
+                destination: normalizedDestination,
                 departure_date: String(departureDate).slice(0, 10),
             },
         ];
         if (returnDate) {
             slices.push({
-                origin: String(destination).trim().toUpperCase(),
-                destination: String(origin).trim().toUpperCase(),
+                origin: normalizedDestination,
+                destination: normalizedOrigin,
                 departure_date: String(returnDate).slice(0, 10),
             });
         }
         console.log('[DUFFEL] search request', {
-            origin: String(origin).trim().toUpperCase(),
-            destination: String(destination).trim().toUpperCase(),
+            origin: normalizedOrigin,
+            destination: normalizedDestination,
             departureDate: String(departureDate).slice(0, 10),
             returnDate: returnDate ? String(returnDate).slice(0, 10) : null,
-            adults: passengerCount,
+            adults: passengers.length,
+            cabinClass: normalizedCabinClass,
+            directOnly: normalizedDirectOnly,
         });
         const result = await duffel_1.duffel.offerRequests.create({
             slices,
             passengers,
-            cabin_class: 'economy',
+            cabin_class: normalizedCabinClass,
+            max_connections: normalizedDirectOnly ? 0 : undefined,
             return_offers: true,
         });
         const offerRequest = result.data;
-        const offers = 'offers' in offerRequest ? offerRequest.offers || [] : [];
+        const offers = 'offers' in offerRequest
+            ? (offerRequest.offers || []).map(buildOfferPayload)
+            : [];
         console.log('[DUFFEL] search success', {
             offerRequestId: offerRequest?.id || null,
             offerCount: offers.length,

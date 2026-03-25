@@ -1,127 +1,253 @@
-import { Router } from 'express';
+import express from 'express';
 import { duffel } from '../lib/duffel';
 
-const router = Router();
+const router = express.Router();
 
-type AirportLike = {
-  id?: string;
-  iataCode: string;
-  name: string;
-  cityName: string;
-  countryName?: string;
-};
+type CabinClass = 'economy' | 'premium_economy' | 'business' | 'first';
 
-const FALLBACK_AIRPORTS: AirportLike[] = [
-  { iataCode: 'OSL', name: 'Gardermoen', cityName: 'Oslo', countryName: 'Norge' },
-  { iataCode: 'TRD', name: 'Værnes', cityName: 'Trondheim', countryName: 'Norge' },
-  { iataCode: 'BGO', name: 'Flesland', cityName: 'Bergen', countryName: 'Norge' },
-  { iataCode: 'AES', name: 'Vigra', cityName: 'Ålesund', countryName: 'Norge' },
-  { iataCode: 'SCR', name: 'Scandinavian Mountains Airport', cityName: 'Sälen', countryName: 'Sverige' },
+function getDuffelErrorMessage(e: any): string {
+  return (
+    e?.errors?.[0]?.message ||
+    e?.errors?.[0]?.title ||
+    e?.message ||
+    'Duffel request failed'
+  );
+}
 
-  { iataCode: 'ARN', name: 'Arlanda', cityName: 'Stockholm', countryName: 'Sverige' },
-  { iataCode: 'CPH', name: 'Kastrup', cityName: 'København', countryName: 'Danmark' },
-  { iataCode: 'AMS', name: 'Schiphol', cityName: 'Amsterdam', countryName: 'Nederland' },
-  { iataCode: 'LGW', name: 'Gatwick', cityName: 'London', countryName: 'Storbritannia' },
-  { iataCode: 'LHR', name: 'Heathrow', cityName: 'London', countryName: 'Storbritannia' },
-  { iataCode: 'HEL', name: 'Helsinki Airport', cityName: 'Helsinki', countryName: 'Finland' },
-  { iataCode: 'TLL', name: 'Tallinn Airport', cityName: 'Tallinn', countryName: 'Estland' },
-  { iataCode: 'RIX', name: 'Riga International', cityName: 'Riga', countryName: 'Latvia' },
-  { iataCode: 'VNO', name: 'Vilnius Airport', cityName: 'Vilnius', countryName: 'Litauen' },
-  { iataCode: 'WAW', name: 'Chopin Airport', cityName: 'Warszawa', countryName: 'Polen' },
-  { iataCode: 'BER', name: 'Berlin Brandenburg', cityName: 'Berlin', countryName: 'Tyskland' },
-  { iataCode: 'CDG', name: 'Charles de Gaulle', cityName: 'Paris', countryName: 'Frankrike' },
-  { iataCode: 'FRA', name: 'Frankfurt Airport', cityName: 'Frankfurt', countryName: 'Tyskland' },
+function isDuffelOfferGoneMessage(message: string): boolean {
+  const m = String(message || '').toLowerCase();
 
-  { iataCode: 'JFK', name: 'John F. Kennedy', cityName: 'New York', countryName: 'USA' },
-  { iataCode: 'LAX', name: 'Los Angeles International', cityName: 'Los Angeles', countryName: 'USA' },
-  { iataCode: 'MIA', name: 'Miami International', cityName: 'Miami', countryName: 'USA' },
-  { iataCode: 'BOS', name: 'Logan International', cityName: 'Boston', countryName: 'USA' },
-];
+  return (
+    m.includes('offer no longer available') ||
+    m.includes('offer is no longer available') ||
+    m.includes('offer has expired') ||
+    m.includes('expired') ||
+    m.includes('not found') ||
+    m.includes('invalid offer')
+  );
+}
 
-function normalizeAirport(airport: any) {
+function getServiceFee(amount: number, currency: string) {
+  if (currency === 'EUR') {
+    if (amount >= 400) return 25;
+    if (amount >= 200) return 20;
+    return 15;
+  }
+
+  if (currency === 'GBP') {
+    if (amount >= 350) return 20;
+    if (amount >= 180) return 15;
+    return 10;
+  }
+
+  if (amount >= 5000) return 149;
+  if (amount >= 2500) return 99;
+  return 69;
+}
+
+function buildOfferPayload(offer: any) {
+  const totalAmount = Number(offer?.total_amount || 0);
+  const totalCurrency = String(offer?.total_currency || 'EUR').toUpperCase();
+  const serviceFee = getServiceFee(totalAmount, totalCurrency);
+  const totalWithFee = totalAmount + serviceFee;
+
   return {
-    id: airport.id,
-    iataCode: airport.iata_code || '',
-    name: airport.name || '',
-    cityName: airport.city_name || airport.city?.name || '',
-    cityIataCode: airport.iata_city_code || airport.city?.iata_code || '',
-    countryName: airport.iata_country_code || airport.country_name || '',
-    displayName: [
-      airport.city_name || airport.city?.name || '',
-      airport.name || '',
-      airport.iata_code ? `(${airport.iata_code})` : '',
-    ]
-      .filter(Boolean)
-      .join(' – '),
+    ...offer,
+    service_fee_amount: serviceFee,
+    total_with_fee: totalWithFee,
   };
 }
 
-function fallbackSearch(query: string) {
-  const q = query.trim().toLowerCase();
+function normalizeCabinClass(value: any): CabinClass {
+  const allowed: CabinClass[] = [
+    'economy',
+    'premium_economy',
+    'business',
+    'first',
+  ];
 
-  return FALLBACK_AIRPORTS.filter((airport) => {
-    const hay = `${airport.cityName} ${airport.name} ${airport.iataCode} ${airport.countryName || ''}`.toLowerCase();
-    return hay.includes(q);
-  }).map((airport) => ({
-    id: `fallback_${airport.iataCode.toLowerCase()}`,
-    iataCode: airport.iataCode,
-    name: airport.name,
-    cityName: airport.cityName,
-    cityIataCode: '',
-    countryName: airport.countryName,
-    displayName: `${airport.cityName} – ${airport.name} (${airport.iataCode})`,
+  const normalized = String(value || 'economy').trim().toLowerCase() as CabinClass;
+
+  if (allowed.includes(normalized)) {
+    return normalized;
+  }
+
+  return 'economy';
+}
+
+function toPositiveInt(value: any, fallback = 0) {
+  const n = Number(value);
+  if (!Number.isFinite(n) || n < 0) return fallback;
+  return Math.floor(n);
+}
+
+function buildPassengers(adultsRaw: any) {
+  const adults = Math.max(1, toPositiveInt(adultsRaw, 1));
+
+  return Array.from({ length: adults }).map(() => ({
+    type: 'adult' as const,
   }));
 }
 
-router.get('/airports', async (req, res) => {
+/**
+ * POST /api/flights/search
+ */
+router.post('/search', async (req, res) => {
   try {
-    const q = String(req.query.q || '').trim();
+    const {
+      origin,
+      destination,
+      departureDate,
+      returnDate,
+      adults,
+      cabinClass,
+      directOnly,
+    } = req.body || {};
 
-    if (!q || q.length < 2) {
-      return res.json({
-        ok: true,
-        data: [],
+    if (!origin || !destination || !departureDate) {
+      return res.status(400).json({
+        ok: false,
+        error: 'missing_params',
+        detail: 'origin, destination og departureDate er påkrevd',
       });
     }
 
-    let items: any[] = [];
+    const normalizedOrigin = String(origin).trim().toUpperCase();
+    const normalizedDestination = String(destination).trim().toUpperCase();
+    const normalizedCabinClass = normalizeCabinClass(cabinClass);
+    const normalizedDirectOnly =
+      directOnly === true || directOnly === 'true' || directOnly === 1 || directOnly === '1';
 
-    try {
-      const result = await duffel.airports.list({
-        limit: 20,
-        name: q,
-      } as any);
+    const passengers = buildPassengers(adults);
 
-      items = (result?.data || []).map(normalizeAirport);
-    } catch (apiError: any) {
-      console.error('[DUFFEL] airport search failed', apiError?.errors || apiError?.message || apiError);
+    const slices: any[] = [
+      {
+        origin: normalizedOrigin,
+        destination: normalizedDestination,
+        departure_date: String(departureDate).slice(0, 10),
+      },
+    ];
+
+    if (returnDate) {
+      slices.push({
+        origin: normalizedDestination,
+        destination: normalizedOrigin,
+        departure_date: String(returnDate).slice(0, 10),
+      });
     }
 
-    const fallbackItems = fallbackSearch(q);
+    console.log('[DUFFEL] search request', {
+      origin: normalizedOrigin,
+      destination: normalizedDestination,
+      departureDate: String(departureDate).slice(0, 10),
+      returnDate: returnDate ? String(returnDate).slice(0, 10) : null,
+      adults: passengers.length,
+      cabinClass: normalizedCabinClass,
+      directOnly: normalizedDirectOnly,
+    });
 
-    const mergedMap = new Map<string, any>();
+    const result = await duffel.offerRequests.create({
+      slices,
+      passengers,
+      cabin_class: normalizedCabinClass,
+      max_connections: normalizedDirectOnly ? 0 : undefined,
+      return_offers: true,
+    } as any);
 
-    for (const item of [...items, ...fallbackItems]) {
-      const key = String(item.iataCode || '').trim().toUpperCase();
-      if (!key) continue;
-      if (!mergedMap.has(key)) {
-        mergedMap.set(key, item);
-      }
-    }
+    const offerRequest = result.data;
+    const offers =
+      'offers' in offerRequest
+        ? (offerRequest.offers || []).map(buildOfferPayload)
+        : [];
 
-    const merged = Array.from(mergedMap.values());
+    console.log('[DUFFEL] search success', {
+      offerRequestId: offerRequest?.id || null,
+      offerCount: offers.length,
+    });
 
     return res.json({
       ok: true,
-      data: merged,
+      data: {
+        offerRequestId: offerRequest.id,
+        offers,
+      },
     });
   } catch (e: any) {
-    console.error('[DUFFEL] airport search failed', e?.errors || e?.message || e);
+    console.error('[DUFFEL] search failed', {
+      message: getDuffelErrorMessage(e),
+      errors: e?.errors || null,
+    });
+
+    return res.status(400).json({
+      ok: false,
+      error: 'duffel_search_failed',
+      detail: getDuffelErrorMessage(e),
+      errors: e?.errors || null,
+    });
+  }
+});
+
+/**
+ * GET /api/flights/offers/:offerId
+ */
+router.get('/offers/:offerId', async (req, res) => {
+  try {
+    const { offerId } = req.params;
+
+    if (!offerId) {
+      return res.status(400).json({
+        ok: false,
+        error: 'missing_offer_id',
+      });
+    }
+
+    console.log('[DUFFEL] get offer', { offerId });
+
+    const result = await duffel.offers.get(offerId as string);
+    const offer = result?.data;
+
+    if (!offer) {
+      return res.status(404).json({
+        ok: false,
+        error: 'offer_no_longer_available',
+        detail: 'Fant ikke offer hos Duffel',
+      });
+    }
+
+    const payload = buildOfferPayload(offer);
+
+    console.log('[DUFFEL] get offer success', {
+      offerId,
+      total_amount: payload?.total_amount || null,
+      total_currency: payload?.total_currency || null,
+    });
+
+    return res.json({
+      ok: true,
+      offer: payload,
+    });
+  } catch (e: any) {
+    const message = getDuffelErrorMessage(e);
+
+    console.error('[DUFFEL] get offer failed', {
+      offerId: req.params?.offerId || null,
+      message,
+      errors: e?.errors || null,
+    });
+
+    if (isDuffelOfferGoneMessage(message)) {
+      return res.status(404).json({
+        ok: false,
+        error: 'offer_no_longer_available',
+        detail: message,
+        errors: e?.errors || null,
+      });
+    }
 
     return res.status(500).json({
       ok: false,
-      error: 'duffel_airport_search_failed',
-      detail: e?.message || 'Duffel airport search failed',
+      error: 'duffel_offer_fetch_failed',
+      detail: message,
       errors: e?.errors || null,
     });
   }
