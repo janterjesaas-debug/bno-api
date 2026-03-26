@@ -144,7 +144,26 @@ function safeNum(v: any): number | null {
   const n = Number(v);
   return Number.isFinite(n) ? n : null;
 }
+function isYmdAfter(a: string, b: string): boolean {
+  return String(a || '').slice(0, 10) > String(b || '').slice(0, 10);
+}
 
+const BOOKING_OPEN_UNTIL_BY_AREA: Record<string, string> = {
+  TRYSIL_TURISTSENTER: '2027-05-01',
+  TRYSIL_HOYFJELLSSENTER: '2027-05-01',
+  TRYSILFJELL_HYTTEOMRADE: '2027-05-01',
+  TRYSIL_SENTRUM: '2027-05-01',
+  TANDADALEN_SALEN: '2027-05-01',
+  HOGFJALLET_SALEN: '2027-05-01',
+  LINDVALLEN_SALEN: '2027-05-01',
+  STRANDA: '2027-05-01',
+};
+
+function getBookingOpenUntil(areaKey: string | null): string | null {
+  const k = normAreaKey(areaKey);
+  if (!k) return null;
+  return BOOKING_OPEN_UNTIL_BY_AREA[k] || null;
+}
 // ===== ENV =====
 const PORT = Number(process.env.PORT || 4010);
 const HOST = String(process.env.HOST || '0.0.0.0');
@@ -1385,7 +1404,23 @@ app.post('/api/stripe/fee/checkout', async (req, res) => {
     const returnUrl = String(req.body?.returnUrl || '').trim();
 
     const metadataIn = (req.body?.metadata || {}) as Record<string, any>;
+        const areaKey = normAreaKey(String(metadataIn.area || '')) || 'STRANDA';
+    const bookingOpenUntil = getBookingOpenUntil(areaKey);
+    const to = String(metadataIn.to || metadataIn.endYmd || '').slice(0, 10);
 
+    if (bookingOpenUntil && to && isYmdAfter(to, bookingOpenUntil)) {
+      return res.status(409).json({
+        ok: false,
+        error: 'booking_not_open',
+        message:
+          'Denne enheten ser ikke ut til å være åpen for booking i valgt periode akkurat nå. Du er velkommen til å sende oss en forespørsel.',
+        inquiryEmail: 'booking@bno-travel.com',
+        resolved: {
+          areaKey,
+          bookingOpenUntil,
+        },
+      });
+    }
     if (priceTotal == null || priceTotal <= 0) return res.status(400).json({ ok: false, error: 'invalid_priceTotal' });
     if (feePercent == null || feePercent <= 0) return res.status(400).json({ ok: false, error: 'invalid_feePercent' });
     if (feeFixedNok == null || feeFixedNok < 0) return res.status(400).json({ ok: false, error: 'invalid_feeFixedNok' });
@@ -2128,6 +2163,22 @@ app.get(['/api/mews/booking-link', '/mews/booking-link'], (req, res) => {
     const areaKey = areaKeyFromService || areaKeyFromArea;
 
     const normalizedAreaKey = normAreaKey(areaKey);
+        const bookingOpenUntil = getBookingOpenUntil(normalizedAreaKey);
+    if (bookingOpenUntil && to && isYmdAfter(to, bookingOpenUntil)) {
+      return res.json({
+        ok: false,
+        error: 'booking_not_open',
+        message:
+          'Denne enheten ser ikke ut til å være åpen for booking i valgt periode akkurat nå. Du er velkommen til å sende oss en forespørsel.',
+        inquiryEmail: 'booking@bno-travel.com',
+        input: { area: areaSlugRaw || null, serviceId: serviceId || null, roomId: roomId || null, from, to, adults },
+        resolved: {
+          areaKey: areaKey || null,
+          normalizedAreaKey: normalizedAreaKey || null,
+          bookingOpenUntil,
+        },
+      });
+    }
 
     // 2) Finn config/override
     const overrideUrl = getBookingUrlOverrideForArea(normalizedAreaKey);
