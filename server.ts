@@ -1019,7 +1019,102 @@ function computePricesFromAvailabilities(item: any): { nightly: (number | null)[
   const total = anyPrice ? sumNumbersSafe(nightly) : null;
   return { nightly, total, currency: detectedCurrency };
 }
+function decorateGuestAvailability<T extends Record<string, any>>(item: T, unitsRaw: any): T {
+  const units = Number(unitsRaw || 0);
+  const availableUnits = Number.isFinite(units) ? units : 0;
+  const isSoldOut = availableUnits <= 0;
 
+  return {
+    ...item,
+    AvailableUnits: availableUnits,
+    TotalAvailableUnitsCount: availableUnits,
+    AvailableRoomCount: availableUnits,
+    availableUnits, // for /api/mews/availability
+    isSoldOut,
+    IsSoldOut: isSoldOut,
+    availabilityLabel: isSoldOut ? 'Fullbooket' : null,
+    AvailabilityLabel: isSoldOut ? 'Fullbooket' : null,
+    availabilitySortOrder: isSoldOut ? 1 : 0,
+    AvailabilitySortOrder: isSoldOut ? 1 : 0,
+  };
+}
+
+function sortGuestAvailability<T extends Record<string, any>>(items: T[]): T[] {
+  return [...items].sort((a, b) => {
+    const aSort = Number(
+      a?.AvailabilitySortOrder ??
+      a?.availabilitySortOrder ??
+      ((Number(a?.AvailableUnits ?? a?.availableUnits ?? 0) > 0) ? 0 : 1)
+    );
+
+    const bSort = Number(
+      b?.AvailabilitySortOrder ??
+      b?.availabilitySortOrder ??
+      ((Number(b?.AvailableUnits ?? b?.availableUnits ?? 0) > 0) ? 0 : 1)
+    );
+
+    if (aSort !== bSort) return aSort - bSort;
+
+    const aPrice = safeNum(a?.PriceTotal ?? a?.priceTotal);
+    const bPrice = safeNum(b?.PriceTotal ?? b?.priceTotal);
+    if (aPrice != null && bPrice != null && aPrice !== bPrice) return aPrice - bPrice;
+
+    const aName = String(a?.Name ?? a?.categoryName ?? '');
+    const bName = String(b?.Name ?? b?.categoryName ?? '');
+    return aName.localeCompare(bName, 'nb');
+  });
+}
+
+async function getFreshCategoryAvailability(opts: {
+  credsKey: MewsCredKey;
+  serviceId: string;
+  categoryId: string;
+  from: string;
+  to: string;
+}): Promise<{ ok: boolean; availableUnits: number; raw?: any; reason?: string }> {
+  const serviceId = String(opts.serviceId || '').trim();
+  const categoryId = String(opts.categoryId || '').trim();
+  const from = String(opts.from || '').slice(0, 10);
+  const to = String(opts.to || '').slice(0, 10);
+
+  if (!serviceId || !categoryId || !from || !to) {
+    return { ok: false, availableUnits: 0, reason: 'missing_params' };
+  }
+
+  const creds = getCreds(opts.credsKey);
+  if (!hasCreds(creds)) {
+    return { ok: false, availableUnits: 0, reason: 'mews_credentials_missing' };
+  }
+
+  const { firstUtc, lastUtc } = buildTimeUnitRange(from, to);
+
+  const availData = await axiosWithRetry<any>({
+    method: 'post',
+    url: `${creds.baseUrl}/api/connector/v1/services/getAvailability`,
+    data: {
+      ClientToken: creds.clientToken,
+      AccessToken: creds.accessToken,
+      Client: creds.clientName,
+      ServiceId: serviceId,
+      FirstTimeUnitStartUtc: firstUtc,
+      LastTimeUnitStartUtc: lastUtc,
+    },
+    timeout: 20000,
+  });
+
+  const cats: any[] = availData?.CategoryAvailabilities || [];
+  const match = cats.find((x) => String(x?.CategoryId || '') === categoryId);
+
+  if (!match) {
+    return { ok: true, availableUnits: 0, raw: null };
+  }
+
+  return {
+    ok: true,
+    availableUnits: computeAvailableUnits(match),
+    raw: match,
+  };
+}
 /**
  * Hent totalpris for EN reservasjon (1 enhet) via reservations/price.
  * NB: vi sender KUN RateId hvis vi faktisk har en.
@@ -1313,14 +1408,51 @@ app.get('/api/stripe/session', async (req, res) => {
       const adults = Number(md.adults || '2') || 2;
 
       const serviceId = md.serviceId || '';
-      const roomId = md.roomId || '';
+const roomId = md.roomId || '';
 
-      if (!serviceId) {
-        return res.status(400).json({ ok: false, error: 'missing_serviceId_in_metadata' });
-      }
+if (!serviceId) {
+  return res.status(400).json({ ok: false, error: 'missing_serviceId_in_metadata' });
+}
+if (!roomId) {
+  return res.status(400).json({ ok: false, error: 'missing_roomId_in_metadata' });
+}
+if (!from || !to) {
+  return res.status(400).json({ ok: false, error: 'missing_dates_in_metadata' });
+}
 
-      // STRANDA: alltid Stranda-config + voucher
-      const areaKey = 'STRANDA';
+const fresh = await getFreshCategoryAvailability({
+  credsKey: CREDS_STRANDA,
+  serviceId,
+  categoryId: roomId,
+  from,
+  to,
+});
+
+if (!fresh.ok) {
+  return res.status(500).json({
+    ok: false,
+    error: 'fresh_availability_check_failed',
+    detail: fresh.reason || 'unknown',
+  });
+}
+
+if (fresh.availableUnits <= 0) {
+  return res.status(409).json({
+    ok: false,
+    error: 'room_no_longer_available',
+    detail: 'Enheten er dessverre ikke lenger tilgjengelig hos Stranda Booking.',
+    data: {
+      serviceId,
+      roomId,
+      from,
+      to,
+      availableUnits: fresh.availableUnits,
+    },
+  });
+}
+
+// STRANDA: alltid Stranda-config + voucher
+const areaKey = 'STRANDA';
       const config = getDistributionConfigForArea(areaKey);
 
       if (!config.configId) {
@@ -1380,13 +1512,36 @@ app.get('/api/stripe/session', async (req, res) => {
       if (!paid) return res.status(400).send('Not paid');
 
       const md = (session.metadata || {}) as Record<string, string>;
-      const from = md.from || '';
-      const to = md.to || '';
-      const adults = Number(md.adults || '2') || 2;
-      const roomId = md.roomId || '';
+const from = md.from || '';
+const to = md.to || '';
+const adults = Number(md.adults || '2') || 2;
+const serviceId = md.serviceId || '';
+const roomId = md.roomId || '';
 
-      const areaKey = 'STRANDA';
-      const config = getDistributionConfigForArea(areaKey);
+if (!serviceId) return res.status(400).send('Missing serviceId in metadata');
+if (!roomId) return res.status(400).send('Missing roomId in metadata');
+if (!from || !to) return res.status(400).send('Missing dates in metadata');
+
+const fresh = await getFreshCategoryAvailability({
+  credsKey: CREDS_STRANDA,
+  serviceId,
+  categoryId: roomId,
+  from,
+  to,
+});
+
+if (!fresh.ok) {
+  return res.status(500).send('Fresh availability check failed');
+}
+
+if (fresh.availableUnits <= 0) {
+  return res.status(409).send(
+    'Enheten er dessverre ikke lenger tilgjengelig hos Stranda Booking. Ikke send gjesten videre til Mews. Håndter refusjon eller ny enhet i BNO Travel.'
+  );
+}
+
+const areaKey = 'STRANDA';
+const config = getDistributionConfigForArea(areaKey);
 
       if (!config.configId) return res.status(500).send('Missing Stranda distribution config');
 
@@ -2214,25 +2369,29 @@ app.get('/api/mews/availability', async (req, res) => {
             priceCurrency = est.currency || priceCurrency;
           }
 
-          allRooms.push({
-            serviceId: svc.id,
-            serviceName: svc.name,
-            categoryId: catId,
-            categoryName: info.name,
-            description: info.description,
-            image: info.image,
-            images: info.images,
-            capacity: info.capacity,
-            availableUnits,
-            priceTotal,
-            priceCurrency: (priceCurrency || DEF_CURRENCY).toUpperCase(),
-            priceNightly,
-            credsKey: svcCredsKey,
-            rawTop: {
-              AvailableRoomCount: ca?.AvailableRoomCount ?? null,
-              TotalAvailableUnitsCount: ca?.TotalAvailableUnitsCount ?? null,
-            },
-          });
+          const outItem = decorateGuestAvailability(
+  {
+    serviceId: svc.id,
+    serviceName: svc.name,
+    categoryId: catId,
+    categoryName: info.name,
+    description: info.description,
+    image: info.image,
+    images: info.images,
+    capacity: info.capacity,
+    priceTotal,
+    priceCurrency: (priceCurrency || DEF_CURRENCY).toUpperCase(),
+    priceNightly,
+    credsKey: svcCredsKey,
+    rawTop: {
+      AvailableRoomCount: ca?.AvailableRoomCount ?? null,
+      TotalAvailableUnitsCount: ca?.TotalAvailableUnitsCount ?? null,
+    },
+  },
+  availableUnits
+);
+
+allRooms.push(outItem);
         }
       } catch (e: any) {
         serviceErrors.push({
@@ -2245,8 +2404,11 @@ app.get('/api/mews/availability', async (req, res) => {
       }
     });
 
-    const filteredRooms = includeAll ? allRooms : allRooms.filter((r) => typeof r.availableUnits === 'number' && r.availableUnits > 0);
+const filteredRoomsBase = includeAll
+  ? allRooms
+  : allRooms.filter((r) => typeof r.availableUnits === 'number' && r.availableUnits > 0);
 
+const filteredRooms = sortGuestAvailability(filteredRoomsBase);
     return res.json({
       ok: true,
       data: filteredRooms,
@@ -2402,25 +2564,24 @@ app.get(['/api/search', '/search', '/api/availability', '/availability'], async 
             }
           }
 
-          const outItem: any = {
-            ResourceCategoryId: catId,
-            RoomCategoryId: catId,
-            Name: info.name,
-            Description: info.description,
-            Capacity: info.capacity,
-            Image: info.image,
-            Images: info.images,
-            AvailableUnits: availableUnits,
-            TotalAvailableUnitsCount: availableUnits,
-            AvailableRoomCount: availableUnits,
-            PriceNightly: priceNightly,
-            PriceTotal: priceTotal,
-            PriceCurrency: (priceCurrency || DEF_CURRENCY).toUpperCase(),
-            ServiceId: svc.id,
-            ServiceName: svc.name,
-            credsKey: svcCredsKey,
-          };
-
+          let outItem: any = decorateGuestAvailability(
+  {
+    ResourceCategoryId: catId,
+    RoomCategoryId: catId,
+    Name: info.name,
+    Description: info.description,
+    Capacity: info.capacity,
+    Image: info.image,
+    Images: info.images,
+    PriceNightly: priceNightly,
+    PriceTotal: priceTotal,
+    PriceCurrency: (priceCurrency || DEF_CURRENCY).toUpperCase(),
+    ServiceId: svc.id,
+    ServiceName: svc.name,
+    credsKey: svcCredsKey,
+  },
+  availableUnits
+);
           if (debugMode) {
             outItem._debug = {
               rawTop: {
@@ -2446,8 +2607,11 @@ app.get(['/api/search', '/search', '/api/availability', '/availability'], async 
       }
     });
 
-    const rcList = includeAll ? allRooms : allRooms.filter((r) => typeof r.AvailableUnits === 'number' && r.AvailableUnits > 0);
+const rcListBase = includeAll
+  ? allRooms
+  : allRooms.filter((r) => typeof r.AvailableUnits === 'number' && r.AvailableUnits > 0);
 
+const rcList = sortGuestAvailability(rcListBase);
     const outResp: any = {
       availability: { ResourceCategoryAvailabilities: rcList },
       params: {
