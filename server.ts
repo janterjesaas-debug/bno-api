@@ -948,8 +948,9 @@ function computeAvailableUnits(item: any): number {
     // ✅ FØR-STRANDA logikk:
     // Hvis vi har både 0 og >0, ignorer 0 og bruk min over positive.
     // (Mews kan sende 0 på enkelte time units uten at hele perioden faktisk er “0 tilgjengelig”.)
-    const positives = vals.filter((v) => v > 0);
-    return positives.length > 0 ? Math.min(...positives) : Math.min(...vals);
+       // For et opphold må ALLE netter i perioden ha kapasitet.
+    // Hvis én natt er 0, skal hele oppholdet regnes som ikke tilgjengelig.
+    return Math.min(...vals);
   }
 
   return 0;
@@ -1041,23 +1042,23 @@ function decorateGuestAvailability<T extends Record<string, any>>(item: T, units
 
 function sortGuestAvailability<T extends Record<string, any>>(items: T[]): T[] {
   return [...items].sort((a, b) => {
-    const aSort = Number(
-      a?.AvailabilitySortOrder ??
-      a?.availabilitySortOrder ??
-      ((Number(a?.AvailableUnits ?? a?.availableUnits ?? 0) > 0) ? 0 : 1)
-    );
+    const aUnits = Number(a?.AvailableUnits ?? a?.availableUnits ?? 0);
+    const bUnits = Number(b?.AvailableUnits ?? b?.availableUnits ?? 0);
 
-    const bSort = Number(
-      b?.AvailabilitySortOrder ??
-      b?.availabilitySortOrder ??
-      ((Number(b?.AvailableUnits ?? b?.availableUnits ?? 0) > 0) ? 0 : 1)
-    );
-
-    if (aSort !== bSort) return aSort - bSort;
+    const aSoldOut = aUnits > 0 ? 0 : 1;
+    const bSoldOut = bUnits > 0 ? 0 : 1;
+    if (aSoldOut !== bSoldOut) return aSoldOut - bSoldOut;
 
     const aPrice = safeNum(a?.PriceTotal ?? a?.priceTotal);
     const bPrice = safeNum(b?.PriceTotal ?? b?.priceTotal);
-    if (aPrice != null && bPrice != null && aPrice !== bPrice) return aPrice - bPrice;
+
+    const aNoPrice = aPrice == null ? 1 : 0;
+    const bNoPrice = bPrice == null ? 1 : 0;
+    if (aNoPrice !== bNoPrice) return aNoPrice - bNoPrice;
+
+    if (aPrice != null && bPrice != null && aPrice !== bPrice) {
+      return aPrice - bPrice;
+    }
 
     const aName = String(a?.Name ?? a?.categoryName ?? '');
     const bName = String(b?.Name ?? b?.categoryName ?? '');
