@@ -1137,50 +1137,71 @@ async function priceReservationOnce(opts: {
 
   const url = `${creds.baseUrl}/api/connector/v1/reservations/price`;
 
-  const reservation: any = {
-    Identifier: 'preview-1',
-    StartUtc: mews.toTimeUnitUtc(opts.startYmd),
-    EndUtc: mews.toTimeUnitUtc(opts.endYmd),
-    RequestedCategoryId: opts.categoryId,
-    AdultCount: Math.max(1, Number(opts.adults || 1)),
-    PersonCounts: [
-      {
-        AgeCategoryId: opts.adultAgeCategoryId,
-        Count: Math.max(1, Number(opts.adults || 1)),
-      },
-    ],
-  };
+  async function tryPrice(rateIdToUse: string | null): Promise<{ total: number | null; currency: string | null }> {
+    const reservation: any = {
+      Identifier: 'preview-1',
+      StartUtc: mews.toTimeUnitUtc(opts.startYmd),
+      EndUtc: mews.toTimeUnitUtc(opts.endYmd),
+      RequestedCategoryId: opts.categoryId,
+      AdultCount: Math.max(1, Number(opts.adults || 1)),
+      PersonCounts: [
+        {
+          AgeCategoryId: opts.adultAgeCategoryId,
+          Count: Math.max(1, Number(opts.adults || 1)),
+        },
+      ],
+    };
 
-  if (opts.rateId && String(opts.rateId).trim().length > 0) {
-    reservation.RateId = String(opts.rateId).trim();
+    if (rateIdToUse && String(rateIdToUse).trim().length > 0) {
+      reservation.RateId = String(rateIdToUse).trim();
+    }
+
+    const payload = {
+      ClientToken: creds.clientToken,
+      AccessToken: creds.accessToken,
+      Client: creds.clientName,
+      ServiceId: opts.serviceId,
+      Reservations: [reservation],
+    };
+
+    try {
+      const respData = await axiosWithRetry<any>(
+        {
+          method: 'post',
+          url,
+          data: payload,
+          timeout: 15000,
+        },
+        2,
+        500,
+        true
+      );
+
+      const item = respData?.ReservationPrices?.[0] || respData?.ReservationPrice || null;
+      if (!item) return { total: null, currency: null };
+
+      const amountObj = item.TotalAmount || item.Total || item.TotalPrice || item.Price || null;
+      const ex = extractPriceValueCurrency(amountObj);
+      return { total: ex.value, currency: ex.currency || DEF_CURRENCY };
+    } catch (err: any) {
+      return { total: null, currency: null };
+    }
   }
 
-  const payload = {
-    ClientToken: creds.clientToken,
-    AccessToken: creds.accessToken,
-    Client: creds.clientName,
-    ServiceId: opts.serviceId,
-    Reservations: [reservation],
-  };
+  const preferredRateId =
+    opts.rateId && String(opts.rateId).trim().length > 0
+      ? String(opts.rateId).trim()
+      : null;
 
-  const respData = await axiosWithRetry<any>(
-    {
-      method: 'post',
-      url,
-      data: payload,
-      timeout: 15000,
-    },
-    2,
-    500,
-    true
-  );
+  if (preferredRateId) {
+    const withRate = await tryPrice(preferredRateId);
+    if (withRate.total != null) return withRate;
+  }
 
-  const item = respData?.ReservationPrices?.[0] || respData?.ReservationPrice || null;
-  if (!item) return { total: null, currency: null };
+  const withoutRate = await tryPrice(null);
+  if (withoutRate.total != null) return withoutRate;
 
-  const amountObj = item.TotalAmount || item.Total || item.TotalPrice || item.Price || null;
-  const ex = extractPriceValueCurrency(amountObj);
-  return { total: ex.value, currency: ex.currency || DEF_CURRENCY };
+  return { total: null, currency: null };
 }
 
 // =======================
