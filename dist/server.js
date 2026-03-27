@@ -561,11 +561,46 @@ function resolveServicesForArea(areaSlugRaw) {
     const slug = (areaSlugRaw || '').toLowerCase().trim();
     if (!slug)
         return { services: MEWS_SERVICES_ALL, areaKey: null };
+    // -------------------------------------------------
+    // HOVEDOMRÅDER / SAMLEOMRÅDER
+    // -------------------------------------------------
+    if (slug === 'trysil') {
+        return {
+            services: MEWS_SERVICES_ALL.filter((s) => s.id === MEWS_SERVICE_ID_TRYSIL_TURISTSENTER ||
+                s.id === MEWS_SERVICE_ID_TRYSIL_HOYFJELLSSENTER ||
+                s.id === MEWS_SERVICE_ID_TRYSILFJELL_HYTTEOMRADE ||
+                s.id === MEWS_SERVICE_ID_TRYSIL_SENTRUM),
+            areaKey: 'TRYSIL',
+        };
+    }
+    if (slug === 'sunnmorsalpene' || slug === 'sunnmørsalpene') {
+        return {
+            services: MEWS_SERVICES_ALL.filter((s) => s.id === MEWS_SERVICE_ID_STRANDA),
+            areaKey: 'SUNNMORSALPENE',
+        };
+    }
+    if (slug === 'salen' || slug === 'sälen') {
+        return {
+            services: MEWS_SERVICES_ALL.filter((s) => s.id === MEWS_SERVICE_ID_TANDADALEN_SALEN ||
+                s.id === MEWS_SERVICE_ID_HOGFJALLET_SALEN ||
+                s.id === MEWS_SERVICE_ID_LINDVALLEN_SALEN),
+            areaKey: 'SALEN',
+        };
+    }
+    // -------------------------------------------------
+    // ENKELTOMRÅDER
+    // -------------------------------------------------
     if (slug === 'stranda') {
-        return { services: MEWS_SERVICES_ALL.filter((s) => s.id === MEWS_SERVICE_ID_STRANDA), areaKey: 'STRANDA' };
+        return {
+            services: MEWS_SERVICES_ALL.filter((s) => s.id === MEWS_SERVICE_ID_STRANDA),
+            areaKey: 'STRANDA',
+        };
     }
     if (slug === 'trysil-sentrum' || slug === 'trysil_sentrum') {
-        return { services: MEWS_SERVICES_ALL.filter((s) => s.id === MEWS_SERVICE_ID_TRYSIL_SENTRUM), areaKey: 'TRYSIL_SENTRUM' };
+        return {
+            services: MEWS_SERVICES_ALL.filter((s) => s.id === MEWS_SERVICE_ID_TRYSIL_SENTRUM),
+            areaKey: 'TRYSIL_SENTRUM',
+        };
     }
     if (slug === 'trysil-turistsenter' || slug === 'trysil_turistsenter') {
         return {
@@ -573,26 +608,39 @@ function resolveServicesForArea(areaSlugRaw) {
             areaKey: 'TRYSIL_TURISTSENTER',
         };
     }
-    if (slug === 'trysil-hoyfjellssenter' || slug === 'trysil-høyfjellssenter' || slug === 'trysil_hoyfjellssenter') {
+    if (slug === 'trysil-hoyfjellssenter' ||
+        slug === 'trysil-høyfjellssenter' ||
+        slug === 'trysil_hoyfjellssenter') {
         return {
             services: MEWS_SERVICES_ALL.filter((s) => s.id === MEWS_SERVICE_ID_TRYSIL_HOYFJELLSSENTER),
             areaKey: 'TRYSIL_HOYFJELLSSENTER',
         };
     }
-    if (slug === 'trysilfjell-hytteomrade' || slug === 'trysilfjell-hytteområde' || slug === 'trysilfjell_hytteomrade') {
+    if (slug === 'trysilfjell-hytteomrade' ||
+        slug === 'trysilfjell-hytteområde' ||
+        slug === 'trysilfjell_hytteomrade') {
         return {
             services: MEWS_SERVICES_ALL.filter((s) => s.id === MEWS_SERVICE_ID_TRYSILFJELL_HYTTEOMRADE),
             areaKey: 'TRYSILFJELL_HYTTEOMRADE',
         };
     }
-    if (slug === 'tandadalen-salen' || slug === 'tandådalen-sälen' || slug === 'tandadalen_salen') {
-        return { services: MEWS_SERVICES_ALL.filter((s) => s.id === MEWS_SERVICE_ID_TANDADALEN_SALEN), areaKey: 'TANDADALEN_SALEN' };
+    if (slug === 'tandadalen-salen' || slug === 'tandådalen-sälen' || slug === 'tandadalen_salen' || slug === 'tandadalen') {
+        return {
+            services: MEWS_SERVICES_ALL.filter((s) => s.id === MEWS_SERVICE_ID_TANDADALEN_SALEN),
+            areaKey: 'TANDADALEN_SALEN',
+        };
     }
-    if (slug === 'hogfjallet-salen' || slug === 'högfjället-sälen' || slug === 'hogfjallet_salen') {
-        return { services: MEWS_SERVICES_ALL.filter((s) => s.id === MEWS_SERVICE_ID_HOGFJALLET_SALEN), areaKey: 'HOGFJALLET_SALEN' };
+    if (slug === 'hogfjallet-salen' || slug === 'högfjället-sälen' || slug === 'hogfjallet_salen' || slug === 'hogfjallet') {
+        return {
+            services: MEWS_SERVICES_ALL.filter((s) => s.id === MEWS_SERVICE_ID_HOGFJALLET_SALEN),
+            areaKey: 'HOGFJALLET_SALEN',
+        };
     }
-    if (slug === 'lindvallen-salen' || slug === 'lindvallen-sälen' || slug === 'lindvallen_salen') {
-        return { services: MEWS_SERVICES_ALL.filter((s) => s.id === MEWS_SERVICE_ID_LINDVALLEN_SALEN), areaKey: 'LINDVALLEN_SALEN' };
+    if (slug === 'lindvallen-salen' || slug === 'lindvallen-sälen' || slug === 'lindvallen_salen' || slug === 'lindvallen') {
+        return {
+            services: MEWS_SERVICES_ALL.filter((s) => s.id === MEWS_SERVICE_ID_LINDVALLEN_SALEN),
+            areaKey: 'LINDVALLEN_SALEN',
+        };
     }
     const normalizedKey = slug.replace(/[\s-]+/g, '_').toUpperCase();
     return { services: MEWS_SERVICES_ALL, areaKey: normalizedKey };
