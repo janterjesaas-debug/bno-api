@@ -3521,27 +3521,6 @@ const topRows = rankedRows.slice(0, 5);
     '- Oppsummer kort og konkret',
   ].join('\n\n');
 }
-function isTravelHelperBookingIntent(messageRaw: string): boolean {
-  const message = normalizeTravelHelperText(messageRaw);
-
-  const bookingHints = [
-    'book',
-    'booking',
-    'bestill',
-    'bestille',
-    'booke',
-    'ga til booking',
-    'gå til booking',
-    'sluttfor',
-    'sluttfør',
-    'fullfor',
-    'fullfør',
-    'hjelp med booking',
-    'hjelpe med booking',
-  ];
-
-  return bookingHints.some((word) => message.includes(word));
-}
 
 function getTravelHelperRowBookingUrl(row: any): string | null {
   const candidates = [
@@ -3630,9 +3609,77 @@ function pickTravelHelperBookingCandidate(
 
   return filtered[0] || null;
 }
+
+function isTravelHelperBookingIntent(messageRaw: string): boolean {
+  const message = normalizeTravelHelperText(messageRaw);
+
+  const bookingPhrases = [
+    'book',
+    'booking',
+    'bestill',
+    'bestille',
+    'ga videre med',
+    'gaa videre med',
+    'hjelpe med booking',
+    'fullfor booking',
+    'fullfor bestilling',
+    'sluttfor bestillingen',
+    'sluttfore bestillingen',
+    'klikk her',
+    'jeg vil booke',
+    'jeg vil bestille',
+    'kan du booke',
+    'kan du hjelpe med booking',
+  ];
+
+  return bookingPhrases.some((phrase) => message.includes(phrase));
+}
+
+function findRequestedRoomFromMessage(messageRaw: string, rows: any[]): any | null {
+  if (!Array.isArray(rows) || rows.length === 0) return null;
+
+  const message = normalizeTravelHelperText(messageRaw);
+
+  const directNameMatch = rows.find((row: any) => {
+    const name = normalizeTravelHelperText(row?.Name || '');
+    return name && message.includes(name);
+  });
+  if (directNameMatch) return directNameMatch;
+
+  const aliasMatchers: Array<{
+    keywords: string[];
+    match: (row: any) => boolean;
+  }> = [
+    {
+      keywords: ['trysilbua'],
+      match: (row) => normalizeTravelHelperText(row?.Name || '').includes('trysilbua'),
+    },
+    {
+      keywords: ['fagerhoy', 'fagerhøy'],
+      match: (row) => normalizeTravelHelperText(row?.Name || '').includes('fagerhoy'),
+    },
+    {
+      keywords: ['ugla 917', 'ugla'],
+      match: (row) => normalizeTravelHelperText(row?.Name || '').includes('ugla 917'),
+    },
+    {
+      keywords: ['vestsidevegen', 'vestsidevegen 14'],
+      match: (row) => normalizeTravelHelperText(row?.Name || '').includes('vestsidevegen'),
+    },
+  ];
+
+  for (const alias of aliasMatchers) {
+    if (alias.keywords.some((keyword) => message.includes(normalizeTravelHelperText(keyword)))) {
+      const matched = rows.find(alias.match);
+      if (matched) return matched;
+    }
+  }
+
+  return null;
+}
 app.post('/api/travel-helper', async (req, res) => {
   try {
-    const { message, history } = req.body || {};
+    const { message, history, lang } = req.body || {};
 
     if (!message || typeof message !== 'string') {
       return res.status(400).json({
@@ -3649,25 +3696,37 @@ app.post('/api/travel-helper', async (req, res) => {
       });
     }
 
-    const safeHistory = Array.isArray(history) ? history.slice(-10) : [];
-    const searchBasis = buildTravelHelperSearchBasis(message, safeHistory);
-    const intent = detectTravelHelperIntent(searchBasis);
+    const safeHistory = Array.isArray(history) ? history.slice(-12) : [];
+    const appLang =
+      typeof lang === 'string' && lang.trim()
+        ? lang.trim().toLowerCase()
+        : 'nb';
+
+    const conversationText = [
+      ...safeHistory.map((item: any) => String(item?.text || '')),
+      String(message),
+    ].join('\n');
+
+    const intent = detectTravelHelperIntent(conversationText);
 
     let dynamicContext = '';
-    let bookingAction: null | {
-      type: 'url';
-      label: string;
-      value: string;
-      title?: string;
-    } = null;
+    let latestSearchRows: any[] = [];
+    let latestSearchParams: {
+      from: string;
+      to: string;
+      adults: number;
+      area: string;
+      promo: string;
+      lang: string;
+    } | null = null;
 
-    if (intent === 'availability_search') {
-      const area = extractTravelHelperArea(searchBasis);
-      const adults = extractTravelHelperAdults(searchBasis);
-      const dates = extractTravelHelperDates(searchBasis);
+    console.log('TRAVEL_HELPER intent:', intent);
 
-      console.log('TRAVEL_HELPER intent:', intent);
-      console.log('TRAVEL_HELPER searchBasis:', searchBasis);
+    if (intent === 'availability_search' || isTravelHelperBookingIntent(message)) {
+      const area = extractTravelHelperArea(conversationText);
+      const adults = extractTravelHelperAdults(conversationText);
+      const dates = extractTravelHelperDates(conversationText);
+
       console.log('TRAVEL_HELPER area:', area);
       console.log('TRAVEL_HELPER adults:', adults);
       console.log('TRAVEL_HELPER dates:', dates);
@@ -3679,7 +3738,7 @@ app.post('/api/travel-helper', async (req, res) => {
           searchUrl.searchParams.set('from', dates.from);
           searchUrl.searchParams.set('to', dates.to);
           searchUrl.searchParams.set('adults', String(adults));
-          searchUrl.searchParams.set('lang', 'nb');
+          searchUrl.searchParams.set('lang', appLang);
 
           const searchResponse = await fetch(searchUrl.toString());
           const searchJson: any = await searchResponse.json();
@@ -3687,53 +3746,54 @@ app.post('/api/travel-helper', async (req, res) => {
           console.log('TRAVEL_HELPER search response ok:', searchResponse.ok);
           console.log(
             'TRAVEL_HELPER search json keys:',
-            Object.keys(searchJson || {})
-          );
-          console.log(
-            'TRAVEL_HELPER raw search data:',
-            JSON.stringify(searchJson?.data || {}, null, 2)
+            searchJson ? Object.keys(searchJson) : []
           );
 
           if (searchResponse.ok && searchJson?.ok && searchJson?.data) {
+            latestSearchRows =
+              searchJson?.data?.availability?.ResourceCategoryAvailabilities || [];
+
+            latestSearchParams = {
+              from: dates.from,
+              to: dates.to,
+              adults,
+              area,
+              promo: '',
+              lang: appLang,
+            };
+
+            console.log(
+              'TRAVEL_HELPER raw search data:',
+              JSON.stringify(searchJson.data, null, 2)
+            );
+
             dynamicContext = buildAvailabilityContextText(
               searchJson.data,
               adults,
-              searchBasis
+              conversationText
             );
 
             console.log('TRAVEL_HELPER dynamicContext:', dynamicContext);
-
-            const bookingIntent = isTravelHelperBookingIntent(searchBasis);
-            const candidate = pickTravelHelperBookingCandidate(
-              searchJson.data,
-              adults,
-              searchBasis
-            );
-
-            if (bookingIntent && candidate?.bookingUrl) {
-              bookingAction = {
-                type: 'url',
-                label: `Gå til booking av ${candidate.row?.Name || 'valgt overnatting'}`,
-                value: candidate.bookingUrl,
-                title: candidate.row?.Name || 'Booking',
-              };
-            }
-
-            if (bookingIntent && !candidate?.bookingUrl) {
-              dynamicContext +=
-                '\n' +
-                [
-                  '',
-                  'BOOKING_HANDOFF:',
-                  'Brukeren ønsker hjelp med booking.',
-                  'Det finnes foreløpig ingen booking-URL i dataene.',
-                  'Ikke si at du kan fullføre bookingen direkte.',
-                  'Forklar kort at du kan hjelpe med valg og neste steg, men at direkte bookinglenke ikke er tilgjengelig i sanntidsdataene akkurat nå.',
-                ].join('\n');
-            }
+          } else {
+            dynamicContext = [
+              'BNO_AVAILABILITY_CONTEXT',
+              'Sanntidsoppslaget ble kjørt, men ga ingen gyldige treff.',
+              `Område: ${area}`,
+              `Fra: ${dates.from}`,
+              `Til: ${dates.to}`,
+              `Voksne: ${adults}`,
+              'Treff: 0',
+              'Hvis det ikke finnes treff, si det tydelig og foreslå justering av datoer, område eller antall gjester.',
+            ].join('\n');
           }
         } catch (searchError) {
           console.error('travel-helper availability lookup failed', searchError);
+          dynamicContext = [
+            'BNO_AVAILABILITY_CONTEXT',
+            'Sanntidsoppslaget feilet teknisk.',
+            'Ikke dikt opp tilgjengelighet.',
+            'Forklar kort at sanntidsoppslaget ikke kunne fullføres akkurat nå.',
+          ].join('\n');
         }
       } else {
         const missing: string[] = [];
@@ -3748,21 +3808,25 @@ app.post('/api/travel-helper', async (req, res) => {
           'Sanntidsoppslag ble ikke kjørt ennå.',
           `Mangler: ${missing.join(', ')}`,
           'Hvis brukeren spør om overnatting, skal du stille ett kort oppfølgingsspørsmål.',
-          'Godta også datoformater som:',
-          '- 2026-04-19 til 2026-04-23',
-          '- 19.4.2026 til 23.4.2026',
-          '- 19. april til 23. april',
-          '- 19. april 2026 til 23. april 2026',
+          'Be om manglende informasjon på en enkel måte.',
           'Hvis destinasjon finnes men dato mangler, be om innsjekk og utsjekk.',
           'Hvis destinasjon og dato finnes men antall personer mangler, be om antall voksne/gjester.',
         ].join('\n');
       }
     }
 
+    const systemPrompt = [
+      BNO_TRAVEL_HELPER_SYSTEM,
+      '',
+      `APP_LANG: ${appLang}`,
+      'Svar helst på samme språk som brukeren skriver på.',
+      `Hvis brukeren skriver på ${appLang}, bruk ${appLang} som hovedspråk med mindre brukeren tydelig velger et annet språk i samtalen.`,
+    ].join('\n');
+
     const input = [
       {
         role: 'system',
-        content: BNO_TRAVEL_HELPER_SYSTEM,
+        content: systemPrompt,
       },
       ...(dynamicContext
         ? [
@@ -3811,13 +3875,60 @@ app.post('/api/travel-helper', async (req, res) => {
         ?.text ||
       '';
 
+    let bookingAction: any = null;
+
+    if (
+      isTravelHelperBookingIntent(message) &&
+      latestSearchRows.length > 0 &&
+      latestSearchParams
+    ) {
+      const matchedRoom = findRequestedRoomFromMessage(message, latestSearchRows);
+
+      if (matchedRoom) {
+        console.log('TRAVEL_HELPER matchedRoom for booking:', matchedRoom?.Name);
+
+        bookingAction = {
+          type: 'book_accommodation',
+          label: `Fullfør booking av ${matchedRoom?.Name || 'overnatting'}`,
+          room: {
+            ResourceCategoryId: matchedRoom?.ResourceCategoryId ?? null,
+            RoomCategoryId:
+              matchedRoom?.RoomCategoryId ??
+              matchedRoom?.ResourceCategoryId ??
+              null,
+            BookingUrl: matchedRoom?.BookingUrl ?? null,
+            Name: matchedRoom?.Name ?? null,
+            Description: matchedRoom?.Description ?? null,
+            Capacity: matchedRoom?.Capacity ?? null,
+            Image: matchedRoom?.Image ?? null,
+            Images: matchedRoom?.Images ?? null,
+            PriceTotal: matchedRoom?.PriceTotal ?? null,
+            PriceCurrency: matchedRoom?.PriceCurrency ?? null,
+            AvailableUnits: matchedRoom?.AvailableUnits ?? null,
+            ServiceId: matchedRoom?.ServiceId ?? null,
+            ServiceName: matchedRoom?.ServiceName ?? null,
+          },
+          search: {
+            from: latestSearchParams.from,
+            to: latestSearchParams.to,
+            adults: latestSearchParams.adults,
+            area: latestSearchParams.area,
+            promo: latestSearchParams.promo,
+            lang: latestSearchParams.lang,
+          },
+        };
+      }
+    }
+
     return res.json({
       ok: true,
       reply: reply || 'Beklager, jeg fikk ikke laget et svar akkurat nå.',
-      action: bookingAction,
+      bookingAction,
       meta: {
         intent,
         usedDynamicContext: Boolean(dynamicContext),
+        appLang,
+        searchRowsCount: latestSearchRows.length,
       },
     });
   } catch (e: any) {
@@ -3828,6 +3939,7 @@ app.post('/api/travel-helper', async (req, res) => {
     });
   }
 });
+
 // 404
 app.use((req, res) => {
   console.warn(`404 ${req.method} ${req.url}`);
