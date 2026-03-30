@@ -3137,8 +3137,16 @@ type TravelHelperIntent =
   | 'availability_search'
   | 'general_travel_help';
 
+function normalizeTravelHelperText(inputRaw: string): string {
+  return String(inputRaw || '')
+    .toLowerCase()
+    .replace(/å/g, 'a')
+    .replace(/æ/g, 'ae')
+    .replace(/ø/g, 'o');
+}
+
 function detectTravelHelperIntent(messageRaw: string): TravelHelperIntent {
-  const message = String(messageRaw || '').toLowerCase();
+  const message = normalizeTravelHelperText(messageRaw);
 
   const availabilityHints = [
     'ledig',
@@ -3148,10 +3156,16 @@ function detectTravelHelperIntent(messageRaw: string): TravelHelperIntent {
     'pris',
     'priser',
     'overnatting',
+    'opphold',
+    'sted a bo',
     'bo',
     'hytte',
+    'hytter',
     'leilighet',
+    'leiligheter',
     'hotell',
+    'hus',
+    'rom',
     'ski in',
     'ski out',
     'ski-in',
@@ -3159,7 +3173,8 @@ function detectTravelHelperIntent(messageRaw: string): TravelHelperIntent {
     'booke',
     'bestille',
     'bestill',
-    'rom',
+    'book',
+    'booking',
   ];
 
   return availabilityHints.some((word) => message.includes(word))
@@ -3168,37 +3183,37 @@ function detectTravelHelperIntent(messageRaw: string): TravelHelperIntent {
 }
 
 function extractTravelHelperArea(messageRaw: string): string | null {
-  const message = String(messageRaw || '').toLowerCase();
+  const message = normalizeTravelHelperText(messageRaw);
 
   const mappings: Array<{ keywords: string[]; area: string }> = [
-    { keywords: ['trysil sentrum'], area: 'trysil-sentrum' },
+    {
+      keywords: ['trysil sentrum'],
+      area: 'trysil-sentrum',
+    },
     {
       keywords: ['turistsenter', 'trysil turistsenter'],
       area: 'trysil-turistsenter',
     },
     {
-      keywords: ['høyfjellssenter', 'hoyfjellssenter', 'trysil høyfjellssenter'],
+      keywords: ['hoyfjellssenter', 'trysil hoyfjellssenter', 'fagerasen', 'fagerasen'],
       area: 'trysil-hoyfjellssenter',
     },
-    { keywords: ['trysilfjellet'], area: 'trysilfjell-hytteomrade' },
+    {
+      keywords: ['trysilfjellet', 'trysilfjell hytteomrade', 'trysilfjell'],
+      area: 'trysilfjell-hytteomrade',
+    },
 
     { keywords: ['trysil'], area: 'trysil' },
-    { keywords: ['sälen', 'salen'], area: 'salen' },
+    { keywords: ['salen'], area: 'salen' },
 
     { keywords: ['geiranger'], area: 'stranda' },
     { keywords: ['stranda'], area: 'stranda' },
-    {
-      keywords: ['sunnmørsalpene', 'sunnmorsalpene'],
-      area: 'sunnmorsalpene',
-    },
+    { keywords: ['sunnmorsalpene'], area: 'sunnmorsalpene' },
 
     { keywords: ['oslo'], area: 'oslo' },
     { keywords: ['london'], area: 'london' },
     { keywords: ['amsterdam'], area: 'amsterdam' },
-    {
-      keywords: ['københavn', 'kobenhavn', 'copenhagen'],
-      area: 'copenhagen',
-    },
+    { keywords: ['kobenhavn', 'copenhagen'], area: 'copenhagen' },
     { keywords: ['stockholm'], area: 'stockholm' },
     { keywords: ['los angeles', 'losangeles'], area: 'losangeles' },
   ];
@@ -3213,11 +3228,13 @@ function extractTravelHelperArea(messageRaw: string): string | null {
 }
 
 function extractTravelHelperAdults(messageRaw: string): number | null {
-  const message = String(messageRaw || '').toLowerCase();
+  const message = normalizeTravelHelperText(messageRaw);
 
   const patterns = [
     /(\d+)\s*(personer|person|voksne|gjester|adults|people)/,
     /for\s+(\d+)/,
+    /vi\s+er\s+(\d+)/,
+    /oss\s+(\d+)/,
   ];
 
   for (const pattern of patterns) {
@@ -3234,9 +3251,28 @@ function extractTravelHelperAdults(messageRaw: string): number | null {
 function extractTravelHelperDates(
   messageRaw: string
 ): { from: string | null; to: string | null } {
-  const message = String(messageRaw || '');
-  const isoDates = message.match(/\b\d{4}-\d{2}-\d{2}\b/g) || [];
+  const raw = String(messageRaw || '');
+  const message = normalizeTravelHelperText(raw);
 
+  const pad = (n: number) => String(n).padStart(2, '0');
+
+  const monthMap: Record<string, number> = {
+    januar: 1,
+    februar: 2,
+    mars: 3,
+    april: 4,
+    mai: 5,
+    juni: 6,
+    juli: 7,
+    august: 8,
+    september: 9,
+    oktober: 10,
+    november: 11,
+    desember: 12,
+  };
+
+  // 1) ISO-format: 2026-04-19 til 2026-04-23
+  const isoDates = raw.match(/\b\d{4}-\d{2}-\d{2}\b/g) || [];
   if (isoDates.length >= 2) {
     return {
       from: isoDates[0] ?? null,
@@ -3244,10 +3280,162 @@ function extractTravelHelperDates(
     };
   }
 
+  // 2) Norsk tallformat: 19.4.2026 til 23.4.2026
+  const dottedDates = [...raw.matchAll(/\b(\d{1,2})\.(\d{1,2})\.(\d{4})\b/g)];
+  if (dottedDates.length >= 2) {
+    const first = dottedDates[0];
+    const second = dottedDates[1];
+
+    return {
+      from: `${first[3]}-${pad(Number(first[2]))}-${pad(Number(first[1]))}`,
+      to: `${second[3]}-${pad(Number(second[2]))}-${pad(Number(second[1]))}`,
+    };
+  }
+
+  // 3) "19. april 2026 til 23. april 2026"
+  const longDates = [
+    ...message.matchAll(
+      /\b(\d{1,2})\.?\s+(januar|februar|mars|april|mai|juni|juli|august|september|oktober|november|desember)\s+(\d{4})\b/g
+    ),
+  ];
+
+  if (longDates.length >= 2) {
+    const first = longDates[0];
+    const second = longDates[1];
+
+    return {
+      from: `${first[3]}-${pad(monthMap[first[2]])}-${pad(Number(first[1]))}`,
+      to: `${second[3]}-${pad(monthMap[second[2]])}-${pad(Number(second[1]))}`,
+    };
+  }
+
+  // 4) "19. april til 23. april 2026" -> anta samme år på begge
+  const monthOnlyDates = [
+    ...message.matchAll(
+      /\b(\d{1,2})\.?\s+(januar|februar|mars|april|mai|juni|juli|august|september|oktober|november|desember)\b/g
+    ),
+  ];
+  const yearMatch = message.match(/\b(20\d{2})\b/);
+
+  if (monthOnlyDates.length >= 2 && yearMatch?.[1]) {
+    const year = yearMatch[1];
+    const first = monthOnlyDates[0];
+    const second = monthOnlyDates[1];
+
+    return {
+      from: `${year}-${pad(monthMap[first[2]])}-${pad(Number(first[1]))}`,
+      to: `${year}-${pad(monthMap[second[2]])}-${pad(Number(second[1]))}`,
+    };
+  }
+
   return { from: null, to: null };
 }
 
-function buildAvailabilityContextText(searchData: any): string {
+function buildTravelHelperSearchBasis(
+  message: string,
+  history: any[]
+): string {
+  const recentUserTexts = (Array.isArray(history) ? history : [])
+    .filter((item: any) => item?.role === 'user')
+    .slice(-4)
+    .map((item: any) => String(item?.text || '').trim())
+    .filter(Boolean);
+
+  const basis = [...recentUserTexts, String(message || '').trim()]
+    .filter(Boolean)
+    .join('\n');
+
+  return basis;
+}
+function rankTravelHelperAvailabilityRows(
+  rows: any[],
+  adults: number | null,
+  messageRaw: string
+) {
+  const message = String(messageRaw || '').toLowerCase();
+
+  const wantsCabin =
+    message.includes('hytte') ||
+    message.includes('cabin') ||
+    message.includes('chalet');
+
+  const wantsSkiInOut =
+    message.includes('ski in') ||
+    message.includes('ski-out') ||
+    message.includes('ski out') ||
+    message.includes('ski-in');
+
+  const scored = (Array.isArray(rows) ? rows : []).map((item: any) => {
+    let score = 0;
+
+    const capacity = Number(item?.Capacity || 0);
+    const name = String(item?.Name || '').toLowerCase();
+    const description = String(item?.Description || '').toLowerCase();
+    const serviceName = String(item?.ServiceName || '').toLowerCase();
+    const textBlob = `${name} ${description} ${serviceName}`;
+
+    if (adults && capacity >= adults) {
+      score += 100;
+      if (capacity === adults) score += 30;
+      if (capacity <= adults + 2) score += 15;
+    } else if (adults && capacity > 0 && capacity < adults) {
+      score -= 200;
+    }
+
+    if (wantsCabin) {
+      if (
+        textBlob.includes('hytte') ||
+        textBlob.includes('cabin') ||
+        textBlob.includes('chalet')
+      ) {
+        score += 20;
+      }
+    }
+
+    if (wantsSkiInOut) {
+      if (
+        textBlob.includes('ski in/ski out') ||
+        textBlob.includes('ski-in/ski-out') ||
+        textBlob.includes('ski in') ||
+        textBlob.includes('ski-out') ||
+        textBlob.includes('ski out') ||
+        textBlob.includes('ski-in')
+      ) {
+        score += 25;
+      }
+    }
+
+    if (item?.PriceTotal != null) {
+      score += 5;
+    }
+
+    if (item?.AvailableUnits != null && Number(item.AvailableUnits) > 0) {
+      score += 5;
+    }
+
+    return {
+      ...item,
+      __travelHelperScore: score,
+    };
+  });
+
+  return scored.sort((a: any, b: any) => {
+    const scoreDiff = Number(b.__travelHelperScore || 0) - Number(a.__travelHelperScore || 0);
+    if (scoreDiff !== 0) return scoreDiff;
+
+    const priceA =
+      a?.PriceTotal != null ? Number(a.PriceTotal) : Number.POSITIVE_INFINITY;
+    const priceB =
+      b?.PriceTotal != null ? Number(b.PriceTotal) : Number.POSITIVE_INFINITY;
+
+    return priceA - priceB;
+  });
+}
+function buildAvailabilityContextText(
+  searchData: any,
+  adults: number | null,
+  messageRaw: string
+): string {
   const rows = searchData?.availability?.ResourceCategoryAvailabilities || [];
   const params = searchData?.params || {};
 
@@ -3263,7 +3451,8 @@ function buildAvailabilityContextText(searchData: any): string {
     ].join('\n');
   }
 
-  const topRows = rows.slice(0, 8);
+  const rankedRows = rankTravelHelperAvailabilityRows(rows, adults, messageRaw);
+const topRows = rankedRows.slice(0, 5);
 
   const formattedRows = topRows.map((item: any, index: number) => {
     const price =
@@ -3338,16 +3527,18 @@ app.post('/api/travel-helper', async (req, res) => {
     }
 
     const safeHistory = Array.isArray(history) ? history.slice(-10) : [];
-    const intent = detectTravelHelperIntent(message);
+const searchBasis = buildTravelHelperSearchBasis(message, safeHistory);
+const intent = detectTravelHelperIntent(searchBasis);
 
-    let dynamicContext = '';
+let dynamicContext = '';
 
-    if (intent === 'availability_search') {
-      const area = extractTravelHelperArea(message);
-      const adults = extractTravelHelperAdults(message);
-      const dates = extractTravelHelperDates(message);
+if (intent === 'availability_search') {
+  const area = extractTravelHelperArea(searchBasis);
+  const adults = extractTravelHelperAdults(searchBasis);
+  const dates = extractTravelHelperDates(searchBasis);
 
       console.log('TRAVEL_HELPER intent:', intent);
+      console.log('TRAVEL_HELPER searchBasis:', searchBasis);
       console.log('TRAVEL_HELPER area:', area);
       console.log('TRAVEL_HELPER adults:', adults);
       console.log('TRAVEL_HELPER dates:', dates);
@@ -3378,7 +3569,11 @@ app.post('/api/travel-helper', async (req, res) => {
           );
 
           if (searchResponse.ok && searchJson?.ok && searchJson?.data) {
-            dynamicContext = buildAvailabilityContextText(searchJson.data);
+            dynamicContext = buildAvailabilityContextText(
+            searchJson.data,
+            adults,
+            searchBasis
+          );
             console.log('TRAVEL_HELPER dynamicContext:', dynamicContext);
           }
         } catch (searchError) {
