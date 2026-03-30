@@ -3060,21 +3060,31 @@ if (ENABLE_SERVER_RESERVATION) {
         detail: 'ENABLE_SERVER_RESERVATION=1 men endpoint er ikke implementert ennå',
       });
     } catch (e: any) {
-      return res.status(500).json({ ok: false, error: 'server_error', detail: e?.message || String(e) });
+      return res.status(500).json({
+        ok: false,
+        error: 'server_error',
+        detail: e?.message || String(e),
+      });
     }
   });
 }
+
+// =============================================================
+// BNO Travel Helper
+// =============================================================
 const BNO_TRAVEL_HELPER_SYSTEM = `
 Du er BNO Reisehjelper i BNO Travel-appen.
 
 Regler:
 1. Prioriter alltid BNO Travel sitt eget innhold først.
-2. Anbefal først BNO Travel sine destinasjoner, opplevelser og produktområder når det er relevant.
-3. Hvis BNO Travel ikke har et eksakt svar, kan du gi korte, praktiske og generelle reiseråd.
+2. Når brukeren spør om overnatting, aktiviteter, restauranter, spa, trening, fly eller leiebil:
+   - anbefal først BNO Travel sitt innhold, destinasjoner og partnerinnhold
+   - vær konkret og nyttig
+3. Hvis BNO Travel ikke har et tydelig svar, kan du gi praktiske generelle reiseråd.
 4. Ikke finn opp priser, tilgjengelighet, partnere eller avtaler.
 5. Hvis sanntidsdata ikke er tilgjengelig, si det tydelig.
-6. Svar kort, nyttig og konkret.
-7. Svar på samme språk som brukeren skriver i, hvis mulig.
+6. Svar kort, tydelig og nyttig.
+7. Svar helst på samme språk som brukeren skriver i.
 
 BNO Travel dekker blant annet:
 - Overnatting
@@ -3087,7 +3097,7 @@ BNO Travel dekker blant annet:
 - BNO Moments
 - BNO Rewards
 
-Kjente destinasjoner i universet:
+Kjente destinasjoner:
 - Trysil
 - Sälen
 - Sunnmørsalpene
@@ -3100,7 +3110,7 @@ Kjente destinasjoner i universet:
 
 BNO Moments:
 - handler om å lagre og dele reiseminner
-- inkluderer deling av minner og konkurranse
+- inkluderer minner og konkurranse
 
 BNO Rewards:
 - handler om fordeler, kampanjer, gavekort og medlemsverdi
@@ -3137,15 +3147,19 @@ app.post('/api/travel-helper', async (req, res) => {
           },
         ],
       },
-      ...safeHistory.map((item: any) => ({
-        role: item?.role === 'assistant' ? 'assistant' : 'user',
-        content: [
-          {
-            type: 'input_text',
-            text: String(item?.text || ''),
-          },
-        ],
-      })),
+      ...safeHistory.map((item: any) => {
+        const role = item?.role === 'assistant' ? 'assistant' : 'user';
+
+        return {
+          role,
+          content: [
+            {
+              type: role === 'assistant' ? 'output_text' : 'input_text',
+              text: String(item?.text || ''),
+            },
+          ],
+        };
+      }),
       {
         role: 'user',
         content: [
@@ -3199,7 +3213,6 @@ app.use((req, res) => {
   console.warn(`404 ${req.method} ${req.url}`);
   res.status(404).json({ ok: false, error: 'not_found' });
 });
-
 // =============================================================
 // Pre-warm (liten win på første /api/search)
 // =============================================================
