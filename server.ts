@@ -3077,30 +3077,29 @@ Du er BNO Reisehjelper i BNO Travel-appen.
 
 Målet ditt er å hjelpe brukeren før, under og etter reisen.
 
-Regler:
+VIKTIGE REGLER:
 1. Prioriter alltid BNO Travel sitt eget innhold først.
-2. Når brukeren spør om overnatting, aktiviteter, restauranter, spa, trening, fly eller leiebil:
-   - anbefal først BNO Travel sitt innhold, destinasjoner og produktområder
-   - vær konkret, inspirerende og nyttig
-3. Ikke finn opp priser, tilgjengelighet, partnere eller avtaler.
-4. Hvis sanntidsdata ikke finnes, si det tydelig.
-5. Hvis nok availability-data finnes i konteksten, bruk dem aktivt.
+2. Du må ALDRI finne opp overnatting, priser, tilgjengelighet, navn på hytter/leiligheter eller områder.
+3. Hvis du får "BNO_AVAILABILITY_CONTEXT", skal du KUN bruke dataene som står der.
+4. Hvis BNO_AVAILABILITY_CONTEXT inneholder ekte treff, skal du ikke gi generelle svar først.
+5. Hvis det er 0 treff, si det tydelig og foreslå hvordan brukeren kan justere søket.
 6. Hvis viktig informasjon mangler, still ett kort og tydelig oppfølgingsspørsmål.
 7. Svar helst på samme språk som brukeren skriver i.
-8. Svar kort og handlingsrettet.
-9. Når det passer, foreslå neste steg i BNO Travel, for eksempel:
-   - se overnatting
-   - se aktiviteter
-   - se restauranter
-   - se spa
-   - se trening
+8. Svar konkret, nyttig og handlingsrettet.
+
+Når brukeren spør om overnatting:
+- bruk BNO Travel sitt eget innhold først
+- presenter konkrete alternativer hvis du har dem
+- ta med navn, pris, kapasitet og område hvis det finnes
+- bruk punktliste når det er flere treff
+- ikke gjett
 
 Hvis du får BNO_AVAILABILITY_CONTEXT:
 - bruk kun disse dataene som sanntidsgrunnlag
-- presenter de beste alternativene kort
-- ta med pris, kapasitet og område når det finnes
-- hvis det er 0 treff, si det tydelig og foreslå å justere datoer, område eller antall gjester
-- hvis informasjon mangler, be om den i stedet for å gjette
+- ikke legg til ekstra alternativer
+- ikke dikt opp egenskaper som ikke står i konteksten
+- ikke dikt opp priser
+- ikke dikt opp beliggenhet
 
 BNO Travel dekker blant annet:
 - Overnatting
@@ -3173,8 +3172,14 @@ function extractTravelHelperArea(messageRaw: string): string | null {
 
   const mappings: Array<{ keywords: string[]; area: string }> = [
     { keywords: ['trysil sentrum'], area: 'trysil-sentrum' },
-    { keywords: ['turistsenter', 'trysil turistsenter'], area: 'trysil-turistsenter' },
-    { keywords: ['høyfjellssenter', 'hoyfjellssenter', 'trysil høyfjellssenter'], area: 'trysil-hoyfjellssenter' },
+    {
+      keywords: ['turistsenter', 'trysil turistsenter'],
+      area: 'trysil-turistsenter',
+    },
+    {
+      keywords: ['høyfjellssenter', 'hoyfjellssenter', 'trysil høyfjellssenter'],
+      area: 'trysil-hoyfjellssenter',
+    },
     { keywords: ['trysilfjellet'], area: 'trysilfjell-hytteomrade' },
 
     { keywords: ['trysil'], area: 'trysil' },
@@ -3182,12 +3187,18 @@ function extractTravelHelperArea(messageRaw: string): string | null {
 
     { keywords: ['geiranger'], area: 'stranda' },
     { keywords: ['stranda'], area: 'stranda' },
-    { keywords: ['sunnmørsalpene', 'sunnmorsalpene'], area: 'sunnmorsalpene' },
+    {
+      keywords: ['sunnmørsalpene', 'sunnmorsalpene'],
+      area: 'sunnmorsalpene',
+    },
 
     { keywords: ['oslo'], area: 'oslo' },
     { keywords: ['london'], area: 'london' },
     { keywords: ['amsterdam'], area: 'amsterdam' },
-    { keywords: ['københavn', 'kobenhavn', 'copenhagen'], area: 'copenhagen' },
+    {
+      keywords: ['københavn', 'kobenhavn', 'copenhagen'],
+      area: 'copenhagen',
+    },
     { keywords: ['stockholm'], area: 'stockholm' },
     { keywords: ['los angeles', 'losangeles'], area: 'losangeles' },
   ];
@@ -3248,6 +3259,7 @@ function buildAvailabilityContextText(searchData: any): string {
       `Til: ${params?.to || 'ukjent'}`,
       `Voksne: ${params?.adults || 'ukjent'}`,
       'Treff: 0',
+      'INSTRUKS: Ingen tilgjengelige enheter funnet. Ikke finn opp alternativer.',
     ].join('\n');
   }
 
@@ -3270,11 +3282,25 @@ function buildAvailabilityContextText(searchData: any): string {
     const area =
       item?.ServiceName || item?.AreaName || params?.area || 'ukjent område';
 
-    return `${index + 1}. ${item?.Name || 'Ukjent enhet'} | område: ${area} | pris: ${price} | kapasitet: ${capacity} | ledige enheter: ${availableUnits}`;
+    const name = item?.Name || 'Ukjent enhet';
+    const description = item?.Description || '';
+    const features = item?.Features || item?.FeatureSummary || '';
+
+    return [
+      `ALTERNATIV_${index + 1}`,
+      `NAVN: ${name}`,
+      `OMRÅDE: ${area}`,
+      `PRIS: ${price}`,
+      `KAPASITET: ${capacity}`,
+      `LEDIGE_ENHETER: ${availableUnits}`,
+      `BESKRIVELSE: ${description}`,
+      `FEATURES: ${features}`,
+    ].join('\n');
   });
 
   return [
     'BNO_AVAILABILITY_CONTEXT',
+    'Dette er ekte tilgjengelighet fra BNO Travel.',
     `Område: ${params?.area || 'ukjent'}`,
     `Fra: ${params?.from || 'ukjent'}`,
     `Til: ${params?.to || 'ukjent'}`,
@@ -3282,9 +3308,15 @@ function buildAvailabilityContextText(searchData: any): string {
     `Treff: ${rows.length}`,
     '',
     ...formattedRows,
-  ].join('\n');
+    '',
+    'INSTRUKS:',
+    '- Bruk KUN alternativene over',
+    '- Ikke legg til nye navn',
+    '- Ikke dikt opp priser',
+    '- Ikke dikt opp områder',
+    '- Oppsummer kort og konkret',
+  ].join('\n\n');
 }
-
 
 app.post('/api/travel-helper', async (req, res) => {
   try {
@@ -3315,6 +3347,11 @@ app.post('/api/travel-helper', async (req, res) => {
       const adults = extractTravelHelperAdults(message);
       const dates = extractTravelHelperDates(message);
 
+      console.log('TRAVEL_HELPER intent:', intent);
+      console.log('TRAVEL_HELPER area:', area);
+      console.log('TRAVEL_HELPER adults:', adults);
+      console.log('TRAVEL_HELPER dates:', dates);
+
       if (area && adults && dates.from && dates.to) {
         try {
           const searchUrl = new URL(`http://127.0.0.1:${PORT}/api/search`);
@@ -3327,8 +3364,22 @@ app.post('/api/travel-helper', async (req, res) => {
           const searchResponse = await fetch(searchUrl.toString());
           const searchJson: any = await searchResponse.json();
 
+          console.log(
+            'TRAVEL_HELPER search response ok:',
+            searchResponse.ok
+          );
+          console.log(
+            'TRAVEL_HELPER search json keys:',
+            searchJson ? Object.keys(searchJson) : null
+          );
+          console.log(
+            'TRAVEL_HELPER raw search data:',
+            JSON.stringify(searchJson?.data || null, null, 2)
+          );
+
           if (searchResponse.ok && searchJson?.ok && searchJson?.data) {
             dynamicContext = buildAvailabilityContextText(searchJson.data);
+            console.log('TRAVEL_HELPER dynamicContext:', dynamicContext);
           }
         } catch (searchError) {
           console.error('travel-helper availability lookup failed', searchError);
@@ -3354,51 +3405,51 @@ app.post('/api/travel-helper', async (req, res) => {
     }
 
     const input = [
-  {
-    role: 'system',
-    content: [
       {
-        type: 'input_text',
-        text: BNO_TRAVEL_HELPER_SYSTEM,
+        role: 'system',
+        content: [
+          {
+            type: 'input_text',
+            text: BNO_TRAVEL_HELPER_SYSTEM,
+          },
+        ],
       },
-    ],
-  },
-  ...(dynamicContext
-    ? [
-        {
-          role: 'system',
+      ...(dynamicContext
+        ? [
+            {
+              role: 'system',
+              content: [
+                {
+                  type: 'input_text',
+                  text: dynamicContext,
+                },
+              ],
+            },
+          ]
+        : []),
+      ...safeHistory.map((item: any) => {
+        const role = item?.role === 'assistant' ? 'assistant' : 'user';
+
+        return {
+          role,
           content: [
             {
-              type: 'input_text',
-              text: dynamicContext,
+              type: role === 'assistant' ? 'output_text' : 'input_text',
+              text: String(item?.text || ''),
             },
           ],
-        },
-      ]
-    : []),
-  ...safeHistory.map((item: any) => {
-    const role = item?.role === 'assistant' ? 'assistant' : 'user';
-
-    return {
-      role,
-      content: [
-        {
-          type: role === 'assistant' ? 'output_text' : 'input_text',
-          text: String(item?.text || ''),
-        },
-      ],
-    };
-  }),
-  {
-    role: 'user',
-    content: [
+        };
+      }),
       {
-        type: 'input_text',
-        text: String(message),
+        role: 'user',
+        content: [
+          {
+            type: 'input_text',
+            text: String(message),
+          },
+        ],
       },
-    ],
-  },
-];
+    ];
 
     const response = await fetch('https://api.openai.com/v1/responses', {
       method: 'POST',
