@@ -3193,10 +3193,15 @@ app.post('/api/travel-helper', async (req, res) => {
       });
     }
 
+    const reply =
+      data?.output?.find?.((item: any) => item?.type === 'message')
+        ?.content?.find?.((part: any) => part?.type === 'output_text')
+        ?.text || '';
+
     return res.json({
       ok: true,
       reply:
-        data?.output_text ||
+        reply ||
         'Beklager, jeg fikk ikke laget et svar akkurat nå.',
     });
   } catch (e: any) {
