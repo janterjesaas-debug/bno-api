@@ -3075,16 +3075,32 @@ if (ENABLE_SERVER_RESERVATION) {
 const BNO_TRAVEL_HELPER_SYSTEM = `
 Du er BNO Reisehjelper i BNO Travel-appen.
 
+Målet ditt er å hjelpe brukeren før, under og etter reisen.
+
 Regler:
 1. Prioriter alltid BNO Travel sitt eget innhold først.
 2. Når brukeren spør om overnatting, aktiviteter, restauranter, spa, trening, fly eller leiebil:
-   - anbefal først BNO Travel sitt innhold, destinasjoner og partnerinnhold
-   - vær konkret og nyttig
-3. Hvis BNO Travel ikke har et tydelig svar, kan du gi praktiske generelle reiseråd.
-4. Ikke finn opp priser, tilgjengelighet, partnere eller avtaler.
-5. Hvis sanntidsdata ikke er tilgjengelig, si det tydelig.
-6. Svar kort, tydelig og nyttig.
+   - anbefal først BNO Travel sitt innhold, destinasjoner og produktområder
+   - vær konkret, inspirerende og nyttig
+3. Ikke finn opp priser, tilgjengelighet, partnere eller avtaler.
+4. Hvis sanntidsdata ikke finnes, si det tydelig.
+5. Hvis nok availability-data finnes i konteksten, bruk dem aktivt.
+6. Hvis viktig informasjon mangler, still ett kort og tydelig oppfølgingsspørsmål.
 7. Svar helst på samme språk som brukeren skriver i.
+8. Svar kort og handlingsrettet.
+9. Når det passer, foreslå neste steg i BNO Travel, for eksempel:
+   - se overnatting
+   - se aktiviteter
+   - se restauranter
+   - se spa
+   - se trening
+
+Hvis du får BNO_AVAILABILITY_CONTEXT:
+- bruk kun disse dataene som sanntidsgrunnlag
+- presenter de beste alternativene kort
+- ta med pris, kapasitet og område når det finnes
+- hvis det er 0 treff, si det tydelig og foreslå å justere datoer, område eller antall gjester
+- hvis informasjon mangler, be om den i stedet for å gjette
 
 BNO Travel dekker blant annet:
 - Overnatting
@@ -3100,6 +3116,8 @@ BNO Travel dekker blant annet:
 Kjente destinasjoner:
 - Trysil
 - Sälen
+- Stranda
+- Geiranger
 - Sunnmørsalpene
 - Oslo
 - London
@@ -3109,11 +3127,11 @@ Kjente destinasjoner:
 - Los Angeles
 
 BNO Moments:
-- handler om å lagre og dele reiseminner
-- inkluderer minner og konkurranse
+- lagre og dele reiseminner
+- konkurranse og engasjement etter reisen
 
 BNO Rewards:
-- handler om fordeler, kampanjer, gavekort og medlemsverdi
+- fordeler, kampanjer, gavekort og medlemsverdi
 `;
 
 type TravelHelperIntent =
@@ -3153,31 +3171,32 @@ function detectTravelHelperIntent(messageRaw: string): TravelHelperIntent {
 function extractTravelHelperArea(messageRaw: string): string | null {
   const message = String(messageRaw || '').toLowerCase();
 
-  if (message.includes('trysil sentrum')) return 'trysil-sentrum';
-  if (message.includes('turistsenter')) return 'trysil-turistsenter';
-  if (message.includes('høyfjellssenter') || message.includes('hoyfjellssenter')) {
-    return 'trysil-hoyfjellssenter';
-  }
-  if (message.includes('trysilfjell')) return 'trysilfjell-hytteomrade';
+  const mappings: Array<{ keywords: string[]; area: string }> = [
+    { keywords: ['trysil sentrum'], area: 'trysil-sentrum' },
+    { keywords: ['turistsenter', 'trysil turistsenter'], area: 'trysil-turistsenter' },
+    { keywords: ['høyfjellssenter', 'hoyfjellssenter', 'trysil høyfjellssenter'], area: 'trysil-hoyfjellssenter' },
+    { keywords: ['trysilfjellet'], area: 'trysilfjell-hytteomrade' },
 
-  if (message.includes('trysil')) return 'trysil';
-  if (message.includes('sälen') || message.includes('salen')) return 'salen';
-  if (message.includes('stranda')) return 'stranda';
-  if (message.includes('sunnmørsalpene') || message.includes('sunnmorsalpene')) {
-    return 'sunnmorsalpene';
+    { keywords: ['trysil'], area: 'trysil' },
+    { keywords: ['sälen', 'salen'], area: 'salen' },
+
+    { keywords: ['geiranger'], area: 'stranda' },
+    { keywords: ['stranda'], area: 'stranda' },
+    { keywords: ['sunnmørsalpene', 'sunnmorsalpene'], area: 'sunnmorsalpene' },
+
+    { keywords: ['oslo'], area: 'oslo' },
+    { keywords: ['london'], area: 'london' },
+    { keywords: ['amsterdam'], area: 'amsterdam' },
+    { keywords: ['københavn', 'kobenhavn', 'copenhagen'], area: 'copenhagen' },
+    { keywords: ['stockholm'], area: 'stockholm' },
+    { keywords: ['los angeles', 'losangeles'], area: 'losangeles' },
+  ];
+
+  for (const item of mappings) {
+    if (item.keywords.some((keyword) => message.includes(keyword))) {
+      return item.area;
+    }
   }
-  if (message.includes('oslo')) return 'oslo';
-  if (message.includes('london')) return 'london';
-  if (message.includes('amsterdam')) return 'amsterdam';
-  if (
-    message.includes('københavn') ||
-    message.includes('kobenhavn') ||
-    message.includes('copenhagen')
-  ) {
-    return 'copenhagen';
-  }
-  if (message.includes('stockholm')) return 'stockholm';
-  if (message.includes('los angeles')) return 'losangeles';
 
   return null;
 }
@@ -3232,7 +3251,7 @@ function buildAvailabilityContextText(searchData: any): string {
     ].join('\n');
   }
 
-  const topRows = rows.slice(0, 5);
+  const topRows = rows.slice(0, 8);
 
   const formattedRows = topRows.map((item: any, index: number) => {
     const price =
@@ -3248,9 +3267,10 @@ function buildAvailabilityContextText(searchData: any): string {
     const availableUnits =
       item?.AvailableUnits != null ? String(item.AvailableUnits) : 'ukjent';
 
-    return `${index + 1}. ${item?.Name || 'Ukjent enhet'} | område: ${
-      item?.ServiceName || 'ukjent'
-    } | pris: ${price} | kapasitet: ${capacity} | ledige enheter: ${availableUnits}`;
+    const area =
+      item?.ServiceName || item?.AreaName || params?.area || 'ukjent område';
+
+    return `${index + 1}. ${item?.Name || 'Ukjent enhet'} | område: ${area} | pris: ${price} | kapasitet: ${capacity} | ledige enheter: ${availableUnits}`;
   });
 
   return [
@@ -3325,53 +3345,60 @@ app.post('/api/travel-helper', async (req, res) => {
           'BNO_AVAILABILITY_CONTEXT',
           'Sanntidsoppslag ble ikke kjørt ennå.',
           `Mangler: ${missing.join(', ')}`,
-          'Be brukeren oppgi manglende informasjon før du svarer mer konkret om tilgjengelighet.',
+          'Hvis brukeren spør om overnatting, skal du stille et kort oppfølgingsspørsmål.',
+          'Be om manglende informasjon på en enkel måte.',
+          'Hvis destinasjon finnes men dato mangler, be om innsjekk og utsjekk.',
+          'Hvis destinasjon og dato finnes men antall personer mangler, be om antall voksne/gjester.',
         ].join('\n');
       }
     }
 
     const input = [
+  {
+    role: 'system',
+    content: [
       {
-        role: 'system',
-        content: [
-          {
-            type: 'input_text',
-            text: BNO_TRAVEL_HELPER_SYSTEM,
-          },
-        ],
+        type: 'input_text',
+        text: BNO_TRAVEL_HELPER_SYSTEM,
       },
-      ...(dynamicContext
-        ? [
+    ],
+  },
+  ...(dynamicContext
+    ? [
+        {
+          role: 'system',
+          content: [
             {
-              role: 'system',
-              content: [
-                {
-                  type: 'input_text',
-                  text: dynamicContext,
-                },
-              ],
+              type: 'input_text',
+              text: dynamicContext,
             },
-          ]
-        : []),
-      ...safeHistory.map((item: any) => ({
-        role: item?.role === 'assistant' ? 'assistant' : 'user',
-        content: [
-          {
-            type: 'input_text',
-            text: String(item?.text || ''),
-          },
-        ],
-      })),
+          ],
+        },
+      ]
+    : []),
+  ...safeHistory.map((item: any) => {
+    const role = item?.role === 'assistant' ? 'assistant' : 'user';
+
+    return {
+      role,
+      content: [
+        {
+          type: role === 'assistant' ? 'output_text' : 'input_text',
+          text: String(item?.text || ''),
+        },
+      ],
+    };
+  }),
+  {
+    role: 'user',
+    content: [
       {
-        role: 'user',
-        content: [
-          {
-            type: 'input_text',
-            text: String(message),
-          },
-        ],
+        type: 'input_text',
+        text: String(message),
       },
-    ];
+    ],
+  },
+];
 
     const response = await fetch('https://api.openai.com/v1/responses', {
       method: 'POST',
@@ -3404,9 +3431,7 @@ app.post('/api/travel-helper', async (req, res) => {
 
     return res.json({
       ok: true,
-      reply:
-        reply ||
-        'Beklager, jeg fikk ikke laget et svar akkurat nå.',
+      reply: reply || 'Beklager, jeg fikk ikke laget et svar akkurat nå.',
       meta: {
         intent,
         usedDynamicContext: Boolean(dynamicContext),
