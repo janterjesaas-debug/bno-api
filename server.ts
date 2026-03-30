@@ -3064,6 +3064,135 @@ if (ENABLE_SERVER_RESERVATION) {
     }
   });
 }
+const BNO_TRAVEL_HELPER_SYSTEM = `
+Du er BNO Reisehjelper i BNO Travel-appen.
+
+Regler:
+1. Prioriter alltid BNO Travel sitt eget innhold først.
+2. Anbefal først BNO Travel sine destinasjoner, opplevelser og produktområder når det er relevant.
+3. Hvis BNO Travel ikke har et eksakt svar, kan du gi korte, praktiske og generelle reiseråd.
+4. Ikke finn opp priser, tilgjengelighet, partnere eller avtaler.
+5. Hvis sanntidsdata ikke er tilgjengelig, si det tydelig.
+6. Svar kort, nyttig og konkret.
+7. Svar på samme språk som brukeren skriver i, hvis mulig.
+
+BNO Travel dekker blant annet:
+- Overnatting
+- Fly
+- Leiebil
+- Aktiviteter
+- Restauranter
+- Massasje / spa
+- Trening
+- BNO Moments
+- BNO Rewards
+
+Kjente destinasjoner i universet:
+- Trysil
+- Sälen
+- Sunnmørsalpene
+- Oslo
+- London
+- Amsterdam
+- København
+- Stockholm
+- Los Angeles
+
+BNO Moments:
+- handler om å lagre og dele reiseminner
+- inkluderer deling av minner og konkurranse
+
+BNO Rewards:
+- handler om fordeler, kampanjer, gavekort og medlemsverdi
+`;
+
+app.post('/api/travel-helper', async (req, res) => {
+  try {
+    const { message, history } = req.body || {};
+
+    if (!message || typeof message !== 'string') {
+      return res.status(400).json({
+        ok: false,
+        error: 'message_mangler',
+      });
+    }
+
+    const openAiKey = String(process.env.OPENAI_API_KEY || '').trim();
+    if (!openAiKey) {
+      return res.status(500).json({
+        ok: false,
+        error: 'OPENAI_API_KEY_mangler',
+      });
+    }
+
+    const safeHistory = Array.isArray(history) ? history.slice(-10) : [];
+
+    const input = [
+      {
+        role: 'system',
+        content: [
+          {
+            type: 'input_text',
+            text: BNO_TRAVEL_HELPER_SYSTEM,
+          },
+        ],
+      },
+      ...safeHistory.map((item: any) => ({
+        role: item?.role === 'assistant' ? 'assistant' : 'user',
+        content: [
+          {
+            type: 'input_text',
+            text: String(item?.text || ''),
+          },
+        ],
+      })),
+      {
+        role: 'user',
+        content: [
+          {
+            type: 'input_text',
+            text: String(message),
+          },
+        ],
+      },
+    ];
+
+    const response = await fetch('https://api.openai.com/v1/responses', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${openAiKey}`,
+      },
+      body: JSON.stringify({
+        model: 'gpt-5.4-mini',
+        input,
+      }),
+    });
+
+    const data: any = await response.json();
+
+    if (!response.ok) {
+      console.error('travel-helper OpenAI error', data);
+      return res.status(500).json({
+        ok: false,
+        error: data?.error?.message || 'openai_request_failed',
+      });
+    }
+
+    return res.json({
+      ok: true,
+      reply:
+        data?.output_text ||
+        'Beklager, jeg fikk ikke laget et svar akkurat nå.',
+    });
+  } catch (e: any) {
+    console.error('POST /api/travel-helper failed', e);
+    return res.status(500).json({
+      ok: false,
+      error: e?.message || 'travel_helper_failed',
+    });
+  }
+});
 
 // 404
 app.use((req, res) => {
