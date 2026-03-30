@@ -3271,6 +3271,8 @@ function extractTravelHelperDates(
     desember: 12,
   };
 
+  const currentYear = new Date().getFullYear();
+
   // 1) ISO-format: 2026-04-19 til 2026-04-23
   const isoDates = raw.match(/\b\d{4}-\d{2}-\d{2}\b/g) || [];
   if (isoDates.length >= 2) {
@@ -3280,7 +3282,7 @@ function extractTravelHelperDates(
     };
   }
 
-  // 2) Norsk tallformat: 19.4.2026 til 23.4.2026
+  // 2) Tallformat: 19.4.2026 til 23.4.2026
   const dottedDates = [...raw.matchAll(/\b(\d{1,2})\.(\d{1,2})\.(\d{4})\b/g)];
   if (dottedDates.length >= 2) {
     const first = dottedDates[0];
@@ -3292,7 +3294,7 @@ function extractTravelHelperDates(
     };
   }
 
-  // 3) "19. april 2026 til 23. april 2026"
+  // 3) Langformat med år: 19. april 2026 til 23. april 2026
   const longDates = [
     ...message.matchAll(
       /\b(\d{1,2})\.?\s+(januar|februar|mars|april|mai|juni|juli|august|september|oktober|november|desember)\s+(\d{4})\b/g
@@ -3309,22 +3311,35 @@ function extractTravelHelperDates(
     };
   }
 
-  // 4) "19. april til 23. april 2026" -> anta samme år på begge
+  // 4) Langformat uten år: 19. april til 23. april
   const monthOnlyDates = [
     ...message.matchAll(
       /\b(\d{1,2})\.?\s+(januar|februar|mars|april|mai|juni|juli|august|september|oktober|november|desember)\b/g
     ),
   ];
-  const yearMatch = message.match(/\b(20\d{2})\b/);
 
-  if (monthOnlyDates.length >= 2 && yearMatch?.[1]) {
-    const year = yearMatch[1];
+  if (monthOnlyDates.length >= 2) {
     const first = monthOnlyDates[0];
     const second = monthOnlyDates[1];
 
+    let fromYear = currentYear;
+    let toYear = currentYear;
+
+    const fromMonth = monthMap[first[2]];
+    const toMonth = monthMap[second[2]];
+    const fromDay = Number(first[1]);
+    const toDay = Number(second[1]);
+
+    const fromDate = new Date(fromYear, fromMonth - 1, fromDay);
+    const toDate = new Date(toYear, toMonth - 1, toDay);
+
+    if (toDate < fromDate) {
+      toYear = currentYear + 1;
+    }
+
     return {
-      from: `${year}-${pad(monthMap[first[2]])}-${pad(Number(first[1]))}`,
-      to: `${year}-${pad(monthMap[second[2]])}-${pad(Number(second[1]))}`,
+      from: `${fromYear}-${pad(fromMonth)}-${pad(fromDay)}`,
+      to: `${toYear}-${pad(toMonth)}-${pad(toDay)}`,
     };
   }
 
@@ -3506,7 +3521,115 @@ const topRows = rankedRows.slice(0, 5);
     '- Oppsummer kort og konkret',
   ].join('\n\n');
 }
+function isTravelHelperBookingIntent(messageRaw: string): boolean {
+  const message = normalizeTravelHelperText(messageRaw);
 
+  const bookingHints = [
+    'book',
+    'booking',
+    'bestill',
+    'bestille',
+    'booke',
+    'ga til booking',
+    'gå til booking',
+    'sluttfor',
+    'sluttfør',
+    'fullfor',
+    'fullfør',
+    'hjelp med booking',
+    'hjelpe med booking',
+  ];
+
+  return bookingHints.some((word) => message.includes(word));
+}
+
+function getTravelHelperRowBookingUrl(row: any): string | null {
+  const candidates = [
+    row?.BookingUrl,
+    row?.bookingUrl,
+    row?.booking_url,
+    row?.Url,
+    row?.url,
+    row?.DeepLink,
+    row?.deepLink,
+    row?.deeplink,
+    row?.BookingLink,
+    row?.bookingLink,
+  ];
+
+  for (const value of candidates) {
+    if (typeof value === 'string' && value.trim()) {
+      return value.trim();
+    }
+  }
+
+  return null;
+}
+
+function pickTravelHelperBookingCandidate(
+  searchData: any,
+  adults: number | null,
+  messageRaw: string
+): any | null {
+  const rows = searchData?.availability?.ResourceCategoryAvailabilities || [];
+  if (!Array.isArray(rows) || rows.length === 0) return null;
+
+  const message = normalizeTravelHelperText(messageRaw);
+  const wantsSkiInOut =
+    message.includes('ski in') ||
+    message.includes('ski-out') ||
+    message.includes('ski out') ||
+    message.includes('ski-in');
+
+  const normalized = rows.map((row: any) => {
+    const description = String(row?.Description || '').toLowerCase();
+    const name = String(row?.Name || '').toLowerCase();
+
+    const capacity = Number(row?.Capacity || 0);
+    const availableUnits = Number(row?.AvailableUnits || row?.availableUnits || 0);
+    const price = Number(row?.PriceTotal || Number.MAX_SAFE_INTEGER);
+
+    const skiScore =
+      wantsSkiInOut &&
+      (description.includes('ski in') ||
+        description.includes('ski-out') ||
+        description.includes('ski out') ||
+        description.includes('ski-in') ||
+        name.includes('ski in') ||
+        name.includes('ski-out') ||
+        name.includes('ski out') ||
+        name.includes('ski-in'))
+        ? 1
+        : 0;
+
+    const fitsAdults = adults ? capacity >= adults : true;
+    const capacityDiff = adults ? capacity - adults : capacity;
+
+    return {
+      row,
+      capacity,
+      availableUnits,
+      price,
+      fitsAdults,
+      capacityDiff,
+      skiScore,
+      bookingUrl: getTravelHelperRowBookingUrl(row),
+    };
+  });
+
+  const filtered = normalized.filter((item) => item.availableUnits > 0);
+
+  if (filtered.length === 0) return null;
+
+  filtered.sort((a, b) => {
+    if (a.fitsAdults !== b.fitsAdults) return a.fitsAdults ? -1 : 1;
+    if (a.skiScore !== b.skiScore) return b.skiScore - a.skiScore;
+    if (a.capacityDiff !== b.capacityDiff) return a.capacityDiff - b.capacityDiff;
+    return a.price - b.price;
+  });
+
+  return filtered[0] || null;
+}
 app.post('/api/travel-helper', async (req, res) => {
   try {
     const { message, history } = req.body || {};
@@ -3527,15 +3650,21 @@ app.post('/api/travel-helper', async (req, res) => {
     }
 
     const safeHistory = Array.isArray(history) ? history.slice(-10) : [];
-const searchBasis = buildTravelHelperSearchBasis(message, safeHistory);
-const intent = detectTravelHelperIntent(searchBasis);
+    const searchBasis = buildTravelHelperSearchBasis(message, safeHistory);
+    const intent = detectTravelHelperIntent(searchBasis);
 
-let dynamicContext = '';
+    let dynamicContext = '';
+    let bookingAction: null | {
+      type: 'url';
+      label: string;
+      value: string;
+      title?: string;
+    } = null;
 
-if (intent === 'availability_search') {
-  const area = extractTravelHelperArea(searchBasis);
-  const adults = extractTravelHelperAdults(searchBasis);
-  const dates = extractTravelHelperDates(searchBasis);
+    if (intent === 'availability_search') {
+      const area = extractTravelHelperArea(searchBasis);
+      const adults = extractTravelHelperAdults(searchBasis);
+      const dates = extractTravelHelperDates(searchBasis);
 
       console.log('TRAVEL_HELPER intent:', intent);
       console.log('TRAVEL_HELPER searchBasis:', searchBasis);
@@ -3555,26 +3684,53 @@ if (intent === 'availability_search') {
           const searchResponse = await fetch(searchUrl.toString());
           const searchJson: any = await searchResponse.json();
 
-          console.log(
-            'TRAVEL_HELPER search response ok:',
-            searchResponse.ok
-          );
+          console.log('TRAVEL_HELPER search response ok:', searchResponse.ok);
           console.log(
             'TRAVEL_HELPER search json keys:',
-            searchJson ? Object.keys(searchJson) : null
+            Object.keys(searchJson || {})
           );
           console.log(
             'TRAVEL_HELPER raw search data:',
-            JSON.stringify(searchJson?.data || null, null, 2)
+            JSON.stringify(searchJson?.data || {}, null, 2)
           );
 
           if (searchResponse.ok && searchJson?.ok && searchJson?.data) {
             dynamicContext = buildAvailabilityContextText(
-            searchJson.data,
-            adults,
-            searchBasis
-          );
+              searchJson.data,
+              adults,
+              searchBasis
+            );
+
             console.log('TRAVEL_HELPER dynamicContext:', dynamicContext);
+
+            const bookingIntent = isTravelHelperBookingIntent(searchBasis);
+            const candidate = pickTravelHelperBookingCandidate(
+              searchJson.data,
+              adults,
+              searchBasis
+            );
+
+            if (bookingIntent && candidate?.bookingUrl) {
+              bookingAction = {
+                type: 'url',
+                label: `Gå til booking av ${candidate.row?.Name || 'valgt overnatting'}`,
+                value: candidate.bookingUrl,
+                title: candidate.row?.Name || 'Booking',
+              };
+            }
+
+            if (bookingIntent && !candidate?.bookingUrl) {
+              dynamicContext +=
+                '\n' +
+                [
+                  '',
+                  'BOOKING_HANDOFF:',
+                  'Brukeren ønsker hjelp med booking.',
+                  'Det finnes foreløpig ingen booking-URL i dataene.',
+                  'Ikke si at du kan fullføre bookingen direkte.',
+                  'Forklar kort at du kan hjelpe med valg og neste steg, men at direkte bookinglenke ikke er tilgjengelig i sanntidsdataene akkurat nå.',
+                ].join('\n');
+            }
           }
         } catch (searchError) {
           console.error('travel-helper availability lookup failed', searchError);
@@ -3584,15 +3740,19 @@ if (intent === 'availability_search') {
         if (!area) missing.push('destinasjon/område');
         if (!adults) missing.push('antall personer');
         if (!dates.from || !dates.to) {
-          missing.push('datoer på format YYYY-MM-DD til YYYY-MM-DD');
+          missing.push('datoer');
         }
 
         dynamicContext = [
           'BNO_AVAILABILITY_CONTEXT',
           'Sanntidsoppslag ble ikke kjørt ennå.',
           `Mangler: ${missing.join(', ')}`,
-          'Hvis brukeren spør om overnatting, skal du stille et kort oppfølgingsspørsmål.',
-          'Be om manglende informasjon på en enkel måte.',
+          'Hvis brukeren spør om overnatting, skal du stille ett kort oppfølgingsspørsmål.',
+          'Godta også datoformater som:',
+          '- 2026-04-19 til 2026-04-23',
+          '- 19.4.2026 til 23.4.2026',
+          '- 19. april til 23. april',
+          '- 19. april 2026 til 23. april 2026',
           'Hvis destinasjon finnes men dato mangler, be om innsjekk og utsjekk.',
           'Hvis destinasjon og dato finnes men antall personer mangler, be om antall voksne/gjester.',
         ].join('\n');
@@ -3602,47 +3762,23 @@ if (intent === 'availability_search') {
     const input = [
       {
         role: 'system',
-        content: [
-          {
-            type: 'input_text',
-            text: BNO_TRAVEL_HELPER_SYSTEM,
-          },
-        ],
+        content: BNO_TRAVEL_HELPER_SYSTEM,
       },
       ...(dynamicContext
         ? [
             {
               role: 'system',
-              content: [
-                {
-                  type: 'input_text',
-                  text: dynamicContext,
-                },
-              ],
+              content: dynamicContext,
             },
           ]
         : []),
-      ...safeHistory.map((item: any) => {
-        const role = item?.role === 'assistant' ? 'assistant' : 'user';
-
-        return {
-          role,
-          content: [
-            {
-              type: role === 'assistant' ? 'output_text' : 'input_text',
-              text: String(item?.text || ''),
-            },
-          ],
-        };
-      }),
+      ...safeHistory.map((item: any) => ({
+        role: item?.role === 'assistant' ? 'assistant' : 'user',
+        content: String(item?.text || ''),
+      })),
       {
         role: 'user',
-        content: [
-          {
-            type: 'input_text',
-            text: String(message),
-          },
-        ],
+        content: String(message),
       },
     ];
 
@@ -3678,6 +3814,7 @@ if (intent === 'availability_search') {
     return res.json({
       ok: true,
       reply: reply || 'Beklager, jeg fikk ikke laget et svar akkurat nå.',
+      action: bookingAction,
       meta: {
         intent,
         usedDynamicContext: Boolean(dynamicContext),
