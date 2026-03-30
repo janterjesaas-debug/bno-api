@@ -3679,7 +3679,7 @@ function findRequestedRoomFromMessage(messageRaw: string, rows: any[]): any | nu
 }
 app.post('/api/travel-helper', async (req, res) => {
   try {
-    const { message, history, lang } = req.body || {};
+    const { message, history, lang, searchContext } = req.body || {};
 
     if (!message || typeof message !== 'string') {
       return res.status(400).json({
@@ -3702,6 +3702,13 @@ app.post('/api/travel-helper', async (req, res) => {
         ? lang.trim().toLowerCase()
         : 'nb';
 
+    const safeSearchContext =
+      searchContext &&
+      typeof searchContext === 'object' &&
+      !Array.isArray(searchContext)
+        ? searchContext
+        : null;
+
     const conversationText = [
       ...safeHistory.map((item: any) => String(item?.text || '')),
       String(message),
@@ -3722,7 +3729,27 @@ app.post('/api/travel-helper', async (req, res) => {
 
     console.log('TRAVEL_HELPER intent:', intent);
 
-    if (intent === 'availability_search' || isTravelHelperBookingIntent(message)) {
+    // 1) Hvis appen sender med forrige availability-søk, bruk det først
+    if (
+      safeSearchContext?.rows &&
+      Array.isArray(safeSearchContext.rows) &&
+      safeSearchContext.rows.length > 0 &&
+      safeSearchContext?.params
+    ) {
+      latestSearchRows = safeSearchContext.rows;
+
+      latestSearchParams = {
+        from: String(safeSearchContext.params?.from || '').slice(0, 10),
+        to: String(safeSearchContext.params?.to || '').slice(0, 10),
+        adults: Number(safeSearchContext.params?.adults || 1),
+        area: String(safeSearchContext.params?.area || '').trim(),
+        promo: String(safeSearchContext.params?.promo || '').trim(),
+        lang: String(safeSearchContext.params?.lang || appLang).trim() || appLang,
+      };
+    }
+
+    // 2) Hvis meldingen er availability-søk, kjør nytt sanntidsoppslag
+    if (intent === 'availability_search') {
       const area = extractTravelHelperArea(conversationText);
       const adults = extractTravelHelperAdults(conversationText);
       const dates = extractTravelHelperDates(conversationText);
@@ -3761,11 +3788,6 @@ app.post('/api/travel-helper', async (req, res) => {
               promo: '',
               lang: appLang,
             };
-
-            console.log(
-              'TRAVEL_HELPER raw search data:',
-              JSON.stringify(searchJson.data, null, 2)
-            );
 
             dynamicContext = buildAvailabilityContextText(
               searchJson.data,
@@ -3878,11 +3900,11 @@ app.post('/api/travel-helper', async (req, res) => {
     let bookingAction: any = null;
 
     if (
-      isTravelHelperBookingIntent(message) &&
+      isTravelHelperBookingIntent(conversationText) &&
       latestSearchRows.length > 0 &&
       latestSearchParams
     ) {
-      const matchedRoom = findRequestedRoomFromMessage(message, latestSearchRows);
+      const matchedRoom = findRequestedRoomFromMessage(conversationText, latestSearchRows);
 
       if (matchedRoom) {
         console.log('TRAVEL_HELPER matchedRoom for booking:', matchedRoom?.Name);
@@ -3924,6 +3946,13 @@ app.post('/api/travel-helper', async (req, res) => {
       ok: true,
       reply: reply || 'Beklager, jeg fikk ikke laget et svar akkurat nå.',
       bookingAction,
+      searchContext:
+        latestSearchRows.length > 0 && latestSearchParams
+          ? {
+              rows: latestSearchRows,
+              params: latestSearchParams,
+            }
+          : null,
       meta: {
         intent,
         usedDynamicContext: Boolean(dynamicContext),

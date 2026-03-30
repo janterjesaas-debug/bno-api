@@ -2681,21 +2681,45 @@ if (ENABLE_SERVER_RESERVATION) {
             });
         }
         catch (e) {
-            return res.status(500).json({ ok: false, error: 'server_error', detail: e?.message || String(e) });
+            return res.status(500).json({
+                ok: false,
+                error: 'server_error',
+                detail: e?.message || String(e),
+            });
         }
     });
 }
+// =============================================================
+// BNO Travel Helper
+// =============================================================
 const BNO_TRAVEL_HELPER_SYSTEM = `
 Du er BNO Reisehjelper i BNO Travel-appen.
 
-Regler:
+Målet ditt er å hjelpe brukeren før, under og etter reisen.
+
+VIKTIGE REGLER:
 1. Prioriter alltid BNO Travel sitt eget innhold først.
-2. Anbefal først BNO Travel sine destinasjoner, opplevelser og produktområder når det er relevant.
-3. Hvis BNO Travel ikke har et eksakt svar, kan du gi korte, praktiske og generelle reiseråd.
-4. Ikke finn opp priser, tilgjengelighet, partnere eller avtaler.
-5. Hvis sanntidsdata ikke er tilgjengelig, si det tydelig.
-6. Svar kort, nyttig og konkret.
-7. Svar på samme språk som brukeren skriver i, hvis mulig.
+2. Du må ALDRI finne opp overnatting, priser, tilgjengelighet, navn på hytter/leiligheter eller områder.
+3. Hvis du får "BNO_AVAILABILITY_CONTEXT", skal du KUN bruke dataene som står der.
+4. Hvis BNO_AVAILABILITY_CONTEXT inneholder ekte treff, skal du ikke gi generelle svar først.
+5. Hvis det er 0 treff, si det tydelig og foreslå hvordan brukeren kan justere søket.
+6. Hvis viktig informasjon mangler, still ett kort og tydelig oppfølgingsspørsmål.
+7. Svar helst på samme språk som brukeren skriver i.
+8. Svar konkret, nyttig og handlingsrettet.
+
+Når brukeren spør om overnatting:
+- bruk BNO Travel sitt eget innhold først
+- presenter konkrete alternativer hvis du har dem
+- ta med navn, pris, kapasitet og område hvis det finnes
+- bruk punktliste når det er flere treff
+- ikke gjett
+
+Hvis du får BNO_AVAILABILITY_CONTEXT:
+- bruk kun disse dataene som sanntidsgrunnlag
+- ikke legg til ekstra alternativer
+- ikke dikt opp egenskaper som ikke står i konteksten
+- ikke dikt opp priser
+- ikke dikt opp beliggenhet
 
 BNO Travel dekker blant annet:
 - Overnatting
@@ -2708,9 +2732,11 @@ BNO Travel dekker blant annet:
 - BNO Moments
 - BNO Rewards
 
-Kjente destinasjoner i universet:
+Kjente destinasjoner:
 - Trysil
 - Sälen
+- Stranda
+- Geiranger
 - Sunnmørsalpene
 - Oslo
 - London
@@ -2720,15 +2746,450 @@ Kjente destinasjoner i universet:
 - Los Angeles
 
 BNO Moments:
-- handler om å lagre og dele reiseminner
-- inkluderer deling av minner og konkurranse
+- lagre og dele reiseminner
+- konkurranse og engasjement etter reisen
 
 BNO Rewards:
-- handler om fordeler, kampanjer, gavekort og medlemsverdi
+- fordeler, kampanjer, gavekort og medlemsverdi
 `;
+function normalizeTravelHelperText(inputRaw) {
+    return String(inputRaw || '')
+        .toLowerCase()
+        .replace(/å/g, 'a')
+        .replace(/æ/g, 'ae')
+        .replace(/ø/g, 'o');
+}
+function detectTravelHelperIntent(messageRaw) {
+    const message = normalizeTravelHelperText(messageRaw);
+    const availabilityHints = [
+        'ledig',
+        'ledige',
+        'tilgjengelig',
+        'tilgjengelige',
+        'pris',
+        'priser',
+        'overnatting',
+        'opphold',
+        'sted a bo',
+        'bo',
+        'hytte',
+        'hytter',
+        'leilighet',
+        'leiligheter',
+        'hotell',
+        'hus',
+        'rom',
+        'ski in',
+        'ski out',
+        'ski-in',
+        'ski-out',
+        'booke',
+        'bestille',
+        'bestill',
+        'book',
+        'booking',
+    ];
+    return availabilityHints.some((word) => message.includes(word))
+        ? 'availability_search'
+        : 'general_travel_help';
+}
+function extractTravelHelperArea(messageRaw) {
+    const message = normalizeTravelHelperText(messageRaw);
+    const mappings = [
+        {
+            keywords: ['trysil sentrum'],
+            area: 'trysil-sentrum',
+        },
+        {
+            keywords: ['turistsenter', 'trysil turistsenter'],
+            area: 'trysil-turistsenter',
+        },
+        {
+            keywords: ['hoyfjellssenter', 'trysil hoyfjellssenter', 'fagerasen', 'fagerasen'],
+            area: 'trysil-hoyfjellssenter',
+        },
+        {
+            keywords: ['trysilfjellet', 'trysilfjell hytteomrade', 'trysilfjell'],
+            area: 'trysilfjell-hytteomrade',
+        },
+        { keywords: ['trysil'], area: 'trysil' },
+        { keywords: ['salen'], area: 'salen' },
+        { keywords: ['geiranger'], area: 'stranda' },
+        { keywords: ['stranda'], area: 'stranda' },
+        { keywords: ['sunnmorsalpene'], area: 'sunnmorsalpene' },
+        { keywords: ['oslo'], area: 'oslo' },
+        { keywords: ['london'], area: 'london' },
+        { keywords: ['amsterdam'], area: 'amsterdam' },
+        { keywords: ['kobenhavn', 'copenhagen'], area: 'copenhagen' },
+        { keywords: ['stockholm'], area: 'stockholm' },
+        { keywords: ['los angeles', 'losangeles'], area: 'losangeles' },
+    ];
+    for (const item of mappings) {
+        if (item.keywords.some((keyword) => message.includes(keyword))) {
+            return item.area;
+        }
+    }
+    return null;
+}
+function extractTravelHelperAdults(messageRaw) {
+    const message = normalizeTravelHelperText(messageRaw);
+    const patterns = [
+        /(\d+)\s*(personer|person|voksne|gjester|adults|people)/,
+        /for\s+(\d+)/,
+        /vi\s+er\s+(\d+)/,
+        /oss\s+(\d+)/,
+    ];
+    for (const pattern of patterns) {
+        const match = message.match(pattern);
+        if (match?.[1]) {
+            const n = Number(match[1]);
+            if (Number.isFinite(n) && n > 0)
+                return n;
+        }
+    }
+    return null;
+}
+function extractTravelHelperDates(messageRaw) {
+    const raw = String(messageRaw || '');
+    const message = normalizeTravelHelperText(raw);
+    const pad = (n) => String(n).padStart(2, '0');
+    const monthMap = {
+        januar: 1,
+        februar: 2,
+        mars: 3,
+        april: 4,
+        mai: 5,
+        juni: 6,
+        juli: 7,
+        august: 8,
+        september: 9,
+        oktober: 10,
+        november: 11,
+        desember: 12,
+    };
+    const currentYear = new Date().getFullYear();
+    // 1) ISO-format: 2026-04-19 til 2026-04-23
+    const isoDates = raw.match(/\b\d{4}-\d{2}-\d{2}\b/g) || [];
+    if (isoDates.length >= 2) {
+        return {
+            from: isoDates[0] ?? null,
+            to: isoDates[1] ?? null,
+        };
+    }
+    // 2) Tallformat: 19.4.2026 til 23.4.2026
+    const dottedDates = [...raw.matchAll(/\b(\d{1,2})\.(\d{1,2})\.(\d{4})\b/g)];
+    if (dottedDates.length >= 2) {
+        const first = dottedDates[0];
+        const second = dottedDates[1];
+        return {
+            from: `${first[3]}-${pad(Number(first[2]))}-${pad(Number(first[1]))}`,
+            to: `${second[3]}-${pad(Number(second[2]))}-${pad(Number(second[1]))}`,
+        };
+    }
+    // 3) Langformat med år: 19. april 2026 til 23. april 2026
+    const longDates = [
+        ...message.matchAll(/\b(\d{1,2})\.?\s+(januar|februar|mars|april|mai|juni|juli|august|september|oktober|november|desember)\s+(\d{4})\b/g),
+    ];
+    if (longDates.length >= 2) {
+        const first = longDates[0];
+        const second = longDates[1];
+        return {
+            from: `${first[3]}-${pad(monthMap[first[2]])}-${pad(Number(first[1]))}`,
+            to: `${second[3]}-${pad(monthMap[second[2]])}-${pad(Number(second[1]))}`,
+        };
+    }
+    // 4) Langformat uten år: 19. april til 23. april
+    const monthOnlyDates = [
+        ...message.matchAll(/\b(\d{1,2})\.?\s+(januar|februar|mars|april|mai|juni|juli|august|september|oktober|november|desember)\b/g),
+    ];
+    if (monthOnlyDates.length >= 2) {
+        const first = monthOnlyDates[0];
+        const second = monthOnlyDates[1];
+        let fromYear = currentYear;
+        let toYear = currentYear;
+        const fromMonth = monthMap[first[2]];
+        const toMonth = monthMap[second[2]];
+        const fromDay = Number(first[1]);
+        const toDay = Number(second[1]);
+        const fromDate = new Date(fromYear, fromMonth - 1, fromDay);
+        const toDate = new Date(toYear, toMonth - 1, toDay);
+        if (toDate < fromDate) {
+            toYear = currentYear + 1;
+        }
+        return {
+            from: `${fromYear}-${pad(fromMonth)}-${pad(fromDay)}`,
+            to: `${toYear}-${pad(toMonth)}-${pad(toDay)}`,
+        };
+    }
+    return { from: null, to: null };
+}
+function buildTravelHelperSearchBasis(message, history) {
+    const recentUserTexts = (Array.isArray(history) ? history : [])
+        .filter((item) => item?.role === 'user')
+        .slice(-4)
+        .map((item) => String(item?.text || '').trim())
+        .filter(Boolean);
+    const basis = [...recentUserTexts, String(message || '').trim()]
+        .filter(Boolean)
+        .join('\n');
+    return basis;
+}
+function rankTravelHelperAvailabilityRows(rows, adults, messageRaw) {
+    const message = String(messageRaw || '').toLowerCase();
+    const wantsCabin = message.includes('hytte') ||
+        message.includes('cabin') ||
+        message.includes('chalet');
+    const wantsSkiInOut = message.includes('ski in') ||
+        message.includes('ski-out') ||
+        message.includes('ski out') ||
+        message.includes('ski-in');
+    const scored = (Array.isArray(rows) ? rows : []).map((item) => {
+        let score = 0;
+        const capacity = Number(item?.Capacity || 0);
+        const name = String(item?.Name || '').toLowerCase();
+        const description = String(item?.Description || '').toLowerCase();
+        const serviceName = String(item?.ServiceName || '').toLowerCase();
+        const textBlob = `${name} ${description} ${serviceName}`;
+        if (adults && capacity >= adults) {
+            score += 100;
+            if (capacity === adults)
+                score += 30;
+            if (capacity <= adults + 2)
+                score += 15;
+        }
+        else if (adults && capacity > 0 && capacity < adults) {
+            score -= 200;
+        }
+        if (wantsCabin) {
+            if (textBlob.includes('hytte') ||
+                textBlob.includes('cabin') ||
+                textBlob.includes('chalet')) {
+                score += 20;
+            }
+        }
+        if (wantsSkiInOut) {
+            if (textBlob.includes('ski in/ski out') ||
+                textBlob.includes('ski-in/ski-out') ||
+                textBlob.includes('ski in') ||
+                textBlob.includes('ski-out') ||
+                textBlob.includes('ski out') ||
+                textBlob.includes('ski-in')) {
+                score += 25;
+            }
+        }
+        if (item?.PriceTotal != null) {
+            score += 5;
+        }
+        if (item?.AvailableUnits != null && Number(item.AvailableUnits) > 0) {
+            score += 5;
+        }
+        return {
+            ...item,
+            __travelHelperScore: score,
+        };
+    });
+    return scored.sort((a, b) => {
+        const scoreDiff = Number(b.__travelHelperScore || 0) - Number(a.__travelHelperScore || 0);
+        if (scoreDiff !== 0)
+            return scoreDiff;
+        const priceA = a?.PriceTotal != null ? Number(a.PriceTotal) : Number.POSITIVE_INFINITY;
+        const priceB = b?.PriceTotal != null ? Number(b.PriceTotal) : Number.POSITIVE_INFINITY;
+        return priceA - priceB;
+    });
+}
+function buildAvailabilityContextText(searchData, adults, messageRaw) {
+    const rows = searchData?.availability?.ResourceCategoryAvailabilities || [];
+    const params = searchData?.params || {};
+    if (!Array.isArray(rows) || rows.length === 0) {
+        return [
+            'BNO_AVAILABILITY_CONTEXT',
+            `Område: ${params?.area || 'ukjent'}`,
+            `Fra: ${params?.from || 'ukjent'}`,
+            `Til: ${params?.to || 'ukjent'}`,
+            `Voksne: ${params?.adults || 'ukjent'}`,
+            'Treff: 0',
+            'INSTRUKS: Ingen tilgjengelige enheter funnet. Ikke finn opp alternativer.',
+        ].join('\n');
+    }
+    const rankedRows = rankTravelHelperAvailabilityRows(rows, adults, messageRaw);
+    const topRows = rankedRows.slice(0, 5);
+    const formattedRows = topRows.map((item, index) => {
+        const price = item?.PriceTotal != null && item?.PriceCurrency
+            ? `${item.PriceTotal} ${item.PriceCurrency}`
+            : item?.PriceTotal != null
+                ? String(item.PriceTotal)
+                : 'ukjent pris';
+        const capacity = item?.Capacity != null ? String(item.Capacity) : 'ukjent kapasitet';
+        const availableUnits = item?.AvailableUnits != null ? String(item.AvailableUnits) : 'ukjent';
+        const area = item?.ServiceName || item?.AreaName || params?.area || 'ukjent område';
+        const name = item?.Name || 'Ukjent enhet';
+        const description = item?.Description || '';
+        const features = item?.Features || item?.FeatureSummary || '';
+        return [
+            `ALTERNATIV_${index + 1}`,
+            `NAVN: ${name}`,
+            `OMRÅDE: ${area}`,
+            `PRIS: ${price}`,
+            `KAPASITET: ${capacity}`,
+            `LEDIGE_ENHETER: ${availableUnits}`,
+            `BESKRIVELSE: ${description}`,
+            `FEATURES: ${features}`,
+        ].join('\n');
+    });
+    return [
+        'BNO_AVAILABILITY_CONTEXT',
+        'Dette er ekte tilgjengelighet fra BNO Travel.',
+        `Område: ${params?.area || 'ukjent'}`,
+        `Fra: ${params?.from || 'ukjent'}`,
+        `Til: ${params?.to || 'ukjent'}`,
+        `Voksne: ${params?.adults || 'ukjent'}`,
+        `Treff: ${rows.length}`,
+        '',
+        ...formattedRows,
+        '',
+        'INSTRUKS:',
+        '- Bruk KUN alternativene over',
+        '- Ikke legg til nye navn',
+        '- Ikke dikt opp priser',
+        '- Ikke dikt opp områder',
+        '- Oppsummer kort og konkret',
+    ].join('\n\n');
+}
+function getTravelHelperRowBookingUrl(row) {
+    const candidates = [
+        row?.BookingUrl,
+        row?.bookingUrl,
+        row?.booking_url,
+        row?.Url,
+        row?.url,
+        row?.DeepLink,
+        row?.deepLink,
+        row?.deeplink,
+        row?.BookingLink,
+        row?.bookingLink,
+    ];
+    for (const value of candidates) {
+        if (typeof value === 'string' && value.trim()) {
+            return value.trim();
+        }
+    }
+    return null;
+}
+function pickTravelHelperBookingCandidate(searchData, adults, messageRaw) {
+    const rows = searchData?.availability?.ResourceCategoryAvailabilities || [];
+    if (!Array.isArray(rows) || rows.length === 0)
+        return null;
+    const message = normalizeTravelHelperText(messageRaw);
+    const wantsSkiInOut = message.includes('ski in') ||
+        message.includes('ski-out') ||
+        message.includes('ski out') ||
+        message.includes('ski-in');
+    const normalized = rows.map((row) => {
+        const description = String(row?.Description || '').toLowerCase();
+        const name = String(row?.Name || '').toLowerCase();
+        const capacity = Number(row?.Capacity || 0);
+        const availableUnits = Number(row?.AvailableUnits || row?.availableUnits || 0);
+        const price = Number(row?.PriceTotal || Number.MAX_SAFE_INTEGER);
+        const skiScore = wantsSkiInOut &&
+            (description.includes('ski in') ||
+                description.includes('ski-out') ||
+                description.includes('ski out') ||
+                description.includes('ski-in') ||
+                name.includes('ski in') ||
+                name.includes('ski-out') ||
+                name.includes('ski out') ||
+                name.includes('ski-in'))
+            ? 1
+            : 0;
+        const fitsAdults = adults ? capacity >= adults : true;
+        const capacityDiff = adults ? capacity - adults : capacity;
+        return {
+            row,
+            capacity,
+            availableUnits,
+            price,
+            fitsAdults,
+            capacityDiff,
+            skiScore,
+            bookingUrl: getTravelHelperRowBookingUrl(row),
+        };
+    });
+    const filtered = normalized.filter((item) => item.availableUnits > 0);
+    if (filtered.length === 0)
+        return null;
+    filtered.sort((a, b) => {
+        if (a.fitsAdults !== b.fitsAdults)
+            return a.fitsAdults ? -1 : 1;
+        if (a.skiScore !== b.skiScore)
+            return b.skiScore - a.skiScore;
+        if (a.capacityDiff !== b.capacityDiff)
+            return a.capacityDiff - b.capacityDiff;
+        return a.price - b.price;
+    });
+    return filtered[0] || null;
+}
+function isTravelHelperBookingIntent(messageRaw) {
+    const message = normalizeTravelHelperText(messageRaw);
+    const bookingPhrases = [
+        'book',
+        'booking',
+        'bestill',
+        'bestille',
+        'ga videre med',
+        'gaa videre med',
+        'hjelpe med booking',
+        'fullfor booking',
+        'fullfor bestilling',
+        'sluttfor bestillingen',
+        'sluttfore bestillingen',
+        'klikk her',
+        'jeg vil booke',
+        'jeg vil bestille',
+        'kan du booke',
+        'kan du hjelpe med booking',
+    ];
+    return bookingPhrases.some((phrase) => message.includes(phrase));
+}
+function findRequestedRoomFromMessage(messageRaw, rows) {
+    if (!Array.isArray(rows) || rows.length === 0)
+        return null;
+    const message = normalizeTravelHelperText(messageRaw);
+    const directNameMatch = rows.find((row) => {
+        const name = normalizeTravelHelperText(row?.Name || '');
+        return name && message.includes(name);
+    });
+    if (directNameMatch)
+        return directNameMatch;
+    const aliasMatchers = [
+        {
+            keywords: ['trysilbua'],
+            match: (row) => normalizeTravelHelperText(row?.Name || '').includes('trysilbua'),
+        },
+        {
+            keywords: ['fagerhoy', 'fagerhøy'],
+            match: (row) => normalizeTravelHelperText(row?.Name || '').includes('fagerhoy'),
+        },
+        {
+            keywords: ['ugla 917', 'ugla'],
+            match: (row) => normalizeTravelHelperText(row?.Name || '').includes('ugla 917'),
+        },
+        {
+            keywords: ['vestsidevegen', 'vestsidevegen 14'],
+            match: (row) => normalizeTravelHelperText(row?.Name || '').includes('vestsidevegen'),
+        },
+    ];
+    for (const alias of aliasMatchers) {
+        if (alias.keywords.some((keyword) => message.includes(normalizeTravelHelperText(keyword)))) {
+            const matched = rows.find(alias.match);
+            if (matched)
+                return matched;
+        }
+    }
+    return null;
+}
 app.post('/api/travel-helper', async (req, res) => {
     try {
-        const { message, history } = req.body || {};
+        const { message, history, lang, searchContext } = req.body || {};
         if (!message || typeof message !== 'string') {
             return res.status(400).json({
                 ok: false,
@@ -2742,34 +3203,143 @@ app.post('/api/travel-helper', async (req, res) => {
                 error: 'OPENAI_API_KEY_mangler',
             });
         }
-        const safeHistory = Array.isArray(history) ? history.slice(-10) : [];
+        const safeHistory = Array.isArray(history) ? history.slice(-12) : [];
+        const appLang = typeof lang === 'string' && lang.trim()
+            ? lang.trim().toLowerCase()
+            : 'nb';
+        const safeSearchContext = searchContext &&
+            typeof searchContext === 'object' &&
+            !Array.isArray(searchContext)
+            ? searchContext
+            : null;
+        const conversationText = [
+            ...safeHistory.map((item) => String(item?.text || '')),
+            String(message),
+        ].join('\n');
+        const intent = detectTravelHelperIntent(conversationText);
+        let dynamicContext = '';
+        let latestSearchRows = [];
+        let latestSearchParams = null;
+        console.log('TRAVEL_HELPER intent:', intent);
+        // 1) Hvis appen sender med forrige availability-søk, bruk det først
+        if (safeSearchContext?.rows &&
+            Array.isArray(safeSearchContext.rows) &&
+            safeSearchContext.rows.length > 0 &&
+            safeSearchContext?.params) {
+            latestSearchRows = safeSearchContext.rows;
+            latestSearchParams = {
+                from: String(safeSearchContext.params?.from || '').slice(0, 10),
+                to: String(safeSearchContext.params?.to || '').slice(0, 10),
+                adults: Number(safeSearchContext.params?.adults || 1),
+                area: String(safeSearchContext.params?.area || '').trim(),
+                promo: String(safeSearchContext.params?.promo || '').trim(),
+                lang: String(safeSearchContext.params?.lang || appLang).trim() || appLang,
+            };
+        }
+        // 2) Hvis meldingen er availability-søk, kjør nytt sanntidsoppslag
+        if (intent === 'availability_search') {
+            const area = extractTravelHelperArea(conversationText);
+            const adults = extractTravelHelperAdults(conversationText);
+            const dates = extractTravelHelperDates(conversationText);
+            console.log('TRAVEL_HELPER area:', area);
+            console.log('TRAVEL_HELPER adults:', adults);
+            console.log('TRAVEL_HELPER dates:', dates);
+            if (area && adults && dates.from && dates.to) {
+                try {
+                    const searchUrl = new URL(`http://127.0.0.1:${PORT}/api/search`);
+                    searchUrl.searchParams.set('area', area);
+                    searchUrl.searchParams.set('from', dates.from);
+                    searchUrl.searchParams.set('to', dates.to);
+                    searchUrl.searchParams.set('adults', String(adults));
+                    searchUrl.searchParams.set('lang', appLang);
+                    const searchResponse = await fetch(searchUrl.toString());
+                    const searchJson = await searchResponse.json();
+                    console.log('TRAVEL_HELPER search response ok:', searchResponse.ok);
+                    console.log('TRAVEL_HELPER search json keys:', searchJson ? Object.keys(searchJson) : []);
+                    if (searchResponse.ok && searchJson?.ok && searchJson?.data) {
+                        latestSearchRows =
+                            searchJson?.data?.availability?.ResourceCategoryAvailabilities || [];
+                        latestSearchParams = {
+                            from: dates.from,
+                            to: dates.to,
+                            adults,
+                            area,
+                            promo: '',
+                            lang: appLang,
+                        };
+                        dynamicContext = buildAvailabilityContextText(searchJson.data, adults, conversationText);
+                        console.log('TRAVEL_HELPER dynamicContext:', dynamicContext);
+                    }
+                    else {
+                        dynamicContext = [
+                            'BNO_AVAILABILITY_CONTEXT',
+                            'Sanntidsoppslaget ble kjørt, men ga ingen gyldige treff.',
+                            `Område: ${area}`,
+                            `Fra: ${dates.from}`,
+                            `Til: ${dates.to}`,
+                            `Voksne: ${adults}`,
+                            'Treff: 0',
+                            'Hvis det ikke finnes treff, si det tydelig og foreslå justering av datoer, område eller antall gjester.',
+                        ].join('\n');
+                    }
+                }
+                catch (searchError) {
+                    console.error('travel-helper availability lookup failed', searchError);
+                    dynamicContext = [
+                        'BNO_AVAILABILITY_CONTEXT',
+                        'Sanntidsoppslaget feilet teknisk.',
+                        'Ikke dikt opp tilgjengelighet.',
+                        'Forklar kort at sanntidsoppslaget ikke kunne fullføres akkurat nå.',
+                    ].join('\n');
+                }
+            }
+            else {
+                const missing = [];
+                if (!area)
+                    missing.push('destinasjon/område');
+                if (!adults)
+                    missing.push('antall personer');
+                if (!dates.from || !dates.to) {
+                    missing.push('datoer');
+                }
+                dynamicContext = [
+                    'BNO_AVAILABILITY_CONTEXT',
+                    'Sanntidsoppslag ble ikke kjørt ennå.',
+                    `Mangler: ${missing.join(', ')}`,
+                    'Hvis brukeren spør om overnatting, skal du stille ett kort oppfølgingsspørsmål.',
+                    'Be om manglende informasjon på en enkel måte.',
+                    'Hvis destinasjon finnes men dato mangler, be om innsjekk og utsjekk.',
+                    'Hvis destinasjon og dato finnes men antall personer mangler, be om antall voksne/gjester.',
+                ].join('\n');
+            }
+        }
+        const systemPrompt = [
+            BNO_TRAVEL_HELPER_SYSTEM,
+            '',
+            `APP_LANG: ${appLang}`,
+            'Svar helst på samme språk som brukeren skriver på.',
+            `Hvis brukeren skriver på ${appLang}, bruk ${appLang} som hovedspråk med mindre brukeren tydelig velger et annet språk i samtalen.`,
+        ].join('\n');
         const input = [
             {
                 role: 'system',
-                content: [
-                    {
-                        type: 'input_text',
-                        text: BNO_TRAVEL_HELPER_SYSTEM,
-                    },
-                ],
+                content: systemPrompt,
             },
+            ...(dynamicContext
+                ? [
+                    {
+                        role: 'system',
+                        content: dynamicContext,
+                    },
+                ]
+                : []),
             ...safeHistory.map((item) => ({
                 role: item?.role === 'assistant' ? 'assistant' : 'user',
-                content: [
-                    {
-                        type: 'input_text',
-                        text: String(item?.text || ''),
-                    },
-                ],
+                content: String(item?.text || ''),
             })),
             {
                 role: 'user',
-                content: [
-                    {
-                        type: 'input_text',
-                        text: String(message),
-                    },
-                ],
+                content: String(message),
             },
         ];
         const response = await fetch('https://api.openai.com/v1/responses', {
@@ -2779,7 +3349,7 @@ app.post('/api/travel-helper', async (req, res) => {
                 Authorization: `Bearer ${openAiKey}`,
             },
             body: JSON.stringify({
-                model: 'gpt-5.4-mini',
+                model: 'gpt-4.1-mini',
                 input,
             }),
         });
@@ -2791,10 +3361,65 @@ app.post('/api/travel-helper', async (req, res) => {
                 error: data?.error?.message || 'openai_request_failed',
             });
         }
+        const reply = data?.output_text ||
+            data?.output?.find?.((item) => item?.type === 'message')
+                ?.content?.find?.((part) => part?.type === 'output_text')
+                ?.text ||
+            '';
+        let bookingAction = null;
+        if (isTravelHelperBookingIntent(conversationText) &&
+            latestSearchRows.length > 0 &&
+            latestSearchParams) {
+            const matchedRoom = findRequestedRoomFromMessage(conversationText, latestSearchRows);
+            if (matchedRoom) {
+                console.log('TRAVEL_HELPER matchedRoom for booking:', matchedRoom?.Name);
+                bookingAction = {
+                    type: 'book_accommodation',
+                    label: `Fullfør booking av ${matchedRoom?.Name || 'overnatting'}`,
+                    room: {
+                        ResourceCategoryId: matchedRoom?.ResourceCategoryId ?? null,
+                        RoomCategoryId: matchedRoom?.RoomCategoryId ??
+                            matchedRoom?.ResourceCategoryId ??
+                            null,
+                        BookingUrl: matchedRoom?.BookingUrl ?? null,
+                        Name: matchedRoom?.Name ?? null,
+                        Description: matchedRoom?.Description ?? null,
+                        Capacity: matchedRoom?.Capacity ?? null,
+                        Image: matchedRoom?.Image ?? null,
+                        Images: matchedRoom?.Images ?? null,
+                        PriceTotal: matchedRoom?.PriceTotal ?? null,
+                        PriceCurrency: matchedRoom?.PriceCurrency ?? null,
+                        AvailableUnits: matchedRoom?.AvailableUnits ?? null,
+                        ServiceId: matchedRoom?.ServiceId ?? null,
+                        ServiceName: matchedRoom?.ServiceName ?? null,
+                    },
+                    search: {
+                        from: latestSearchParams.from,
+                        to: latestSearchParams.to,
+                        adults: latestSearchParams.adults,
+                        area: latestSearchParams.area,
+                        promo: latestSearchParams.promo,
+                        lang: latestSearchParams.lang,
+                    },
+                };
+            }
+        }
         return res.json({
             ok: true,
-            reply: data?.output_text ||
-                'Beklager, jeg fikk ikke laget et svar akkurat nå.',
+            reply: reply || 'Beklager, jeg fikk ikke laget et svar akkurat nå.',
+            bookingAction,
+            searchContext: latestSearchRows.length > 0 && latestSearchParams
+                ? {
+                    rows: latestSearchRows,
+                    params: latestSearchParams,
+                }
+                : null,
+            meta: {
+                intent,
+                usedDynamicContext: Boolean(dynamicContext),
+                appLang,
+                searchRowsCount: latestSearchRows.length,
+            },
         });
     }
     catch (e) {
