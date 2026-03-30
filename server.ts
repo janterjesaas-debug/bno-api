@@ -3116,6 +3116,156 @@ BNO Rewards:
 - handler om fordeler, kampanjer, gavekort og medlemsverdi
 `;
 
+type TravelHelperIntent =
+  | 'availability_search'
+  | 'general_travel_help';
+
+function detectTravelHelperIntent(messageRaw: string): TravelHelperIntent {
+  const message = String(messageRaw || '').toLowerCase();
+
+  const availabilityHints = [
+    'ledig',
+    'ledige',
+    'tilgjengelig',
+    'tilgjengelige',
+    'pris',
+    'priser',
+    'overnatting',
+    'bo',
+    'hytte',
+    'leilighet',
+    'hotell',
+    'ski in',
+    'ski out',
+    'ski-in',
+    'ski-out',
+    'booke',
+    'bestille',
+    'bestill',
+    'rom',
+  ];
+
+  return availabilityHints.some((word) => message.includes(word))
+    ? 'availability_search'
+    : 'general_travel_help';
+}
+
+function extractTravelHelperArea(messageRaw: string): string | null {
+  const message = String(messageRaw || '').toLowerCase();
+
+  if (message.includes('trysil sentrum')) return 'trysil-sentrum';
+  if (message.includes('turistsenter')) return 'trysil-turistsenter';
+  if (message.includes('høyfjellssenter') || message.includes('hoyfjellssenter')) {
+    return 'trysil-hoyfjellssenter';
+  }
+  if (message.includes('trysilfjell')) return 'trysilfjell-hytteomrade';
+
+  if (message.includes('trysil')) return 'trysil';
+  if (message.includes('sälen') || message.includes('salen')) return 'salen';
+  if (message.includes('stranda')) return 'stranda';
+  if (message.includes('sunnmørsalpene') || message.includes('sunnmorsalpene')) {
+    return 'sunnmorsalpene';
+  }
+  if (message.includes('oslo')) return 'oslo';
+  if (message.includes('london')) return 'london';
+  if (message.includes('amsterdam')) return 'amsterdam';
+  if (
+    message.includes('københavn') ||
+    message.includes('kobenhavn') ||
+    message.includes('copenhagen')
+  ) {
+    return 'copenhagen';
+  }
+  if (message.includes('stockholm')) return 'stockholm';
+  if (message.includes('los angeles')) return 'losangeles';
+
+  return null;
+}
+
+function extractTravelHelperAdults(messageRaw: string): number | null {
+  const message = String(messageRaw || '').toLowerCase();
+
+  const patterns = [
+    /(\d+)\s*(personer|person|voksne|gjester|adults|people)/,
+    /for\s+(\d+)/,
+  ];
+
+  for (const pattern of patterns) {
+    const match = message.match(pattern);
+    if (match?.[1]) {
+      const n = Number(match[1]);
+      if (Number.isFinite(n) && n > 0) return n;
+    }
+  }
+
+  return null;
+}
+
+function extractTravelHelperDates(
+  messageRaw: string
+): { from: string | null; to: string | null } {
+  const message = String(messageRaw || '');
+  const isoDates = message.match(/\b\d{4}-\d{2}-\d{2}\b/g) || [];
+
+  if (isoDates.length >= 2) {
+    return {
+      from: isoDates[0] ?? null,
+      to: isoDates[1] ?? null,
+    };
+  }
+
+  return { from: null, to: null };
+}
+
+function buildAvailabilityContextText(searchData: any): string {
+  const rows = searchData?.availability?.ResourceCategoryAvailabilities || [];
+  const params = searchData?.params || {};
+
+  if (!Array.isArray(rows) || rows.length === 0) {
+    return [
+      'BNO_AVAILABILITY_CONTEXT',
+      `Område: ${params?.area || 'ukjent'}`,
+      `Fra: ${params?.from || 'ukjent'}`,
+      `Til: ${params?.to || 'ukjent'}`,
+      `Voksne: ${params?.adults || 'ukjent'}`,
+      'Treff: 0',
+    ].join('\n');
+  }
+
+  const topRows = rows.slice(0, 5);
+
+  const formattedRows = topRows.map((item: any, index: number) => {
+    const price =
+      item?.PriceTotal != null && item?.PriceCurrency
+        ? `${item.PriceTotal} ${item.PriceCurrency}`
+        : item?.PriceTotal != null
+        ? String(item.PriceTotal)
+        : 'ukjent pris';
+
+    const capacity =
+      item?.Capacity != null ? String(item.Capacity) : 'ukjent kapasitet';
+
+    const availableUnits =
+      item?.AvailableUnits != null ? String(item.AvailableUnits) : 'ukjent';
+
+    return `${index + 1}. ${item?.Name || 'Ukjent enhet'} | område: ${
+      item?.ServiceName || 'ukjent'
+    } | pris: ${price} | kapasitet: ${capacity} | ledige enheter: ${availableUnits}`;
+  });
+
+  return [
+    'BNO_AVAILABILITY_CONTEXT',
+    `Område: ${params?.area || 'ukjent'}`,
+    `Fra: ${params?.from || 'ukjent'}`,
+    `Til: ${params?.to || 'ukjent'}`,
+    `Voksne: ${params?.adults || 'ukjent'}`,
+    `Treff: ${rows.length}`,
+    '',
+    ...formattedRows,
+  ].join('\n');
+}
+
+
 app.post('/api/travel-helper', async (req, res) => {
   try {
     const { message, history } = req.body || {};
@@ -3136,6 +3286,49 @@ app.post('/api/travel-helper', async (req, res) => {
     }
 
     const safeHistory = Array.isArray(history) ? history.slice(-10) : [];
+    const intent = detectTravelHelperIntent(message);
+
+    let dynamicContext = '';
+
+    if (intent === 'availability_search') {
+      const area = extractTravelHelperArea(message);
+      const adults = extractTravelHelperAdults(message);
+      const dates = extractTravelHelperDates(message);
+
+      if (area && adults && dates.from && dates.to) {
+        try {
+          const searchUrl = new URL(`http://127.0.0.1:${PORT}/api/search`);
+          searchUrl.searchParams.set('area', area);
+          searchUrl.searchParams.set('from', dates.from);
+          searchUrl.searchParams.set('to', dates.to);
+          searchUrl.searchParams.set('adults', String(adults));
+          searchUrl.searchParams.set('lang', 'nb');
+
+          const searchResponse = await fetch(searchUrl.toString());
+          const searchJson: any = await searchResponse.json();
+
+          if (searchResponse.ok && searchJson?.ok && searchJson?.data) {
+            dynamicContext = buildAvailabilityContextText(searchJson.data);
+          }
+        } catch (searchError) {
+          console.error('travel-helper availability lookup failed', searchError);
+        }
+      } else {
+        const missing: string[] = [];
+        if (!area) missing.push('destinasjon/område');
+        if (!adults) missing.push('antall personer');
+        if (!dates.from || !dates.to) {
+          missing.push('datoer på format YYYY-MM-DD til YYYY-MM-DD');
+        }
+
+        dynamicContext = [
+          'BNO_AVAILABILITY_CONTEXT',
+          'Sanntidsoppslag ble ikke kjørt ennå.',
+          `Mangler: ${missing.join(', ')}`,
+          'Be brukeren oppgi manglende informasjon før du svarer mer konkret om tilgjengelighet.',
+        ].join('\n');
+      }
+    }
 
     const input = [
       {
@@ -3147,19 +3340,28 @@ app.post('/api/travel-helper', async (req, res) => {
           },
         ],
       },
-      ...safeHistory.map((item: any) => {
-        const role = item?.role === 'assistant' ? 'assistant' : 'user';
-
-        return {
-          role,
-          content: [
+      ...(dynamicContext
+        ? [
             {
-              type: role === 'assistant' ? 'output_text' : 'input_text',
-              text: String(item?.text || ''),
+              role: 'system',
+              content: [
+                {
+                  type: 'input_text',
+                  text: dynamicContext,
+                },
+              ],
             },
-          ],
-        };
-      }),
+          ]
+        : []),
+      ...safeHistory.map((item: any) => ({
+        role: item?.role === 'assistant' ? 'assistant' : 'user',
+        content: [
+          {
+            type: 'input_text',
+            text: String(item?.text || ''),
+          },
+        ],
+      })),
       {
         role: 'user',
         content: [
@@ -3178,7 +3380,7 @@ app.post('/api/travel-helper', async (req, res) => {
         Authorization: `Bearer ${openAiKey}`,
       },
       body: JSON.stringify({
-        model: 'gpt-5.4-mini',
+        model: 'gpt-4.1-mini',
         input,
       }),
     });
@@ -3194,15 +3396,21 @@ app.post('/api/travel-helper', async (req, res) => {
     }
 
     const reply =
+      data?.output_text ||
       data?.output?.find?.((item: any) => item?.type === 'message')
         ?.content?.find?.((part: any) => part?.type === 'output_text')
-        ?.text || '';
+        ?.text ||
+      '';
 
     return res.json({
       ok: true,
       reply:
         reply ||
         'Beklager, jeg fikk ikke laget et svar akkurat nå.',
+      meta: {
+        intent,
+        usedDynamicContext: Boolean(dynamicContext),
+      },
     });
   } catch (e: any) {
     console.error('POST /api/travel-helper failed', e);
@@ -3212,7 +3420,6 @@ app.post('/api/travel-helper', async (req, res) => {
     });
   }
 });
-
 // 404
 app.use((req, res) => {
   console.warn(`404 ${req.method} ${req.url}`);
