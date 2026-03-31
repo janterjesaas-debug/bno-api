@@ -3098,6 +3098,9 @@ Når brukeren spør om overnatting:
 - ta med navn, pris, kapasitet og område hvis det finnes
 - bruk punktliste når det er flere treff
 - ikke gjett
+- Du skal ikke samle inn navn, e-post, telefonnummer eller betalingsinformasjon i chatten for å fullføre overnattingsbooking.
+- Hvis bookingAction finnes, skal du heller oppfordre brukeren til å bruke bookingknappen.
+- Du skal ikke si at en booking er registrert eller fullført med mindre systemet faktisk har gjort det.
 
 Hvis du får BNO_AVAILABILITY_CONTEXT:
 - bruk kun disse dataene som sanntidsgrunnlag
@@ -3669,17 +3672,23 @@ function isTravelHelperBookingIntent(messageRaw: string): boolean {
   return bookingPhrases.some((phrase) => message.includes(phrase));
 }
 
-function findRequestedRoomFromMessage(messageRaw: string, rows: any[]): any | null {
+function findRequestedRoomFromMessage(
+  messageRaw: string,
+  rows: any[],
+  adults?: number | null
+): any | null {
   if (!Array.isArray(rows) || rows.length === 0) return null;
 
   const message = normalizeTravelHelperText(messageRaw);
 
-  const exactMatch = rows.find((row: any) => {
+  // 1) Eksakt navn i meldingen
+  const directNameMatch = rows.find((row: any) => {
     const name = normalizeTravelHelperText(row?.Name || '');
     return !!name && message.includes(name);
   });
-  if (exactMatch) return exactMatch;
+  if (directNameMatch) return directNameMatch;
 
+  // 2) Kjente aliaser
   const aliasMatchers: Array<{
     keywords: string[];
     match: (row: any) => boolean;
@@ -3707,6 +3716,26 @@ function findRequestedRoomFromMessage(messageRaw: string, rows: any[]): any | nu
       const matched = rows.find(alias.match);
       if (matched) return matched;
     }
+  }
+
+  // 3) Pronomen / kort bekreftelse -> bruk best rangerte treff
+  const pronounBookingHints = [
+    'den',
+    'denne',
+    'den der',
+    'ja',
+    'yes',
+    'book den',
+    'booke den',
+    'bestill den',
+    'kan jeg booke den',
+    'kan du booke den',
+    'ja takk',
+  ];
+
+  if (pronounBookingHints.some((phrase) => message.includes(phrase) || message === phrase)) {
+    const ranked = rankTravelHelperAvailabilityRows(rows, adults ?? null, messageRaw);
+    return ranked[0] || null;
   }
 
   return null;
@@ -4202,13 +4231,61 @@ const dates = {
 
     let bookingAction: any = null;
 
-    if (
+  if (
   isTravelHelperBookingIntent(currentMessageText) &&
   latestSearchRows.length > 0 &&
   latestSearchParams
 ) {
-  const matchedRoom = findRequestedRoomFromMessage(currentMessageText, latestSearchRows);
+  const matchedRoom = findRequestedRoomFromMessage(
+    currentMessageText,
+    latestSearchRows,
+    latestSearchParams?.adults || null
+  );
+let resolvedRoom = matchedRoom;
 
+if (!resolvedRoom) {
+  const ranked = rankTravelHelperAvailabilityRows(
+    latestSearchRows,
+    latestSearchParams?.adults || null,
+    currentMessageText
+  );
+  resolvedRoom = ranked[0] || null;
+}
+
+if (resolvedRoom) {
+  console.log('TRAVEL_HELPER matchedRoom for booking:', resolvedRoom?.Name);
+
+  bookingAction = {
+    type: 'book_accommodation',
+    label: `Fullfør booking av ${resolvedRoom?.Name || 'overnatting'}`,
+    room: {
+      ResourceCategoryId: resolvedRoom?.ResourceCategoryId ?? null,
+      RoomCategoryId:
+        resolvedRoom?.RoomCategoryId ??
+        resolvedRoom?.ResourceCategoryId ??
+        null,
+      BookingUrl: resolvedRoom?.BookingUrl ?? null,
+      Name: resolvedRoom?.Name ?? null,
+      Description: resolvedRoom?.Description ?? null,
+      Capacity: resolvedRoom?.Capacity ?? null,
+      Image: resolvedRoom?.Image ?? null,
+      Images: resolvedRoom?.Images ?? null,
+      PriceTotal: resolvedRoom?.PriceTotal ?? null,
+      PriceCurrency: resolvedRoom?.PriceCurrency ?? null,
+      AvailableUnits: resolvedRoom?.AvailableUnits ?? null,
+      ServiceId: resolvedRoom?.ServiceId ?? null,
+      ServiceName: resolvedRoom?.ServiceName ?? null,
+    },
+    search: {
+      from: latestSearchParams.from,
+      to: latestSearchParams.to,
+      adults: latestSearchParams.adults,
+      area: latestSearchParams.area,
+      promo: latestSearchParams.promo,
+      lang: latestSearchParams.lang,
+    },
+  };
+}
       if (matchedRoom) {
         console.log('TRAVEL_HELPER matchedRoom for booking:', matchedRoom?.Name);
 
@@ -4244,7 +4321,7 @@ const dates = {
         };
       }
     }
-
+    
     return res.json({
       ok: true,
       reply: reply || 'Beklager, jeg fikk ikke laget et svar akkurat nå.',
@@ -4274,6 +4351,7 @@ const dates = {
       error: e?.message || 'travel_helper_failed',
     });
   }
+  
 });
 // 404
 app.use((req, res) => {
