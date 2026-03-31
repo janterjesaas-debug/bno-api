@@ -3939,15 +3939,19 @@ app.post('/api/travel-helper', async (req, res) => {
         ? lastSearchParams
         : null;
 
-    const conversationText = buildTravelHelperSearchBasis(String(message), safeHistory);
+    const currentMessageText = String(message || '').trim();
+const conversationText = buildTravelHelperSearchBasis(currentMessageText, safeHistory);
 
-    const intent = detectTravelHelperIntent(conversationText);
-    const contentIntent = detectTravelContentIntent(conversationText);
-    const contentCategory = extractTravelContentCategory(conversationText);
+const intent = detectTravelHelperIntent(currentMessageText);
+const contentIntent = detectTravelContentIntent(currentMessageText);
+const contentCategory = extractTravelContentCategory(currentMessageText);
 
-    let dynamicContext = '';
-    let contentContext = '';
-    let contentItemsCount = 0;
+const shouldRunAvailabilitySearch =
+  intent === 'availability_search' && !contentIntent;
+
+let dynamicContext = '';
+let contentContext = '';
+let contentItemsCount = 0;
 
     let latestSearchRows: any[] = [];
     let latestSearchParams: {
@@ -3995,10 +3999,22 @@ app.post('/api/travel-helper', async (req, res) => {
     }
 
     // 2) Availability-oppslag ved behov
-    if (intent === 'availability_search') {
-      const area = extractTravelHelperArea(conversationText);
-      const adults = extractTravelHelperAdults(conversationText);
-      const dates = extractTravelHelperDates(conversationText);
+if (shouldRunAvailabilitySearch) {
+     const area =
+  extractTravelHelperArea(currentMessageText) ||
+  extractTravelHelperArea(conversationText);
+
+const adults =
+  extractTravelHelperAdults(currentMessageText) ||
+  extractTravelHelperAdults(conversationText);
+
+const datesFromCurrent = extractTravelHelperDates(currentMessageText);
+const datesFromHistory = extractTravelHelperDates(conversationText);
+
+const dates = {
+  from: datesFromCurrent.from || datesFromHistory.from,
+  to: datesFromCurrent.to || datesFromHistory.to,
+};
 
       console.log('TRAVEL_HELPER area:', area);
       console.log('TRAVEL_HELPER adults:', adults);
@@ -4084,7 +4100,9 @@ app.post('/api/travel-helper', async (req, res) => {
     // 3) Innholdsoppslag fra travel_helper_content
     if (contentIntent) {
       try {
-        const detectedArea = extractTravelHelperArea(conversationText);
+        const detectedArea =
+  extractTravelHelperArea(currentMessageText) ||
+  extractTravelHelperArea(conversationText);
         const destinationForContent =
           contentCategory === 'travel_terms'
             ? 'global'
@@ -4185,11 +4203,11 @@ app.post('/api/travel-helper', async (req, res) => {
     let bookingAction: any = null;
 
     if (
-      isTravelHelperBookingIntent(conversationText) &&
-      latestSearchRows.length > 0 &&
-      latestSearchParams
-    ) {
-      const matchedRoom = findRequestedRoomFromMessage(conversationText, latestSearchRows);
+  isTravelHelperBookingIntent(currentMessageText) &&
+  latestSearchRows.length > 0 &&
+  latestSearchParams
+) {
+  const matchedRoom = findRequestedRoomFromMessage(currentMessageText, latestSearchRows);
 
       if (matchedRoom) {
         console.log('TRAVEL_HELPER matchedRoom for booking:', matchedRoom?.Name);
