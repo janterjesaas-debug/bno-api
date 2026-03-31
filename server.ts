@@ -3229,14 +3229,8 @@ function extractTravelHelperArea(messageRaw: string): string | null {
   const message = normalizeTravelHelperText(messageRaw);
 
   const mappings: Array<{ keywords: string[]; area: string }> = [
-    {
-      keywords: ['trysil sentrum'],
-      area: 'trysil-sentrum',
-    },
-    {
-      keywords: ['turistsenter', 'trysil turistsenter'],
-      area: 'trysil-turistsenter',
-    },
+    { keywords: ['trysil sentrum'], area: 'trysil-sentrum' },
+    { keywords: ['turistsenter', 'trysil turistsenter'], area: 'trysil-turistsenter' },
     {
       keywords: ['hoyfjellssenter', 'trysil hoyfjellssenter', 'fagerasen', 'fageraasen'],
       area: 'trysil-hoyfjellssenter',
@@ -3412,10 +3406,7 @@ function extractTravelHelperDates(
   return { from: null, to: null };
 }
 
-function buildTravelHelperSearchBasis(
-  message: string,
-  history: any[]
-): string {
+function buildTravelHelperSearchBasis(message: string, history: any[]): string {
   const recentUserTexts = (Array.isArray(history) ? history : [])
     .filter((item: any) => item?.role === 'user')
     .slice(-4)
@@ -3495,7 +3486,8 @@ function rankTravelHelperAvailabilityRows(
   });
 
   return scored.sort((a: any, b: any) => {
-    const scoreDiff = Number(b.__travelHelperScore || 0) - Number(a.__travelHelperScore || 0);
+    const scoreDiff =
+      Number(b.__travelHelperScore || 0) - Number(a.__travelHelperScore || 0);
     if (scoreDiff !== 0) return scoreDiff;
 
     const priceA =
@@ -3535,8 +3527,8 @@ function buildAvailabilityContextText(
       item?.PriceTotal != null && item?.PriceCurrency
         ? `${item.PriceTotal} ${item.PriceCurrency}`
         : item?.PriceTotal != null
-        ? String(item.PriceTotal)
-        : 'ukjent pris';
+          ? String(item.PriceTotal)
+          : 'ukjent pris';
 
     const capacity =
       item?.Capacity != null ? String(item.Capacity) : 'ukjent kapasitet';
@@ -3581,29 +3573,6 @@ function buildAvailabilityContextText(
     '- Ikke dikt opp områder',
     '- Oppsummer kort og konkret',
   ].join('\n\n');
-}
-
-function getTravelHelperRowBookingUrl(row: any): string | null {
-  const candidates = [
-    row?.BookingUrl,
-    row?.bookingUrl,
-    row?.booking_url,
-    row?.Url,
-    row?.url,
-    row?.DeepLink,
-    row?.deepLink,
-    row?.deeplink,
-    row?.BookingLink,
-    row?.bookingLink,
-  ];
-
-  for (const value of candidates) {
-    if (typeof value === 'string' && value.trim()) {
-      return value.trim();
-    }
-  }
-
-  return null;
 }
 
 function isTravelHelperBookingIntent(messageRaw: string): boolean {
@@ -3705,6 +3674,17 @@ function detectTravelContentIntent(messageRaw: string): boolean {
     'reisevilkår',
     'vilkar',
     'vilkår',
+    'aldersgrense',
+    'innsjekk',
+    'utsjekk',
+    'check in',
+    'check-in',
+    'checkout',
+    'check out',
+    'avbestilling',
+    'avbestille',
+    'depositum',
+    'husregler',
     'snoscooter',
     'snøscooter',
     'aktivitet',
@@ -3738,8 +3718,14 @@ function extractTravelContentCategory(messageRaw: string): string | null {
     message.includes('aldersgrense') ||
     message.includes('innsjekk') ||
     message.includes('utsjekk') ||
+    message.includes('check in') ||
+    message.includes('check-in') ||
+    message.includes('check out') ||
+    message.includes('checkout') ||
     message.includes('depositum') ||
-    message.includes('avbestilling')
+    message.includes('avbestilling') ||
+    message.includes('avbestille') ||
+    message.includes('husregler')
   ) {
     return 'travel_terms';
   }
@@ -3760,11 +3746,12 @@ function extractTravelContentCategory(messageRaw: string): string | null {
 
   if (
     message.includes('trening') ||
+    message.includes('fitness') ||
     message.includes('gym') ||
     message.includes('yoga') ||
     message.includes('treningssenter')
   ) {
-    return 'training';
+    return 'fitness';
   }
 
   if (
@@ -3971,8 +3958,27 @@ function extractTravelFlightDirectOnly(messageRaw: string): boolean {
   );
 }
 
-function mapTravelFlightPlaceToCode(messageRaw: string, kind: 'origin' | 'destination'): string | null {
+function extractBoundedPlace(
+  messageRaw: string,
+  kind: 'origin' | 'destination'
+): string {
+  const raw = String(messageRaw || '');
+
+  if (kind === 'origin') {
+    const match = raw.match(/\bfra\s+(.+?)(?:\s+til\s+|$)/i);
+    return String(match?.[1] || '').trim();
+  }
+
+  const match = raw.match(/\btil\s+(.+?)(?:\s+fra\s+|$)/i);
+  return String(match?.[1] || '').trim();
+}
+
+function mapTravelFlightPlaceToCode(
+  messageRaw: string,
+  kind: 'origin' | 'destination'
+): string | null {
   const message = normalizeTravelHelperText(messageRaw);
+  const bounded = normalizeTravelHelperText(extractBoundedPlace(messageRaw, kind));
 
   const mappings: Array<{ keywords: string[]; code: string }> = [
     { keywords: ['oslo', 'gardermoen', 'osl'], code: 'OSL' },
@@ -4002,17 +4008,9 @@ function mapTravelFlightPlaceToCode(messageRaw: string, kind: 'origin' | 'destin
     { keywords: ['salen', 'sälen', 'scr'], code: 'SCR' },
   ];
 
-  const fromMatch = message.match(/\bfra\s+([a-zA-ZæøåÆØÅ\s]+)/i);
-  const toMatch = message.match(/\btil\s+([a-zA-ZæøåÆØÅ\s]+)/i);
-
-  const candidateText =
-    kind === 'origin'
-      ? normalizeTravelHelperText(fromMatch?.[1] || '')
-      : normalizeTravelHelperText(toMatch?.[1] || '');
-
-  if (candidateText) {
+  if (bounded) {
     for (const item of mappings) {
-      if (item.keywords.some((keyword) => candidateText.includes(normalizeTravelHelperText(keyword)))) {
+      if (item.keywords.some((keyword) => bounded.includes(normalizeTravelHelperText(keyword)))) {
         return item.code;
       }
     }
@@ -4192,12 +4190,12 @@ app.post('/api/travel-helper', async (req, res) => {
     const {
       message,
       history,
-      lang,
       searchContext,
       lastSearchRows,
       lastSearchParams,
       lastFlightOffers,
       lastFlightSearch,
+      lang,
     } = req.body || {};
 
     if (!message || typeof message !== 'string') {
@@ -4294,11 +4292,6 @@ app.post('/api/travel-helper', async (req, res) => {
           }
         : null;
 
-    console.log('TRAVEL_HELPER intent:', intent);
-    console.log('TRAVEL_HELPER contentIntent:', contentIntent);
-    console.log('TRAVEL_HELPER contentCategory:', contentCategory);
-    console.log('TRAVEL_HELPER flightIntent:', flightIntent);
-
     if (safeLastSearchRows.length > 0 && safeLastSearchParams) {
       latestSearchRows = safeLastSearchRows;
       latestSearchParams = {
@@ -4343,10 +4336,6 @@ app.post('/api/travel-helper', async (req, res) => {
         to: datesFromCurrent.to || datesFromHistory.to,
       };
 
-      console.log('TRAVEL_HELPER area:', area);
-      console.log('TRAVEL_HELPER adults:', adults);
-      console.log('TRAVEL_HELPER dates:', dates);
-
       if (area && adults && dates.from && dates.to) {
         try {
           const searchUrl = new URL(`http://127.0.0.1:${PORT}/api/search`);
@@ -4358,12 +4347,6 @@ app.post('/api/travel-helper', async (req, res) => {
 
           const searchResponse = await fetch(searchUrl.toString());
           const searchJson: any = await searchResponse.json();
-
-          console.log('TRAVEL_HELPER search response ok:', searchResponse.ok);
-          console.log(
-            'TRAVEL_HELPER search json keys:',
-            searchJson ? Object.keys(searchJson) : []
-          );
 
           if (searchResponse.ok && searchJson?.ok && searchJson?.data) {
             latestSearchRows =
@@ -4383,8 +4366,6 @@ app.post('/api/travel-helper', async (req, res) => {
               adults,
               currentMessageText
             );
-
-            console.log('TRAVEL_HELPER searchRowsCount:', latestSearchRows.length);
           } else {
             dynamicContext = [
               'BNO_AVAILABILITY_CONTEXT',
@@ -4443,14 +4424,6 @@ app.post('/api/travel-helper', async (req, res) => {
 
         contentItemsCount = contentItems.length;
 
-        console.log('TRAVEL_HELPER content lookup:', {
-          appLang,
-          contentCategory,
-          destinationForContent,
-          contentItemsCount,
-          slugs: contentItems.map((item: any) => item?.slug),
-        });
-
         if (contentItems.length > 0) {
           contentContext = buildTravelContentContext(contentItems);
         }
@@ -4462,8 +4435,6 @@ app.post('/api/travel-helper', async (req, res) => {
     if (flightIntent) {
       try {
         const flightParams = extractTravelFlightSearchParams(currentMessageText, safeHistory);
-
-        console.log('TRAVEL_HELPER flightParams:', flightParams);
 
         if (flightParams.origin && flightParams.destination && flightParams.departureDate) {
           const flightSearchResponse = await fetch(`http://127.0.0.1:${PORT}/api/flights/search`, {
@@ -4483,12 +4454,6 @@ app.post('/api/travel-helper', async (req, res) => {
           });
 
           const flightSearchJson: any = await flightSearchResponse.json();
-
-          console.log('TRAVEL_HELPER flight search ok:', flightSearchResponse.ok);
-          console.log(
-            'TRAVEL_HELPER flight search keys:',
-            flightSearchJson ? Object.keys(flightSearchJson) : []
-          );
 
           if (
             flightSearchResponse.ok &&
@@ -4567,28 +4532,13 @@ app.post('/api/travel-helper', async (req, res) => {
         content: systemPrompt,
       },
       ...(dynamicContext
-        ? [
-            {
-              role: 'system',
-              content: dynamicContext,
-            },
-          ]
+        ? [{ role: 'system', content: dynamicContext }]
         : []),
       ...(contentContext
-        ? [
-            {
-              role: 'system',
-              content: contentContext,
-            },
-          ]
+        ? [{ role: 'system', content: contentContext }]
         : []),
       ...(flightContext
-        ? [
-            {
-              role: 'system',
-              content: flightContext,
-            },
-          ]
+        ? [{ role: 'system', content: flightContext }]
         : []),
       ...safeHistory.map((item: any) => ({
         role: item?.role === 'assistant' ? 'assistant' : 'user',
@@ -4655,8 +4605,6 @@ app.post('/api/travel-helper', async (req, res) => {
       }
 
       if (resolvedRoom) {
-        console.log('TRAVEL_HELPER matchedRoom for booking:', resolvedRoom?.Name);
-
         bookingAction = {
           type: 'book_accommodation',
           label: `Fullfør booking av ${resolvedRoom?.Name || 'overnatting'}`,
@@ -4701,8 +4649,6 @@ app.post('/api/travel-helper', async (req, res) => {
       );
 
       if (matchedOffer) {
-        console.log('TRAVEL_HELPER matched flight offer:', matchedOffer?.id);
-
         flightAction = {
           type: 'book_flight',
           label: 'Fullfør flybestilling',
