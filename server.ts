@@ -3353,7 +3353,11 @@ function mapTravelHelperAreaToContentDestinationSlug(area: string | null): strin
     return 'trysil';
   }
 
-  if (normalized === 'stranda' || normalized === 'sunnmorsalpene') {
+  if (
+    normalized === 'stranda' ||
+    normalized === 'sunnmorsalpene' ||
+    normalized === 'geiranger'
+  ) {
     return 'stranda';
   }
 
@@ -3511,7 +3515,10 @@ function buildTravelHelperSearchBasis(message: string, history: any[]): string {
     .join('\n');
 }
 
-function detectTravelSeason(messageRaw: string, dates?: { from: string | null; to: string | null }): 'winter' | 'summer' | 'unknown' {
+function detectTravelSeason(
+  messageRaw: string,
+  dates?: { from: string | null; to: string | null }
+): 'winter' | 'summer' | 'unknown' {
   const message = normalizeTravelHelperText(messageRaw);
 
   if (
@@ -4044,18 +4051,6 @@ function extractTravelTermsKeywords(messageRaw: string): string[] {
   return [...new Set(keywords)];
 }
 
-function inferContentSeasonTags(
-  season: 'winter' | 'summer' | 'unknown'
-): string[] {
-  if (season === 'winter') {
-    return ['winter', 'vinter', 'ski', 'alpint', 'snø', 'snow', 'year_round', 'helår'];
-  }
-  if (season === 'summer') {
-    return ['summer', 'sommer', 'hike', 'hiking', 'sykkel', 'bike', 'year_round', 'helår'];
-  }
-  return ['year_round', 'helår'];
-}
-
 async function getTravelHelperContent(opts: {
   destinationSlug: string | null;
   category: string | null;
@@ -4444,6 +4439,50 @@ function mapTravelFlightPlaceToCode(
   return null;
 }
 
+function inferAirportFromTravelArea(area: string | null): string | null {
+  const normalized = String(area || '').trim().toLowerCase();
+
+  if (!normalized) return null;
+
+  if (
+    normalized === 'trysil' ||
+    normalized === 'trysil-sentrum' ||
+    normalized === 'trysil-turistsenter' ||
+    normalized === 'trysil-hoyfjellssenter' ||
+    normalized === 'trysilfjell-hytteomrade'
+  ) {
+    return 'OSL';
+  }
+
+  if (
+    normalized === 'stranda' ||
+    normalized === 'sunnmorsalpene' ||
+    normalized === 'geiranger'
+  ) {
+    return 'AES';
+  }
+
+  if (normalized === 'salen') return 'SCR';
+
+  if (normalized === 'oslo') return 'OSL';
+  if (normalized === 'london') return 'LON';
+  if (normalized === 'amsterdam') return 'AMS';
+  if (normalized === 'copenhagen') return 'CPH';
+  if (normalized === 'stockholm') return 'ARN';
+  if (normalized === 'losangeles') return 'LAX';
+  if (normalized === 'miami') return 'MIA';
+
+  return null;
+}
+
+function extractTravelAreaForTripPlanning(messageRaw: string, history: any[]): string | null {
+  const current = extractTravelHelperArea(messageRaw);
+  if (current) return current;
+
+  const combined = buildTravelHelperSearchBasis(String(messageRaw || ''), history || []);
+  return extractTravelHelperArea(combined);
+}
+
 function extractTravelFlightSearchParams(messageRaw: string, history: any[]) {
   const currentMessage = String(messageRaw || '').trim();
   const combined = buildTravelHelperSearchBasis(currentMessage, history);
@@ -4647,7 +4686,11 @@ function pickTransportSuggestion(area: string | null): string | null {
     return 'Leiebil via BNO Travel eller buss fra Oslo/Gardermoen til Trysil.';
   }
 
-  if (normalized === 'stranda' || normalized === 'sunnmorsalpene') {
+  if (
+    normalized === 'stranda' ||
+    normalized === 'sunnmorsalpene' ||
+    normalized === 'geiranger'
+  ) {
     return 'Leiebil anbefales fra Ålesund eller nærmeste ankomstpunkt.';
   }
 
@@ -5221,16 +5264,29 @@ app.post('/api/travel-helper', async (req, res) => {
     if (flightIntent || tripPlanningIntent) {
       try {
         const flightParams = extractTravelFlightSearchParams(currentMessageText, safeHistory);
+        const inferredArea = extractTravelAreaForTripPlanning(currentMessageText, safeHistory);
+        const inferredAirport = inferAirportFromTravelArea(inferredArea);
 
-        if (flightParams.origin && flightParams.destination && flightParams.departureDate) {
+        let resolvedOrigin = flightParams.origin || null;
+        let resolvedDestination = flightParams.destination || null;
+
+        if (!resolvedOrigin && resolvedDestination && inferredAirport) {
+          resolvedOrigin = inferredAirport;
+        }
+
+        if (resolvedOrigin && !resolvedDestination && inferredAirport) {
+          resolvedDestination = inferredAirport;
+        }
+
+        if (resolvedOrigin && resolvedDestination && flightParams.departureDate) {
           const flightSearchResponse = await fetch(`http://127.0.0.1:${PORT}/api/flights/search`, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-              origin: flightParams.origin,
-              destination: flightParams.destination,
+              origin: resolvedOrigin,
+              destination: resolvedDestination,
               departureDate: flightParams.departureDate,
               returnDate: flightParams.returnDate || undefined,
               adults: flightParams.adults,
@@ -5251,8 +5307,8 @@ app.post('/api/travel-helper', async (req, res) => {
               : [];
 
             latestFlightSearch = {
-              origin: flightParams.origin,
-              destination: flightParams.destination,
+              origin: resolvedOrigin,
+              destination: resolvedDestination,
               departureDate: flightParams.departureDate,
               returnDate: flightParams.returnDate || null,
               adults: flightParams.adults,
@@ -5267,8 +5323,8 @@ app.post('/api/travel-helper', async (req, res) => {
           } else {
             latestFlightOffers = [];
             latestFlightSearch = {
-              origin: flightParams.origin,
-              destination: flightParams.destination,
+              origin: resolvedOrigin,
+              destination: resolvedDestination,
               departureDate: flightParams.departureDate,
               returnDate: flightParams.returnDate || null,
               adults: flightParams.adults,
@@ -5278,10 +5334,10 @@ app.post('/api/travel-helper', async (req, res) => {
 
             flightContext = buildFlightContextText([], latestFlightSearch);
           }
-        } else if (flightIntent) {
+        } else if (flightIntent || tripPlanningIntent) {
           const missing: string[] = [];
-          if (!flightParams.origin) missing.push('avreiseflyplass');
-          if (!flightParams.destination) missing.push('destinasjon');
+          if (!resolvedOrigin) missing.push('avreiseflyplass');
+          if (!resolvedDestination) missing.push('destinasjon/ankomstflyplass');
           if (!flightParams.departureDate) missing.push('utreisedato');
 
           flightContext = [
@@ -5290,8 +5346,8 @@ app.post('/api/travel-helper', async (req, res) => {
             `Mangler: ${missing.join(', ')}`,
             '',
             'INSTRUKS:',
-            '- Still ett kort oppfølgingsspørsmål',
-            '- Be om avreiseflyplass, destinasjon og dato',
+            '- Still ett kort oppfølgingsspørsmål hvis det trengs',
+            '- Be om avreiseflyplass, destinasjon og dato hvis dette mangler',
             '- Ikke dikt opp flyavganger',
           ].join('\n');
         }
