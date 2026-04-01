@@ -3107,6 +3107,11 @@ Når brukeren spør om overnatting:
 - hvis bookingAction finnes, skal du heller oppfordre brukeren til å bruke bookingknappen
 - du skal ikke si at en booking er registrert eller fullført med mindre systemet faktisk har gjort det
 
+- Hvis brukeren spør om aldersgrense, må du alltid oppgi:
+  1) hovedregelen på 20 år
+  2) unntaket for 18–20 år med egen avtale
+  3) særregelen for nyttår, påske og Trysilsmellen
+
 Hvis du får BNO_AVAILABILITY_CONTEXT:
 - bruk kun disse dataene som sanntidsgrunnlag
 - ikke legg til ekstra alternativer
@@ -3716,7 +3721,53 @@ function detectTravelContentIntent(messageRaw: string): boolean {
 
   return keywords.some((word) => message.includes(word));
 }
+function prioritizeTravelTermItems(items: any[], messageRaw: string): any[] {
+  if (!Array.isArray(items) || items.length === 0) return [];
 
+  const message = normalizeTravelHelperText(messageRaw);
+
+  const scoreItem = (item: any) => {
+    const title = normalizeTravelHelperText(item?.title || '');
+    const summary = normalizeTravelHelperText(item?.summary || '');
+    const body = normalizeTravelHelperText(item?.body || '');
+    const text = `${title} ${summary} ${body}`;
+
+    let score = 0;
+
+    if (message.includes('aldersgrense') || message.includes('18 ar') || message.includes('20 ar')) {
+      if (text.includes('aldersgrense')) score += 120;
+      if (text.includes('18 og 20')) score += 90;
+      if (text.includes('20 ar')) score += 60;
+      if (text.includes('23 ar')) score += 40;
+      if (text.includes('egen avtale')) score += 80;
+      if (text.includes('depositum')) score += 25;
+    }
+
+    if (message.includes('innsjekk') || message.includes('utsjekk')) {
+      if (text.includes('innsjekk')) score += 80;
+      if (text.includes('utsjekk')) score += 80;
+      if (text.includes('17.00')) score += 40;
+      if (text.includes('11.00')) score += 40;
+      if (text.includes('14.00')) score += 20;
+    }
+
+    if (message.includes('avbestilling') || message.includes('avbestille')) {
+      if (text.includes('avbestilling')) score += 80;
+      if (text.includes('forsikring')) score += 20;
+    }
+
+    if (message.includes('depositum')) {
+      if (text.includes('depositum')) score += 80;
+      if (text.includes('2000')) score += 40;
+    }
+
+    return { ...item, __priorityScore: score };
+  };
+
+  return items
+    .map(scoreItem)
+    .sort((a, b) => Number(b.__priorityScore || 0) - Number(a.__priorityScore || 0));
+}
 function extractTravelContentCategory(messageRaw: string): string | null {
   const message = normalizeTravelHelperText(messageRaw);
 
@@ -4499,8 +4550,9 @@ app.post('/api/travel-helper', async (req, res) => {
         contentItemsCount = contentItems.length;
 
         if (contentItems.length > 0) {
-          contentContext = buildTravelContentContext(contentItems);
-        }
+  const prioritizedItems = prioritizeTravelTermItems(contentItems, currentMessageText);
+  contentContext = buildTravelContentContext(prioritizedItems.slice(0, 8));
+}
       } catch (contentError) {
         console.error('travel-helper content lookup failed', contentError);
       }
@@ -4534,7 +4586,9 @@ app.post('/api/travel-helper', async (req, res) => {
             flightSearchJson?.ok &&
             Array.isArray(flightSearchJson?.data?.offers)
           ) {
-            latestFlightOffers = flightSearchJson.data.offers;
+            latestFlightOffers = Array.isArray(flightSearchJson.data.offers)
+  ? flightSearchJson.data.offers.slice(0, 5)
+  : [];
             latestFlightSearch = {
               origin: flightParams.origin,
               destination: flightParams.destination,
@@ -4778,12 +4832,12 @@ app.post('/api/travel-helper', async (req, res) => {
             }
           : null,
       flightSearchContext:
-        latestFlightOffers.length > 0 && latestFlightSearch
-          ? {
-              offers: latestFlightOffers,
-              search: latestFlightSearch,
-            }
-          : null,
+  latestFlightOffers.length > 0 && latestFlightSearch
+    ? {
+        offers: latestFlightOffers.slice(0, 5),
+        search: latestFlightSearch,
+      }
+    : null,
       meta: {
         intent,
         contentIntent,
