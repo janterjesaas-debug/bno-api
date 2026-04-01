@@ -2669,27 +2669,6 @@ app.get(['/api/products', '/products'], async (_req, res) => {
 });
 app.post('/webhooks/mews', mews_webhook_1.mewsWebhookHandler);
 // =============================================================
-// (Valgfritt) server-side create reservation (bak feature flag)
-// =============================================================
-if (ENABLE_SERVER_RESERVATION) {
-    app.post('/api/mews/reservation', async (_req, res) => {
-        try {
-            return res.status(501).json({
-                ok: false,
-                error: 'not_implemented',
-                detail: 'ENABLE_SERVER_RESERVATION=1 men endpoint er ikke implementert ennå',
-            });
-        }
-        catch (e) {
-            return res.status(500).json({
-                ok: false,
-                error: 'server_error',
-                detail: e?.message || String(e),
-            });
-        }
-    });
-}
-// =============================================================
 // BNO Travel Helper
 // =============================================================
 const BNO_TRAVEL_HELPER_SYSTEM = `
@@ -3497,8 +3476,19 @@ function isTravelHelperFlightBookingIntent(messageRaw) {
         'bestill det første',
         'book det forste',
         'book det første',
+        'det forste',
+        'det første',
+        'forste',
+        'første',
+        'nummer 1',
+        '1.',
+        'ja',
+        'ja takk',
+        'gjerne',
+        'ok',
+        'okei',
     ];
-    return phrases.some((phrase) => message.includes(phrase));
+    return phrases.some((phrase) => message.includes(phrase) || message === phrase);
 }
 function extractTravelFlightCabinClass(messageRaw) {
     const message = normalizeTravelHelperText(messageRaw);
@@ -3714,12 +3704,15 @@ function findRequestedFlightOfferFromMessage(messageRaw, offers) {
 }
 app.post('/api/travel-helper', async (req, res) => {
     try {
-        const { message, history, searchContext, lastSearchRows, lastSearchParams, lastFlightOffers, lastFlightSearch, lang, } = req.body || {};
+        const { message, history, searchContext, lastSearchRows, lastSearchParams, lastFlightOffers, lastFlightSearch, flightSearchContext, lang, } = req.body || {};
         console.log('TRAVEL_HELPER request', {
             message,
             historyCount: Array.isArray(history) ? history.length : 0,
             hasLastSearchRows: Array.isArray(lastSearchRows) ? lastSearchRows.length : 0,
             hasLastFlightOffers: Array.isArray(lastFlightOffers) ? lastFlightOffers.length : 0,
+            hasFlightSearchContextOffers: Array.isArray(flightSearchContext?.offers)
+                ? flightSearchContext.offers.length
+                : 0,
             lang,
         });
         if (!message || typeof message !== 'string') {
@@ -3750,6 +3743,30 @@ app.post('/api/travel-helper', async (req, res) => {
             !Array.isArray(lastSearchParams)
             ? lastSearchParams
             : null;
+        const safeFlightSearchContext = flightSearchContext &&
+            typeof flightSearchContext === 'object' &&
+            !Array.isArray(flightSearchContext)
+            ? {
+                offers: Array.isArray(flightSearchContext.offers)
+                    ? flightSearchContext.offers
+                    : [],
+                search: flightSearchContext.search &&
+                    typeof flightSearchContext.search === 'object' &&
+                    !Array.isArray(flightSearchContext.search)
+                    ? {
+                        origin: String(flightSearchContext.search.origin || '').trim().toUpperCase(),
+                        destination: String(flightSearchContext.search.destination || '').trim().toUpperCase(),
+                        departureDate: String(flightSearchContext.search.departureDate || '').slice(0, 10),
+                        returnDate: flightSearchContext.search.returnDate
+                            ? String(flightSearchContext.search.returnDate).slice(0, 10)
+                            : null,
+                        adults: Number(flightSearchContext.search.adults || 1),
+                        cabinClass: String(flightSearchContext.search.cabinClass || 'economy'),
+                        directOnly: Boolean(flightSearchContext.search.directOnly),
+                    }
+                    : null,
+            }
+            : null;
         const currentMessageText = String(message || '').trim();
         const conversationText = buildTravelHelperSearchBasis(currentMessageText, safeHistory);
         const intent = detectTravelHelperIntent(currentMessageText);
@@ -3763,7 +3780,11 @@ app.post('/api/travel-helper', async (req, res) => {
         let contentItemsCount = 0;
         let latestSearchRows = [];
         let latestSearchParams = null;
-        let latestFlightOffers = Array.isArray(lastFlightOffers) ? lastFlightOffers : [];
+        let latestFlightOffers = Array.isArray(lastFlightOffers) && lastFlightOffers.length > 0
+            ? lastFlightOffers
+            : Array.isArray(safeFlightSearchContext?.offers)
+                ? safeFlightSearchContext.offers
+                : [];
         let latestFlightSearch = lastFlightSearch &&
             typeof lastFlightSearch === 'object' &&
             !Array.isArray(lastFlightSearch)
@@ -3778,7 +3799,7 @@ app.post('/api/travel-helper', async (req, res) => {
                 cabinClass: String(lastFlightSearch.cabinClass || 'economy'),
                 directOnly: Boolean(lastFlightSearch.directOnly),
             }
-            : null;
+            : safeFlightSearchContext?.search || null;
         if (safeLastSearchRows.length > 0 && safeLastSearchParams) {
             latestSearchRows = safeLastSearchRows;
             latestSearchParams = {
@@ -4104,26 +4125,30 @@ app.post('/api/travel-helper', async (req, res) => {
                 };
             }
         }
-        if (isTravelHelperFlightBookingIntent(currentMessageText) &&
-            latestFlightOffers.length > 0 &&
-            latestFlightSearch) {
-            const matchedOffer = findRequestedFlightOfferFromMessage(currentMessageText, latestFlightOffers);
-            if (matchedOffer) {
-                const outbound = getFlightSliceSummary(matchedOffer?.slices?.[0]);
-                flightAction = {
-                    type: 'book_flight',
-                    label: `Fullfør flybestilling med ${matchedOffer?.owner?.name || outbound.airline || 'flyselskap'}`,
-                    offer: matchedOffer,
-                    search: {
-                        origin: latestFlightSearch.origin,
-                        destination: latestFlightSearch.destination,
-                        departureDate: latestFlightSearch.departureDate,
-                        returnDate: latestFlightSearch.returnDate || null,
-                        adults: latestFlightSearch.adults,
-                        cabinClass: latestFlightSearch.cabinClass,
-                        directOnly: latestFlightSearch.directOnly,
-                    },
-                };
+        if (latestFlightOffers.length > 0 && latestFlightSearch) {
+            const wantsFlightBooking = isTravelHelperFlightBookingIntent(currentMessageText);
+            if (wantsFlightBooking) {
+                let resolvedOffer = findRequestedFlightOfferFromMessage(currentMessageText, latestFlightOffers);
+                if (!resolvedOffer) {
+                    resolvedOffer = latestFlightOffers[0] || null;
+                }
+                if (resolvedOffer) {
+                    const outbound = getFlightSliceSummary(resolvedOffer?.slices?.[0]);
+                    flightAction = {
+                        type: 'book_flight',
+                        label: `Fullfør flybestilling med ${resolvedOffer?.owner?.name || outbound.airline || 'flyselskap'}`,
+                        offer: resolvedOffer,
+                        search: {
+                            origin: latestFlightSearch.origin,
+                            destination: latestFlightSearch.destination,
+                            departureDate: latestFlightSearch.departureDate,
+                            returnDate: latestFlightSearch.returnDate || null,
+                            adults: latestFlightSearch.adults,
+                            cabinClass: latestFlightSearch.cabinClass,
+                            directOnly: latestFlightSearch.directOnly,
+                        },
+                    };
+                }
             }
         }
         return res.json({

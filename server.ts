@@ -3049,27 +3049,6 @@ app.get(['/api/products', '/products'], async (_req, res) => {
 app.post('/webhooks/mews', mewsWebhookHandler);
 
 // =============================================================
-// (Valgfritt) server-side create reservation (bak feature flag)
-// =============================================================
-if (ENABLE_SERVER_RESERVATION) {
-  app.post('/api/mews/reservation', async (_req, res) => {
-    try {
-      return res.status(501).json({
-        ok: false,
-        error: 'not_implemented',
-        detail: 'ENABLE_SERVER_RESERVATION=1 men endpoint er ikke implementert ennå',
-      });
-    } catch (e: any) {
-      return res.status(500).json({
-        ok: false,
-        error: 'server_error',
-        detail: e?.message || String(e),
-      });
-    }
-  });
-}
-
-// =============================================================
 // BNO Travel Helper
 // =============================================================
 const BNO_TRAVEL_HELPER_SYSTEM = `
@@ -3189,6 +3168,19 @@ type FlightAction = {
     cabinClass: 'economy' | 'premium_economy' | 'business' | 'first';
     directOnly: boolean;
   };
+};
+
+type FlightSearchContextPayload = {
+  offers: any[];
+  search: {
+    origin: string;
+    destination: string;
+    departureDate: string;
+    returnDate?: string | null;
+    adults: number;
+    cabinClass: 'economy' | 'premium_economy' | 'business' | 'first';
+    directOnly: boolean;
+  } | null;
 };
 
 function normalizeTravelHelperText(inputRaw: string): string {
@@ -3721,6 +3713,7 @@ function detectTravelContentIntent(messageRaw: string): boolean {
 
   return keywords.some((word) => message.includes(word));
 }
+
 function prioritizeTravelTermItems(items: any[], messageRaw: string): any[] {
   if (!Array.isArray(items) || items.length === 0) return [];
 
@@ -3768,6 +3761,7 @@ function prioritizeTravelTermItems(items: any[], messageRaw: string): any[] {
     .map(scoreItem)
     .sort((a, b) => Number(b.__priorityScore || 0) - Number(a.__priorityScore || 0));
 }
+
 function extractTravelContentCategory(messageRaw: string): string | null {
   const message = normalizeTravelHelperText(messageRaw);
 
@@ -4042,11 +4036,22 @@ function isTravelHelperFlightBookingIntent(messageRaw: string): boolean {
     'bestill det første',
     'book det forste',
     'book det første',
+
+    'det forste',
+    'det første',
+    'forste',
+    'første',
+    'nummer 1',
+    '1.',
+    'ja',
+    'ja takk',
+    'gjerne',
+    'ok',
+    'okei',
   ];
 
-  return phrases.some((phrase) => message.includes(phrase));
+  return phrases.some((phrase) => message.includes(phrase) || message === phrase);
 }
-
 
 function extractTravelFlightCabinClass(
   messageRaw: string
@@ -4326,6 +4331,7 @@ function findRequestedFlightOfferFromMessage(messageRaw: string, offers: any[]):
 
   return offers[0] || null;
 }
+
 app.post('/api/travel-helper', async (req, res) => {
   try {
     const {
@@ -4336,6 +4342,7 @@ app.post('/api/travel-helper', async (req, res) => {
       lastSearchParams,
       lastFlightOffers,
       lastFlightSearch,
+      flightSearchContext,
       lang,
     } = req.body || {};
 
@@ -4344,6 +4351,9 @@ app.post('/api/travel-helper', async (req, res) => {
       historyCount: Array.isArray(history) ? history.length : 0,
       hasLastSearchRows: Array.isArray(lastSearchRows) ? lastSearchRows.length : 0,
       hasLastFlightOffers: Array.isArray(lastFlightOffers) ? lastFlightOffers.length : 0,
+      hasFlightSearchContextOffers: Array.isArray(flightSearchContext?.offers)
+        ? flightSearchContext.offers.length
+        : 0,
       lang,
     });
 
@@ -4383,6 +4393,35 @@ app.post('/api/travel-helper', async (req, res) => {
         ? lastSearchParams
         : null;
 
+    const safeFlightSearchContext: FlightSearchContextPayload | null =
+      flightSearchContext &&
+      typeof flightSearchContext === 'object' &&
+      !Array.isArray(flightSearchContext)
+        ? {
+            offers: Array.isArray(flightSearchContext.offers)
+              ? flightSearchContext.offers
+              : [],
+            search:
+              flightSearchContext.search &&
+              typeof flightSearchContext.search === 'object' &&
+              !Array.isArray(flightSearchContext.search)
+                ? {
+                    origin: String(flightSearchContext.search.origin || '').trim().toUpperCase(),
+                    destination: String(flightSearchContext.search.destination || '').trim().toUpperCase(),
+                    departureDate: String(flightSearchContext.search.departureDate || '').slice(0, 10),
+                    returnDate: flightSearchContext.search.returnDate
+                      ? String(flightSearchContext.search.returnDate).slice(0, 10)
+                      : null,
+                    adults: Number(flightSearchContext.search.adults || 1),
+                    cabinClass: (String(
+                      flightSearchContext.search.cabinClass || 'economy'
+                    ) as 'economy' | 'premium_economy' | 'business' | 'first'),
+                    directOnly: Boolean(flightSearchContext.search.directOnly),
+                  }
+                : null,
+          }
+        : null;
+
     const currentMessageText = String(message || '').trim();
     const conversationText = buildTravelHelperSearchBasis(currentMessageText, safeHistory);
 
@@ -4409,7 +4448,13 @@ app.post('/api/travel-helper', async (req, res) => {
       lang: string;
     } | null = null;
 
-    let latestFlightOffers: any[] = Array.isArray(lastFlightOffers) ? lastFlightOffers : [];
+    let latestFlightOffers: any[] =
+      Array.isArray(lastFlightOffers) && lastFlightOffers.length > 0
+        ? lastFlightOffers
+        : Array.isArray(safeFlightSearchContext?.offers)
+          ? safeFlightSearchContext!.offers
+          : [];
+
     let latestFlightSearch:
       | {
           origin: string;
@@ -4439,7 +4484,7 @@ app.post('/api/travel-helper', async (req, res) => {
               | 'first'),
             directOnly: Boolean(lastFlightSearch.directOnly),
           }
-        : null;
+        : safeFlightSearchContext?.search || null;
 
     if (safeLastSearchRows.length > 0 && safeLastSearchParams) {
       latestSearchRows = safeLastSearchRows;
@@ -4575,9 +4620,9 @@ app.post('/api/travel-helper', async (req, res) => {
         contentItemsCount = contentItems.length;
 
         if (contentItems.length > 0) {
-  const prioritizedItems = prioritizeTravelTermItems(contentItems, currentMessageText);
-  contentContext = buildTravelContentContext(prioritizedItems.slice(0, 8));
-}
+          const prioritizedItems = prioritizeTravelTermItems(contentItems, currentMessageText);
+          contentContext = buildTravelContentContext(prioritizedItems.slice(0, 8));
+        }
       } catch (contentError) {
         console.error('travel-helper content lookup failed', contentError);
       }
@@ -4612,8 +4657,9 @@ app.post('/api/travel-helper', async (req, res) => {
             Array.isArray(flightSearchJson?.data?.offers)
           ) {
             latestFlightOffers = Array.isArray(flightSearchJson.data.offers)
-  ? flightSearchJson.data.offers.slice(0, 5)
-  : [];
+              ? flightSearchJson.data.offers.slice(0, 5)
+              : [];
+
             latestFlightSearch = {
               origin: flightParams.origin,
               destination: flightParams.destination,
@@ -4816,33 +4862,37 @@ app.post('/api/travel-helper', async (req, res) => {
       }
     }
 
-    if (
-      isTravelHelperFlightBookingIntent(currentMessageText) &&
-      latestFlightOffers.length > 0 &&
-      latestFlightSearch
-    ) {
-      const matchedOffer = findRequestedFlightOfferFromMessage(
-        currentMessageText,
-        latestFlightOffers
-      );
+    if (latestFlightOffers.length > 0 && latestFlightSearch) {
+      const wantsFlightBooking = isTravelHelperFlightBookingIntent(currentMessageText);
 
-      if (matchedOffer) {
-        const outbound = getFlightSliceSummary(matchedOffer?.slices?.[0]);
+      if (wantsFlightBooking) {
+        let resolvedOffer = findRequestedFlightOfferFromMessage(
+          currentMessageText,
+          latestFlightOffers
+        );
 
-flightAction = {
-  type: 'book_flight',
-  label: `Fullfør flybestilling med ${matchedOffer?.owner?.name || outbound.airline || 'flyselskap'}`,
-  offer: matchedOffer,
-  search: {
-            origin: latestFlightSearch.origin,
-            destination: latestFlightSearch.destination,
-            departureDate: latestFlightSearch.departureDate,
-            returnDate: latestFlightSearch.returnDate || null,
-            adults: latestFlightSearch.adults,
-            cabinClass: latestFlightSearch.cabinClass,
-            directOnly: latestFlightSearch.directOnly,
-          },
-        };
+        if (!resolvedOffer) {
+          resolvedOffer = latestFlightOffers[0] || null;
+        }
+
+        if (resolvedOffer) {
+          const outbound = getFlightSliceSummary(resolvedOffer?.slices?.[0]);
+
+          flightAction = {
+            type: 'book_flight',
+            label: `Fullfør flybestilling med ${resolvedOffer?.owner?.name || outbound.airline || 'flyselskap'}`,
+            offer: resolvedOffer,
+            search: {
+              origin: latestFlightSearch.origin,
+              destination: latestFlightSearch.destination,
+              departureDate: latestFlightSearch.departureDate,
+              returnDate: latestFlightSearch.returnDate || null,
+              adults: latestFlightSearch.adults,
+              cabinClass: latestFlightSearch.cabinClass,
+              directOnly: latestFlightSearch.directOnly,
+            },
+          };
+        }
       }
     }
 
@@ -4859,12 +4909,12 @@ flightAction = {
             }
           : null,
       flightSearchContext:
-  latestFlightOffers.length > 0 && latestFlightSearch
-    ? {
-        offers: latestFlightOffers.slice(0, 5),
-        search: latestFlightSearch,
-      }
-    : null,
+        latestFlightOffers.length > 0 && latestFlightSearch
+          ? {
+              offers: latestFlightOffers.slice(0, 5),
+              search: latestFlightSearch,
+            }
+          : null,
       meta: {
         intent,
         contentIntent,
