@@ -4827,11 +4827,13 @@ app.post('/api/travel-helper', async (req, res) => {
       );
 
       if (matchedOffer) {
-        flightAction = {
-          type: 'book_flight',
-          label: 'Fullfør flybestilling',
-          offer: matchedOffer,
-          search: {
+        const outbound = getFlightSliceSummary(matchedOffer?.slices?.[0]);
+
+flightAction = {
+  type: 'book_flight',
+  label: `Fullfør flybestilling med ${matchedOffer?.owner?.name || outbound.airline || 'flyselskap'}`,
+  offer: matchedOffer,
+  search: {
             origin: latestFlightSearch.origin,
             destination: latestFlightSearch.destination,
             departureDate: latestFlightSearch.departureDate,
