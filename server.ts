@@ -3079,7 +3079,7 @@ Målet ditt er å hjelpe brukeren før, under og etter reisen.
 
 VIKTIGE REGLER:
 1. Prioriter alltid BNO Travel sitt eget innhold først.
-2. Du må ALDRI finne opp overnatting, priser, tilgjengelighet, navn på hytter/leiligheter eller områder.
+2. Du må ALDRI finne opp overnatting, priser, tilgjengelighet, navn på hytter/leiligheter, områder, fly, tider, aktiviteter eller reisevilkår.
 3. Hvis du får "BNO_AVAILABILITY_CONTEXT", skal du KUN bruke dataene som står der.
 4. Hvis BNO_AVAILABILITY_CONTEXT inneholder ekte treff, skal du ikke gi generelle svar først.
 5. Hvis det er 0 treff, si det tydelig og foreslå hvordan brukeren kan justere søket.
@@ -3091,6 +3091,11 @@ VIKTIGE REGLER:
 11. Ikke dikt opp konkrete aktiviteter, restauranter, spa, treningstilbud eller reisevilkår som ikke finnes i BNO_CONTENT_CONTEXT.
 12. Hvis BNO_CONTENT_CONTEXT er på norsk, men brukeren skriver på et annet språk, kan du oversette og oppsummere korrekt til brukerens språk.
 13. Hvis noe ikke er sanntidsbookbart, vær tydelig på det.
+14. Når reisevilkår inneholder konkrete tall, aldersgrenser, tider eller beløp, skal du gjengi disse eksplisitt og ikke bare oppsummere generelt.
+15. Hvis spørsmålet gjelder aldersgrense, og innholdet sier både hovedregel og unntak, skal du nevne begge deler.
+16. Hvis spørsmålet gjelder innsjekk og utsjekk, og tidene finnes i BNO_CONTENT_CONTEXT, skal du oppgi de eksakte tidene.
+17. Hvis brukeren ber om booking av fly eller overnatting, skal du være tydelig på at booking fullføres via knapp/checkout i appen.
+18. Du skal ikke samle inn navn, e-post, telefonnummer, passasjerdata eller betalingsinformasjon i chatten.
 
 Når brukeren spør om overnatting:
 - bruk BNO Travel sitt eget innhold først
@@ -3115,6 +3120,7 @@ Hvis du får BNO_CONTENT_CONTEXT:
 - oppsummer konkret og nyttig
 - hvis brukeren spør etter forslag, bruk innholdet aktivt
 - ikke dikt opp detaljer som ikke finnes i konteksten
+- hvis brukeren spør om reisevilkår, svar med de konkrete opplysningene som faktisk står i innholdet
 
 Hvis du får BNO_FLIGHT_CONTEXT:
 - bruk dette som verifiserte flydata fra BNO Travel
@@ -3702,6 +3708,10 @@ function detectTravelContentIntent(messageRaw: string): boolean {
     'hva kan vi gjøre',
     'alpint',
     'langrenn',
+    'fitness',
+    'gym',
+    'yoga',
+    'treningssenter',
   ];
 
   return keywords.some((word) => message.includes(word));
@@ -3773,10 +3783,50 @@ function extractTravelContentCategory(messageRaw: string): string | null {
   return null;
 }
 
+function extractTravelTermsKeywords(messageRaw: string): string[] {
+  const message = normalizeTravelHelperText(messageRaw);
+  const keywords: string[] = [];
+
+  if (
+    message.includes('aldersgrense') ||
+    message.includes('18 ar') ||
+    message.includes('20 ar') ||
+    message.includes('23 ar')
+  ) {
+    keywords.push('aldersgrense');
+  }
+
+  if (
+    message.includes('innsjekk') ||
+    message.includes('utsjekk') ||
+    message.includes('check in') ||
+    message.includes('check-in') ||
+    message.includes('check out') ||
+    message.includes('checkout')
+  ) {
+    keywords.push('innsjekk', 'utsjekk', 'check-in', 'check-out');
+  }
+
+  if (message.includes('avbestilling') || message.includes('avbestille')) {
+    keywords.push('avbestilling');
+  }
+
+  if (message.includes('depositum')) {
+    keywords.push('depositum');
+  }
+
+  if (message.includes('husregler')) {
+    keywords.push('husregler');
+  }
+
+  return [...new Set(keywords)];
+}
+
 async function getTravelHelperContent(opts: {
   destinationSlug: string | null;
   category: string | null;
   language: string;
+  message?: string;
 }) {
   const destinationSlug = String(opts.destinationSlug || 'global').trim().toLowerCase();
   const category = opts.category ? String(opts.category).trim().toLowerCase() : null;
@@ -3807,10 +3857,26 @@ async function getTravelHelperContent(opts: {
       )
       .order('is_featured', { ascending: false })
       .order('sort_order', { ascending: true })
-      .limit(8);
+      .limit(20);
 
     if (category) {
       query = query.eq('category', category);
+    }
+
+    if (category === 'travel_terms' && opts.message) {
+      const keywordHints = extractTravelTermsKeywords(opts.message);
+
+      if (keywordHints.length > 0) {
+        const orParts: string[] = [];
+
+        for (const keyword of keywordHints) {
+          orParts.push(`title.ilike.%${keyword}%`);
+          orParts.push(`summary.ilike.%${keyword}%`);
+          orParts.push(`body.ilike.%${keyword}%`);
+        }
+
+        query = query.or(orParts.join(','));
+      }
     }
 
     return await query;
@@ -4152,7 +4218,6 @@ function buildFlightContextText(offers: any[], searchParams: any): string {
       lines.push(`RETUR_STOPP: ${returnTrip.stops}`);
     }
 
-    lines.push(`RAW_OFFER_JSON: ${JSON.stringify(offer)}`);
     lines.push('');
   });
 
@@ -4197,6 +4262,14 @@ app.post('/api/travel-helper', async (req, res) => {
       lastFlightSearch,
       lang,
     } = req.body || {};
+
+    console.log('TRAVEL_HELPER request', {
+      message,
+      historyCount: Array.isArray(history) ? history.length : 0,
+      hasLastSearchRows: Array.isArray(lastSearchRows) ? lastSearchRows.length : 0,
+      hasLastFlightOffers: Array.isArray(lastFlightOffers) ? lastFlightOffers.length : 0,
+      lang,
+    });
 
     if (!message || typeof message !== 'string') {
       return res.status(400).json({
@@ -4420,6 +4493,7 @@ app.post('/api/travel-helper', async (req, res) => {
           destinationSlug: destinationForContent,
           category: contentCategory,
           language: appLang,
+          message: currentMessageText,
         });
 
         contentItemsCount = contentItems.length;
@@ -4550,6 +4624,15 @@ app.post('/api/travel-helper', async (req, res) => {
       },
     ];
 
+    console.log('TRAVEL_HELPER context sizes', {
+      dynamicContextLength: dynamicContext.length,
+      contentContextLength: contentContext.length,
+      flightContextLength: flightContext.length,
+      inputCount: input.length,
+      contentItemsCount,
+      flightOffersCount: latestFlightOffers.length,
+    });
+
     const response = await fetch('https://api.openai.com/v1/responses', {
       method: 'POST',
       headers: {
@@ -4562,7 +4645,23 @@ app.post('/api/travel-helper', async (req, res) => {
       }),
     });
 
-    const data: any = await response.json();
+    const rawResponseText = await response.text();
+    let data: any = null;
+
+    try {
+      data = rawResponseText ? JSON.parse(rawResponseText) : null;
+    } catch (parseError) {
+      console.error('travel-helper OpenAI non-json error', {
+        status: response.status,
+        statusText: response.statusText,
+        bodyStart: rawResponseText?.slice(0, 500),
+      });
+
+      return res.status(500).json({
+        ok: false,
+        error: 'openai_non_json_response',
+      });
+    }
 
     if (!response.ok) {
       console.error('travel-helper OpenAI error', data);
