@@ -4024,14 +4024,29 @@ function isTravelHelperFlightBookingIntent(messageRaw: string): boolean {
     'kan du bestille det flyet',
     'ta meg til flybestillingen',
     'ja bestill det flyet',
+
     'bestill det forste flyet',
     'bestill det første flyet',
     'book det forste flyet',
     'book det første flyet',
+
+    'jeg vil bestille det forste',
+    'jeg vil bestille det første',
+    'jeg vil booke det forste',
+    'jeg vil booke det første',
+    'ja, jeg vil bestille det forste',
+    'ja, jeg vil bestille det første',
+    'ja jeg vil bestille det forste',
+    'ja jeg vil bestille det første',
+    'bestill det forste',
+    'bestill det første',
+    'book det forste',
+    'book det første',
   ];
 
   return phrases.some((phrase) => message.includes(phrase));
 }
+
 
 function extractTravelFlightCabinClass(
   messageRaw: string
@@ -4283,24 +4298,34 @@ function findRequestedFlightOfferFromMessage(messageRaw: string, offers: any[]):
   if (
     message.includes('forste') ||
     message.includes('første') ||
-    message.includes('første flyet') ||
     message.includes('det forste') ||
-    message.includes('det første')
+    message.includes('det første') ||
+    message.includes('1.') ||
+    message.includes('nummer 1')
   ) {
-    return offers[0];
+    return offers[0] || null;
   }
 
-  if (message.includes('andre') || message.includes('det andre')) {
+  if (
+    message.includes('andre') ||
+    message.includes('det andre') ||
+    message.includes('2.') ||
+    message.includes('nummer 2')
+  ) {
     return offers[1] || null;
   }
 
-  if (message.includes('tredje') || message.includes('det tredje')) {
+  if (
+    message.includes('tredje') ||
+    message.includes('det tredje') ||
+    message.includes('3.') ||
+    message.includes('nummer 3')
+  ) {
     return offers[2] || null;
   }
 
   return offers[0] || null;
 }
-
 app.post('/api/travel-helper', async (req, res) => {
   try {
     const {
