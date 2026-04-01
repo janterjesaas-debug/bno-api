@@ -22,6 +22,19 @@ type PassengerInput = {
   locale?: string;
 };
 
+type OfferSnapshot = {
+  id?: string;
+  total_amount?: string | number;
+  total_currency?: string;
+  passengers?: Array<{
+    id?: string;
+    passenger_id?: string;
+  }>;
+  owner?: any;
+  slices?: any[];
+  [key: string]: any;
+};
+
 type BookingDraft = {
   offerId: string;
   offerAmount: number;
@@ -31,6 +44,7 @@ type BookingDraft = {
   passenger: PassengerInput;
   paymentIntentId: string;
   createdAt: number;
+  offerSnapshot?: OfferSnapshot | null;
 };
 
 const bookingDrafts = new Map<string, BookingDraft>();
@@ -118,6 +132,46 @@ function getFirstOfferPassengerId(offer: any): string {
   return String(offerPassengerId);
 }
 
+function isUsableOfferSnapshot(offer: any, offerId: string): boolean {
+  if (!offer || typeof offer !== 'object') return false;
+
+  const snapshotId = String(offer?.id || '').trim();
+  const expectedId = String(offerId || '').trim();
+
+  if (!snapshotId || !expectedId || snapshotId !== expectedId) {
+    return false;
+  }
+
+  const totalAmount = Number(offer?.total_amount || 0);
+  const totalCurrency = String(offer?.total_currency || '').trim();
+  const passengerId =
+    offer?.passengers?.[0]?.id ||
+    offer?.passengers?.[0]?.passenger_id ||
+    '';
+
+  return totalAmount > 0 && !!totalCurrency && !!passengerId;
+}
+
+async function resolveOfferForCheckout(input: {
+  offerId: string;
+  offer?: OfferSnapshot | null;
+}) {
+  if (isUsableOfferSnapshot(input.offer, input.offerId)) {
+    console.log('[FLIGHT PAY] using offer snapshot for checkout', {
+      offerId: input.offerId,
+    });
+
+    return input.offer as OfferSnapshot;
+  }
+
+  console.log('[FLIGHT PAY] offer snapshot missing/invalid, fetching live offer', {
+    offerId: input.offerId,
+  });
+
+  const offerResult = await duffel.offers.get(String(input.offerId));
+  return offerResult?.data || null;
+}
+
 async function createDuffelOrder(input: {
   offerId: string;
   offerAmount: number;
@@ -203,7 +257,7 @@ router.post('/api/payments/create-intent', async (req, res) => {
   try {
     const stripe = getStripe();
 
-    const { offerId, passenger } = req.body || {};
+    const { offerId, offer, passenger } = req.body || {};
 
     if (!offerId) {
       return res.status(400).json({
@@ -229,26 +283,29 @@ router.post('/api/payments/create-intent', async (req, res) => {
 
     console.log('[FLIGHT PAY] create-intent start', {
       offerId,
+      hasOfferSnapshot: !!offer,
       email: passenger.email,
       hasPhone: !!passenger.phone_number,
       gender: passenger.gender,
       title: passenger.title,
     });
 
-    const offerResult = await duffel.offers.get(String(offerId));
-    const offer = offerResult?.data;
+    const resolvedOffer = await resolveOfferForCheckout({
+      offerId: String(offerId),
+      offer: offer || null,
+    });
 
-    if (!offer) {
+    if (!resolvedOffer) {
       return res.status(404).json({
         ok: false,
         error: 'offer_no_longer_available',
       });
     }
 
-    const offerPassengerId = getFirstOfferPassengerId(offer);
+    const offerPassengerId = getFirstOfferPassengerId(resolvedOffer);
 
-    const flightAmount = Number(offer.total_amount || 0);
-    const currencyUpper = String(offer.total_currency || 'EUR').toUpperCase();
+    const flightAmount = Number(resolvedOffer.total_amount || 0);
+    const currencyUpper = String(resolvedOffer.total_currency || 'EUR').toUpperCase();
     const currencyLower = currencyUpper.toLowerCase();
     const serviceFee = getServiceFee(flightAmount, currencyUpper);
     const totalAmount = flightAmount + serviceFee;
@@ -261,7 +318,7 @@ router.post('/api/payments/create-intent', async (req, res) => {
         enabled: true,
       },
       metadata: {
-        offerId: String(offer.id || offerId),
+        offerId: String(resolvedOffer.id || offerId),
         passengerEmail: String(passenger.email),
         offerPassengerId,
       },
@@ -272,7 +329,7 @@ router.post('/api/payments/create-intent', async (req, res) => {
       .slice(2, 10)}`;
 
     bookingDrafts.set(bookingDraftId, {
-      offerId: String(offer.id || offerId),
+      offerId: String(resolvedOffer.id || offerId),
       offerAmount: flightAmount,
       offerCurrency: currencyUpper,
       serviceFee,
@@ -284,10 +341,11 @@ router.post('/api/payments/create-intent', async (req, res) => {
       },
       paymentIntentId: paymentIntent.id,
       createdAt: Date.now(),
+      offerSnapshot: resolvedOffer,
     });
 
     console.log('[FLIGHT PAY] create-intent success', {
-      offerId: String(offer.id || offerId),
+      offerId: String(resolvedOffer.id || offerId),
       bookingDraftId,
       totalAmount,
       currency: currencyUpper,
@@ -466,8 +524,10 @@ router.post('/api/bookings/confirm', async (req, res) => {
       bnoBookingRef: confirmedBooking?.bno_booking_ref || null,
     });
   } catch (e: any) {
+    const message = e?.message || String(e);
+
     console.error('[FLIGHT PAY] confirm failed', {
-      message: e?.message || String(e),
+      message,
       duffel: e?.duffel || null,
       bookingId,
     });
@@ -489,9 +549,17 @@ router.post('/api/bookings/confirm', async (req, res) => {
       });
     }
 
+    if (isDuffelOfferGoneMessage(message)) {
+      return res.status(409).json({
+        ok: false,
+        error: 'offer_no_longer_available',
+        detail: message,
+      });
+    }
+
     return res.status(500).json({
       ok: false,
-      error: e?.message || 'Kunne ikke fullføre booking',
+      error: message || 'Kunne ikke fullføre booking',
     });
   }
 });

@@ -42,13 +42,14 @@ function getServiceFee(amount, currency) {
         return 99;
     return 69;
 }
-function buildOfferPayload(offer) {
+function buildOfferPayload(offer, offerRequestId) {
     const totalAmount = Number(offer?.total_amount || 0);
     const totalCurrency = String(offer?.total_currency || 'EUR').toUpperCase();
     const serviceFee = getServiceFee(totalAmount, totalCurrency);
     const totalWithFee = totalAmount + serviceFee;
     return {
         ...offer,
+        offer_request_id: offerRequestId || offer?.offer_request_id || null,
         service_fee_amount: serviceFee,
         total_with_fee: totalWithFee,
     };
@@ -128,7 +129,7 @@ router.post('/search', async (req, res) => {
         });
         const offerRequest = result.data;
         const offers = 'offers' in offerRequest
-            ? (offerRequest.offers || []).map(buildOfferPayload)
+            ? (offerRequest.offers || []).map((offer) => buildOfferPayload(offer, offerRequest?.id || null))
             : [];
         console.log('[DUFFEL] search success', {
             offerRequestId: offerRequest?.id || null,

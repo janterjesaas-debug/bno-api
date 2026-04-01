@@ -2699,7 +2699,7 @@ Målet ditt er å hjelpe brukeren før, under og etter reisen.
 
 VIKTIGE REGLER:
 1. Prioriter alltid BNO Travel sitt eget innhold først.
-2. Du må ALDRI finne opp overnatting, priser, tilgjengelighet, navn på hytter/leiligheter eller områder.
+2. Du må ALDRI finne opp overnatting, priser, tilgjengelighet, navn på hytter/leiligheter, områder, fly, tider, aktiviteter eller reisevilkår.
 3. Hvis du får "BNO_AVAILABILITY_CONTEXT", skal du KUN bruke dataene som står der.
 4. Hvis BNO_AVAILABILITY_CONTEXT inneholder ekte treff, skal du ikke gi generelle svar først.
 5. Hvis det er 0 treff, si det tydelig og foreslå hvordan brukeren kan justere søket.
@@ -2711,6 +2711,11 @@ VIKTIGE REGLER:
 11. Ikke dikt opp konkrete aktiviteter, restauranter, spa, treningstilbud eller reisevilkår som ikke finnes i BNO_CONTENT_CONTEXT.
 12. Hvis BNO_CONTENT_CONTEXT er på norsk, men brukeren skriver på et annet språk, kan du oversette og oppsummere korrekt til brukerens språk.
 13. Hvis noe ikke er sanntidsbookbart, vær tydelig på det.
+14. Når reisevilkår inneholder konkrete tall, aldersgrenser, tider eller beløp, skal du gjengi disse eksplisitt og ikke bare oppsummere generelt.
+15. Hvis spørsmålet gjelder aldersgrense, og innholdet sier både hovedregel og unntak, skal du nevne begge deler.
+16. Hvis spørsmålet gjelder innsjekk og utsjekk, og tidene finnes i BNO_CONTENT_CONTEXT, skal du oppgi de eksakte tidene.
+17. Hvis brukeren ber om booking av fly eller overnatting, skal du være tydelig på at booking fullføres via knapp/checkout i appen.
+18. Du skal ikke samle inn navn, e-post, telefonnummer, passasjerdata eller betalingsinformasjon i chatten.
 
 Når brukeren spør om overnatting:
 - bruk BNO Travel sitt eget innhold først
@@ -2721,6 +2726,11 @@ Når brukeren spør om overnatting:
 - du skal ikke samle inn navn, e-post, telefonnummer eller betalingsinformasjon i chatten for å fullføre overnattingsbooking
 - hvis bookingAction finnes, skal du heller oppfordre brukeren til å bruke bookingknappen
 - du skal ikke si at en booking er registrert eller fullført med mindre systemet faktisk har gjort det
+
+- Hvis brukeren spør om aldersgrense, må du alltid oppgi:
+  1) hovedregelen på 20 år
+  2) unntaket for 18–20 år med egen avtale
+  3) særregelen for nyttår, påske og Trysilsmellen
 
 Hvis du får BNO_AVAILABILITY_CONTEXT:
 - bruk kun disse dataene som sanntidsgrunnlag
@@ -2735,6 +2745,7 @@ Hvis du får BNO_CONTENT_CONTEXT:
 - oppsummer konkret og nyttig
 - hvis brukeren spør etter forslag, bruk innholdet aktivt
 - ikke dikt opp detaljer som ikke finnes i konteksten
+- hvis brukeren spør om reisevilkår, svar med de konkrete opplysningene som faktisk står i innholdet
 
 Hvis du får BNO_FLIGHT_CONTEXT:
 - bruk dette som verifiserte flydata fra BNO Travel
@@ -3211,8 +3222,66 @@ function detectTravelContentIntent(messageRaw) {
         'hva kan vi gjøre',
         'alpint',
         'langrenn',
+        'fitness',
+        'gym',
+        'yoga',
+        'treningssenter',
     ];
     return keywords.some((word) => message.includes(word));
+}
+function prioritizeTravelTermItems(items, messageRaw) {
+    if (!Array.isArray(items) || items.length === 0)
+        return [];
+    const message = normalizeTravelHelperText(messageRaw);
+    const scoreItem = (item) => {
+        const title = normalizeTravelHelperText(item?.title || '');
+        const summary = normalizeTravelHelperText(item?.summary || '');
+        const body = normalizeTravelHelperText(item?.body || '');
+        const text = `${title} ${summary} ${body}`;
+        let score = 0;
+        if (message.includes('aldersgrense') || message.includes('18 ar') || message.includes('20 ar')) {
+            if (text.includes('aldersgrense'))
+                score += 120;
+            if (text.includes('18 og 20'))
+                score += 90;
+            if (text.includes('20 ar'))
+                score += 60;
+            if (text.includes('23 ar'))
+                score += 40;
+            if (text.includes('egen avtale'))
+                score += 80;
+            if (text.includes('depositum'))
+                score += 25;
+        }
+        if (message.includes('innsjekk') || message.includes('utsjekk')) {
+            if (text.includes('innsjekk'))
+                score += 80;
+            if (text.includes('utsjekk'))
+                score += 80;
+            if (text.includes('17.00'))
+                score += 40;
+            if (text.includes('11.00'))
+                score += 40;
+            if (text.includes('14.00'))
+                score += 20;
+        }
+        if (message.includes('avbestilling') || message.includes('avbestille')) {
+            if (text.includes('avbestilling'))
+                score += 80;
+            if (text.includes('forsikring'))
+                score += 20;
+        }
+        if (message.includes('depositum')) {
+            if (text.includes('depositum'))
+                score += 80;
+            if (text.includes('2000'))
+                score += 40;
+        }
+        return { ...item, __priorityScore: score };
+    };
+    return items
+        .map(scoreItem)
+        .sort((a, b) => Number(b.__priorityScore || 0) - Number(a.__priorityScore || 0));
 }
 function extractTravelContentCategory(messageRaw) {
     const message = normalizeTravelHelperText(messageRaw);
@@ -3265,6 +3334,34 @@ function extractTravelContentCategory(messageRaw) {
     }
     return null;
 }
+function extractTravelTermsKeywords(messageRaw) {
+    const message = normalizeTravelHelperText(messageRaw);
+    const keywords = [];
+    if (message.includes('aldersgrense') ||
+        message.includes('18 ar') ||
+        message.includes('20 ar') ||
+        message.includes('23 ar')) {
+        keywords.push('aldersgrense');
+    }
+    if (message.includes('innsjekk') ||
+        message.includes('utsjekk') ||
+        message.includes('check in') ||
+        message.includes('check-in') ||
+        message.includes('check out') ||
+        message.includes('checkout')) {
+        keywords.push('innsjekk', 'utsjekk', 'check-in', 'check-out');
+    }
+    if (message.includes('avbestilling') || message.includes('avbestille')) {
+        keywords.push('avbestilling');
+    }
+    if (message.includes('depositum')) {
+        keywords.push('depositum');
+    }
+    if (message.includes('husregler')) {
+        keywords.push('husregler');
+    }
+    return [...new Set(keywords)];
+}
 async function getTravelHelperContent(opts) {
     const destinationSlug = String(opts.destinationSlug || 'global').trim().toLowerCase();
     const category = opts.category ? String(opts.category).trim().toLowerCase() : null;
@@ -3287,9 +3384,21 @@ async function getTravelHelperContent(opts) {
             : [destinationSlug, 'global'])
             .order('is_featured', { ascending: false })
             .order('sort_order', { ascending: true })
-            .limit(8);
+            .limit(20);
         if (category) {
             query = query.eq('category', category);
+        }
+        if (category === 'travel_terms' && opts.message) {
+            const keywordHints = extractTravelTermsKeywords(opts.message);
+            if (keywordHints.length > 0) {
+                const orParts = [];
+                for (const keyword of keywordHints) {
+                    orParts.push(`title.ilike.%${keyword}%`);
+                    orParts.push(`summary.ilike.%${keyword}%`);
+                    orParts.push(`body.ilike.%${keyword}%`);
+                }
+                query = query.or(orParts.join(','));
+            }
         }
         return await query;
     };
@@ -3376,6 +3485,18 @@ function isTravelHelperFlightBookingIntent(messageRaw) {
         'bestill det første flyet',
         'book det forste flyet',
         'book det første flyet',
+        'jeg vil bestille det forste',
+        'jeg vil bestille det første',
+        'jeg vil booke det forste',
+        'jeg vil booke det første',
+        'ja, jeg vil bestille det forste',
+        'ja, jeg vil bestille det første',
+        'ja jeg vil bestille det forste',
+        'ja jeg vil bestille det første',
+        'bestill det forste',
+        'bestill det første',
+        'book det forste',
+        'book det første',
     ];
     return phrases.some((phrase) => message.includes(phrase));
 }
@@ -3561,7 +3682,6 @@ function buildFlightContextText(offers, searchParams) {
             lines.push(`RETUR: ${returnTrip.origin} ${formatFlightTime(returnTrip.departure)} -> ${returnTrip.destination} ${formatFlightTime(returnTrip.arrival)}`);
             lines.push(`RETUR_STOPP: ${returnTrip.stops}`);
         }
-        lines.push(`RAW_OFFER_JSON: ${JSON.stringify(offer)}`);
         lines.push('');
     });
     return lines.join('\n');
@@ -3572,15 +3692,22 @@ function findRequestedFlightOfferFromMessage(messageRaw, offers) {
     const message = normalizeTravelHelperText(messageRaw);
     if (message.includes('forste') ||
         message.includes('første') ||
-        message.includes('første flyet') ||
         message.includes('det forste') ||
-        message.includes('det første')) {
-        return offers[0];
+        message.includes('det første') ||
+        message.includes('1.') ||
+        message.includes('nummer 1')) {
+        return offers[0] || null;
     }
-    if (message.includes('andre') || message.includes('det andre')) {
+    if (message.includes('andre') ||
+        message.includes('det andre') ||
+        message.includes('2.') ||
+        message.includes('nummer 2')) {
         return offers[1] || null;
     }
-    if (message.includes('tredje') || message.includes('det tredje')) {
+    if (message.includes('tredje') ||
+        message.includes('det tredje') ||
+        message.includes('3.') ||
+        message.includes('nummer 3')) {
         return offers[2] || null;
     }
     return offers[0] || null;
@@ -3588,6 +3715,13 @@ function findRequestedFlightOfferFromMessage(messageRaw, offers) {
 app.post('/api/travel-helper', async (req, res) => {
     try {
         const { message, history, searchContext, lastSearchRows, lastSearchParams, lastFlightOffers, lastFlightSearch, lang, } = req.body || {};
+        console.log('TRAVEL_HELPER request', {
+            message,
+            historyCount: Array.isArray(history) ? history.length : 0,
+            hasLastSearchRows: Array.isArray(lastSearchRows) ? lastSearchRows.length : 0,
+            hasLastFlightOffers: Array.isArray(lastFlightOffers) ? lastFlightOffers.length : 0,
+            lang,
+        });
         if (!message || typeof message !== 'string') {
             return res.status(400).json({
                 ok: false,
@@ -3757,10 +3891,12 @@ app.post('/api/travel-helper', async (req, res) => {
                     destinationSlug: destinationForContent,
                     category: contentCategory,
                     language: appLang,
+                    message: currentMessageText,
                 });
                 contentItemsCount = contentItems.length;
                 if (contentItems.length > 0) {
-                    contentContext = buildTravelContentContext(contentItems);
+                    const prioritizedItems = prioritizeTravelTermItems(contentItems, currentMessageText);
+                    contentContext = buildTravelContentContext(prioritizedItems.slice(0, 8));
                 }
             }
             catch (contentError) {
@@ -3790,7 +3926,9 @@ app.post('/api/travel-helper', async (req, res) => {
                     if (flightSearchResponse.ok &&
                         flightSearchJson?.ok &&
                         Array.isArray(flightSearchJson?.data?.offers)) {
-                        latestFlightOffers = flightSearchJson.data.offers;
+                        latestFlightOffers = Array.isArray(flightSearchJson.data.offers)
+                            ? flightSearchJson.data.offers.slice(0, 5)
+                            : [];
                         latestFlightSearch = {
                             origin: flightParams.origin,
                             destination: flightParams.destination,
@@ -3876,6 +4014,14 @@ app.post('/api/travel-helper', async (req, res) => {
                 content: String(message),
             },
         ];
+        console.log('TRAVEL_HELPER context sizes', {
+            dynamicContextLength: dynamicContext.length,
+            contentContextLength: contentContext.length,
+            flightContextLength: flightContext.length,
+            inputCount: input.length,
+            contentItemsCount,
+            flightOffersCount: latestFlightOffers.length,
+        });
         const response = await fetch('https://api.openai.com/v1/responses', {
             method: 'POST',
             headers: {
@@ -3887,7 +4033,22 @@ app.post('/api/travel-helper', async (req, res) => {
                 input,
             }),
         });
-        const data = await response.json();
+        const rawResponseText = await response.text();
+        let data = null;
+        try {
+            data = rawResponseText ? JSON.parse(rawResponseText) : null;
+        }
+        catch (parseError) {
+            console.error('travel-helper OpenAI non-json error', {
+                status: response.status,
+                statusText: response.statusText,
+                bodyStart: rawResponseText?.slice(0, 500),
+            });
+            return res.status(500).json({
+                ok: false,
+                error: 'openai_non_json_response',
+            });
+        }
         if (!response.ok) {
             console.error('travel-helper OpenAI error', data);
             return res.status(500).json({
@@ -3948,9 +4109,10 @@ app.post('/api/travel-helper', async (req, res) => {
             latestFlightSearch) {
             const matchedOffer = findRequestedFlightOfferFromMessage(currentMessageText, latestFlightOffers);
             if (matchedOffer) {
+                const outbound = getFlightSliceSummary(matchedOffer?.slices?.[0]);
                 flightAction = {
                     type: 'book_flight',
-                    label: 'Fullfør flybestilling',
+                    label: `Fullfør flybestilling med ${matchedOffer?.owner?.name || outbound.airline || 'flyselskap'}`,
                     offer: matchedOffer,
                     search: {
                         origin: latestFlightSearch.origin,
@@ -3977,7 +4139,7 @@ app.post('/api/travel-helper', async (req, res) => {
                 : null,
             flightSearchContext: latestFlightOffers.length > 0 && latestFlightSearch
                 ? {
-                    offers: latestFlightOffers,
+                    offers: latestFlightOffers.slice(0, 5),
                     search: latestFlightSearch,
                 }
                 : null,
