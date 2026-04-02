@@ -4100,6 +4100,235 @@ function buildDeterministicAccommodationReply(rows: any[], params: any): string 
 
   return lines.join('\n');
 }
+function buildDeterministicTripPackageReply(opts: {
+  tripProposal: TripProposal | null;
+  flightOffers: any[];
+  flightSearch: {
+    origin: string;
+    destination: string;
+    departureDate: string;
+    returnDate?: string | null;
+    adults: number;
+    cabinClass: 'economy' | 'premium_economy' | 'business' | 'first';
+    directOnly: boolean;
+  } | null;
+  searchRows: any[];
+  searchParams: {
+    from: string;
+    to: string;
+    adults: number;
+    area: string;
+    promo: string;
+    lang: string;
+  } | null;
+  message: string;
+}): string {
+  const proposal = opts.tripProposal;
+  const lines: string[] = [];
+
+  const destinationLabel =
+    proposal?.destination?.label ||
+    opts.searchParams?.area ||
+    extractTravelHelperArea(opts.message) ||
+    'destinasjonen';
+
+  lines.push(`Her er et samlet reiseforslag til ${destinationLabel}:`);
+  lines.push('');
+
+  // Fly
+  if (proposal?.flight) {
+    const outbound = getFlightSliceSummary(proposal.flight?.slices?.[0]);
+    const returnTrip = getFlightSliceSummary(proposal.flight?.slices?.[1]);
+
+    lines.push('Fly:');
+    lines.push(`- Flyselskap: ${proposal.flight?.owner?.name || outbound.airline || 'Ukjent'}`);
+    lines.push(
+      `- Utreise: ${outbound.origin} ${formatFlightTime(outbound.departure)} -> ${outbound.destination} ${formatFlightTime(outbound.arrival)}`
+    );
+
+    if (returnTrip?.origin || returnTrip?.destination) {
+      lines.push(
+        `- Retur: ${returnTrip.origin} ${formatFlightTime(returnTrip.departure)} -> ${returnTrip.destination} ${formatFlightTime(returnTrip.arrival)}`
+      );
+    }
+
+    const totalPrice =
+      proposal.flight?.total_with_fee ??
+      proposal.flight?.total_amount ??
+      null;
+
+    if (totalPrice != null) {
+      lines.push(`- Pris: ${totalPrice} ${proposal.flight?.total_currency || ''}`.trim());
+    }
+
+    lines.push('');
+  } else if (Array.isArray(opts.flightOffers) && opts.flightOffers.length > 0) {
+    const bestFlight = rankFlightOffersForTrip(opts.flightOffers, opts.message)[0];
+
+    if (bestFlight) {
+      const outbound = getFlightSliceSummary(bestFlight?.slices?.[0]);
+      const returnTrip = getFlightSliceSummary(bestFlight?.slices?.[1]);
+
+      lines.push('Fly:');
+      lines.push(`- Flyselskap: ${bestFlight?.owner?.name || outbound.airline || 'Ukjent'}`);
+      lines.push(
+        `- Utreise: ${outbound.origin} ${formatFlightTime(outbound.departure)} -> ${outbound.destination} ${formatFlightTime(outbound.arrival)}`
+      );
+
+      if (returnTrip?.origin || returnTrip?.destination) {
+        lines.push(
+          `- Retur: ${returnTrip.origin} ${formatFlightTime(returnTrip.departure)} -> ${returnTrip.destination} ${formatFlightTime(returnTrip.arrival)}`
+        );
+      }
+
+      const totalPrice =
+        bestFlight?.total_with_fee ??
+        bestFlight?.total_amount ??
+        null;
+
+      if (totalPrice != null) {
+        lines.push(`- Pris: ${totalPrice} ${bestFlight?.total_currency || ''}`.trim());
+      }
+
+      lines.push('');
+    }
+  } else if (opts.flightSearch) {
+    lines.push('Fly:');
+    lines.push(
+      `- Jeg fant ikke et verifisert flyforslag akkurat nå for ${opts.flightSearch.origin} til ${opts.flightSearch.destination}.`
+    );
+    lines.push('');
+  } else {
+    lines.push('Fly:');
+    lines.push('- Jeg fant ikke et verifisert flyforslag akkurat nå.');
+    lines.push('');
+  }
+
+  // Overnatting
+  if (proposal?.accommodation) {
+    const acc = proposal.accommodation;
+    const name = acc?.Name || acc?.name || 'Ukjent overnatting';
+    const area = acc?.ServiceName || acc?.serviceName || opts.searchParams?.area || 'Ukjent område';
+    const capacity = acc?.Capacity ?? acc?.capacity ?? 'Ukjent';
+    const price =
+      acc?.PriceTotal != null && acc?.PriceCurrency
+        ? `${acc.PriceTotal} ${acc.PriceCurrency}`
+        : acc?.priceTotal != null && acc?.priceCurrency
+          ? `${acc.priceTotal} ${acc.priceCurrency}`
+          : 'Pris ikke tilgjengelig';
+
+    lines.push('Overnatting:');
+    lines.push(`- ${name}`);
+    lines.push(`- Område: ${area}`);
+    lines.push(`- Kapasitet: ${capacity}`);
+    lines.push(`- Pris: ${price}`);
+
+    const description = acc?.Description || acc?.description || '';
+    if (description) {
+      lines.push(`- Beskrivelse: ${description}`);
+    }
+
+    lines.push('');
+  } else if (Array.isArray(opts.searchRows) && opts.searchRows.length > 0 && opts.searchParams) {
+    const rankedRows = rankTravelHelperAvailabilityRows(
+      opts.searchRows,
+      opts.searchParams.adults || null,
+      opts.message
+    );
+
+    const best = rankedRows[0];
+
+    if (best) {
+      const name = best?.Name || best?.name || 'Ukjent overnatting';
+      const area = best?.ServiceName || best?.serviceName || opts.searchParams.area || 'Ukjent område';
+      const capacity = best?.Capacity ?? best?.capacity ?? 'Ukjent';
+      const price =
+        best?.PriceTotal != null && best?.PriceCurrency
+          ? `${best.PriceTotal} ${best.PriceCurrency}`
+          : best?.priceTotal != null && best?.priceCurrency
+            ? `${best.priceTotal} ${best.priceCurrency}`
+            : 'Pris ikke tilgjengelig';
+
+      lines.push('Overnatting:');
+      lines.push(`- ${name}`);
+      lines.push(`- Område: ${area}`);
+      lines.push(`- Kapasitet: ${capacity}`);
+      lines.push(`- Pris: ${price}`);
+
+      const description = best?.Description || best?.description || '';
+      if (description) {
+        lines.push(`- Beskrivelse: ${description}`);
+      }
+
+      lines.push('');
+    }
+  } else if (opts.searchParams) {
+    lines.push('Overnatting:');
+    lines.push(
+      `- Jeg fant ikke verifisert overnatting akkurat nå for ${opts.searchParams.area} fra ${opts.searchParams.from} til ${opts.searchParams.to}.`
+    );
+    lines.push('');
+  } else {
+    lines.push('Overnatting:');
+    lines.push('- Jeg fant ikke verifisert overnatting akkurat nå.');
+    lines.push('');
+  }
+
+  // Transport
+  if (proposal?.transport) {
+    lines.push('Transport:');
+    lines.push(`- ${proposal.transport}`);
+    lines.push('');
+  }
+
+  // Aktiviteter
+  if (Array.isArray(proposal?.activities) && proposal.activities.length > 0) {
+    lines.push('Aktiviteter:');
+    proposal.activities.slice(0, 3).forEach((item: any) => {
+      lines.push(`- ${item?.title || 'Aktivitet'}`);
+      if (item?.summary) {
+        lines.push(`  ${item.summary}`);
+      }
+    });
+    lines.push('');
+  } else {
+    lines.push('Aktiviteter:');
+    lines.push('- Jeg fant ikke verifiserte aktivitetsforslag akkurat nå.');
+    lines.push('');
+  }
+
+  // Restauranter
+  if (Array.isArray(proposal?.restaurants) && proposal.restaurants.length > 0) {
+    lines.push('Restauranter:');
+    proposal.restaurants.slice(0, 3).forEach((item: any) => {
+      lines.push(`- ${item?.title || 'Restaurant'}`);
+      if (item?.summary) {
+        lines.push(`  ${item.summary}`);
+      }
+    });
+    lines.push('');
+  } else {
+    lines.push('Restauranter:');
+    lines.push('- Jeg fant ikke verifiserte restaurantforslag akkurat nå.');
+    lines.push('');
+  }
+
+  // Dagsprogram
+  if (Array.isArray(proposal?.itinerary) && proposal.itinerary.length > 0) {
+    lines.push('Enkelt dagsprogram:');
+    proposal.itinerary.forEach((day) => {
+      lines.push(`${day.day}. ${day.title}`);
+      day.items.forEach((item) => {
+        lines.push(`- ${item}`);
+      });
+    });
+    lines.push('');
+  }
+
+  lines.push('Fly og overnatting fullføres via bookingknappene i appen.');
+
+  return lines.join('\n');
+}
 
 function isTravelHelperBookingIntent(messageRaw: string): boolean {
   const message = normalizeTravelHelperText(messageRaw);
@@ -6014,15 +6243,28 @@ app.post('/api/travel-helper', async (req, res) => {
     }
 
     const shouldForceDeterministicAccommodationReply =
-      responseMode === 'accommodation_only' &&
-      latestSearchRows.length > 0 &&
-      latestSearchParams &&
-      !hostRentalIntent;
+  responseMode === 'accommodation_only' &&
+  latestSearchRows.length > 0 &&
+  latestSearchParams &&
+  !hostRentalIntent;
 
-    const safeReply =
-      shouldForceDeterministicAccommodationReply
-        ? buildDeterministicAccommodationReply(latestSearchRows, latestSearchParams)
-        : (reply || 'Beklager, jeg fikk ikke laget et svar akkurat nå.');
+const shouldForceDeterministicTripReply =
+  responseMode === 'trip_package' &&
+  !!tripProposal;
+
+const safeReply =
+  shouldForceDeterministicAccommodationReply
+    ? buildDeterministicAccommodationReply(latestSearchRows, latestSearchParams)
+    : shouldForceDeterministicTripReply
+      ? buildDeterministicTripPackageReply({
+          tripProposal,
+          flightOffers: latestFlightOffers,
+          flightSearch: latestFlightSearch,
+          searchRows: latestSearchRows,
+          searchParams: latestSearchParams,
+          message: currentMessageText,
+        })
+      : (reply || 'Beklager, jeg fikk ikke laget et svar akkurat nå.');
 
     return res.json({
       ok: true,
