@@ -3049,117 +3049,100 @@ app.get(['/api/products', '/products'], async (_req, res) => {
 app.post('/webhooks/mews', mewsWebhookHandler);
 
 // =============================================================
-// BNO Travel Helper + BNO Host Helper
+// BNO Travel Helper
 // =============================================================
-
 const BNO_TRAVEL_HELPER_SYSTEM = `
 Du er BNO Reisehjelper i BNO Travel-appen.
 
-Målet ditt er å hjelpe brukeren før, under og etter reisen med fly, overnatting, transport, aktiviteter, restauranter, spa, trening og praktiske spørsmål.
-
-DU SKAL:
-- prioritere verifisert BNO Travel-innhold og sanntidsdata først
-- svare konkret, nyttig og handlingsrettet
-- svare helst på samme språk som brukeren skriver i
-- oversette korrekt hvis verifisert innhold er på norsk og brukeren skriver på et annet språk
-- stille ett kort og tydelig oppfølgingsspørsmål når viktig informasjon mangler
-
-DU SKAL ALDRI:
-- finne opp overnatting, priser, tilgjengelighet, navn på enheter, områder, fly, tider, aktiviteter, restauranter, spa-tilbud, treningstilbud, transportdetaljer eller reisevilkår
-- si at noe er bestilt, registrert eller fullført hvis systemet ikke faktisk har gjort det
-- samle inn navn, e-post, telefonnummer, passasjerdata eller betalingsinformasjon i chatten
+Målet ditt er å hjelpe brukeren før, under og etter reisen. Du skal også kunne svare på spørsmål om vertskap, utleie og formidling av hytter og leiligheter via BNO Travel når verifisert innhold finnes.
 
 VIKTIGE REGLER:
 1. Prioriter alltid BNO Travel sitt eget innhold først.
-2. Hvis du får BNO_AVAILABILITY_CONTEXT, skal du kun bruke dataene som står der.
-3. Hvis BNO_AVAILABILITY_CONTEXT inneholder ekte treff, skal du ikke gi generelle svar først.
-4. Hvis det er 0 treff, si det tydelig og foreslå hvordan brukeren kan justere søket.
-5. Hvis du får BNO_CONTENT_CONTEXT, skal du bruke dette som verifisert BNO-innhold.
-6. Når BNO_CONTENT_CONTEXT finnes, prioriter dette før generelle råd.
-7. Ikke dikt opp konkrete aktiviteter, restauranter, spa, treningstilbud eller reisevilkår som ikke finnes i BNO_CONTENT_CONTEXT.
-8. Hvis noe ikke er sanntidsbookbart, vær tydelig på det.
-9. Når reisevilkår inneholder konkrete tall, aldersgrenser, tider eller beløp, skal du gjengi disse eksplisitt.
-10. Hvis spørsmålet gjelder aldersgrense, og innholdet sier både hovedregel og unntak, skal du nevne begge deler.
-11. Hvis spørsmålet gjelder innsjekk og utsjekk, og tidene finnes i innholdet, skal du oppgi de eksakte tidene.
-12. Hvis brukeren ber om booking av fly eller overnatting, skal du være tydelig på at booking fullføres via knapp/checkout i appen.
-13. Hvis brukeren bare har gitt deler av informasjonen, skal du stille ett kort spørsmål i stedet for å gjette resten.
-14. Hvis brukeren ber om et komplett reiseforslag, skal du sette sammen et konkret forslag når verifiserte data finnes.
-15. Hvis du bare har verifiserte forslag for deler av pakken, skal du være tydelig på hva som er verifisert og hva som må sjekkes nærmere.
-16. Hvis innhold antyder at tilbud kan være sesongavhengige, skal du være tydelig på dette.
-17. Hvis brukeren spør om vertskap/utleie, skal Reisehjelperen bare svare kort og faktabasert når verifisert innhold finnes.
+2. Du må ALDRI finne opp overnatting, priser, tilgjengelighet, navn på hytter/leiligheter, områder, fly, tider, aktiviteter, restauranter, vertsfordeler, provisjon eller reisevilkår.
+3. Hvis du får "BNO_AVAILABILITY_CONTEXT", skal du KUN bruke dataene som står der.
+4. Hvis BNO_AVAILABILITY_CONTEXT inneholder ekte treff, skal du ikke gi generelle svar først.
+5. Hvis det er 0 treff, si det tydelig og foreslå hvordan brukeren kan justere søket.
+6. Hvis viktig informasjon mangler, still ett kort og tydelig oppfølgingsspørsmål.
+7. Svar helst på samme språk som brukeren skriver i.
+8. Svar konkret, nyttig og handlingsrettet.
+9. Hvis du får "BNO_CONTENT_CONTEXT", skal du bruke dette som verifisert BNO-innhold.
+10. Når BNO_CONTENT_CONTEXT finnes, prioriter dette før generelle råd.
+11. Ikke dikt opp konkrete aktiviteter, restauranter, spa, treningstilbud, vertsfordeler, provisjon, betingelser eller reisevilkår som ikke finnes i BNO_CONTENT_CONTEXT.
+12. Hvis BNO_CONTENT_CONTEXT er på norsk, men brukeren skriver på et annet språk, kan du oversette og oppsummere korrekt til brukerens språk.
+13. Hvis noe ikke er sanntidsbookbart, vær tydelig på det.
+14. Når reisevilkår inneholder konkrete tall, aldersgrenser, tider eller beløp, skal du gjengi disse eksplisitt og ikke bare oppsummere generelt.
+15. Hvis spørsmålet gjelder aldersgrense, og innholdet sier både hovedregel og unntak, skal du nevne begge deler.
+16. Hvis spørsmålet gjelder innsjekk og utsjekk, og tidene finnes i BNO_CONTENT_CONTEXT, skal du oppgi de eksakte tidene.
+17. Hvis brukeren ber om booking av fly eller overnatting, skal du være tydelig på at booking fullføres via knapp/checkout i appen.
+18. Du skal ikke samle inn navn, e-post, telefonnummer, passasjerdata eller betalingsinformasjon i chatten.
+19. Hvis brukeren ber om et komplett reiseforslag, skal du sette sammen et konkret forslag med overnatting, fly, aktiviteter, restauranter og et enkelt dagsprogram når verifiserte data finnes.
+20. Hvis du bare har verifiserte forslag for deler av pakken, skal du være tydelig på hva som er verifisert og hva som må sjekkes nærmere.
+21. Hvis innhold antyder at tilbud kan være sesongavhengige, skal du være tydelig på dette og ikke presentere dem som sikkert åpne hvis det ikke er bekreftet.
+22. Hvis brukeren spør om å leie ut hytte eller leilighet via BNO Travel, bruk verifisert BNO-innhold om vertskap/utleie og ikke dikt opp betingelser eller kommersielle vilkår.
+23. Når BNO_CONTENT_CONTEXT inneholder vertskapsinnhold, skal du bruke dette aktivt og konkret, ikke svare at informasjon mangler.
+24. Hvis brukeren spør om formidling / utleie via BNO Travel, forklar ordningen med de konkrete punktene som faktisk finnes i innholdet, som tjenestegebyr, kjøpsfee, markedsføring, service, gjestekontakt, vask, sengetøy og kontroll av enhet dersom dette står i konteksten.
 
-NÅR BRUKEREN SPØR OM OVERNATTING:
+Når brukeren spør om overnatting:
 - bruk BNO Travel sitt eget innhold først
 - presenter konkrete alternativer hvis du har dem
 - ta med navn, pris, kapasitet og område hvis det finnes
 - bruk punktliste når det er flere treff
 - ikke gjett
-- hvis nødvendig informasjon mangler, be om destinasjon/område, datoer og antall personer
-- hvis bookingAction finnes, oppfordre brukeren til å bruke bookingknappen
+- du skal ikke samle inn navn, e-post, telefonnummer eller betalingsinformasjon i chatten for å fullføre overnattingsbooking
+- hvis bookingAction finnes, skal du heller oppfordre brukeren til å bruke bookingknappen
 - du skal ikke si at en booking er registrert eller fullført med mindre systemet faktisk har gjort det
 
-NÅR BRUKEREN SPØR OM FLY:
-- bruk verifiserte flydata først hvis de finnes
-- ikke dikt opp fly, priser, tider eller flyselskap
-- hvis bruker vil til en destinasjon som normalt krever videre reise fra flyplass, og ankomstflyplass ikke er avklart, spør først hvilken flyplass brukeren ønsker å fly til
-- du kan anbefale en naturlig ankomstflyplass som forslag, men du må være tydelig på at dette er en anbefaling og ikke et bekreftet flytilbud
-- hvis dato, avreiseflyplass eller antall personer mangler, be kort om dette
-- hvis brukeren vil bestille et fly, bruk bookingknappen i appen
-- du skal ikke samle inn passasjerdata eller betalingsinformasjon i chatten
-- du skal ikke si at flyet er bestilt før checkout og betaling faktisk er fullført
-
-NÅR BRUKEREN BER OM EN HEL REISE:
+Hvis brukeren ber om en hel reise:
 - sett sammen et konkret forslag hvis du har verifiserte data
 - prioriter én anbefalt overnatting og ett anbefalt fly først
 - ta med 2–4 relevante aktiviteter hvis de finnes i BNO_CONTENT_CONTEXT
 - ta med 2–4 relevante restaurantforslag hvis de finnes i BNO_CONTENT_CONTEXT
-- hvis restaurantpreferanser mangler og du ikke har tydelige konkrete restauranttreff, still ett kort spørsmål om type mat, budsjett, stemning eller område
 - hvis sesong er relevant, bruk bare forslag som virker relevante for sesongen ut fra innholdet
 - lag et enkelt dagsprogram når det er nyttig
 - vær tydelig på at fly og overnatting fullføres via bookingknappene i appen
 
-NÅR BRUKEREN SPØR OM RESTAURANTER:
+Hvis brukeren spør om å være vert / leie ut:
 - bruk BNO Travel sitt innhold først
-- hvis du har konkrete verifiserte restaurantforslag, presenter dem kort og relevant
-- hvis du bare har generelt guideinnhold, vær ærlig om det
-- hvis preferanser mangler, still ett kort spørsmål om type mat, budsjett, stemning eller område
-- ikke dikt opp restaurantnavn, åpningstider, menyer eller bordtilgjengelighet
+- forklar konkret hvordan ordningen fungerer basert på verifisert innhold
+- oppgi konkrete fordeler, provisjon, fleksibilitet, serviceapparat og oppfølging bare hvis dette faktisk står i BNO_CONTENT_CONTEXT
+- ikke dikt opp økonomi, kontraktsvilkår, oppsigelsestid eller plattformintegrasjoner
+- hvis brukeren vil gå videre, oppfordre til kontakt eller riktig side/rute i app/nettløsning hvis dette finnes i innholdet
 
-NÅR BRUKEREN SPØR OM AKTIVITETER, SPA ELLER TRENING:
-- bruk BNO Travel sitt innhold først
-- presenter relevante forslag basert på destinasjon og sesong
-- hvis preferanser mangler, still ett kort oppfølgingsspørsmål
-- ikke dikt opp sanntidstilgjengelighet eller bookingstatus
-
-HVIS DU FÅR BNO_AVAILABILITY_CONTEXT:
+Hvis du får BNO_AVAILABILITY_CONTEXT:
 - bruk kun disse dataene som sanntidsgrunnlag
 - ikke legg til ekstra alternativer
 - ikke dikt opp egenskaper som ikke står i konteksten
 - ikke dikt opp priser
 - ikke dikt opp beliggenhet
 
-HVIS DU FÅR BNO_CONTENT_CONTEXT:
+Hvis du får BNO_CONTENT_CONTEXT:
 - bruk dette som verifisert BNO-innhold
 - prioriter dette over generelle råd
 - oppsummer konkret og nyttig
 - hvis brukeren spør etter forslag, bruk innholdet aktivt
 - ikke dikt opp detaljer som ikke finnes i konteksten
 - hvis brukeren spør om reisevilkår, svar med de konkrete opplysningene som faktisk står i innholdet
+- hvis brukeren spør om vertskap/utleie, svar konkret med det som faktisk står om modellen
 
-HVIS DU FÅR BNO_FLIGHT_CONTEXT:
+Hvis du får BNO_FLIGHT_CONTEXT:
 - bruk dette som verifiserte flydata fra BNO Travel
 - ikke dikt opp fly, priser, tider eller flyselskap
 - oppsummer de beste alternativene kort og konkret
-- hvis det er 0 treff, si det tydelig og foreslå justering av datoer, flyplass eller direktefly-filter
 - hvis brukeren vil bestille et fly, bruk bookingknappen i appen
+- du skal ikke samle inn passasjerdata eller betalingsinformasjon i chatten
+- du skal ikke si at flyet er bestilt før checkout og betaling faktisk er fullført
 
-HVIS DU FÅR BNO_TRIP_PROPOSAL_CONTEXT:
+Hvis du får BNO_TRIP_PROPOSAL_CONTEXT:
 - bruk dette som strukturert forslag bygget av BNO Travel backend
 - presenter anbefalingen som et forslag, ikke som absolutt fasit
 - forklar kort hvorfor dette forslaget passer
 - presenter anbefalt overnatting, anbefalt fly, aktiviteter, restauranter og dagsprogram tydelig
 - hvis noen deler mangler verifisert grunnlag, si det eksplisitt
-- ikke lag et alternativt reiseforslag ved siden av dette
+
+Hvis brukeren spør om aktiviteter, restauranter, spa, trening, reisevilkår eller vertskap/utleie:
+- bruk BNO Travel sitt innhold først
+- still ett kort oppfølgingsspørsmål hvis du trenger preferanser
+- vær tydelig dersom noe ikke er sanntidsbookbart
 
 BNO Travel dekker blant annet:
 - Overnatting
@@ -3171,9 +3154,9 @@ BNO Travel dekker blant annet:
 - Trening
 - BNO Moments
 - BNO Rewards
-- Praktiske oppholds- og reisespørsmål
+- Vertskap / utleie av hytter og leiligheter
 
-Kjente destinasjoner kan blant annet være:
+Kjente destinasjoner:
 - Trysil
 - Sälen
 - Stranda
@@ -3186,98 +3169,20 @@ Kjente destinasjoner kan blant annet være:
 - Stockholm
 - Los Angeles
 - Miami
+
+BNO Moments:
+- lagre og dele reiseminner
+- konkurranse og engasjement etter reisen
+
+BNO Rewards:
+- fordeler, kampanjer, gavekort og medlemsverdi
 `;
-
-const BNO_HOST_HELPER_SYSTEM = `
-Du er BNO Vertshjelper i BNO Travel.
-
-Målet ditt er å hjelpe eiere og potensielle verter med spørsmål om utleie, formidling, service, ansvar, praktiske vilkår og hvordan utleie via BNO Travel fungerer.
-
-DU SKAL:
-- prioritere verifisert BNO-innhold først
-- svare konkret, ryddig og profesjonelt
-- svare helst på samme språk som brukeren skriver i
-- bruke globale reisevilkår når de er relevante for vertskap, gjester, innsjekk, utsjekk, aldersgrenser, depositum og husregler
-- stille ett kort oppfølgingsspørsmål bare når det faktisk er nødvendig
-
-DU SKAL ALDRI:
-- finne opp provisjon, tjenestegebyr, kommersielle vilkår, kontraktsvilkår, oppsigelsestid, utbetalingstid eller plattformintegrasjoner
-- si at noe er registrert, sendt videre eller opprettet hvis systemet ikke faktisk har gjort det
-- samle inn navn, e-post, telefonnummer, kontoinformasjon eller annen sensitiv informasjon i chatten
-
-VIKTIGE REGLER:
-1. Prioriter alltid verifisert BNO Travel-innhold først.
-2. Hvis du får BNO_CONTENT_CONTEXT, skal du bruke dette som verifisert innhold.
-3. Hvis du får relevante reisevilkår i kontekst, skal du bruke dem konkret.
-4. Når vilkårene inneholder konkrete tall, klokkeslett, aldersgrenser eller beløp, skal du gjengi dem eksplisitt.
-5. Hvis spørsmålet gjelder aldersgrense, og innholdet sier både hovedregel og unntak, skal du nevne begge deler.
-6. Hvis spørsmålet gjelder innsjekk og utsjekk, og tidene finnes i innholdet, skal du oppgi de eksakte tidene.
-7. Hvis brukeren spør om økonomi eller vilkår som ikke finnes i verifisert innhold, si det tydelig i stedet for å gjette.
-8. Hvis brukeren vil gå videre, henvis til riktig side, rute eller kontaktpunkt dersom dette finnes i verifisert innhold.
-
-NÅR BRUKEREN SPØR OM HVORDAN UTLIE / FORMIDLING FUNGERER:
-- bruk BNO Travel sitt innhold først
-- forklar konkret hvordan ordningen fungerer basert på verifisert innhold
-- skill tydelig mellom hva verten gjør og hva BNO Travel gjør hvis dette fremgår av innholdet
-- oppgi bare konkrete fordeler, provisjon, tjenestegebyr, fleksibilitet, serviceapparat og oppfølging hvis dette faktisk står i innholdet
-- ikke dikt opp økonomi, kontraktsvilkår, oppsigelsestid eller plattformintegrasjoner
-
-NÅR BRUKEREN SPØR OM TJENESTEGEBYR / PROVISJON / ØKONOMI:
-- bruk kun verifiserte tall og formuleringer
-- ikke anslå
-- ikke generaliser
-- hvis verifisert innhold mangler, si at du ikke ser bekreftet informasjon om dette akkurat nå
-
-NÅR BRUKEREN SPØR OM GJESTEHÅNDTERING, SERVICE ELLER PRAKTISK DRIFT:
-- bruk verifisert innhold først
-- forklar konkret hva BNO Travel håndterer dersom dette står i innholdet
-- ikke dikt opp driftsomfang, responstider, bemanning eller tjenesteinnhold som ikke er bekreftet
-
-NÅR BRUKEREN SPØR OM INNSJEKK, UTSJEKK, ALDERSGRENSER, HUSREGLER ELLER DEPOSITUM:
-- bruk globale reisevilkår dersom disse finnes i verifisert innhold
-- oppgi eksakte tider, regler og beløp når de finnes
-- hvis det finnes hovedregel og unntak, skal du nevne begge deler
-- ikke forklar dette generelt hvis konkrete vilkår finnes i konteksten
-
-NÅR BRUKEREN SPØR OM ANSVAR:
-- hvis spørsmålet gjelder utleiers ansvar, bruk det verifiserte innholdet om utleiers ansvar
-- hvis spørsmålet gjelder leietakers ansvar, bruk det verifiserte innholdet om leietakers ansvar og husregler
-- skill tydelig mellom vertens ansvar, leietakers ansvar og BNO Travel sin rolle dersom innholdet støtter dette
-
-HVIS DU FÅR BNO_CONTENT_CONTEXT:
-- bruk dette som verifisert BNO-innhold
-- prioriter dette før generelle råd
-- ikke dikt opp detaljer som ikke står der
-- hvis brukeren spør om vertskap, utleie, provisjon, tjenestegebyr, serviceapparat eller oppfølging, svar bare med det som faktisk står i konteksten
-
-MÅL FOR SVARET:
-- konkret
-- tydelig
-- verifisert
-- nyttig for både eksisterende og potensielle verter
-`;
-
-// =============================================================
-// Types
-// =============================================================
 
 type TravelHelperIntent =
   | 'availability_search'
   | 'general_travel_help'
   | 'trip_planning'
-  | 'host_rental_help'
-  | 'flight_clarification'
-  | 'restaurant_clarification'
-  | 'activity_clarification';
-
-type TravelHelperResponseMode =
-  | 'direct_answer'
-  | 'clarify_airport'
-  | 'clarify_restaurant_preferences'
-  | 'clarify_activity_preferences'
-  | 'clarify_missing_trip_inputs'
-  | 'trip_proposal'
-  | 'host_answer';
+  | 'host_rental_help';
 
 type FlightAction = {
   type: 'book_flight';
@@ -3327,141 +3232,12 @@ type TripProposal = {
   summary: string[];
 };
 
-type DestinationAirportOption = {
-  code: string;
-  label: string;
-  rank: number;
-  reason: string;
-};
-
-// =============================================================
-// Airport recommendation map
-// =============================================================
-
-const AIRPORT_OPTIONS_BY_AREA: Record<string, DestinationAirportOption[]> = {
-  trysil: [
-    {
-      code: 'OSL',
-      label: 'Oslo Lufthavn Gardermoen',
-      rank: 1,
-      reason: 'Flest direkteruter og enklest videre transport til Trysil.',
-    },
-    {
-      code: 'SCR',
-      label: 'Scandinavian Mountains Airport',
-      rank: 2,
-      reason: 'Kan være aktuelt for fjellreiser, avhengig av sesong og tilgjengelighet.',
-    },
-  ],
-  'trysil-sentrum': [
-    {
-      code: 'OSL',
-      label: 'Oslo Lufthavn Gardermoen',
-      rank: 1,
-      reason: 'Flest direkteruter og enklest videre transport til Trysil.',
-    },
-    {
-      code: 'SCR',
-      label: 'Scandinavian Mountains Airport',
-      rank: 2,
-      reason: 'Kan være aktuelt for fjellreiser, avhengig av sesong og tilgjengelighet.',
-    },
-  ],
-  'trysil-turistsenter': [
-    {
-      code: 'OSL',
-      label: 'Oslo Lufthavn Gardermoen',
-      rank: 1,
-      reason: 'Flest direkteruter og enklest videre transport til Trysil.',
-    },
-    {
-      code: 'SCR',
-      label: 'Scandinavian Mountains Airport',
-      rank: 2,
-      reason: 'Kan være aktuelt for fjellreiser, avhengig av sesong og tilgjengelighet.',
-    },
-  ],
-  'trysil-hoyfjellssenter': [
-    {
-      code: 'OSL',
-      label: 'Oslo Lufthavn Gardermoen',
-      rank: 1,
-      reason: 'Flest direkteruter og enklest videre transport til Trysil.',
-    },
-    {
-      code: 'SCR',
-      label: 'Scandinavian Mountains Airport',
-      rank: 2,
-      reason: 'Kan være aktuelt for fjellreiser, avhengig av sesong og tilgjengelighet.',
-    },
-  ],
-  salen: [
-    {
-      code: 'SCR',
-      label: 'Scandinavian Mountains Airport',
-      rank: 1,
-      reason: 'Naturlig flyplass for Sälen-området.',
-    },
-    {
-      code: 'ARN',
-      label: 'Stockholm Arlanda',
-      rank: 2,
-      reason: 'Kan være aktuelt som alternativ avhengig av videre reise og tilgjengelighet.',
-    },
-  ],
-  stranda: [
-    {
-      code: 'AES',
-      label: 'Ålesund lufthavn Vigra',
-      rank: 1,
-      reason: 'Naturlig hovedflyplass for videre reise til Stranda.',
-    },
-  ],
-  geiranger: [
-    {
-      code: 'AES',
-      label: 'Ålesund lufthavn Vigra',
-      rank: 1,
-      reason: 'Naturlig hovedflyplass for videre reise til området.',
-    },
-  ],
-  sunnmorsalpene: [
-    {
-      code: 'AES',
-      label: 'Ålesund lufthavn Vigra',
-      rank: 1,
-      reason: 'Naturlig hovedflyplass for videre reise til området.',
-    },
-  ],
-};
-
-function getAirportRecommendationOptions(area: string | null): DestinationAirportOption[] {
-  const normalized = String(area || '').trim().toLowerCase();
-  return AIRPORT_OPTIONS_BY_AREA[normalized] || [];
-}
-
-// =============================================================
-// Utility functions
-// =============================================================
-
 function normalizeTravelHelperText(inputRaw: string): string {
   return String(inputRaw || '')
     .toLowerCase()
     .replace(/å/g, 'a')
     .replace(/æ/g, 'ae')
     .replace(/ø/g, 'o');
-}
-
-function buildTravelHelperSearchBasis(message: string, history: any[]): string {
-  const recentUserTexts = (Array.isArray(history) ? history : [])
-    .filter((item: any) => item?.role === 'user')
-    .slice(-6)
-    .map((item: any) => String(item?.text || '').trim())
-    .filter(Boolean);
-
-  return [...recentUserTexts, String(message || '').trim()]
-    .filter(Boolean)
-    .join('\n');
 }
 
 function detectTravelHelperIntent(messageRaw: string): TravelHelperIntent {
@@ -3476,15 +3252,19 @@ function detectTravelHelperIntent(messageRaw: string): TravelHelperIntent {
     'vaere vert',
     'være vert',
     'host',
+    'hoste',
     'formidling',
     'eier',
     'eierside',
     'provisjon',
-    'tjenestegebyr',
     'serviceapparat',
     'bookingstatus',
     'reservasjoner for din hytte',
     'revenue for din hytte',
+    'leilighet i trysil kan jeg leie ut',
+    'kan jeg leie ut',
+    'kan bno travel hjelpe meg a leie ut',
+    'kan bno travel hjelpe meg å leie ut',
   ];
 
   if (hostHints.some((word) => message.includes(word))) {
@@ -3526,54 +3306,6 @@ function detectTravelHelperIntent(messageRaw: string): TravelHelperIntent {
     planningNeedsCount >= 2
   ) {
     return 'trip_planning';
-  }
-
-  const flightKeywords = [
-    'fly',
-    'flight',
-    'flybillett',
-    'flybilletter',
-    'flyreise',
-    'avgang',
-    'avganger',
-    'returfly',
-    'direktefly',
-  ];
-
-  if (flightKeywords.some((word) => message.includes(word))) {
-    return 'flight_clarification';
-  }
-
-  const restaurantKeywords = [
-    'restaurant',
-    'restauranter',
-    'mat',
-    'middag',
-    'spisested',
-    'spisesteder',
-    'cafe',
-    'kafe',
-  ];
-
-  if (restaurantKeywords.some((word) => message.includes(word))) {
-    return 'restaurant_clarification';
-  }
-
-  const activityKeywords = [
-    'aktivitet',
-    'aktiviteter',
-    'spa',
-    'massasje',
-    'trening',
-    'fitness',
-    'alpint',
-    'langrenn',
-    'snoscooter',
-    'snøscooter',
-  ];
-
-  if (activityKeywords.some((word) => message.includes(word))) {
-    return 'activity_clarification';
   }
 
   const availabilityHints = [
@@ -3626,7 +3358,7 @@ function extractTravelHelperArea(messageRaw: string): string | null {
     },
     { keywords: ['trysil'], area: 'trysil' },
     { keywords: ['salen', 'saelen', 'sälen'], area: 'salen' },
-    { keywords: ['geiranger'], area: 'geiranger' },
+    { keywords: ['geiranger'], area: 'stranda' },
     { keywords: ['stranda'], area: 'stranda' },
     { keywords: ['sunnmorsalpene', 'sunnmørsalpene'], area: 'sunnmorsalpene' },
     { keywords: ['oslo'], area: 'oslo' },
@@ -3748,25 +3480,14 @@ function extractTravelHelperDates(
     };
   }
 
-  const compactNumericRange = raw.match(
-    /\b(\d{1,2})[.\-/](\d{1,2})(?:[.\-/](\d{2,4}))?\s*(?:til|-|–)\s*(\d{1,2})[.\-/](\d{1,2})(?:[.\-/](\d{2,4}))?\b/i
-  );
-  if (compactNumericRange) {
-    const fromDay = Number(compactNumericRange[1]);
-    const fromMonth = Number(compactNumericRange[2]);
-    const fromYear = compactNumericRange[3]
-      ? Number(String(compactNumericRange[3]).length === 2 ? `20${compactNumericRange[3]}` : compactNumericRange[3])
-      : currentYear;
-
-    const toDay = Number(compactNumericRange[4]);
-    const toMonth = Number(compactNumericRange[5]);
-    const toYear = compactNumericRange[6]
-      ? Number(String(compactNumericRange[6]).length === 2 ? `20${compactNumericRange[6]}` : compactNumericRange[6])
-      : fromYear;
-
+  const dashRange = raw.match(/\b(\d{1,2})\s*-\s*(\d{1,2})\.\s*(januar|februar|mars|april|mai|juni|juli|august|september|oktober|november|desember)\b/i);
+  if (dashRange) {
+    const fromDay = Number(dashRange[1]);
+    const toDay = Number(dashRange[2]);
+    const month = monthMap[normalizeTravelHelperText(dashRange[3])];
     return {
-      from: `${fromYear}-${pad(fromMonth)}-${pad(fromDay)}`,
-      to: `${toYear}-${pad(toMonth)}-${pad(toDay)}`,
+      from: `${currentYear}-${pad(month)}-${pad(fromDay)}`,
+      to: `${currentYear}-${pad(month)}-${pad(toDay)}`,
     };
   }
 
@@ -3779,22 +3500,6 @@ function extractTravelHelperDates(
     const toDay = Number(rangeSameMonthWithYear[2]);
     const month = monthMap[rangeSameMonthWithYear[3]];
     const year = Number(rangeSameMonthWithYear[4]);
-
-    return {
-      from: `${year}-${pad(month)}-${pad(fromDay)}`,
-      to: `${year}-${pad(month)}-${pad(toDay)}`,
-    };
-  }
-
-  const compactSameMonth = message.match(
-    /\b(\d{1,2})\s*(?:-|–|til)\s*(\d{1,2})\.?\s+(januar|februar|mars|april|mai|juni|juli|august|september|oktober|november|desember)(?:\s+(\d{4}))?\b/
-  );
-
-  if (compactSameMonth) {
-    const fromDay = Number(compactSameMonth[1]);
-    const toDay = Number(compactSameMonth[2]);
-    const month = monthMap[compactSameMonth[3]];
-    const year = compactSameMonth[4] ? Number(compactSameMonth[4]) : currentYear;
 
     return {
       from: `${year}-${pad(month)}-${pad(fromDay)}`,
@@ -3866,6 +3571,18 @@ function extractTravelHelperDates(
   return { from: null, to: null };
 }
 
+function buildTravelHelperSearchBasis(message: string, history: any[]): string {
+  const recentUserTexts = (Array.isArray(history) ? history : [])
+    .filter((item: any) => item?.role === 'user')
+    .slice(-4)
+    .map((item: any) => String(item?.text || '').trim())
+    .filter(Boolean);
+
+  return [...recentUserTexts, String(message || '').trim()]
+    .filter(Boolean)
+    .join('\n');
+}
+
 function detectTravelSeason(
   messageRaw: string,
   dates?: { from: string | null; to: string | null }
@@ -3905,175 +3622,6 @@ function detectTravelSeason(
 
   return 'unknown';
 }
-
-// =============================================================
-// Clarification helpers
-// =============================================================
-
-function messageMentionsAirportExplicitly(messageRaw: string): boolean {
-  const message = normalizeTravelHelperText(messageRaw);
-
-  const airportHints = [
-    'osl',
-    'gardermoen',
-    'oslo lufthavn',
-    'scr',
-    'scandinavian mountains airport',
-    'arlanda',
-    'arn',
-    'vigra',
-    'aes',
-    'heathrow',
-    'gatwick',
-    'schiphol',
-    'airport',
-    'flyplass',
-  ];
-
-  return airportHints.some((item) => message.includes(item));
-}
-
-function needsAirportClarification(messageRaw: string, history: any[]): boolean {
-  const combined = buildTravelHelperSearchBasis(messageRaw, history);
-  const message = normalizeTravelHelperText(combined);
-
-  const asksAboutTravel =
-    message.includes('fly') ||
-    message.includes('flight') ||
-    message.includes('reise') ||
-    message.includes('reise til') ||
-    message.includes('vi vil reise');
-
-  if (!asksAboutTravel) return false;
-
-  const area = extractTravelHelperArea(combined);
-  if (!area) return false;
-
-  const recommendedAirports = getAirportRecommendationOptions(area);
-  if (recommendedAirports.length === 0) return false;
-
-  const origin = mapTravelFlightPlaceToCode(combined, 'origin');
-  const hasDates = Boolean(extractTravelHelperDates(combined).from);
-
-  if (!origin || !hasDates) return false;
-  if (messageMentionsAirportExplicitly(combined)) return false;
-
-  const explicitDestinationCode = mapTravelFlightPlaceToCode(combined, 'destination');
-  if (explicitDestinationCode) return false;
-
-  return true;
-}
-
-function needsRestaurantClarification(messageRaw: string, history: any[]): boolean {
-  const combined = buildTravelHelperSearchBasis(messageRaw, history);
-  const message = normalizeTravelHelperText(combined);
-
-  const asksForRestaurants =
-    message.includes('restaurant') ||
-    message.includes('restauranter') ||
-    message.includes('mat') ||
-    message.includes('spisested') ||
-    message.includes('spisesteder') ||
-    message.includes('middag');
-
-  if (!asksForRestaurants) return false;
-
-  const hasPreference =
-    message.includes('pizza') ||
-    message.includes('italiensk') ||
-    message.includes('italian') ||
-    message.includes('amerikansk') ||
-    message.includes('american') ||
-    message.includes('fine dining') ||
-    message.includes('familie') ||
-    message.includes('family') ||
-    message.includes('sentrum') ||
-    message.includes('turistsenter') ||
-    message.includes('hoyfjellssenter') ||
-    message.includes('høyfjellssenter') ||
-    message.includes('fagerasen') ||
-    message.includes('fageråsen') ||
-    message.includes('budsjett') ||
-    message.includes('rimelig') ||
-    message.includes('dyrt') ||
-    message.includes('romantisk') ||
-    message.includes('afterski');
-
-  return !hasPreference;
-}
-
-function needsActivityClarification(messageRaw: string, history: any[]): boolean {
-  const combined = buildTravelHelperSearchBasis(messageRaw, history);
-  const message = normalizeTravelHelperText(combined);
-
-  const asksForActivities =
-    message.includes('aktivitet') ||
-    message.includes('aktiviteter') ||
-    message.includes('spa') ||
-    message.includes('massasje') ||
-    message.includes('trening') ||
-    message.includes('fitness');
-
-  if (!asksForActivities) return false;
-
-  const hasPreference =
-    message.includes('vinter') ||
-    message.includes('sommer') ||
-    message.includes('barn') ||
-    message.includes('familie') ||
-    message.includes('rolig') ||
-    message.includes('action') ||
-    message.includes('adrenalin') ||
-    message.includes('alpint') ||
-    message.includes('langrenn') ||
-    message.includes('spa');
-
-  return !hasPreference;
-}
-
-function buildAirportClarificationReply(area: string | null): string {
-  const options = getAirportRecommendationOptions(area);
-
-  if (!options.length) {
-    return 'Hvilken flyplass ønsker du å fly til?';
-  }
-
-  const top = options[0];
-  const second = options[1];
-
-  const label =
-    area === 'trysil' || String(area || '').startsWith('trysil')
-      ? 'Trysil'
-      : area === 'salen'
-        ? 'Sälen'
-        : area || 'destinasjonen';
-
-  if (second) {
-    return `Ok, reise til ${label}. Hvilken flyplass ønsker du å fly til? Jeg vil normalt anbefale ${top.label} fordi ${top.reason.toLowerCase()} Det kan også være aktuelt å se på ${second.label}, avhengig av sesong og tilgjengelighet.`;
-  }
-
-  return `Ok, reise til ${label}. Hvilken flyplass ønsker du å fly til? Jeg vil normalt anbefale ${top.label} fordi ${top.reason.toLowerCase()}`;
-}
-
-function buildRestaurantClarificationReply(area: string | null): string {
-  if (area && String(area).startsWith('trysil')) {
-    return 'Ja, det kan jeg. Hvilken type restauranter ønsker dere – pizza, italiensk, amerikansk, fine dining eller noe familievennlig? Og vil dere helst spise i Trysil sentrum, Turistsenteret eller Høyfjellssenteret/Fageråsen?';
-  }
-
-  if (area === 'salen') {
-    return 'Ja, det kan jeg. Hvilken type restauranter ønsker dere – pizza, italiensk, amerikansk, fine dining eller noe familievennlig? Og vil dere helst spise i sentrum, nær fjellet eller i et roligere område?';
-  }
-
-  return 'Ja, det kan jeg. Hvilken type restauranter ønsker dere – pizza, italiensk, amerikansk, fine dining eller noe familievennlig?';
-}
-
-function buildActivityClarificationReply(): string {
-  return 'Ja, det kan jeg. Hva er viktigst for dere – familievennlige aktiviteter, ro og velvære, eller mer actionpregede opplevelser?';
-}
-
-// =============================================================
-// Availability ranking
-// =============================================================
 
 function rankTravelHelperAvailabilityRows(
   rows: any[],
@@ -4280,9 +3828,47 @@ function buildAvailabilityContextText(
   ].join('\n\n');
 }
 
-// =============================================================
-// Booking intent helpers
-// =============================================================
+function buildDeterministicAccommodationReply(rows: any[], params: any): string {
+  if (!Array.isArray(rows) || rows.length === 0) {
+    return `Jeg fant dessverre ingen ledige overnattingsalternativer i ${params?.area || 'valgt område'} fra ${params?.from || ''} til ${params?.to || ''} for ${params?.adults || ''} personer. Du kan prøve å justere datoer, område eller antall personer.`;
+  }
+
+  const rankedRows = rankTravelHelperAvailabilityRows(rows, params?.adults || null, '');
+  const topRows = rankedRows.slice(0, 3);
+
+  const lines: string[] = [
+    `Her er ${topRows.length === 1 ? 'et ledig overnattingsalternativ' : 'ledige overnattingsalternativer'} i ${params?.area || 'området'} fra ${params?.from || ''} til ${params?.to || ''} for ${params?.adults || ''} personer:`,
+    '',
+  ];
+
+  topRows.forEach((item, index) => {
+    const name = item?.Name || item?.name || 'Ukjent enhet';
+    const area = item?.ServiceName || item?.serviceName || params?.area || 'Ukjent område';
+    const capacity = item?.Capacity ?? item?.capacity ?? 'Ukjent';
+    const price =
+      item?.PriceTotal != null && item?.PriceCurrency
+        ? `${item.PriceTotal} ${item.PriceCurrency}`
+        : item?.priceTotal != null && item?.priceCurrency
+          ? `${item.priceTotal} ${item.priceCurrency}`
+          : 'Pris ikke tilgjengelig';
+    const availableUnits = item?.AvailableUnits ?? item?.availableUnits ?? 'Ukjent';
+    const description = item?.Description || item?.description || '';
+
+    lines.push(`${index + 1}. ${name}`);
+    lines.push(`- Område: ${area}`);
+    lines.push(`- Kapasitet: ${capacity}`);
+    lines.push(`- Pris: ${price}`);
+    lines.push(`- Ledige enheter: ${availableUnits}`);
+    if (description) {
+      lines.push(`- Beskrivelse: ${description}`);
+    }
+    lines.push('');
+  });
+
+  lines.push('Du kan bruke bookingknappen i appen for å se detaljer og fullføre bestillingen.');
+
+  return lines.join('\n');
+}
 
 function isTravelHelperBookingIntent(messageRaw: string): boolean {
   const message = normalizeTravelHelperText(messageRaw);
@@ -4324,35 +3910,6 @@ function findRequestedRoomFromMessage(
   });
   if (directNameMatch) return directNameMatch;
 
-  const aliasMatchers: Array<{
-    keywords: string[];
-    match: (row: any) => boolean;
-  }> = [
-    {
-      keywords: ['trysilbua'],
-      match: (row) => normalizeTravelHelperText(row?.Name || row?.name || '').includes('trysilbua'),
-    },
-    {
-      keywords: ['fagerhoy', 'fagerhøy'],
-      match: (row) => normalizeTravelHelperText(row?.Name || row?.name || '').includes('fagerhoy'),
-    },
-    {
-      keywords: ['ugla 917', 'ugla'],
-      match: (row) => normalizeTravelHelperText(row?.Name || row?.name || '').includes('ugla 917'),
-    },
-    {
-      keywords: ['vestsidevegen', 'vestsidevegen 14'],
-      match: (row) => normalizeTravelHelperText(row?.Name || row?.name || '').includes('vestsidevegen'),
-    },
-  ];
-
-  for (const alias of aliasMatchers) {
-    if (alias.keywords.some((keyword) => message.includes(normalizeTravelHelperText(keyword)))) {
-      const matched = rows.find(alias.match);
-      if (matched) return matched;
-    }
-  }
-
   const pronounBookingHints = [
     'den',
     'denne',
@@ -4374,10 +3931,6 @@ function findRequestedRoomFromMessage(
 
   return null;
 }
-
-// =============================================================
-// Content helpers
-// =============================================================
 
 function detectTravelContentIntent(messageRaw: string): boolean {
   const message = normalizeTravelHelperText(messageRaw);
@@ -4427,7 +3980,6 @@ function detectTravelContentIntent(messageRaw: string): boolean {
     'vert',
     'formidling',
     'provisjon',
-    'tjenestegebyr',
     'eier',
     'serviceapparat',
     'bookingstatus',
@@ -4476,6 +4028,27 @@ function prioritizeTravelTermItems(items: any[], messageRaw: string): any[] {
       if (text.includes('2000')) score += 40;
     }
 
+    if (
+      message.includes('leie ut') ||
+      message.includes('utleie') ||
+      message.includes('vert') ||
+      message.includes('formidling') ||
+      message.includes('provisjon')
+    ) {
+      if (text.includes('utleie')) score += 120;
+      if (text.includes('formidling')) score += 100;
+      if (text.includes('3 %')) score += 80;
+      if (text.includes('3%')) score += 80;
+      if (text.includes('kjopsfee')) score += 60;
+      if (text.includes('kjøpsfee')) score += 60;
+      if (text.includes('markedsforing')) score += 50;
+      if (text.includes('markedsføring')) score += 50;
+      if (text.includes('gjestekontakt')) score += 50;
+      if (text.includes('vask')) score += 30;
+      if (text.includes('sengetoy')) score += 30;
+      if (text.includes('sengetøy')) score += 30;
+    }
+
     return { ...item, __priorityScore: score };
   };
 
@@ -4497,7 +4070,6 @@ function extractTravelContentCategory(messageRaw: string): string | null {
     message.includes('formidling') ||
     message.includes('eier') ||
     message.includes('provisjon') ||
-    message.includes('tjenestegebyr') ||
     message.includes('serviceapparat') ||
     message.includes('bookingstatus')
   ) {
@@ -4529,7 +4101,6 @@ function extractTravelContentCategory(messageRaw: string): string | null {
     message.includes('restauranter') ||
     message.includes('middag') ||
     message.includes('cafe') ||
-    message.includes('kafe') ||
     message.includes('mat')
   ) {
     return 'restaurant';
@@ -4604,6 +4175,16 @@ function extractTravelTermsKeywords(messageRaw: string): string[] {
     keywords.push('husregler');
   }
 
+  if (
+    message.includes('leie ut') ||
+    message.includes('utleie') ||
+    message.includes('vert') ||
+    message.includes('formidling') ||
+    message.includes('provisjon')
+  ) {
+    keywords.push('utleie', 'vert', 'formidling', 'provisjon');
+  }
+
   return [...new Set(keywords)];
 }
 
@@ -4642,13 +4223,13 @@ async function getTravelHelperContent(opts: {
       )
       .order('is_featured', { ascending: false })
       .order('sort_order', { ascending: true })
-      .limit(40);
+      .limit(30);
 
     if (category) {
       query = query.eq('category', category);
     }
 
-    if (category === 'travel_terms' && opts.message) {
+    if ((category === 'travel_terms' || category === 'host_rental') && opts.message) {
       const keywordHints = extractTravelTermsKeywords(opts.message);
 
       if (keywordHints.length > 0) {
@@ -4678,9 +4259,9 @@ async function getTravelHelperContent(opts: {
         'title.ilike.%provisjon%',
         'summary.ilike.%provisjon%',
         'body.ilike.%provisjon%',
-        'title.ilike.%tjenestegebyr%',
-        'summary.ilike.%tjenestegebyr%',
-        'body.ilike.%tjenestegebyr%',
+        'title.ilike.%3 %%',
+        'summary.ilike.%3 %%',
+        'body.ilike.%3 %%',
       ];
 
       query = query.or(orParts.join(','));
@@ -4770,11 +4351,11 @@ function scoreSeasonalContentItem(
   }
 
   if (message.includes('restaurant') || message.includes('mat')) {
-    if (item?.category === 'restaurant' || item?.category === 'restaurant_place') score += 15;
+    if (item?.category === 'restaurant') score += 15;
   }
 
   if (message.includes('aktivitet') || message.includes('skiferie') || message.includes('sommerferie')) {
-    if (item?.category === 'activity' || item?.category === 'activity_place') score += 15;
+    if (item?.category === 'activity') score += 15;
   }
 
   if (
@@ -4783,7 +4364,10 @@ function scoreSeasonalContentItem(
     message.includes('vert') ||
     message.includes('formidling')
   ) {
-    if (item?.category === 'host_rental') score += 40;
+    if (item?.category === 'host_rental') score += 60;
+    if (text.includes('3 %') || text.includes('3%')) score += 50;
+    if (text.includes('kjopsfee') || text.includes('kjøpsfee')) score += 40;
+    if (text.includes('gjestekontakt')) score += 30;
   }
 
   return score;
@@ -4839,10 +4423,6 @@ function buildTravelContentContext(items: any[]): string {
   return lines.join('\n');
 }
 
-// =============================================================
-// Flight helpers
-// =============================================================
-
 function detectTravelFlightIntent(messageRaw: string): boolean {
   const message = normalizeTravelHelperText(messageRaw);
 
@@ -4894,10 +4474,6 @@ function isTravelHelperFlightBookingIntent(messageRaw: string): boolean {
     'jeg vil bestille det første',
     'jeg vil booke det forste',
     'jeg vil booke det første',
-    'ja, jeg vil bestille det forste',
-    'ja, jeg vil bestille det første',
-    'ja jeg vil bestille det forste',
-    'ja jeg vil bestille det første',
     'bestill det forste',
     'bestill det første',
     'book det forste',
@@ -4987,12 +4563,10 @@ function mapTravelFlightPlaceToCode(
     { keywords: ['trondheim', 'vaernes', 'værnes', 'trd'], code: 'TRD' },
     { keywords: ['bergen', 'flesland', 'bgo'], code: 'BGO' },
     { keywords: ['alesund', 'ålesund', 'vigra', 'aes'], code: 'AES' },
-
     { keywords: ['london', 'lon'], code: 'LON' },
     { keywords: ['heathrow', 'lhr'], code: 'LHR' },
     { keywords: ['gatwick', 'lgw'], code: 'LGW' },
     { keywords: ['luton', 'ltn'], code: 'LTN' },
-
     { keywords: ['amsterdam', 'schiphol', 'ams'], code: 'AMS' },
     { keywords: ['kobenhavn', 'københavn', 'copenhagen', 'cph'], code: 'CPH' },
     { keywords: ['stockholm', 'arlanda', 'arn'], code: 'ARN' },
@@ -5009,7 +4583,6 @@ function mapTravelFlightPlaceToCode(
     { keywords: ['miami', 'mia'], code: 'MIA' },
     { keywords: ['boston', 'bos'], code: 'BOS' },
     { keywords: ['salen', 'sälen', 'scr'], code: 'SCR' },
-    { keywords: ['scandinavian mountains airport'], code: 'SCR' },
   ];
 
   if (bounded) {
@@ -5291,10 +4864,6 @@ function pickTransportSuggestion(area: string | null): string | null {
   return null;
 }
 
-// =============================================================
-// Trip proposal helpers
-// =============================================================
-
 function buildTripProposalContextText(proposal: TripProposal | null): string {
   if (!proposal) return '';
 
@@ -5379,7 +4948,7 @@ async function buildTripProposal(opts: {
   availabilityParams: any | null;
   flightOffers: any[];
   flightSearch: any | null;
-}): Promise<TripProposal | null> {
+}) : Promise<TripProposal | null> {
   const message = String(opts.message || '');
   const season = detectTravelSeason(message, extractTravelHelperDates(message));
 
@@ -5430,8 +4999,8 @@ async function buildTripProposal(opts: {
       }),
     ]);
 
-    allActivities = filterAndRankTravelContentForSeason(activityItems, season, message).slice(0, 4);
-    allRestaurants = filterAndRankTravelContentForSeason(restaurantItems, season, message).slice(0, 4);
+    allActivities = filterAndRankTravelContentForSeason(activityItems, season, message).slice(0, 3);
+    allRestaurants = filterAndRankTravelContentForSeason(restaurantItems, season, message).slice(0, 3);
   } catch (e) {
     console.error('buildTripProposal content fetch failed', e);
   }
@@ -5452,58 +5021,50 @@ async function buildTripProposal(opts: {
         )
       : 3;
 
-  for (let day = 1; day <= daysBetweenTrip; day++) {
-    if (day === 1) {
-      itinerary.push({
-        day,
-        title: 'Ankomst og innsjekk',
-        items: [
-          selectedFlight
-            ? 'Reis med anbefalt fly og gå videre til overnattingen.'
-            : 'Ankomst til destinasjonen.',
-          transport || 'Planlegg transport videre fra ankomststedet.',
-          selectedAccommodation
-            ? `Sjekk inn på ${selectedAccommodation?.Name || selectedAccommodation?.name || 'anbefalt overnatting'}.`
-            : 'Sjekk inn på valgt overnatting.',
-          allRestaurants[0]?.title
-            ? `Middagstips: ${allRestaurants[0].title}.`
-            : 'Avslutt dagen med en rolig middag.',
-        ],
-      });
-      continue;
-    }
+  itinerary.push({
+    day: 1,
+    title: 'Ankomst og innsjekk',
+    items: [
+      selectedFlight
+        ? 'Reis med anbefalt fly og gå videre til overnattingen.'
+        : 'Ankomst til destinasjonen.',
+      transport || 'Planlegg transport videre fra ankomststedet.',
+      selectedAccommodation
+        ? `Sjekk inn på ${selectedAccommodation?.Name || selectedAccommodation?.name || 'anbefalt overnatting'}.`
+        : 'Sjekk inn på valgt overnatting.',
+      allRestaurants[0]?.title
+        ? `Middagstips: ${allRestaurants[0].title}.`
+        : 'Avslutt dagen med en rolig middag.',
+    ],
+  });
 
-    if (day === daysBetweenTrip) {
-      const activityIndex = allActivities.length ? (day - 2) % allActivities.length : -1;
-      itinerary.push({
-        day,
-        title: 'Avslutning og hjemreise',
-        items: [
-          activityIndex >= 0 && allActivities[activityIndex]?.title
-            ? `Formiddagstips: ${allActivities[activityIndex].title}.`
-            : 'Rolig formiddag før avreise.',
-          'Utsjekk og reis videre hjem.',
-        ],
-      });
-      continue;
-    }
-
-    const activityIndex = allActivities.length ? (day - 2) % allActivities.length : -1;
-    const restaurantIndex = allRestaurants.length ? (day - 2) % allRestaurants.length : -1;
-
+  if (daysBetweenTrip >= 2) {
     itinerary.push({
-      day,
+      day: 2,
       title: season === 'winter' ? 'Skidag og opplevelser' : 'Opplevelser og aktiviteter',
       items: [
         season === 'winter'
           ? 'Bruk dagen på ski eller andre vinteraktiviteter.'
           : 'Bruk dagen på sommeraktiviteter og naturopplevelser.',
-        activityIndex >= 0 && allActivities[activityIndex]?.title
-          ? `Aktivitet: ${allActivities[activityIndex].title}.`
+        allActivities[0]?.title
+          ? `Aktivitet: ${allActivities[0].title}.`
           : 'Velg en aktivitet fra BNO Travel sitt utvalg.',
-        restaurantIndex >= 0 && allRestaurants[restaurantIndex]?.title
-          ? `Restauranttips: ${allRestaurants[restaurantIndex].title}.`
-          : 'Spis middag på et sted som passer området og sesongen.',
+        allRestaurants[1]?.title
+          ? `Restauranttips: ${allRestaurants[1].title}.`
+          : 'Spis middag på et sted som passer sesongen og området.',
+      ],
+    });
+  }
+
+  if (daysBetweenTrip >= 3) {
+    itinerary.push({
+      day: 3,
+      title: 'Avslutning og hjemreise',
+      items: [
+        allActivities[1]?.title
+          ? `Formiddagstips: ${allActivities[1].title}.`
+          : 'Ha en rolig avslutning på oppholdet.',
+        'Utsjekk og reis videre hjem.',
       ],
     });
   }
@@ -5519,18 +5080,12 @@ async function buildTripProposal(opts: {
 
   if (selectedFlight) {
     summary.push('Det finnes et konkret flyforslag som matcher reisen.');
-  } else {
-    summary.push('Fant ikke et verifisert flyforslag akkurat nå.');
   }
-
   if (allActivities.length > 0) {
     summary.push(`Fant ${allActivities.length} relevante aktivitetsforslag.`);
   }
-
   if (allRestaurants.length > 0) {
     summary.push(`Fant ${allRestaurants.length} relevante restaurantforslag.`);
-  } else {
-    summary.push('Fant ikke tydelige verifiserte restaurantforslag akkurat nå.');
   }
 
   return {
@@ -5549,10 +5104,6 @@ async function buildTripProposal(opts: {
     summary,
   };
 }
-
-// =============================================================
-// Travel Helper route
-// =============================================================
 
 app.post('/api/travel-helper', async (req, res) => {
   try {
@@ -5654,18 +5205,6 @@ app.post('/api/travel-helper', async (req, res) => {
     const tripPlanningIntent = intent === 'trip_planning';
     const hostRentalIntent = intent === 'host_rental_help';
 
-    let responseMode: TravelHelperResponseMode = hostRentalIntent
-      ? 'host_answer'
-      : 'direct_answer';
-
-    if (needsAirportClarification(currentMessageText, safeHistory)) {
-      responseMode = 'clarify_airport';
-    } else if (needsRestaurantClarification(currentMessageText, safeHistory)) {
-      responseMode = 'clarify_restaurant_preferences';
-    } else if (needsActivityClarification(currentMessageText, safeHistory)) {
-      responseMode = 'clarify_activity_preferences';
-    }
-
     const shouldRunAvailabilitySearch =
       intent === 'availability_search' || tripPlanningIntent;
 
@@ -5689,7 +5228,7 @@ app.post('/api/travel-helper', async (req, res) => {
       Array.isArray(lastFlightOffers) && lastFlightOffers.length > 0
         ? lastFlightOffers
         : Array.isArray(safeFlightSearchContext?.offers)
-          ? safeFlightSearchContext.offers
+          ? safeFlightSearchContext!.offers
           : [];
 
     let latestFlightSearch:
@@ -5848,12 +5387,7 @@ app.post('/api/travel-helper', async (req, res) => {
           extractTravelHelperArea(currentMessageText) ||
           extractTravelHelperArea(conversationText) ||
           latestSearchParams?.area ||
-          (tripPlanningIntent ? 'trysil' : null);
-
-        const destinationForContent =
-          contentCategory === 'travel_terms' || contentCategory === 'host_rental'
-            ? 'global'
-            : mapTravelHelperAreaToContentDestinationSlug(detectedArea);
+          'trysil';
 
         const season = detectTravelSeason(
           currentMessageText,
@@ -5869,15 +5403,18 @@ app.post('/api/travel-helper', async (req, res) => {
         let contentItems: any[] = [];
 
         for (const category of categoriesToFetch) {
+          const destinationSlugForCategory =
+            category === 'travel_terms' || category === 'host_rental'
+              ? 'global'
+              : mapTravelHelperAreaToContentDestinationSlug(detectedArea);
+
           const items = await getTravelHelperContent({
-            destinationSlug:
-              category === 'travel_terms' || category === 'host_rental'
-                ? 'global'
-                : destinationForContent,
+            destinationSlug: destinationSlugForCategory,
             category: category || null,
             language: appLang,
             message: currentMessageText,
           });
+
           contentItems.push(...items);
         }
 
@@ -5886,7 +5423,7 @@ app.post('/api/travel-helper', async (req, res) => {
         );
 
         const prioritizedItems =
-          contentCategory === 'travel_terms' && !tripPlanningIntent
+          contentCategory === 'travel_terms' || hostRentalIntent
             ? prioritizeTravelTermItems(deduped, currentMessageText)
             : filterAndRankTravelContentForSeason(deduped, season, currentMessageText);
 
@@ -5900,7 +5437,7 @@ app.post('/api/travel-helper', async (req, res) => {
       }
     }
 
-    if ((flightIntent || tripPlanningIntent) && responseMode !== 'clarify_airport') {
+    if (flightIntent || tripPlanningIntent) {
       try {
         const flightParams = extractTravelFlightSearchParams(currentMessageText, safeHistory);
         const inferredArea = extractTravelAreaForTripPlanning(currentMessageText, safeHistory);
@@ -6022,139 +5559,6 @@ app.post('/api/travel-helper', async (req, res) => {
       }
     }
 
-    if (responseMode === 'clarify_airport') {
-      const inferredArea = extractTravelAreaForTripPlanning(currentMessageText, safeHistory);
-
-      return res.json({
-        ok: true,
-        reply: buildAirportClarificationReply(inferredArea),
-        responseMode,
-        bookingAction: null,
-        flightAction: null,
-        tripProposal: null,
-        searchContext:
-          latestSearchRows.length > 0 && latestSearchParams
-            ? {
-                rows: latestSearchRows,
-                params: latestSearchParams,
-              }
-            : null,
-        flightSearchContext:
-          latestFlightOffers.length > 0 && latestFlightSearch
-            ? {
-                offers: latestFlightOffers.slice(0, 5),
-                search: latestFlightSearch,
-              }
-            : null,
-        meta: {
-          intent,
-          contentIntent,
-          contentCategory,
-          flightIntent,
-          tripPlanningIntent,
-          hostRentalIntent,
-          responseMode,
-          usedDynamicContext: Boolean(dynamicContext),
-          usedContentContext: Boolean(contentContext),
-          usedFlightContext: Boolean(flightContext),
-          usedTripProposalContext: Boolean(tripProposalContext),
-          contentItemsCount,
-          flightOffersCount: latestFlightOffers.length,
-          appLang,
-          searchRowsCount: latestSearchRows.length,
-          tripProposalBuilt: Boolean(tripProposal),
-        },
-      });
-    }
-
-    if (responseMode === 'clarify_restaurant_preferences') {
-      const inferredArea = extractTravelAreaForTripPlanning(currentMessageText, safeHistory);
-
-      return res.json({
-        ok: true,
-        reply: buildRestaurantClarificationReply(inferredArea),
-        responseMode,
-        bookingAction: null,
-        flightAction: null,
-        tripProposal: null,
-        searchContext:
-          latestSearchRows.length > 0 && latestSearchParams
-            ? {
-                rows: latestSearchRows,
-                params: latestSearchParams,
-              }
-            : null,
-        flightSearchContext:
-          latestFlightOffers.length > 0 && latestFlightSearch
-            ? {
-                offers: latestFlightOffers.slice(0, 5),
-                search: latestFlightSearch,
-              }
-            : null,
-        meta: {
-          intent,
-          contentIntent,
-          contentCategory,
-          flightIntent,
-          tripPlanningIntent,
-          hostRentalIntent,
-          responseMode,
-          usedDynamicContext: Boolean(dynamicContext),
-          usedContentContext: Boolean(contentContext),
-          usedFlightContext: Boolean(flightContext),
-          usedTripProposalContext: Boolean(tripProposalContext),
-          contentItemsCount,
-          flightOffersCount: latestFlightOffers.length,
-          appLang,
-          searchRowsCount: latestSearchRows.length,
-          tripProposalBuilt: Boolean(tripProposal),
-        },
-      });
-    }
-
-    if (responseMode === 'clarify_activity_preferences') {
-      return res.json({
-        ok: true,
-        reply: buildActivityClarificationReply(),
-        responseMode,
-        bookingAction: null,
-        flightAction: null,
-        tripProposal: null,
-        searchContext:
-          latestSearchRows.length > 0 && latestSearchParams
-            ? {
-                rows: latestSearchRows,
-                params: latestSearchParams,
-              }
-            : null,
-        flightSearchContext:
-          latestFlightOffers.length > 0 && latestFlightSearch
-            ? {
-                offers: latestFlightOffers.slice(0, 5),
-                search: latestFlightSearch,
-              }
-            : null,
-        meta: {
-          intent,
-          contentIntent,
-          contentCategory,
-          flightIntent,
-          tripPlanningIntent,
-          hostRentalIntent,
-          responseMode,
-          usedDynamicContext: Boolean(dynamicContext),
-          usedContentContext: Boolean(contentContext),
-          usedFlightContext: Boolean(flightContext),
-          usedTripProposalContext: Boolean(tripProposalContext),
-          contentItemsCount,
-          flightOffersCount: latestFlightOffers.length,
-          appLang,
-          searchRowsCount: latestSearchRows.length,
-          tripProposalBuilt: Boolean(tripProposal),
-        },
-      });
-    }
-
     const systemPrompt = [
       BNO_TRAVEL_HELPER_SYSTEM,
       '',
@@ -6200,7 +5604,6 @@ app.post('/api/travel-helper', async (req, res) => {
       flightOffersCount: latestFlightOffers.length,
       tripPlanningIntent,
       hostRentalIntent,
-      responseMode,
     });
 
     const response = await fetch('https://api.openai.com/v1/responses', {
@@ -6342,10 +5745,19 @@ app.post('/api/travel-helper', async (req, res) => {
       }
     }
 
+    const shouldForceDeterministicAccommodationReply =
+      (intent === 'availability_search' || tripPlanningIntent) &&
+      latestSearchRows.length > 0 &&
+      latestSearchParams &&
+      !hostRentalIntent;
+
+    const safeReply = shouldForceDeterministicAccommodationReply
+      ? buildDeterministicAccommodationReply(latestSearchRows, latestSearchParams)
+      : (reply || 'Beklager, jeg fikk ikke laget et svar akkurat nå.');
+
     return res.json({
       ok: true,
-      reply: reply || 'Beklager, jeg fikk ikke laget et svar akkurat nå.',
-      responseMode: tripProposal ? 'trip_proposal' : responseMode,
+      reply: safeReply,
       bookingAction,
       flightAction,
       tripProposal,
@@ -6370,7 +5782,6 @@ app.post('/api/travel-helper', async (req, res) => {
         flightIntent,
         tripPlanningIntent,
         hostRentalIntent,
-        responseMode,
         usedDynamicContext: Boolean(dynamicContext),
         usedContentContext: Boolean(contentContext),
         usedFlightContext: Boolean(flightContext),
@@ -6380,6 +5791,7 @@ app.post('/api/travel-helper', async (req, res) => {
         appLang,
         searchRowsCount: latestSearchRows.length,
         tripProposalBuilt: Boolean(tripProposal),
+        forcedDeterministicAccommodationReply: Boolean(shouldForceDeterministicAccommodationReply),
       },
     });
   } catch (e: any) {
@@ -6387,169 +5799,6 @@ app.post('/api/travel-helper', async (req, res) => {
     return res.status(500).json({
       ok: false,
       error: e?.message || 'travel_helper_failed',
-    });
-  }
-});
-
-// =============================================================
-// Host Helper route
-// =============================================================
-
-app.post('/api/host-helper', async (req, res) => {
-  try {
-    const { message, history, lang } = req.body || {};
-
-    if (!message || typeof message !== 'string') {
-      return res.status(400).json({
-        ok: false,
-        error: 'message_mangler',
-      });
-    }
-
-    const openAiKey = String(process.env.OPENAI_API_KEY || '').trim();
-    if (!openAiKey) {
-      return res.status(500).json({
-        ok: false,
-        error: 'OPENAI_API_KEY_mangler',
-      });
-    }
-
-    const safeHistory = Array.isArray(history) ? history.slice(-12) : [];
-    const appLang =
-      typeof lang === 'string' && lang.trim()
-        ? lang.trim().toLowerCase()
-        : 'nb';
-
-    const currentMessageText = String(message || '').trim();
-
-    let contentContext = '';
-    let contentItemsCount = 0;
-
-    try {
-      const hostItems = await getTravelHelperContent({
-        destinationSlug: 'global',
-        category: 'host_rental',
-        language: appLang,
-        message: currentMessageText,
-      });
-
-      const travelTermsItems = await getTravelHelperContent({
-        destinationSlug: 'global',
-        category: 'travel_terms',
-        language: appLang,
-        message: currentMessageText,
-      });
-
-      const deduped = [...hostItems, ...travelTermsItems].filter(
-        (item, index, arr) => arr.findIndex((x) => x?.slug === item?.slug) === index
-      );
-
-      const normalizedMessage = normalizeTravelHelperText(currentMessageText);
-
-      const prioritizedItems =
-        normalizedMessage.includes('innsjekk') ||
-        normalizedMessage.includes('utsjekk') ||
-        normalizedMessage.includes('aldersgrense') ||
-        normalizedMessage.includes('depositum') ||
-        normalizedMessage.includes('husregler')
-          ? prioritizeTravelTermItems(deduped, currentMessageText)
-          : deduped;
-
-      contentItemsCount = prioritizedItems.length;
-
-      if (prioritizedItems.length > 0) {
-        contentContext = buildTravelContentContext(prioritizedItems.slice(0, 12));
-      }
-    } catch (contentError) {
-      console.error('host-helper content lookup failed', contentError);
-    }
-
-    const systemPrompt = [
-      BNO_HOST_HELPER_SYSTEM,
-      '',
-      `APP_LANG: ${appLang}`,
-      'Svar helst på samme språk som brukeren skriver på.',
-      `Hvis brukeren skriver på ${appLang}, bruk ${appLang} som hovedspråk med mindre brukeren tydelig velger et annet språk i samtalen.`,
-    ].join('\n');
-
-    const input = [
-      {
-        role: 'system',
-        content: systemPrompt,
-      },
-      ...(contentContext
-        ? [{ role: 'system', content: contentContext }]
-        : []),
-      ...safeHistory.map((item: any) => ({
-        role: item?.role === 'assistant' ? 'assistant' : 'user',
-        content: String(item?.text || ''),
-      })),
-      {
-        role: 'user',
-        content: String(message),
-      },
-    ];
-
-    const response = await fetch('https://api.openai.com/v1/responses', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${openAiKey}`,
-      },
-      body: JSON.stringify({
-        model: 'gpt-4.1-mini',
-        input,
-      }),
-    });
-
-    const rawResponseText = await response.text();
-    let data: any = null;
-
-    try {
-      data = rawResponseText ? JSON.parse(rawResponseText) : null;
-    } catch (parseError) {
-      console.error('host-helper OpenAI non-json error', {
-        status: response.status,
-        statusText: response.statusText,
-        bodyStart: rawResponseText?.slice(0, 500),
-      });
-
-      return res.status(500).json({
-        ok: false,
-        error: 'openai_non_json_response',
-      });
-    }
-
-    if (!response.ok) {
-      console.error('host-helper OpenAI error', data);
-      return res.status(500).json({
-        ok: false,
-        error: data?.error?.message || 'openai_request_failed',
-      });
-    }
-
-    const reply =
-      data?.output_text ||
-      data?.output?.find?.((item: any) => item?.type === 'message')
-        ?.content?.find?.((part: any) => part?.type === 'output_text')
-        ?.text ||
-      '';
-
-    return res.json({
-      ok: true,
-      reply: reply || 'Beklager, jeg fikk ikke laget et svar akkurat nå.',
-      responseMode: 'host_answer',
-      meta: {
-        appLang,
-        contentItemsCount,
-        usedContentContext: Boolean(contentContext),
-      },
-    });
-  } catch (e: any) {
-    console.error('POST /api/host-helper failed', e);
-    return res.status(500).json({
-      ok: false,
-      error: e?.message || 'host_helper_failed',
     });
   }
 });
