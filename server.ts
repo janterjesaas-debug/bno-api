@@ -3723,30 +3723,31 @@ function extractTravelHelperDates(
     };
   }
 
-  const dashRange = raw.match(/\b(\d{1,2})\s*-\s*(\d{1,2})\.\s*(januar|februar|mars|april|mai|juni|juli|august|september|oktober|november|desember)\b/i);
-  if (dashRange) {
-    const fromDay = Number(dashRange[1]);
-    const toDay = Number(dashRange[2]);
-    const month = monthMap[normalizeTravelHelperText(dashRange[3])];
+    const dashRangeNoDot = raw.match(
+    /\b(\d{1,2})\s*-\s*(\d{1,2})\s+(januar|februar|mars|april|mai|juni|juli|august|september|oktober|november|desember)\b/i
+  );
+
+  if (dashRangeNoDot) {
+    const fromDay = Number(dashRangeNoDot[1]);
+    const toDay = Number(dashRangeNoDot[2]);
+    const month = monthMap[normalizeTravelHelperText(dashRangeNoDot[3])];
     return {
       from: `${currentYear}-${pad(month)}-${pad(fromDay)}`,
       to: `${currentYear}-${pad(month)}-${pad(toDay)}`,
     };
   }
 
-  const rangeSameMonthWithYear = message.match(
-    /\bfra\s+(\d{1,2})\s+til\s+(\d{1,2})\s+(januar|februar|mars|april|mai|juni|juli|august|september|oktober|november|desember)\s+(\d{4})\b/
+  const dashRangeWithDot = raw.match(
+    /\b(\d{1,2})\s*-\s*(\d{1,2})\.\s*(januar|februar|mars|april|mai|juni|juli|august|september|oktober|november|desember)\b/i
   );
 
-  if (rangeSameMonthWithYear) {
-    const fromDay = Number(rangeSameMonthWithYear[1]);
-    const toDay = Number(rangeSameMonthWithYear[2]);
-    const month = monthMap[rangeSameMonthWithYear[3]];
-    const year = Number(rangeSameMonthWithYear[4]);
-
+  if (dashRangeWithDot) {
+    const fromDay = Number(dashRangeWithDot[1]);
+    const toDay = Number(dashRangeWithDot[2]);
+    const month = monthMap[normalizeTravelHelperText(dashRangeWithDot[3])];
     return {
-      from: `${year}-${pad(month)}-${pad(fromDay)}`,
-      to: `${year}-${pad(month)}-${pad(toDay)}`,
+      from: `${currentYear}-${pad(month)}-${pad(fromDay)}`,
+      to: `${currentYear}-${pad(month)}-${pad(toDay)}`,
     };
   }
 
@@ -5019,7 +5020,8 @@ function mapTravelFlightPlaceToCode(
   kind: 'origin' | 'destination'
 ): string | null {
   const message = normalizeTravelHelperText(messageRaw);
-  const bounded = normalizeTravelHelperText(extractBoundedPlace(messageRaw, kind));
+  const boundedRaw = extractBoundedPlace(messageRaw, kind);
+  const bounded = normalizeTravelHelperText(boundedRaw);
 
   const mappings: Array<{ keywords: string[]; code: string }> = [
     { keywords: ['oslo', 'gardermoen', 'osl'], code: 'OSL' },
@@ -5048,22 +5050,34 @@ function mapTravelFlightPlaceToCode(
     { keywords: ['salen', 'sälen', 'scr'], code: 'SCR' },
   ];
 
+  // 1. Prøv bounded tekst først
   if (bounded) {
     for (const item of mappings) {
       if (item.keywords.some((keyword) => bounded.includes(normalizeTravelHelperText(keyword)))) {
         return item.code;
       }
     }
+
+    // Viktig:
+    // Hvis vi faktisk fant en bounded phrase, men den ikke matcher en flyplass direkte,
+    // så skal vi IKKE falle tilbake til hele meldingen for destination.
+    // Ellers kan "fra Amsterdam" bli brukt som destination også.
+    if (kind === 'destination') {
+      return null;
+    }
   }
 
-  for (const item of mappings) {
-    if (item.keywords.some((keyword) => message.includes(normalizeTravelHelperText(keyword)))) {
-      return item.code;
+  // 2. Kun origin får lov til å falle tilbake til hele meldingen
+  if (kind === 'origin') {
+    for (const item of mappings) {
+      if (item.keywords.some((keyword) => message.includes(normalizeTravelHelperText(keyword)))) {
+        return item.code;
+      }
     }
   }
 
   return null;
-}
+} null;
 
 function inferAirportFromTravelArea(area: string | null): string | null {
   const normalized = String(area || '').trim().toLowerCase();
@@ -6248,23 +6262,53 @@ app.post('/api/travel-helper', async (req, res) => {
   latestSearchParams &&
   !hostRentalIntent;
 
+const hasVerifiedFlightForPackage =
+  Array.isArray(latestFlightOffers) && latestFlightOffers.length > 0;
+
+const hasVerifiedAccommodationForPackage =
+  Array.isArray(latestSearchRows) && latestSearchRows.length > 0;
+
+const hasVerifiedContentForPackage =
+  !!tripProposal &&
+  (
+    (Array.isArray(tripProposal.activities) && tripProposal.activities.length > 0) ||
+    (Array.isArray(tripProposal.restaurants) && tripProposal.restaurants.length > 0)
+  );
+
 const shouldForceDeterministicTripReply =
   responseMode === 'trip_package' &&
-  !!tripProposal;
+  !!tripProposal &&
+  (hasVerifiedFlightForPackage || hasVerifiedAccommodationForPackage || hasVerifiedContentForPackage) &&
+  (
+    hasVerifiedFlightForPackage ||
+    hasVerifiedAccommodationForPackage
+  );
+
+  const shouldAskFollowUpForTripPackage =
+  responseMode === 'trip_package' &&
+  (
+    !latestFlightSearch?.origin ||
+    !latestFlightSearch?.departureDate ||
+    !latestSearchParams?.from ||
+    !latestSearchParams?.to ||
+    !latestSearchParams?.adults
+  );
 
 const safeReply =
   shouldForceDeterministicAccommodationReply
     ? buildDeterministicAccommodationReply(latestSearchRows, latestSearchParams)
-    : shouldForceDeterministicTripReply
-      ? buildDeterministicTripPackageReply({
-          tripProposal,
-          flightOffers: latestFlightOffers,
-          flightSearch: latestFlightSearch,
-          searchRows: latestSearchRows,
-          searchParams: latestSearchParams,
-          message: currentMessageText,
-        })
-      : (reply || 'Beklager, jeg fikk ikke laget et svar akkurat nå.');
+    : shouldAskFollowUpForTripPackage
+      ? 'Jeg kan sette opp en komplett pakke, men jeg trenger å bekrefte reisedatoene og avreiseflyplassen først.'
+      : shouldForceDeterministicTripReply
+        ? buildDeterministicTripPackageReply({
+            tripProposal,
+            flightOffers: latestFlightOffers,
+            flightSearch: latestFlightSearch,
+            searchRows: latestSearchRows,
+            searchParams: latestSearchParams,
+            message: currentMessageText,
+          })
+        : (reply || 'Beklager, jeg fikk ikke laget et svar akkurat nå.');
 
     return res.json({
       ok: true,
