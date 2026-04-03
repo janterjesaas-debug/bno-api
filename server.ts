@@ -3050,7 +3050,9 @@ app.post('/webhooks/mews', mewsWebhookHandler);
 
 // =============================================================
 // BNO Travel Helper
+// Erstatt hele travel-helper-blokken med denne
 // =============================================================
+
 const BNO_TRAVEL_HELPER_SYSTEM = `
 Du er BNO Reisehjelper i BNO Travel-appen.
 
@@ -3075,21 +3077,22 @@ VIKTIGE REGLER:
 16. Hvis spørsmålet gjelder innsjekk og utsjekk, og tidene finnes i BNO_CONTENT_CONTEXT, skal du oppgi de eksakte tidene.
 17. Hvis brukeren ber om booking av fly eller overnatting, skal du være tydelig på at booking fullføres via knapp/checkout i appen.
 18. Du skal ikke samle inn navn, e-post, telefonnummer, passasjerdata eller betalingsinformasjon i chatten.
-19. Hvis brukeren ber om et komplett reiseforslag, skal du sette sammen et konkret forslag med overnatting, fly, aktiviteter, restauranter, shopping og et enkelt dagsprogram når verifiserte data finnes.
+19. Hvis brukeren ber om et komplett reiseforslag, skal du sette sammen et konkret forslag med fly, overnatting, aktiviteter, restauranter og shopping når verifiserte data finnes.
 20. Hvis du bare har verifiserte forslag for deler av pakken, skal du være tydelig på hva som er verifisert og hva som må sjekkes nærmere.
 21. Hvis innhold antyder at tilbud kan være sesongavhengige, skal du være tydelig på dette og ikke presentere dem som sikkert åpne hvis det ikke er bekreftet.
 22. Hvis brukeren spør om å leie ut hytte eller leilighet via BNO Travel, bruk verifisert BNO-innhold om vertskap/utleie og ikke dikt opp betingelser eller kommersielle vilkår.
-23. Når BNO_CONTENT_CONTEXT inneholder vertskapsinnhold, skal du bruke dette aktivt og konkret, ikke svare at informasjon mangler.
-24. Hvis brukeren spør om formidling / utleie via BNO Travel, forklar ordningen med de konkrete punktene som faktisk finnes i innholdet, som tjenestegebyr, kjøpsfee, markedsføring, service, gjestekontakt, vask, sengetøy og kontroll av enhet dersom dette står i konteksten.
+23. Når BNO_CONTENT_CONTEXT inneholder vertskapsinnhold, skal du bruke dette aktivt og konkret.
+24. Hvis brukeren spør om formidling / utleie via BNO Travel, forklar ordningen med de konkrete punktene som faktisk finnes i innholdet.
 25. Når brukeren spør kun om restaurant, skal du ikke begynne å svare om overnatting eller fly.
 26. Når brukeren spør kun om aktiviteter, skal du ikke begynne å svare om overnatting eller fly.
 27. Når brukeren spør kun om shopping, skal du ikke begynne å svare om overnatting eller fly.
-28. Når brukeren spør om en reisepakke, skal du prøve å svare samlet på de delene brukeren faktisk ber om, men bare med verifisert grunnlag.
-29. Hvis brukeren spør om restaurant, aktiviteter eller shopping og du mangler preferanser, still ett kort oppfølgingsspørsmål, men ikke bytt tema.
-30. Hvis brukeren ber om bare fly, bare aktiviteter, bare restauranter eller bare shopping, skal du holde deg til det temaet.
-31. Ved reiseforslag skal "til [destinasjon]" tolkes som reisemål, mens "fra [sted]" er avreisested. Ikke bytt disse om.
+28. Når brukeren svarer med korte preferanser i en oppfølging, for eksempel "italiensk", "familierestaurant", "sportsklær", "pris spiller ingen rolle", skal du tolke dette i lys av forrige tema og IKKE bytte tema.
+29. Når brukeren spør om en reisepakke, skal du bruke ankomstdestinasjonen som destinasjon for aktiviteter, restauranter og shopping. Ikke bruk avreisestedet som destinasjon.
+30. Hvis brukeren ikke har bedt om overnatting, skal du ikke legge inn overnatting i et samlet forslag.
+31. Hvis du har konkrete verifiserte steder i restaurant eller shopping, skal du anbefale disse direkte i stedet for å svare generelt.
+32. Ikke si at informasjon mangler hvis BNO_CONTENT_CONTEXT faktisk inneholder konkrete forslag.
 
-Når brukeren spør om overnatting:
+Hvis brukeren spør om overnatting:
 - bruk BNO Travel sitt eget innhold først
 - presenter konkrete alternativer hvis du har dem
 - ta med navn, pris, kapasitet og område hvis det finnes
@@ -3101,101 +3104,35 @@ Når brukeren spør om overnatting:
 
 Hvis brukeren ber om en hel reise:
 - sett sammen et konkret forslag hvis du har verifiserte data
-- ta bare med overnatting hvis brukeren faktisk ba om overnatting
-- ta bare med fly hvis brukeren faktisk ba om fly
-- ta bare med aktiviteter hvis brukeren faktisk ba om aktiviteter
-- ta bare med restaurantforslag hvis brukeren faktisk ba om restauranter
-- ta bare med shopping hvis brukeren faktisk ba om shopping
-- prioriter én anbefalt overnatting og ett anbefalt fly først når disse er etterspurt
+- prioriter ett anbefalt fly først
+- ta bare med overnatting hvis brukeren faktisk har bedt om overnatting
 - ta med 2–4 relevante aktiviteter hvis de finnes i BNO_CONTENT_CONTEXT
 - ta med 2–4 relevante restaurantforslag hvis de finnes i BNO_CONTENT_CONTEXT
 - ta med 2–4 relevante shoppingforslag hvis de finnes i BNO_CONTENT_CONTEXT
 - hvis sesong er relevant, bruk bare forslag som virker relevante for sesongen ut fra innholdet
-- lag et enkelt dagsprogram når det er nyttig
+- hvis du lager et dagsprogram, kall det et enkelt forslag for de første dagene og ikke som en full plan for hele reisen med mindre du har grunnlag for hele perioden
 - vær tydelig på at fly og overnatting fullføres via bookingknappene i appen
 
-Hvis brukeren spør om å være vert / leie ut:
+Hvis brukeren spør om restaurant:
 - bruk BNO Travel sitt innhold først
-- forklar konkret hvordan ordningen fungerer basert på verifisert innhold
-- oppgi konkrete fordeler, provisjon, fleksibilitet, serviceapparat og oppfølging bare hvis dette faktisk står i BNO_CONTENT_CONTEXT
-- ikke dikt opp økonomi, kontraktsvilkår, oppsigelsestid eller plattformintegrasjoner
-- hvis brukeren vil gå videre, oppfordre til kontakt eller riktig side/rute i app/nettløsning hvis dette finnes i innholdet
+- presenter konkrete restaurantnavn hvis de finnes
+- prioriter konkrete steder foran generelle guideartikler
+- hvis preferanser finnes, bruk dem aktivt til å velge de mest relevante stedene
+- hvis du mangler preferanser, still ett kort oppfølgingsspørsmål
+- ikke bytt tema
 
-Hvis du får BNO_AVAILABILITY_CONTEXT:
-- bruk kun disse dataene som sanntidsgrunnlag
-- ikke legg til ekstra alternativer
-- ikke dikt opp egenskaper som ikke står i konteksten
-- ikke dikt opp priser
-- ikke dikt opp beliggenhet
-
-Hvis du får BNO_CONTENT_CONTEXT:
-- bruk dette som verifisert BNO-innhold
-- prioriter dette over generelle råd
-- oppsummer konkret og nyttig
-- hvis brukeren spør etter forslag, bruk innholdet aktivt
-- ikke dikt opp detaljer som ikke finnes i konteksten
-- hvis brukeren spør om reisevilkår, svar med de konkrete opplysningene som faktisk står i innholdet
-- hvis brukeren spør om vertskap/utleie, svar konkret med det som faktisk står om modellen
-- hvis brukeren spør om restaurant, hold deg til restaurantinnhold
-- hvis brukeren spør om aktiviteter, hold deg til aktivitetsinnhold
-- hvis brukeren spør om shopping, hold deg til shoppinginnhold
-
-Hvis du får BNO_FLIGHT_CONTEXT:
-- bruk dette som verifiserte flydata fra BNO Travel
-- ikke dikt opp fly, priser, tider eller flyselskap
-- oppsummer de beste alternativene kort og konkret
-- hvis brukeren vil bestille et fly, bruk bookingknappen i appen
-- du skal ikke samle inn passasjerdata eller betalingsinformasjon i chatten
-- du skal ikke si at flyet er bestilt før checkout og betaling faktisk er fullført
-
-Hvis du får BNO_TRIP_PROPOSAL_CONTEXT:
-- bruk dette som strukturert forslag bygget av BNO Travel backend
-- presenter anbefalingen som et forslag, ikke som absolutt fasit
-- forklar kort hvorfor dette forslaget passer
-- presenter bare de delene brukeren faktisk har bedt om
-- hvis noen deler mangler verifisert grunnlag, si det eksplisitt
+Hvis brukeren spør om shopping:
+- bruk BNO Travel sitt innhold først
+- presenter konkrete shoppingsteder hvis de finnes
+- prioriter konkrete steder foran generelle guideartikler
+- hvis preferanser finnes, bruk dem aktivt til å velge de mest relevante stedene
+- hvis du mangler preferanser, still ett kort oppfølgingsspørsmål
+- ikke bytt tema
 
 Hvis brukeren spør om aktiviteter, restauranter, shopping, spa, trening, reisevilkår eller vertskap/utleie:
 - bruk BNO Travel sitt innhold først
 - still ett kort oppfølgingsspørsmål hvis du trenger preferanser
 - vær tydelig dersom noe ikke er sanntidsbookbart
-
-BNO Travel dekker blant annet:
-- Overnatting
-- Fly
-- Leiebil
-- Aktiviteter
-- Restauranter
-- Shopping
-- Massasje / spa
-- Trening
-- BNO Moments
-- BNO Rewards
-- Vertskap / utleie av hytter og leiligheter
-
-Kjente destinasjoner:
-- Trysil
-- Sälen
-- Stranda
-- Geiranger
-- Sunnmørsalpene
-- Oslo
-- London
-- Amsterdam
-- København
-- Stockholm
-- Los Angeles
-- Miami
-- Paris
-- Roma
-- Berlin
-
-BNO Moments:
-- lagre og dele reiseminner
-- konkurranse og engasjement etter reisen
-
-BNO Rewards:
-- fordeler, kampanjer, gavekort og medlemsverdi
 `;
 
 type TravelHelperIntent =
@@ -3213,15 +3150,6 @@ type TravelHelperResponseMode =
   | 'trip_package'
   | 'host_only'
   | 'general';
-
-type TravelRequestScope = {
-  accommodation: boolean;
-  flight: boolean;
-  restaurant: boolean;
-  activity: boolean;
-  shopping: boolean;
-  host: boolean;
-};
 
 type FlightAction = {
   type: 'book_flight';
@@ -3258,7 +3186,6 @@ type TripProposal = {
     label: string;
     season: 'winter' | 'summer' | 'unknown';
   } | null;
-  requested: TravelRequestScope;
   accommodation: any | null;
   flight: any | null;
   activities: any[];
@@ -3285,19 +3212,11 @@ function containsAny(text: string, values: string[]): boolean {
   return values.some((value) => text.includes(value));
 }
 
-function getHistoryItemText(item: any): string {
-  if (!item) return '';
-  if (typeof item?.text === 'string' && item.text.trim()) return item.text.trim();
-  if (typeof item?.content === 'string' && item.content.trim()) return item.content.trim();
-  if (typeof item?.message === 'string' && item.message.trim()) return item.message.trim();
-  return '';
-}
-
 function buildTravelHelperSearchBasis(message: string, history: any[]): string {
   const recentUserTexts = (Array.isArray(history) ? history : [])
     .filter((item: any) => item?.role === 'user')
     .slice(-6)
-    .map((item: any) => getHistoryItemText(item))
+    .map((item: any) => String(item?.text || '').trim())
     .filter(Boolean);
 
   return [...recentUserTexts, String(message || '').trim()]
@@ -3305,19 +3224,37 @@ function buildTravelHelperSearchBasis(message: string, history: any[]): string {
     .join('\n');
 }
 
-function buildTravelHelperRecentFollowUpBasis(message: string, history: any[]): string {
-  const recentUserTexts = (Array.isArray(history) ? history : [])
-    .filter((item: any) => item?.role === 'user')
-    .slice(-3)
-    .map((item: any) => getHistoryItemText(item))
-    .filter(Boolean);
-
-  return [...recentUserTexts, String(message || '').trim()]
-    .filter(Boolean)
-    .join('\n');
+function getLastUserMessage(history: any[]): string {
+  const arr = (Array.isArray(history) ? history : []).filter((item: any) => item?.role === 'user');
+  const last = arr[arr.length - 1];
+  return String(last?.text || '').trim();
 }
 
-function getTravelSignalWords() {
+function getPreviousUserMessage(history: any[]): string {
+  const arr = (Array.isArray(history) ? history : []).filter((item: any) => item?.role === 'user');
+  const prev = arr[arr.length - 2];
+  return String(prev?.text || '').trim();
+}
+
+function isShortPreferenceReply(messageRaw: string): boolean {
+  const s = String(messageRaw || '').trim();
+  if (!s) return false;
+  if (s.length > 80) return false;
+  if (s.includes('?')) return false;
+  return true;
+}
+
+function detectTravelHelperResponseMode(
+  messageRaw: string,
+  history: any[] = []
+): TravelHelperResponseMode {
+  const message = normalizeTravelHelperText(messageRaw);
+  const previous = normalizeTravelHelperText(getPreviousUserMessage(history));
+  const last = normalizeTravelHelperText(getLastUserMessage(history));
+  const combined = normalizeTravelHelperText(
+    buildTravelHelperSearchBasis(String(messageRaw || ''), history || [])
+  );
+
   const hostWords = [
     'leie ut',
     'utleie',
@@ -3333,11 +3270,6 @@ function getTravelSignalWords() {
     'provisjon',
     'serviceapparat',
     'bookingstatus',
-    'reservasjoner for din hytte',
-    'revenue for din hytte',
-    'kan jeg leie ut',
-    'kan bno travel hjelpe meg a leie ut',
-    'kan bno travel hjelpe meg å leie ut',
   ];
 
   const accommodationWords = [
@@ -3345,8 +3277,6 @@ function getTravelSignalWords() {
     'ledige',
     'tilgjengelig',
     'tilgjengelige',
-    'pris',
-    'priser',
     'overnatting',
     'opphold',
     'sted a bo',
@@ -3356,7 +3286,6 @@ function getTravelSignalWords() {
     'leilighet',
     'leiligheter',
     'hotell',
-    'hus',
     'rom',
     'ski in',
     'ski out',
@@ -3365,7 +3294,6 @@ function getTravelSignalWords() {
     'booke',
     'bestille',
     'bestill',
-    'book',
     'booking',
   ];
 
@@ -3387,13 +3315,17 @@ function getTravelSignalWords() {
     'restaurant',
     'restauranter',
     'middag',
-    'cafe',
-    'kafe',
+    'lunsj',
     'spisested',
     'spisesteder',
+    'italiensk',
+    'pizza',
+    'familierestaurant',
+    'romantisk',
+    'fine dining',
+    'cafe',
+    'kafe',
     'mat',
-    'afterski',
-    'lunsj',
   ];
 
   const activityWords = [
@@ -3401,12 +3333,8 @@ function getTravelSignalWords() {
     'aktiviteter',
     'ting a gjore',
     'ting å gjøre',
-    'hva kan vi gjore',
-    'hva kan vi gjøre',
     'alpint',
     'langrenn',
-    'snoscooter',
-    'snøscooter',
     'spa',
     'massasje',
     'trening',
@@ -3415,26 +3343,27 @@ function getTravelSignalWords() {
     'yoga',
     'vandring',
     'sykkel',
-    'program',
-    'reiseprogram',
+    'museum',
+    'guide',
   ];
 
   const shoppingWords = [
     'shopping',
-    'shoppe',
-    'butikker',
     'butikk',
-    'handle',
-    'shoppingmuligheter',
-    'shoppingtips',
+    'butikker',
+    'shoppe',
+    'sportsklaer',
+    'sportsklær',
     'klaer',
     'klær',
-    'sportsutstyr',
-    'souvenir',
-    'suvenir',
+    'mote',
+    'design',
     'gaver',
-    'dagligvare',
-    'designbutikk',
+    'souvenir',
+    'souvenirer',
+    'dagligvarer',
+    'skiutstyr',
+    'sportsutstyr',
   ];
 
   const packageHints = [
@@ -3444,7 +3373,6 @@ function getTravelSignalWords() {
     'ferieforslag',
     'reiseplan',
     'dagsprogram',
-    'program for',
     'kan du sette opp',
     'kan du lage et forslag',
     'kan du lage et opplegg',
@@ -3452,68 +3380,9 @@ function getTravelSignalWords() {
     'skiferie',
     'sommerferie',
     'familieferie',
-    'vi trenger fly',
-    'vi trenger overnatting',
-    'vi trenger hytte',
-    'vi trenger flybilletter',
   ];
 
-  return {
-    hostWords,
-    accommodationWords,
-    flightWords,
-    restaurantWords,
-    activityWords,
-    shoppingWords,
-    packageHints,
-  };
-}
-
-function detectTravelRequestScope(messageRaw: string, history: any[] = []): TravelRequestScope {
-  const current = normalizeTravelHelperText(String(messageRaw || ''));
-  const combined = normalizeTravelHelperText(
-    buildTravelHelperSearchBasis(String(messageRaw || ''), history || [])
-  );
-  const {
-    hostWords,
-    accommodationWords,
-    flightWords,
-    restaurantWords,
-    activityWords,
-    shoppingWords,
-  } = getTravelSignalWords();
-
-  return {
-    accommodation: containsAny(current, accommodationWords),
-    flight: containsAny(current, flightWords),
-    restaurant: containsAny(current, restaurantWords),
-    activity: containsAny(current, activityWords),
-    shopping: containsAny(current, shoppingWords),
-    host: containsAny(combined, hostWords),
-  };
-}
-
-function detectTravelHelperResponseMode(
-  messageRaw: string,
-  history: any[] = []
-): TravelHelperResponseMode {
-  const message = normalizeTravelHelperText(messageRaw);
-  const combined = normalizeTravelHelperText(
-    buildTravelHelperSearchBasis(String(messageRaw || ''), history || [])
-  );
-
-  const {
-    hostWords,
-    accommodationWords,
-    flightWords,
-    restaurantWords,
-    activityWords,
-    shoppingWords,
-    packageHints,
-  } = getTravelSignalWords();
-
-  const hasHost = containsAny(combined, hostWords);
-  if (hasHost) return 'host_only';
+  if (containsAny(combined, hostWords)) return 'host_only';
 
   const hasAccommodation = containsAny(message, accommodationWords);
   const hasFlight = containsAny(message, flightWords);
@@ -3538,12 +3407,12 @@ function detectTravelHelperResponseMode(
     return 'restaurant_only';
   }
 
-  if (hasActivity && !hasAccommodation && !hasFlight && !hasRestaurant && !hasShopping) {
-    return 'activity_only';
+  if (hasShopping && !hasAccommodation && !hasFlight && !hasActivity && !hasRestaurant) {
+    return 'shopping_only';
   }
 
-  if (hasShopping && !hasAccommodation && !hasFlight && !hasRestaurant && !hasActivity) {
-    return 'shopping_only';
+  if (hasActivity && !hasAccommodation && !hasFlight && !hasRestaurant && !hasShopping) {
+    return 'activity_only';
   }
 
   if (hasFlight && !hasAccommodation && !hasRestaurant && !hasActivity && !hasShopping) {
@@ -3554,234 +3423,66 @@ function detectTravelHelperResponseMode(
     return 'accommodation_only';
   }
 
-  const lastUserText = normalizeTravelHelperText(
-    (Array.isArray(history) ? history : [])
-      .filter((item: any) => item?.role === 'user')
-      .slice(-1)
-      .map((item: any) => getHistoryItemText(item))
-      .join(' ')
-  );
-
-  if (lastUserText) {
-    if (
-      containsAny(lastUserText, restaurantWords) &&
-      !hasAccommodation &&
-      !hasFlight &&
-      !hasActivity &&
-      !hasShopping
-    ) {
+  if (isShortPreferenceReply(messageRaw)) {
+    if (containsAny(previous, restaurantWords) || containsAny(last, restaurantWords)) {
       return 'restaurant_only';
     }
-
-    if (
-      containsAny(lastUserText, shoppingWords) &&
-      !hasAccommodation &&
-      !hasFlight &&
-      !hasActivity &&
-      !hasRestaurant
-    ) {
+    if (containsAny(previous, shoppingWords) || containsAny(last, shoppingWords)) {
       return 'shopping_only';
     }
-
-    if (
-      containsAny(lastUserText, activityWords) &&
-      !hasAccommodation &&
-      !hasFlight &&
-      !hasRestaurant &&
-      !hasShopping
-    ) {
+    if (containsAny(previous, activityWords) || containsAny(last, activityWords)) {
       return 'activity_only';
-    }
-
-    if (
-      containsAny(lastUserText, flightWords) &&
-      !hasAccommodation &&
-      !hasRestaurant &&
-      !hasActivity &&
-      !hasShopping
-    ) {
-      return 'flight_only';
-    }
-
-    if (
-      containsAny(lastUserText, accommodationWords) &&
-      !hasFlight &&
-      !hasRestaurant &&
-      !hasActivity &&
-      !hasShopping
-    ) {
-      return 'accommodation_only';
     }
   }
 
   return 'general';
 }
 
-function isRestaurantOnlyQuestion(
-  messageRaw: string,
-  history: any[] = []
-): boolean {
-  return detectTravelHelperResponseMode(messageRaw, history) === 'restaurant_only';
-}
-
-function isActivityOnlyQuestion(
-  messageRaw: string,
-  history: any[] = []
-): boolean {
-  return detectTravelHelperResponseMode(messageRaw, history) === 'activity_only';
-}
-
-function isShoppingOnlyQuestion(
-  messageRaw: string,
-  history: any[] = []
-): boolean {
-  return detectTravelHelperResponseMode(messageRaw, history) === 'shopping_only';
-}
-
-function isHostOnlyQuestion(
-  messageRaw: string,
-  history: any[] = []
-): boolean {
-  return detectTravelHelperResponseMode(messageRaw, history) === 'host_only';
-}
-
-function isAccommodationOnlyQuestion(
-  messageRaw: string,
-  history: any[] = []
-): boolean {
-  return detectTravelHelperResponseMode(messageRaw, history) === 'accommodation_only';
-}
-
-function isFlightOnlyQuestion(
-  messageRaw: string,
-  history: any[] = []
-): boolean {
-  return detectTravelHelperResponseMode(messageRaw, history) === 'flight_only';
-}
-
-function isTripPackageQuestion(
-  messageRaw: string,
-  history: any[] = []
-): boolean {
-  return detectTravelHelperResponseMode(messageRaw, history) === 'trip_package';
-}
-
 function detectTravelHelperIntent(messageRaw: string): TravelHelperIntent {
   const message = normalizeTravelHelperText(messageRaw);
 
-  const hostHints = [
-    'leie ut',
-    'utleie',
-    'utleier',
-    'utleiermodell',
-    'vert',
-    'vaere vert',
-    'være vert',
-    'host',
-    'hoste',
-    'formidling',
-    'eier',
-    'eierside',
-    'provisjon',
-    'serviceapparat',
-    'bookingstatus',
-    'reservasjoner for din hytte',
-    'revenue for din hytte',
-    'leilighet i trysil kan jeg leie ut',
-    'kan jeg leie ut',
-    'kan bno travel hjelpe meg a leie ut',
-    'kan bno travel hjelpe meg å leie ut',
-  ];
-
-  if (hostHints.some((word) => message.includes(word))) {
+  if (
+    message.includes('leie ut') ||
+    message.includes('utleie') ||
+    message.includes('vert') ||
+    message.includes('formidling') ||
+    message.includes('provisjon')
+  ) {
     return 'host_rental_help';
   }
 
-  const tripPlanningHints = [
-    'sett opp et forslag',
-    'sett opp forslag',
-    'reiseforslag',
-    'ferieforslag',
-    'reiseplan',
-    'dagsprogram',
-    'program for',
-    'vi trenger en hytte',
-    'vi trenger hytte',
-    'vi trenger fly',
-    'vi trenger flybilletter',
-    'vi trenger overnatting',
-    'kan du sette opp',
-    'kan du lage et forslag',
-    'kan du lage et opplegg',
-    'vi vil reise',
-    'skiferie',
-    'sommerferie',
-    'familieferie',
-  ];
-
   const planningNeedsCount = [
-    message.includes('hytte') || message.includes('overnatting') || message.includes('leilighet'),
-    message.includes('fly') || message.includes('flight') || message.includes('flybilletter'),
+    message.includes('overnatting') || message.includes('hytte') || message.includes('leilighet'),
+    message.includes('fly') || message.includes('flight'),
     message.includes('aktivitet') || message.includes('aktiviteter'),
-    message.includes('restaurant') || message.includes('restauranter') || message.includes('mat'),
+    message.includes('restaurant') || message.includes('restauranter'),
     message.includes('shopping') || message.includes('butikker'),
-    message.includes('dagsprogram') || message.includes('reiseplan') || message.includes('opplegg'),
   ].filter(Boolean).length;
 
-  if (
-    tripPlanningHints.some((word) => message.includes(word)) ||
-    planningNeedsCount >= 2
-  ) {
+  if (planningNeedsCount >= 2) {
     return 'trip_planning';
   }
 
-  const availabilityHints = [
-    'ledig',
-    'ledige',
-    'tilgjengelig',
-    'tilgjengelige',
-    'pris',
-    'priser',
-    'overnatting',
-    'opphold',
-    'sted a bo',
-    'bo',
-    'hytte',
-    'hytter',
-    'leilighet',
-    'leiligheter',
-    'hotell',
-    'hus',
-    'rom',
-    'ski in',
-    'ski out',
-    'ski-in',
-    'ski-out',
-    'booke',
-    'bestille',
-    'bestill',
-    'book',
-    'booking',
-  ];
+  if (
+    message.includes('overnatting') ||
+    message.includes('hytte') ||
+    message.includes('leilighet') ||
+    message.includes('rom')
+  ) {
+    return 'availability_search';
+  }
 
-  return availabilityHints.some((word) => message.includes(word))
-    ? 'availability_search'
-    : 'general_travel_help';
+  return 'general_travel_help';
 }
 
 function extractTravelHelperArea(messageRaw: string): string | null {
-  const raw = String(messageRaw || '');
+  const message = normalizeTravelHelperText(messageRaw);
+
   const mappings: Array<{ keywords: string[]; area: string }> = [
     { keywords: ['trysil sentrum'], area: 'trysil-sentrum' },
     { keywords: ['turistsenter', 'trysil turistsenter'], area: 'trysil-turistsenter' },
-    {
-      keywords: ['hoyfjellssenter', 'trysil hoyfjellssenter', 'fagerasen', 'fageraasen'],
-      area: 'trysil-hoyfjellssenter',
-    },
-    {
-      keywords: ['trysilfjellet', 'trysilfjell hytteomrade', 'trysilfjell'],
-      area: 'trysilfjell-hytteomrade',
-    },
+    { keywords: ['hoyfjellssenter', 'trysil hoyfjellssenter', 'fagerasen', 'fageraasen'], area: 'trysil-hoyfjellssenter' },
+    { keywords: ['trysilfjell', 'trysilfjellet'], area: 'trysilfjell-hytteomrade' },
     { keywords: ['trysil'], area: 'trysil' },
     { keywords: ['salen', 'saelen', 'sälen'], area: 'salen' },
     { keywords: ['geiranger'], area: 'stranda' },
@@ -3795,49 +3496,59 @@ function extractTravelHelperArea(messageRaw: string): string | null {
     { keywords: ['los angeles', 'losangeles'], area: 'losangeles' },
     { keywords: ['miami'], area: 'miami' },
     { keywords: ['paris'], area: 'paris' },
-    { keywords: ['roma', 'rome'], area: 'rome' },
-    { keywords: ['berlin'], area: 'berlin' },
+    { keywords: ['rome', 'roma'], area: 'rome' },
   ];
 
-  const findAreaInText = (textRaw: string): string | null => {
-    const text = normalizeTravelHelperText(textRaw);
-    for (const item of mappings) {
-      if (item.keywords.some((keyword) => text.includes(normalizeTravelHelperText(keyword)))) {
-        return item.area;
-      }
+  for (const item of mappings) {
+    if (item.keywords.some((keyword) => message.includes(keyword))) {
+      return item.area;
     }
-    return null;
-  };
+  }
 
-  const destinationPartMatch =
-    raw.match(/\btil\s+(.+?)(?:\s+fra\s+|$)/i) ||
-    raw.match(/\breise til\s+(.+?)(?:\s+fra\s+|$)/i) ||
-    raw.match(/\bdra til\s+(.+?)(?:\s+fra\s+|$)/i);
-
-  const destinationPart = String(destinationPartMatch?.[1] || '').trim();
-  const areaFromDestinationPart = destinationPart ? findAreaInText(destinationPart) : null;
-  if (areaFromDestinationPart) return areaFromDestinationPart;
-
-  return findAreaInText(raw);
+  return null;
 }
 
-function extractTravelDestinationArea(messageRaw: string, history: any[] = []): string | null {
-  const currentRaw = String(messageRaw || '').trim();
+function extractBoundedPlace(
+  messageRaw: string,
+  kind: 'origin' | 'destination'
+): string {
+  const raw = String(messageRaw || '');
 
-  const currentDirect = extractTravelHelperArea(currentRaw);
-  if (currentDirect) return currentDirect;
-
-  const recentUserTexts = (Array.isArray(history) ? history : [])
-    .filter((item: any) => item?.role === 'user')
-    .slice(-6)
-    .map((item: any) => getHistoryItemText(item))
-    .filter(Boolean)
-    .reverse();
-
-  for (const text of recentUserTexts) {
-    const found = extractTravelHelperArea(text);
-    if (found) return found;
+  if (kind === 'origin') {
+    const match = raw.match(/\bfra\s+(.+?)(?:\s+til\s+|$)/i);
+    return String(match?.[1] || '').trim();
   }
+
+  const match = raw.match(/\btil\s+(.+?)(?:\s+fra\s+|$)/i);
+  return String(match?.[1] || '').trim();
+}
+
+function extractTripDestinationArea(
+  messageRaw: string,
+  history: any[]
+): string | null {
+  const directDestination = extractBoundedPlace(messageRaw, 'destination');
+  const directArea = extractTravelHelperArea(directDestination);
+  if (directArea) return directArea;
+
+  const direct = extractTravelHelperArea(messageRaw);
+  if (direct) {
+    const originBounded = extractBoundedPlace(messageRaw, 'origin');
+    const originArea = extractTravelHelperArea(originBounded);
+
+    if (originArea && direct === originArea) {
+      const destinationBounded = extractBoundedPlace(messageRaw, 'destination');
+      const destinationArea = extractTravelHelperArea(destinationBounded);
+      if (destinationArea) return destinationArea;
+    }
+
+    return direct;
+  }
+
+  const prev = getPreviousUserMessage(history);
+  const prevDestination = extractBoundedPlace(prev, 'destination');
+  const prevArea = extractTravelHelperArea(prevDestination || prev);
+  if (prevArea) return prevArea;
 
   return null;
 }
@@ -3875,7 +3586,6 @@ function mapTravelHelperAreaToContentDestinationSlug(area: string | null): strin
   if (normalized === 'miami') return 'miami';
   if (normalized === 'paris') return 'paris';
   if (normalized === 'rome') return 'rome';
-  if (normalized === 'berlin') return 'berlin';
 
   return 'global';
 }
@@ -3888,7 +3598,6 @@ function extractTravelHelperAdults(messageRaw: string): number | null {
     /for\s+(\d+)/,
     /vi\s+er\s+(\d+)/,
     /oss\s+(\d+)/,
-    /familien min.*?(\d+)/,
   ];
 
   for (const pattern of patterns) {
@@ -3929,108 +3638,51 @@ function extractTravelHelperDates(
 
   const isoDates = raw.match(/\b\d{4}-\d{2}-\d{2}\b/g) || [];
   if (isoDates.length >= 2) {
-    return {
-      from: isoDates[0] ?? null,
-      to: isoDates[1] ?? null,
-    };
+    return { from: isoDates[0] ?? null, to: isoDates[1] ?? null };
   }
 
   const dottedDates = [...raw.matchAll(/\b(\d{1,2})\.(\d{1,2})\.(\d{4})\b/g)];
   if (dottedDates.length >= 2) {
     const first = dottedDates[0];
     const second = dottedDates[1];
-
     return {
       from: `${first[3]}-${pad(Number(first[2]))}-${pad(Number(first[1]))}`,
       to: `${second[3]}-${pad(Number(second[2]))}-${pad(Number(second[1]))}`,
     };
   }
 
-  const dashRange = raw.match(/\b(\d{1,2})\s*-\s*(\d{1,2})\.\s*(januar|februar|mars|april|mai|juni|juli|august|september|oktober|november|desember)\b/i);
-  if (dashRange) {
-    const fromDay = Number(dashRange[1]);
-    const toDay = Number(dashRange[2]);
-    const month = monthMap[normalizeTravelHelperText(dashRange[3])];
-    return {
-      from: `${currentYear}-${pad(month)}-${pad(fromDay)}`,
-      to: `${currentYear}-${pad(month)}-${pad(toDay)}`,
-    };
-  }
-
-  const rangeSameMonthWithYear = message.match(
-    /\bfra\s+(\d{1,2})\s+til\s+(\d{1,2})\s+(januar|februar|mars|april|mai|juni|juli|august|september|oktober|november|desember)\s+(\d{4})\b/
+  const rangeSameMonth = message.match(
+    /\b(\d{1,2})\.?\s*(?:-|til)\s*(\d{1,2})\.?\s*(januar|februar|mars|april|mai|juni|juli|august|september|oktober|november|desember)(?:\s+(\d{4}))?\b/
   );
-
-  if (rangeSameMonthWithYear) {
-    const fromDay = Number(rangeSameMonthWithYear[1]);
-    const toDay = Number(rangeSameMonthWithYear[2]);
-    const month = monthMap[rangeSameMonthWithYear[3]];
-    const year = Number(rangeSameMonthWithYear[4]);
-
+  if (rangeSameMonth) {
+    const fromDay = Number(rangeSameMonth[1]);
+    const toDay = Number(rangeSameMonth[2]);
+    const month = monthMap[rangeSameMonth[3]];
+    const year = Number(rangeSameMonth[4] || currentYear);
     return {
       from: `${year}-${pad(month)}-${pad(fromDay)}`,
       to: `${year}-${pad(month)}-${pad(toDay)}`,
     };
   }
 
-  const rangeSameMonth = message.match(
-    /\bfra\s+(\d{1,2})\s+til\s+(\d{1,2})\s+(januar|februar|mars|april|mai|juni|juli|august|september|oktober|november|desember)\b/
-  );
-
-  if (rangeSameMonth) {
-    const fromDay = Number(rangeSameMonth[1]);
-    const toDay = Number(rangeSameMonth[2]);
-    const month = monthMap[rangeSameMonth[3]];
-    return {
-      from: `${currentYear}-${pad(month)}-${pad(fromDay)}`,
-      to: `${currentYear}-${pad(month)}-${pad(toDay)}`,
-    };
-  }
-
   const longDates = [
     ...message.matchAll(
-      /\b(\d{1,2})\.?\s+(januar|februar|mars|april|mai|juni|juli|august|september|oktober|november|desember)\s+(\d{4})\b/g
+      /\b(\d{1,2})\.?\s+(januar|februar|mars|april|mai|juni|juli|august|september|oktober|november|desember)(?:\s+(\d{4}))?\b/g
     ),
   ];
 
   if (longDates.length >= 2) {
     const first = longDates[0];
     const second = longDates[1];
+    const firstYear = Number(first[3] || currentYear);
+    let secondYear = Number(second[3] || currentYear);
+    const firstMonth = monthMap[first[2]];
+    const secondMonth = monthMap[second[2]];
+    if (!second[3] && secondMonth < firstMonth) secondYear = firstYear + 1;
 
     return {
-      from: `${first[3]}-${pad(monthMap[first[2]])}-${pad(Number(first[1]))}`,
-      to: `${second[3]}-${pad(monthMap[second[2]])}-${pad(Number(second[1]))}`,
-    };
-  }
-
-  const monthOnlyDates = [
-    ...message.matchAll(
-      /\b(\d{1,2})\.?\s+(januar|februar|mars|april|mai|juni|juli|august|september|oktober|november|desember)\b/g
-    ),
-  ];
-
-  if (monthOnlyDates.length >= 2) {
-    const first = monthOnlyDates[0];
-    const second = monthOnlyDates[1];
-
-    let fromYear = currentYear;
-    let toYear = currentYear;
-
-    const fromMonth = monthMap[first[2]];
-    const toMonth = monthMap[second[2]];
-    const fromDay = Number(first[1]);
-    const toDay = Number(second[1]);
-
-    const fromDate = new Date(fromYear, fromMonth - 1, fromDay);
-    const toDate = new Date(toYear, toMonth - 1, toDay);
-
-    if (toDate < fromDate) {
-      toYear = currentYear + 1;
-    }
-
-    return {
-      from: `${fromYear}-${pad(fromMonth)}-${pad(fromDay)}`,
-      to: `${toYear}-${pad(toMonth)}-${pad(toDay)}`,
+      from: `${firstYear}-${pad(firstMonth)}-${pad(Number(first[1]))}`,
+      to: `${secondYear}-${pad(secondMonth)}-${pad(Number(second[1]))}`,
     };
   }
 
@@ -4058,8 +3710,7 @@ function detectTravelSeason(
     message.includes('sommer') ||
     message.includes('vandring') ||
     message.includes('hiking') ||
-    message.includes('sykkel') ||
-    message.includes('bike')
+    message.includes('sykkel')
   ) {
     return 'summer';
   }
@@ -4084,21 +3735,9 @@ function rankTravelHelperAvailabilityRows(
 ) {
   const message = normalizeTravelHelperText(messageRaw);
 
-  const wantsCabin =
-    message.includes('hytte') ||
-    message.includes('cabin') ||
-    message.includes('chalet');
-
-  const wantsSkiInOut =
-    message.includes('ski in') ||
-    message.includes('ski-out') ||
-    message.includes('ski out') ||
-    message.includes('ski-in');
-
-  const wantsFamily =
-    message.includes('familie') ||
-    message.includes('barn') ||
-    message.includes('family');
+  const wantsCabin = message.includes('hytte') || message.includes('cabin') || message.includes('chalet');
+  const wantsSkiInOut = message.includes('ski in') || message.includes('ski out') || message.includes('ski-in') || message.includes('ski-out');
+  const wantsFamily = message.includes('familie') || message.includes('barn') || message.includes('family');
 
   const scored = (Array.isArray(rows) ? rows : []).map((item: any) => {
     let score = 0;
@@ -4117,37 +3756,26 @@ function rankTravelHelperAvailabilityRows(
       score -= 200;
     }
 
-    if (wantsCabin) {
-      if (
-        textBlob.includes('hytte') ||
-        textBlob.includes('cabin') ||
-        textBlob.includes('chalet')
-      ) {
-        score += 20;
-      }
+    if (wantsCabin && (textBlob.includes('hytte') || textBlob.includes('cabin') || textBlob.includes('chalet'))) {
+      score += 20;
     }
 
-    if (wantsFamily) {
-      if (
-        textBlob.includes('familie') ||
-        textBlob.includes('family') ||
-        capacity >= 4
-      ) {
-        score += 12;
-      }
+    if (wantsFamily && (textBlob.includes('familie') || textBlob.includes('family') || capacity >= 4)) {
+      score += 12;
     }
 
-    if (wantsSkiInOut) {
-      if (
+    if (
+      wantsSkiInOut &&
+      (
         textBlob.includes('ski in/ski out') ||
         textBlob.includes('ski-in/ski-out') ||
         textBlob.includes('ski in') ||
-        textBlob.includes('ski-out') ||
         textBlob.includes('ski out') ||
-        textBlob.includes('ski-in')
-      ) {
-        score += 25;
-      }
+        textBlob.includes('ski-in') ||
+        textBlob.includes('ski-out')
+      )
+    ) {
+      score += 25;
     }
 
     if (item?.PriceTotal != null || item?.priceTotal != null) score += 5;
@@ -4158,30 +3786,22 @@ function rankTravelHelperAvailabilityRows(
       score += 5;
     }
 
-    return {
-      ...item,
-      __travelHelperScore: score,
-    };
+    return { ...item, __travelHelperScore: score };
   });
 
   return scored.sort((a: any, b: any) => {
-    const scoreDiff =
-      Number(b.__travelHelperScore || 0) - Number(a.__travelHelperScore || 0);
+    const scoreDiff = Number(b.__travelHelperScore || 0) - Number(a.__travelHelperScore || 0);
     if (scoreDiff !== 0) return scoreDiff;
 
     const priceA =
-      a?.PriceTotal != null
-        ? Number(a.PriceTotal)
-        : a?.priceTotal != null
-          ? Number(a.priceTotal)
-          : Number.POSITIVE_INFINITY;
+      a?.PriceTotal != null ? Number(a.PriceTotal)
+      : a?.priceTotal != null ? Number(a.priceTotal)
+      : Number.POSITIVE_INFINITY;
 
     const priceB =
-      b?.PriceTotal != null
-        ? Number(b.PriceTotal)
-        : b?.priceTotal != null
-          ? Number(b.priceTotal)
-          : Number.POSITIVE_INFINITY;
+      b?.PriceTotal != null ? Number(b.PriceTotal)
+      : b?.priceTotal != null ? Number(b.priceTotal)
+      : Number.POSITIVE_INFINITY;
 
     return priceA - priceB;
   });
@@ -4226,18 +3846,14 @@ function buildAvailabilityContextText(
               : 'ukjent pris';
 
     const capacity =
-      item?.Capacity != null
-        ? String(item.Capacity)
-        : item?.capacity != null
-          ? String(item.capacity)
-          : 'ukjent kapasitet';
+      item?.Capacity != null ? String(item.Capacity)
+      : item?.capacity != null ? String(item.capacity)
+      : 'ukjent kapasitet';
 
     const availableUnits =
-      item?.AvailableUnits != null
-        ? String(item.AvailableUnits)
-        : item?.availableUnits != null
-          ? String(item.availableUnits)
-          : 'ukjent';
+      item?.AvailableUnits != null ? String(item.AvailableUnits)
+      : item?.availableUnits != null ? String(item.availableUnits)
+      : 'ukjent';
 
     const area =
       item?.ServiceName ||
@@ -4313,14 +3929,11 @@ function buildDeterministicAccommodationReply(rows: any[], params: any): string 
     lines.push(`- Kapasitet: ${capacity}`);
     lines.push(`- Pris: ${price}`);
     lines.push(`- Ledige enheter: ${availableUnits}`);
-    if (description) {
-      lines.push(`- Beskrivelse: ${description}`);
-    }
+    if (description) lines.push(`- Beskrivelse: ${description}`);
     lines.push('');
   });
 
   lines.push('Du kan bruke bookingknappen i appen for å se detaljer og fullføre bestillingen.');
-
   return lines.join('\n');
 }
 
@@ -4332,18 +3945,13 @@ function isTravelHelperBookingIntent(messageRaw: string): boolean {
     'booking',
     'bestill',
     'bestille',
-    'ga videre med',
     'gaa videre med',
     'hjelpe med booking',
     'fullfor booking',
     'fullfor bestilling',
-    'sluttfor bestillingen',
-    'sluttfore bestillingen',
-    'klikk her',
     'jeg vil booke',
     'jeg vil bestille',
     'kan du booke',
-    'kan du hjelpe med booking',
   ];
 
   return bookingPhrases.some((phrase) => message.includes(phrase));
@@ -4364,20 +3972,7 @@ function findRequestedRoomFromMessage(
   });
   if (directNameMatch) return directNameMatch;
 
-  const pronounBookingHints = [
-    'den',
-    'denne',
-    'den der',
-    'ja',
-    'yes',
-    'book den',
-    'booke den',
-    'bestill den',
-    'kan jeg booke den',
-    'kan du booke den',
-    'ja takk',
-  ];
-
+  const pronounBookingHints = ['den', 'denne', 'ja', 'book den', 'bestill den', 'ja takk'];
   if (pronounBookingHints.some((phrase) => message.includes(phrase) || message === phrase)) {
     const ranked = rankTravelHelperAvailabilityRows(rows, adults ?? null, messageRaw);
     return ranked[0] || null;
@@ -4392,23 +3987,13 @@ function detectTravelContentIntent(messageRaw: string): boolean {
   const keywords = [
     'reisevilkar',
     'reisevilkår',
-    'vilkar',
-    'vilkår',
     'aldersgrense',
     'innsjekk',
     'utsjekk',
-    'check in',
-    'check-in',
-    'checkout',
-    'check out',
-    'avbestilling',
-    'avbestille',
     'depositum',
+    'avbestilling',
     'husregler',
-    'snoscooter',
-    'snøscooter',
     'aktivitet',
-    'aktiviteter',
     'restaurant',
     'restauranter',
     'shopping',
@@ -4416,118 +4001,34 @@ function detectTravelContentIntent(messageRaw: string): boolean {
     'spa',
     'massasje',
     'trening',
-    'program',
-    'reiseprogram',
-    'ting a gjore',
-    'ting å gjøre',
-    'hva kan vi gjore',
-    'hva kan vi gjøre',
-    'alpint',
-    'langrenn',
-    'fitness',
-    'gym',
-    'yoga',
-    'treningssenter',
-    'sommerferie',
-    'skiferie',
     'leie ut',
     'utleie',
-    'utleier',
     'vert',
     'formidling',
     'provisjon',
-    'eier',
-    'serviceapparat',
-    'bookingstatus',
   ];
 
   return keywords.some((word) => message.includes(word));
 }
 
-function prioritizeTravelTermItems(items: any[], messageRaw: string): any[] {
-  if (!Array.isArray(items) || items.length === 0) return [];
-
+function extractTravelContentCategory(
+  messageRaw: string,
+  history: any[] = []
+): string | null {
   const message = normalizeTravelHelperText(messageRaw);
+  const responseMode = detectTravelHelperResponseMode(messageRaw, history);
 
-  const scoreItem = (item: any) => {
-    const title = normalizeTravelHelperText(item?.title || '');
-    const summary = normalizeTravelHelperText(item?.summary || '');
-    const body = normalizeTravelHelperText(item?.body || '');
-    const text = `${title} ${summary} ${body}`;
-
-    let score = 0;
-
-    if (message.includes('aldersgrense') || message.includes('18 ar') || message.includes('20 ar')) {
-      if (text.includes('aldersgrense')) score += 120;
-      if (text.includes('18 og 20')) score += 90;
-      if (text.includes('20 ar')) score += 60;
-      if (text.includes('23 ar')) score += 40;
-      if (text.includes('egen avtale')) score += 80;
-      if (text.includes('depositum')) score += 25;
-    }
-
-    if (message.includes('innsjekk') || message.includes('utsjekk')) {
-      if (text.includes('innsjekk')) score += 80;
-      if (text.includes('utsjekk')) score += 80;
-      if (text.includes('17.00')) score += 40;
-      if (text.includes('11.00')) score += 40;
-      if (text.includes('14.00')) score += 20;
-    }
-
-    if (message.includes('avbestilling') || message.includes('avbestille')) {
-      if (text.includes('avbestilling')) score += 80;
-      if (text.includes('forsikring')) score += 20;
-    }
-
-    if (message.includes('depositum')) {
-      if (text.includes('depositum')) score += 80;
-      if (text.includes('2000')) score += 40;
-    }
-
-    if (
-      message.includes('leie ut') ||
-      message.includes('utleie') ||
-      message.includes('vert') ||
-      message.includes('formidling') ||
-      message.includes('provisjon')
-    ) {
-      if (text.includes('utleie')) score += 120;
-      if (text.includes('formidling')) score += 100;
-      if (text.includes('3 %')) score += 80;
-      if (text.includes('3%')) score += 80;
-      if (text.includes('kjopsfee')) score += 60;
-      if (text.includes('kjøpsfee')) score += 60;
-      if (text.includes('markedsforing')) score += 50;
-      if (text.includes('markedsføring')) score += 50;
-      if (text.includes('gjestekontakt')) score += 50;
-      if (text.includes('vask')) score += 30;
-      if (text.includes('sengetoy')) score += 30;
-      if (text.includes('sengetøy')) score += 30;
-    }
-
-    return { ...item, __priorityScore: score };
-  };
-
-  return items
-    .map(scoreItem)
-    .sort((a, b) => Number(b.__priorityScore || 0) - Number(a.__priorityScore || 0));
-}
-
-function extractTravelContentCategory(messageRaw: string): string | null {
-  const message = normalizeTravelHelperText(messageRaw);
+  if (responseMode === 'restaurant_only') return 'restaurant';
+  if (responseMode === 'shopping_only') return 'shopping';
+  if (responseMode === 'activity_only') return 'activity';
+  if (responseMode === 'host_only') return 'host_rental';
 
   if (
     message.includes('leie ut') ||
     message.includes('utleie') ||
-    message.includes('utleier') ||
     message.includes('vert') ||
-    message.includes('vaere vert') ||
-    message.includes('være vert') ||
     message.includes('formidling') ||
-    message.includes('eier') ||
-    message.includes('provisjon') ||
-    message.includes('serviceapparat') ||
-    message.includes('bookingstatus')
+    message.includes('provisjon')
   ) {
     return 'host_rental';
   }
@@ -4535,18 +4036,11 @@ function extractTravelContentCategory(messageRaw: string): string | null {
   if (
     message.includes('reisevilkar') ||
     message.includes('reisevilkår') ||
-    message.includes('vilkar') ||
-    message.includes('vilkår') ||
     message.includes('aldersgrense') ||
     message.includes('innsjekk') ||
     message.includes('utsjekk') ||
-    message.includes('check in') ||
-    message.includes('check-in') ||
-    message.includes('check out') ||
-    message.includes('checkout') ||
     message.includes('depositum') ||
     message.includes('avbestilling') ||
-    message.includes('avbestille') ||
     message.includes('husregler')
   ) {
     return 'travel_terms';
@@ -4556,59 +4050,36 @@ function extractTravelContentCategory(messageRaw: string): string | null {
     message.includes('restaurant') ||
     message.includes('restauranter') ||
     message.includes('middag') ||
-    message.includes('cafe') ||
-    message.includes('kafe') ||
-    message.includes('mat') ||
-    message.includes('spisested') ||
-    message.includes('spisesteder')
+    message.includes('lunsj') ||
+    message.includes('italiensk') ||
+    message.includes('pizza')
   ) {
     return 'restaurant';
   }
 
   if (
     message.includes('shopping') ||
-    message.includes('butikker') ||
     message.includes('butikk') ||
-    message.includes('shoppe') ||
-    message.includes('shoppingmuligheter') ||
-    message.includes('shoppingtips') ||
+    message.includes('butikker') ||
+    message.includes('sportsklaer') ||
+    message.includes('sportsklær') ||
     message.includes('klaer') ||
     message.includes('klær') ||
-    message.includes('sportsutstyr') ||
-    message.includes('souvenir') ||
-    message.includes('suvenir') ||
-    message.includes('gaver') ||
-    message.includes('dagligvare')
+    message.includes('mote') ||
+    message.includes('souvenir')
   ) {
     return 'shopping';
   }
 
-  if (message.includes('spa') || message.includes('massasje') || message.includes('wellness')) {
-    return 'spa';
-  }
-
   if (
-    message.includes('trening') ||
-    message.includes('fitness') ||
-    message.includes('gym') ||
-    message.includes('yoga') ||
-    message.includes('treningssenter')
-  ) {
-    return 'fitness';
-  }
-
-  if (
-    message.includes('snoscooter') ||
-    message.includes('snøscooter') ||
     message.includes('aktivitet') ||
     message.includes('aktiviteter') ||
-    message.includes('ting a gjore') ||
-    message.includes('ting å gjøre') ||
-    message.includes('hva kan vi gjore') ||
-    message.includes('hva kan vi gjøre') ||
-    message.includes('program') ||
     message.includes('alpint') ||
-    message.includes('langrenn')
+    message.includes('langrenn') ||
+    message.includes('museum') ||
+    message.includes('spa') ||
+    message.includes('massasje') ||
+    message.includes('trening')
   ) {
     return 'activity';
   }
@@ -4620,45 +4091,12 @@ function extractTravelTermsKeywords(messageRaw: string): string[] {
   const message = normalizeTravelHelperText(messageRaw);
   const keywords: string[] = [];
 
-  if (
-    message.includes('aldersgrense') ||
-    message.includes('18 ar') ||
-    message.includes('20 ar') ||
-    message.includes('23 ar')
-  ) {
-    keywords.push('aldersgrense');
-  }
-
-  if (
-    message.includes('innsjekk') ||
-    message.includes('utsjekk') ||
-    message.includes('check in') ||
-    message.includes('check-in') ||
-    message.includes('check out') ||
-    message.includes('checkout')
-  ) {
-    keywords.push('innsjekk', 'utsjekk', 'check-in', 'check-out');
-  }
-
-  if (message.includes('avbestilling') || message.includes('avbestille')) {
-    keywords.push('avbestilling');
-  }
-
-  if (message.includes('depositum')) {
-    keywords.push('depositum');
-  }
-
-  if (message.includes('husregler')) {
-    keywords.push('husregler');
-  }
-
-  if (
-    message.includes('leie ut') ||
-    message.includes('utleie') ||
-    message.includes('vert') ||
-    message.includes('formidling') ||
-    message.includes('provisjon')
-  ) {
+  if (message.includes('aldersgrense')) keywords.push('aldersgrense');
+  if (message.includes('innsjekk') || message.includes('utsjekk')) keywords.push('innsjekk', 'utsjekk');
+  if (message.includes('avbestilling')) keywords.push('avbestilling');
+  if (message.includes('depositum')) keywords.push('depositum');
+  if (message.includes('husregler')) keywords.push('husregler');
+  if (message.includes('utleie') || message.includes('vert') || message.includes('formidling') || message.includes('provisjon')) {
     keywords.push('utleie', 'vert', 'formidling', 'provisjon');
   }
 
@@ -4692,15 +4130,10 @@ async function getTravelHelperContent(opts: {
       .select('*')
       .eq('is_active', true)
       .eq('language', langToUse)
-      .in(
-        'destination_slug',
-        destinationSlug === 'global'
-          ? ['global']
-          : [destinationSlug, 'global']
-      )
+      .in('destination_slug', destinationSlug === 'global' ? ['global'] : [destinationSlug, 'global'])
       .order('is_featured', { ascending: false })
       .order('sort_order', { ascending: true })
-      .limit(30);
+      .limit(40);
 
     if (category) {
       query = query.eq('category', category);
@@ -4708,74 +4141,103 @@ async function getTravelHelperContent(opts: {
 
     if ((category === 'travel_terms' || category === 'host_rental') && opts.message) {
       const keywordHints = extractTravelTermsKeywords(opts.message);
-
       if (keywordHints.length > 0) {
         const orParts: string[] = [];
-
         for (const keyword of keywordHints) {
           orParts.push(`title.ilike.%${keyword}%`);
           orParts.push(`summary.ilike.%${keyword}%`);
           orParts.push(`body.ilike.%${keyword}%`);
         }
-
         query = query.or(orParts.join(','));
       }
-    }
-
-    if (category === 'host_rental' && opts.message) {
-      const orParts = [
-        'title.ilike.%utleie%',
-        'summary.ilike.%utleie%',
-        'body.ilike.%utleie%',
-        'title.ilike.%vert%',
-        'summary.ilike.%vert%',
-        'body.ilike.%vert%',
-        'title.ilike.%formidling%',
-        'summary.ilike.%formidling%',
-        'body.ilike.%formidling%',
-        'title.ilike.%provisjon%',
-        'summary.ilike.%provisjon%',
-        'body.ilike.%provisjon%',
-        'title.ilike.%3 %%',
-        'summary.ilike.%3 %%',
-        'body.ilike.%3 %%',
-      ];
-
-      query = query.or(orParts.join(','));
     }
 
     return await query;
   };
 
   let { data, error } = await runQuery(language);
-
-  if (error) {
-    throw error;
-  }
+  if (error) throw error;
 
   if ((!data || data.length === 0) && language !== 'nb') {
     const fallback = await runQuery('nb');
-    if (fallback.error) {
-      throw fallback.error;
-    }
+    if (fallback.error) throw fallback.error;
     data = fallback.data || [];
   }
 
   return Array.isArray(data) ? data : [];
 }
 
+function normalizeTags(tags: any): string[] {
+  return Array.isArray(tags)
+    ? tags.map((t: any) => normalizeTravelHelperText(String(t || ''))).filter(Boolean)
+    : [];
+}
+
+function isGuideLikeContentItem(item: any): boolean {
+  const title = normalizeTravelHelperText(item?.title || '');
+  return (
+    title.includes('restauranttips') ||
+    title.includes('restauranter i') ||
+    title.includes('shopping i') ||
+    title.includes('shoppingtips') ||
+    title.includes('aktiviteter i') ||
+    title.includes('opplev ')
+  );
+}
+
+function extractRestaurantPreferenceKeywords(
+  messageRaw: string,
+  history: any[] = []
+): string[] {
+  const text = normalizeTravelHelperText(
+    `${getPreviousUserMessage(history)}\n${getLastUserMessage(history)}\n${messageRaw}`
+  );
+
+  const keywords: string[] = [];
+
+  if (text.includes('italiensk')) keywords.push('italiensk', 'italian', 'pizza', 'pasta');
+  if (text.includes('familierestaurant') || text.includes('familie')) keywords.push('familie', 'family', 'barn');
+  if (text.includes('romantisk')) keywords.push('romantisk', 'romantic', 'par', 'couples');
+  if (text.includes('lunsj')) keywords.push('lunsj', 'lunch');
+  if (text.includes('middag')) keywords.push('middag', 'dinner');
+  if (text.includes('fine dining')) keywords.push('fine dining', 'premium', 'luxury');
+  if (text.includes('pris spiller ingen rolle')) keywords.push('premium', 'fine dining', 'luxury');
+  if (text.includes('rimelig') || text.includes('billig')) keywords.push('rimelig', 'casual', 'budget');
+
+  return [...new Set(keywords)];
+}
+
+function extractShoppingPreferenceKeywords(
+  messageRaw: string,
+  history: any[] = []
+): string[] {
+  const text = normalizeTravelHelperText(
+    `${getPreviousUserMessage(history)}\n${getLastUserMessage(history)}\n${messageRaw}`
+  );
+
+  const keywords: string[] = [];
+
+  if (text.includes('sportsklaer') || text.includes('sportsklær')) keywords.push('sportsklaer', 'sportsklær', 'sportswear');
+  if (text.includes('skiutstyr') || text.includes('sportsutstyr')) keywords.push('skiutstyr', 'sportsutstyr', 'ski', 'outdoor');
+  if (text.includes('klaer') || text.includes('klær')) keywords.push('klaer', 'klær', 'fashion', 'apparel');
+  if (text.includes('mote')) keywords.push('mote', 'fashion', 'design');
+  if (text.includes('gaver') || text.includes('souvenir')) keywords.push('gaver', 'souvenir', 'gifts');
+  if (text.includes('dagligvarer')) keywords.push('dagligvarer', 'groceries');
+
+  return [...new Set(keywords)];
+}
+
 function scoreSeasonalContentItem(
   item: any,
   season: 'winter' | 'summer' | 'unknown',
-  messageRaw: string
+  messageRaw: string,
+  history: any[] = []
 ): number {
   const message = normalizeTravelHelperText(messageRaw);
   const title = normalizeTravelHelperText(item?.title || '');
   const summary = normalizeTravelHelperText(item?.summary || '');
   const body = normalizeTravelHelperText(item?.body || '');
-  const tags = Array.isArray(item?.tags)
-    ? item.tags.map((t: any) => normalizeTravelHelperText(String(t)))
-    : [];
+  const tags = normalizeTags(item?.tags);
   const text = `${title} ${summary} ${body} ${tags.join(' ')}`;
 
   let score = 0;
@@ -4793,12 +4255,9 @@ function scoreSeasonalContentItem(
       tags.includes('winter') ||
       tags.includes('vinter') ||
       tags.includes('year_round') ||
-      tags.includes('helår')
+      tags.includes('helar')
     ) {
       score += 50;
-    }
-    if (text.includes('summer') || text.includes('sommer')) {
-      score -= 15;
     }
   }
 
@@ -4813,42 +4272,36 @@ function scoreSeasonalContentItem(
       tags.includes('summer') ||
       tags.includes('sommer') ||
       tags.includes('year_round') ||
-      tags.includes('helår')
+      tags.includes('helar')
     ) {
       score += 50;
     }
-    if (
-      text.includes('winter') ||
-      text.includes('vinter') ||
-      text.includes('ski') ||
-      text.includes('alpint')
-    ) {
-      score -= 15;
+  }
+
+  if (item?.category === 'restaurant') {
+    const prefs = extractRestaurantPreferenceKeywords(messageRaw, history);
+    if (prefs.length > 0) {
+      for (const pref of prefs) {
+        if (text.includes(normalizeTravelHelperText(pref))) score += 40;
+      }
     }
+    if (isGuideLikeContentItem(item)) score -= 30;
+    else score += 40;
   }
 
-  if (message.includes('restaurant') || message.includes('mat')) {
-    if (item?.category === 'restaurant') score += 15;
+  if (item?.category === 'shopping') {
+    const prefs = extractShoppingPreferenceKeywords(messageRaw, history);
+    if (prefs.length > 0) {
+      for (const pref of prefs) {
+        if (text.includes(normalizeTravelHelperText(pref))) score += 40;
+      }
+    }
+    if (isGuideLikeContentItem(item)) score -= 30;
+    else score += 40;
   }
 
-  if (message.includes('shopping') || message.includes('butikker') || message.includes('klaer') || message.includes('klær')) {
-    if (item?.category === 'shopping') score += 15;
-  }
-
-  if (message.includes('aktivitet') || message.includes('skiferie') || message.includes('sommerferie')) {
-    if (item?.category === 'activity') score += 15;
-  }
-
-  if (
-    message.includes('leie ut') ||
-    message.includes('utleie') ||
-    message.includes('vert') ||
-    message.includes('formidling')
-  ) {
-    if (item?.category === 'host_rental') score += 60;
-    if (text.includes('3 %') || text.includes('3%')) score += 50;
-    if (text.includes('kjopsfee') || text.includes('kjøpsfee')) score += 40;
-    if (text.includes('gjestekontakt')) score += 30;
+  if (item?.category === 'activity' && !isGuideLikeContentItem(item)) {
+    score += 20;
   }
 
   return score;
@@ -4857,14 +4310,15 @@ function scoreSeasonalContentItem(
 function filterAndRankTravelContentForSeason(
   items: any[],
   season: 'winter' | 'summer' | 'unknown',
-  messageRaw: string
+  messageRaw: string,
+  history: any[] = []
 ): any[] {
   if (!Array.isArray(items) || items.length === 0) return [];
 
   return items
     .map((item) => ({
       ...item,
-      __seasonScore: scoreSeasonalContentItem(item, season, messageRaw),
+      __seasonScore: scoreSeasonalContentItem(item, season, messageRaw, history),
     }))
     .sort((a, b) => {
       const diff = Number(b.__seasonScore || 0) - Number(a.__seasonScore || 0);
@@ -4873,10 +4327,30 @@ function filterAndRankTravelContentForSeason(
     });
 }
 
+function prioritizeTravelTermItems(items: any[], messageRaw: string): any[] {
+  if (!Array.isArray(items) || items.length === 0) return [];
+
+  const message = normalizeTravelHelperText(messageRaw);
+
+  return items
+    .map((item: any) => {
+      const text = normalizeTravelHelperText(
+        `${item?.title || ''} ${item?.summary || ''} ${item?.body || ''}`
+      );
+      let score = 0;
+
+      if (message.includes('aldersgrense') && text.includes('aldersgrense')) score += 100;
+      if ((message.includes('innsjekk') || message.includes('utsjekk')) && (text.includes('innsjekk') || text.includes('utsjekk'))) score += 100;
+      if (message.includes('depositum') && text.includes('depositum')) score += 100;
+      if ((message.includes('utleie') || message.includes('vert')) && (text.includes('utleie') || text.includes('vert'))) score += 100;
+
+      return { ...item, __priorityScore: score };
+    })
+    .sort((a: any, b: any) => Number(b.__priorityScore || 0) - Number(a.__priorityScore || 0));
+}
+
 function buildTravelContentContext(items: any[]): string {
-  if (!Array.isArray(items) || items.length === 0) {
-    return '';
-  }
+  if (!Array.isArray(items) || items.length === 0) return '';
 
   const lines = [
     'BNO_CONTENT_CONTEXT',
@@ -4917,13 +4391,6 @@ function detectTravelFlightIntent(messageRaw: string): boolean {
     'avgang',
     'returfly',
     'direktefly',
-    'business class',
-    'okonomi',
-    'economy',
-    'premium economy',
-    'premium_economy',
-    'best fly',
-    'beste fly',
     'fly fra',
     'flight from',
   ];
@@ -4937,39 +4404,15 @@ function isTravelHelperFlightBookingIntent(messageRaw: string): boolean {
   const phrases = [
     'bestill flyet',
     'book flyet',
-    'book det flyet',
     'bestill det flyet',
     'jeg vil bestille flyet',
     'jeg vil booke flyet',
-    'fullfor flybestilling',
-    'fullfor bestilling av fly',
-    'kan jeg bestille det flyet',
-    'kan du bestille det flyet',
-    'ta meg til flybestillingen',
-    'ja bestill det flyet',
-    'bestill det forste flyet',
     'bestill det første flyet',
-    'book det forste flyet',
     'book det første flyet',
-    'jeg vil bestille det forste',
-    'jeg vil bestille det første',
-    'jeg vil booke det forste',
-    'jeg vil booke det første',
-    'bestill det forste',
-    'bestill det første',
-    'book det forste',
-    'book det første',
-    'det forste',
     'det første',
-    'forste',
-    'første',
     'nummer 1',
-    '1.',
     'ja',
     'ja takk',
-    'gjerne',
-    'ok',
-    'okei',
   ];
 
   return phrases.some((phrase) => message.includes(phrase) || message === phrase);
@@ -4980,24 +4423,11 @@ function extractTravelFlightCabinClass(
 ): 'economy' | 'premium_economy' | 'business' | 'first' {
   const message = normalizeTravelHelperText(messageRaw);
 
-  if (
-    message.includes('premium economy') ||
-    message.includes('premium_economy') ||
-    message.includes('okonomi ekstra')
-  ) {
+  if (message.includes('premium economy') || message.includes('premium_economy')) {
     return 'premium_economy';
   }
-
-  if (message.includes('business')) {
-    return 'business';
-  }
-
-  if (
-    message.includes('first class') ||
-    message.includes('1. klasse') ||
-    message.includes('forste klasse') ||
-    message.includes('første klasse')
-  ) {
+  if (message.includes('business')) return 'business';
+  if (message.includes('first class') || message.includes('første klasse') || message.includes('forste klasse')) {
     return 'first';
   }
 
@@ -5012,32 +4442,16 @@ function extractTravelFlightDirectOnly(messageRaw: string): boolean {
     message.includes('direkte fly') ||
     message.includes('kun direkte') ||
     message.includes('uten mellomlanding') ||
-    message.includes('nonstop') ||
-    message.includes('direct only')
+    message.includes('nonstop')
   );
-}
-
-function extractBoundedPlace(
-  messageRaw: string,
-  kind: 'origin' | 'destination'
-): string {
-  const raw = String(messageRaw || '');
-
-  if (kind === 'origin') {
-    const match = raw.match(/\bfra\s+(.+?)(?:\s+til\s+|$)/i);
-    return String(match?.[1] || '').trim();
-  }
-
-  const match = raw.match(/\btil\s+(.+?)(?:\s+fra\s+|$)/i);
-  return String(match?.[1] || '').trim();
 }
 
 function mapTravelFlightPlaceToCode(
   messageRaw: string,
   kind: 'origin' | 'destination'
 ): string | null {
-  const message = normalizeTravelHelperText(messageRaw);
   const bounded = normalizeTravelHelperText(extractBoundedPlace(messageRaw, kind));
+  const allText = normalizeTravelHelperText(messageRaw);
 
   const mappings: Array<{ keywords: string[]; code: string }> = [
     { keywords: ['oslo', 'gardermoen', 'osl'], code: 'OSL' },
@@ -5048,23 +4462,13 @@ function mapTravelFlightPlaceToCode(
     { keywords: ['heathrow', 'lhr'], code: 'LHR' },
     { keywords: ['gatwick', 'lgw'], code: 'LGW' },
     { keywords: ['luton', 'ltn'], code: 'LTN' },
-    { keywords: ['city airport', 'lcy'], code: 'LCY' },
-    { keywords: ['southend', 'sen'], code: 'SEN' },
     { keywords: ['amsterdam', 'schiphol', 'ams'], code: 'AMS' },
     { keywords: ['kobenhavn', 'københavn', 'copenhagen', 'cph'], code: 'CPH' },
     { keywords: ['stockholm', 'arlanda', 'arn'], code: 'ARN' },
-    { keywords: ['berlin', 'ber'], code: 'BER' },
-    { keywords: ['paris', 'cdg'], code: 'CDG' },
-    { keywords: ['frankfurt', 'fra'], code: 'FRA' },
-    { keywords: ['helsinki', 'hel'], code: 'HEL' },
-    { keywords: ['tallinn', 'tll'], code: 'TLL' },
-    { keywords: ['riga', 'rix'], code: 'RIX' },
-    { keywords: ['vilnius', 'vno'], code: 'VNO' },
-    { keywords: ['warszawa', 'warsaw', 'waw'], code: 'WAW' },
-    { keywords: ['new york', 'nyc', 'jfk'], code: 'NYC' },
-    { keywords: ['los angeles', 'lax'], code: 'LAX' },
+    { keywords: ['paris', 'cdg'], code: 'PAR' },
+    { keywords: ['rome', 'roma', 'fco'], code: 'ROM' },
     { keywords: ['miami', 'mia'], code: 'MIA' },
-    { keywords: ['boston', 'bos'], code: 'BOS' },
+    { keywords: ['los angeles', 'lax'], code: 'LAX' },
     { keywords: ['salen', 'sälen', 'scr'], code: 'SCR' },
   ];
 
@@ -5077,7 +4481,7 @@ function mapTravelFlightPlaceToCode(
   }
 
   for (const item of mappings) {
-    if (item.keywords.some((keyword) => message.includes(normalizeTravelHelperText(keyword)))) {
+    if (item.keywords.some((keyword) => allText.includes(normalizeTravelHelperText(keyword)))) {
       return item.code;
     }
   }
@@ -5109,7 +4513,6 @@ function inferAirportFromTravelArea(area: string | null): string | null {
   }
 
   if (normalized === 'salen') return 'SCR';
-
   if (normalized === 'oslo') return 'OSL';
   if (normalized === 'london') return 'LON';
   if (normalized === 'amsterdam') return 'AMS';
@@ -5117,42 +4520,34 @@ function inferAirportFromTravelArea(area: string | null): string | null {
   if (normalized === 'stockholm') return 'ARN';
   if (normalized === 'losangeles') return 'LAX';
   if (normalized === 'miami') return 'MIA';
-  if (normalized === 'paris') return 'CDG';
+  if (normalized === 'paris') return 'PAR';
   if (normalized === 'rome') return 'ROM';
-  if (normalized === 'berlin') return 'BER';
 
   return null;
 }
 
-function extractTravelAreaForTripPlanning(messageRaw: string, history: any[]): string | null {
-  return extractTravelDestinationArea(messageRaw, history);
-}
-
 function extractTravelFlightSearchParams(messageRaw: string, history: any[]) {
   const currentMessage = String(messageRaw || '').trim();
-  const combined = buildTravelHelperSearchBasis(currentMessage, history);
-
+  const previous = getPreviousUserMessage(history);
   const datesFromCurrent = extractTravelHelperDates(currentMessage);
-  const datesFromCombined = extractTravelHelperDates(combined);
+  const datesFromPrevious = extractTravelHelperDates(previous);
 
-  const departureDate = datesFromCurrent.from || datesFromCombined.from || null;
-  const returnDate = datesFromCurrent.to || datesFromCombined.to || null;
+  const departureDate = datesFromCurrent.from || datesFromPrevious.from || null;
+  const returnDate = datesFromCurrent.to || datesFromPrevious.to || null;
 
   const adults =
     extractTravelHelperAdults(currentMessage) ||
-    extractTravelHelperAdults(combined) ||
+    extractTravelHelperAdults(previous) ||
     1;
 
-  const origin =
-    mapTravelFlightPlaceToCode(currentMessage, 'origin') ||
-    mapTravelFlightPlaceToCode(combined, 'origin');
+  let origin = mapTravelFlightPlaceToCode(currentMessage, 'origin');
+  let destination = mapTravelFlightPlaceToCode(currentMessage, 'destination');
 
-  const destination =
-    mapTravelFlightPlaceToCode(currentMessage, 'destination') ||
-    mapTravelFlightPlaceToCode(combined, 'destination');
+  if (!origin) origin = mapTravelFlightPlaceToCode(previous, 'origin');
+  if (!destination) destination = mapTravelFlightPlaceToCode(previous, 'destination');
 
-  const cabinClass = extractTravelFlightCabinClass(combined);
-  const directOnly = extractTravelFlightDirectOnly(combined);
+  const cabinClass = extractTravelFlightCabinClass(`${previous}\n${currentMessage}`);
+  const directOnly = extractTravelFlightDirectOnly(`${previous}\n${currentMessage}`);
 
   return {
     origin,
@@ -5163,31 +4558,6 @@ function extractTravelFlightSearchParams(messageRaw: string, history: any[]) {
     cabinClass,
     directOnly,
   };
-}
-
-function mapAirportCodeToArea(code: string | null): string | null {
-  const normalized = String(code || '').trim().toUpperCase();
-  if (!normalized) return null;
-
-  const airportToArea: Record<string, string> = {
-    OSL: 'oslo',
-    AMS: 'amsterdam',
-    CPH: 'copenhagen',
-    ARN: 'stockholm',
-    LAX: 'losangeles',
-    MIA: 'miami',
-    BER: 'berlin',
-    CDG: 'paris',
-    FRA: 'frankfurt',
-    LHR: 'london',
-    LGW: 'london',
-    LTN: 'london',
-    LCY: 'london',
-    SEN: 'london',
-    LON: 'london',
-  };
-
-  return airportToArea[normalized] || null;
 }
 
 function formatFlightTime(value?: string | null): string {
@@ -5294,15 +4664,11 @@ function buildFlightContextText(offers: any[], searchParams: any): string {
     lines.push(`PRIS: ${offer?.total_amount || '-'} ${offer?.total_currency || ''}`);
     lines.push(`SERVICE_FEE: ${offer?.service_fee_amount ?? '-'}`);
     lines.push(`TOTAL_WITH_FEE: ${offer?.total_with_fee ?? '-'}`);
-    lines.push(
-      `UTREISE: ${outbound.origin} ${formatFlightTime(outbound.departure)} -> ${outbound.destination} ${formatFlightTime(outbound.arrival)}`
-    );
+    lines.push(`UTREISE: ${outbound.origin} ${formatFlightTime(outbound.departure)} -> ${outbound.destination} ${formatFlightTime(outbound.arrival)}`);
     lines.push(`UTREISE_STOPP: ${outbound.stops}`);
 
     if (returnTrip?.origin || returnTrip?.destination) {
-      lines.push(
-        `RETUR: ${returnTrip.origin} ${formatFlightTime(returnTrip.departure)} -> ${returnTrip.destination} ${formatFlightTime(returnTrip.arrival)}`
-      );
+      lines.push(`RETUR: ${returnTrip.origin} ${formatFlightTime(returnTrip.departure)} -> ${returnTrip.destination} ${formatFlightTime(returnTrip.arrival)}`);
       lines.push(`RETUR_STOPP: ${returnTrip.stops}`);
     }
 
@@ -5317,32 +4683,13 @@ function findRequestedFlightOfferFromMessage(messageRaw: string, offers: any[]):
 
   const message = normalizeTravelHelperText(messageRaw);
 
-  if (
-    message.includes('forste') ||
-    message.includes('første') ||
-    message.includes('det forste') ||
-    message.includes('det første') ||
-    message.includes('1.') ||
-    message.includes('nummer 1')
-  ) {
+  if (message.includes('første') || message.includes('forste') || message.includes('nummer 1') || message.includes('1.')) {
     return offers[0] || null;
   }
-
-  if (
-    message.includes('andre') ||
-    message.includes('det andre') ||
-    message.includes('2.') ||
-    message.includes('nummer 2')
-  ) {
+  if (message.includes('andre') || message.includes('nummer 2') || message.includes('2.')) {
     return offers[1] || null;
   }
-
-  if (
-    message.includes('tredje') ||
-    message.includes('det tredje') ||
-    message.includes('3.') ||
-    message.includes('nummer 3')
-  ) {
+  if (message.includes('tredje') || message.includes('nummer 3') || message.includes('3.')) {
     return offers[2] || null;
   }
 
@@ -5355,29 +4702,21 @@ function pickTransportSuggestion(area: string | null): string | null {
   if (normalized === 'trysil' || normalized.startsWith('trysil-')) {
     return 'Leiebil via BNO Travel eller buss fra Oslo/Gardermoen til Trysil.';
   }
-
+  if (normalized === 'amsterdam') {
+    return 'Tog, trikk eller taxi fra Schiphol videre inn til sentrum.';
+  }
+  if (normalized === 'london') {
+    return 'Tog, Underground eller taxi fra flyplassen videre inn til byen.';
+  }
+  if (normalized === 'oslo') {
+    return 'Tog, Flytoget, buss eller taxi fra flyplassen videre inn til sentrum.';
+  }
   if (
     normalized === 'stranda' ||
     normalized === 'sunnmorsalpene' ||
     normalized === 'geiranger'
   ) {
     return 'Leiebil anbefales fra Ålesund eller nærmeste ankomstpunkt.';
-  }
-
-  if (normalized === 'salen') {
-    return 'Leiebil eller transfer videre til valgt område i Sälen.';
-  }
-
-  if (normalized === 'london') {
-    return 'Bruk kollektivtransport, Heathrow/Gatwick Express eller taxi videre inn til byen.';
-  }
-
-  if (normalized === 'amsterdam') {
-    return 'Tog, trikk eller taxi fra Schiphol videre inn til sentrum.';
-  }
-
-  if (normalized === 'oslo') {
-    return 'Flytoget, lokaltog eller taxi fra Oslo lufthavn videre inn til byen.';
   }
 
   return null;
@@ -5396,32 +4735,25 @@ function buildTripProposalContextText(proposal: TripProposal | null): string {
   lines.push(`DESTINASJON: ${proposal.destination?.label || '-'}`);
   lines.push(`SESONG: ${proposal.destination?.season || 'unknown'}`);
   lines.push(`TRANSPORT: ${proposal.transport || '-'}`);
-  lines.push(`REQUESTED_ACCOMMODATION: ${proposal.requested.accommodation ? 'yes' : 'no'}`);
-  lines.push(`REQUESTED_FLIGHT: ${proposal.requested.flight ? 'yes' : 'no'}`);
-  lines.push(`REQUESTED_ACTIVITY: ${proposal.requested.activity ? 'yes' : 'no'}`);
-  lines.push(`REQUESTED_RESTAURANT: ${proposal.requested.restaurant ? 'yes' : 'no'}`);
-  lines.push(`REQUESTED_SHOPPING: ${proposal.requested.shopping ? 'yes' : 'no'}`);
   lines.push('');
 
-  if (proposal.requested.accommodation && proposal.accommodation) {
+  if (proposal.accommodation) {
     lines.push('ANBEFALT_OVERNATTING');
     lines.push(`NAVN: ${proposal.accommodation?.Name || proposal.accommodation?.name || '-'}`);
     lines.push(`OMRÅDE: ${proposal.accommodation?.ServiceName || proposal.accommodation?.serviceName || '-'}`);
-    lines.push(
-      `PRIS: ${
-        proposal.accommodation?.PriceTotal != null && proposal.accommodation?.PriceCurrency
-          ? `${proposal.accommodation.PriceTotal} ${proposal.accommodation.PriceCurrency}`
-          : proposal.accommodation?.priceTotal != null && proposal.accommodation?.priceCurrency
-            ? `${proposal.accommodation.priceTotal} ${proposal.accommodation.priceCurrency}`
-            : '-'
-      }`
-    );
+    lines.push(`PRIS: ${
+      proposal.accommodation?.PriceTotal != null && proposal.accommodation?.PriceCurrency
+        ? `${proposal.accommodation.PriceTotal} ${proposal.accommodation.PriceCurrency}`
+        : proposal.accommodation?.priceTotal != null && proposal.accommodation?.priceCurrency
+          ? `${proposal.accommodation.priceTotal} ${proposal.accommodation.priceCurrency}`
+          : '-'
+    }`);
     lines.push(`KAPASITET: ${proposal.accommodation?.Capacity ?? proposal.accommodation?.capacity ?? '-'}`);
     lines.push(`BESKRIVELSE: ${proposal.accommodation?.Description || proposal.accommodation?.description || ''}`);
     lines.push('');
   }
 
-  if (proposal.requested.flight && proposal.flight) {
+  if (proposal.flight) {
     const outbound = getFlightSliceSummary(proposal.flight?.slices?.[0]);
     const returnTrip = getFlightSliceSummary(proposal.flight?.slices?.[1]);
 
@@ -5435,7 +4767,7 @@ function buildTripProposalContextText(proposal: TripProposal | null): string {
     lines.push('');
   }
 
-  if (proposal.requested.activity && proposal.activities.length > 0) {
+  if (proposal.activities.length > 0) {
     lines.push('AKTIVITETER');
     proposal.activities.forEach((item: any, index: number) => {
       lines.push(`AKTIVITET_${index + 1}: ${item?.title || '-'}`);
@@ -5444,7 +4776,7 @@ function buildTripProposalContextText(proposal: TripProposal | null): string {
     lines.push('');
   }
 
-  if (proposal.requested.restaurant && proposal.restaurants.length > 0) {
+  if (proposal.restaurants.length > 0) {
     lines.push('RESTAURANTER');
     proposal.restaurants.forEach((item: any, index: number) => {
       lines.push(`RESTAURANT_${index + 1}: ${item?.title || '-'}`);
@@ -5453,7 +4785,7 @@ function buildTripProposalContextText(proposal: TripProposal | null): string {
     lines.push('');
   }
 
-  if (proposal.requested.shopping && proposal.shopping.length > 0) {
+  if (proposal.shopping.length > 0) {
     lines.push('SHOPPING');
     proposal.shopping.forEach((item: any, index: number) => {
       lines.push(`SHOPPING_${index + 1}: ${item?.title || '-'}`);
@@ -5473,31 +4805,8 @@ function buildTripProposalContextText(proposal: TripProposal | null): string {
   return lines.join('\n');
 }
 
-async function buildTripProposal(opts: {
-  message: string;
-  history: any[];
-  lang: string;
-  scope: TravelRequestScope;
-  availabilityRows: any[];
-  availabilityParams: any | null;
-  flightOffers: any[];
-  flightSearch: any | null;
-}) : Promise<TripProposal | null> {
-  const message = String(opts.message || '');
-  const season = detectTravelSeason(message, extractTravelHelperDates(message));
-
-  let detectedArea = extractTravelDestinationArea(message, opts.history);
-
-  if (!detectedArea && opts.flightSearch?.destination) {
-    detectedArea = mapAirportCodeToArea(opts.flightSearch.destination);
-  }
-
-  if (!detectedArea && season === 'winter') {
-    detectedArea = 'trysil';
-  }
-
-  const destinationSlug = mapTravelHelperAreaToContentDestinationSlug(detectedArea);
-  const destinationLabelMap: Record<string, string> = {
+function inferDestinationLabel(destinationSlug: string): string {
+  const map: Record<string, string> = {
     trysil: 'Trysil',
     stranda: 'Stranda',
     salen: 'Sälen',
@@ -5510,228 +4819,126 @@ async function buildTripProposal(opts: {
     miami: 'Miami',
     paris: 'Paris',
     rome: 'Roma',
-    berlin: 'Berlin',
     global: 'Ukjent destinasjon',
   };
-  const destinationLabel = destinationLabelMap[destinationSlug] || destinationSlug || 'Ukjent destinasjon';
+  return map[destinationSlug] || destinationSlug || 'Ukjent destinasjon';
+}
 
-  const rankedAccommodation = rankTravelHelperAvailabilityRows(
-    opts.availabilityRows || [],
-    opts.availabilityParams?.adults || extractTravelHelperAdults(message) || null,
-    message
-  );
+async function buildTripProposal(opts: {
+  message: string;
+  history: any[];
+  lang: string;
+  includeAccommodation: boolean;
+  availabilityRows: any[];
+  availabilityParams: any | null;
+  flightOffers: any[];
+  flightSearch: any | null;
+}): Promise<TripProposal | null> {
+  const message = String(opts.message || '');
+  const destinationArea = extractTripDestinationArea(message, opts.history);
+  const destinationSlug = mapTravelHelperAreaToContentDestinationSlug(destinationArea);
+  const destinationLabel = inferDestinationLabel(destinationSlug);
+  const season = detectTravelSeason(message, extractTravelHelperDates(message));
 
-  const selectedAccommodation =
-    opts.scope.accommodation
-      ? (rankedAccommodation[0] || null)
-      : null;
+  const adults = opts.availabilityParams?.adults || extractTravelHelperAdults(message) || null;
+
+  const rankedAccommodation = opts.includeAccommodation
+    ? rankTravelHelperAvailabilityRows(opts.availabilityRows || [], adults, message)
+    : [];
+  const selectedAccommodation = opts.includeAccommodation ? rankedAccommodation[0] || null : null;
 
   const rankedFlights = rankFlightOffersForTrip(opts.flightOffers || [], message);
-  const selectedFlight =
-    opts.scope.flight
-      ? (rankedFlights[0] || null)
-      : null;
+  const selectedFlight = rankedFlights[0] || null;
 
   let allActivities: any[] = [];
   let allRestaurants: any[] = [];
   let allShopping: any[] = [];
 
   try {
-    const jobs: Promise<any[]>[] = [];
+    const [activityItems, restaurantItems, shoppingItems] = await Promise.all([
+      getTravelHelperContent({
+        destinationSlug,
+        category: 'activity',
+        language: opts.lang,
+        message,
+      }),
+      getTravelHelperContent({
+        destinationSlug,
+        category: 'restaurant',
+        language: opts.lang,
+        message,
+      }),
+      getTravelHelperContent({
+        destinationSlug,
+        category: 'shopping',
+        language: opts.lang,
+        message,
+      }),
+    ]);
 
-    if (opts.scope.activity) {
-      jobs.push(
-        getTravelHelperContent({
-          destinationSlug,
-          category: 'activity',
-          language: opts.lang,
-          message,
-        })
-      );
-    } else {
-      jobs.push(Promise.resolve([]));
-    }
-
-    if (opts.scope.restaurant) {
-      jobs.push(
-        getTravelHelperContent({
-          destinationSlug,
-          category: 'restaurant',
-          language: opts.lang,
-          message,
-        })
-      );
-    } else {
-      jobs.push(Promise.resolve([]));
-    }
-
-    if (opts.scope.shopping) {
-      jobs.push(
-        getTravelHelperContent({
-          destinationSlug,
-          category: 'shopping',
-          language: opts.lang,
-          message,
-        })
-      );
-    } else {
-      jobs.push(Promise.resolve([]));
-    }
-
-    const [activityItems, restaurantItems, shoppingItems] = await Promise.all(jobs);
-
-    allActivities = opts.scope.activity
-      ? filterAndRankTravelContentForSeason(activityItems, season, message).slice(0, 3)
-      : [];
-
-    allRestaurants = opts.scope.restaurant
-      ? filterAndRankTravelContentForSeason(restaurantItems, season, message).slice(0, 3)
-      : [];
-
-    allShopping = opts.scope.shopping
-      ? filterAndRankTravelContentForSeason(shoppingItems, season, message).slice(0, 3)
-      : [];
+    allActivities = filterAndRankTravelContentForSeason(activityItems, season, message, opts.history).slice(0, 3);
+    allRestaurants = filterAndRankTravelContentForSeason(restaurantItems, season, message, opts.history).slice(0, 3);
+    allShopping = filterAndRankTravelContentForSeason(shoppingItems, season, message, opts.history).slice(0, 3);
   } catch (e) {
     console.error('buildTripProposal content fetch failed', e);
   }
 
-  const transport = pickTransportSuggestion(detectedArea);
+  const transport = pickTransportSuggestion(destinationArea);
 
   const itinerary: Array<{ day: number; title: string; items: string[] }> = [];
-  const dateRange = extractTravelHelperDates(message);
-  const daysBetweenTrip =
-    dateRange.from && dateRange.to
-      ? Math.max(
-          1,
-          Math.round(
-            (new Date(`${dateRange.to}T12:00:00Z`).getTime() -
-              new Date(`${dateRange.from}T12:00:00Z`).getTime()) /
-              86400000
-          ) + 1
-        )
-      : 3;
-
-  const day1Items: string[] = [];
-  if (opts.scope.flight) {
-    day1Items.push(
-      selectedFlight
-        ? 'Reis med anbefalt fly og gå videre til destinasjonen.'
-        : 'Planlegg ankomst til destinasjonen.'
-    );
-  } else {
-    day1Items.push('Ankomst til destinasjonen.');
-  }
-
-  if (transport) {
-    day1Items.push(transport);
-  }
-
-  if (opts.scope.accommodation) {
-    day1Items.push(
-      selectedAccommodation
-        ? `Sjekk inn på ${selectedAccommodation?.Name || selectedAccommodation?.name || 'anbefalt overnatting'}.`
-        : 'Sjekk inn på valgt overnatting.'
-    );
-  }
-
-  if (opts.scope.restaurant && allRestaurants[0]?.title) {
-    day1Items.push(`Middagstips: ${allRestaurants[0].title}.`);
-  }
 
   itinerary.push({
     day: 1,
-    title: 'Ankomst og innsjekk',
-    items: day1Items,
+    title: 'Forslag for første dag',
+    items: [
+      selectedFlight ? 'Reis med anbefalt fly og gå videre til destinasjonen.' : 'Ankomst til destinasjonen.',
+      transport || 'Planlegg transport videre fra ankomststedet.',
+      selectedAccommodation
+        ? `Sjekk inn på ${selectedAccommodation?.Name || selectedAccommodation?.name || 'anbefalt overnatting'}.`
+        : 'Bruk dagen til å komme på plass på destinasjonen.',
+      allRestaurants[0]?.title ? `Middagstips: ${allRestaurants[0].title}.` : 'Avslutt dagen med en god middag.',
+    ],
   });
 
-  if (daysBetweenTrip >= 2) {
-    const day2Items: string[] = [];
-
-    if (opts.scope.activity) {
-      day2Items.push(
-        season === 'winter'
-          ? 'Bruk dagen på ski eller andre vinteraktiviteter.'
-          : 'Bruk dagen på aktiviteter og opplevelser.'
-      );
-
-      if (allActivities[0]?.title) {
-        day2Items.push(`Aktivitet: ${allActivities[0].title}.`);
-      }
-    }
-
-    if (opts.scope.restaurant && allRestaurants[1]?.title) {
-      day2Items.push(`Restauranttips: ${allRestaurants[1].title}.`);
-    }
-
-    if (opts.scope.shopping && allShopping[0]?.title) {
-      day2Items.push(`Shoppingtips: ${allShopping[0].title}.`);
-    }
-
-    if (day2Items.length > 0) {
-      itinerary.push({
-        day: 2,
-        title: 'Opplevelser og aktiviteter',
-        items: day2Items,
-      });
-    }
+  if (allActivities[0] || allRestaurants[1] || allShopping[0]) {
+    itinerary.push({
+      day: 2,
+      title: 'Forslag for dag to',
+      items: [
+        allActivities[0]?.title ? `Aktivitet: ${allActivities[0].title}.` : 'Utforsk aktiviteter på destinasjonen.',
+        allRestaurants[1]?.title ? `Restauranttips: ${allRestaurants[1].title}.` : 'Velg et sted for lunsj eller middag.',
+        allShopping[0]?.title ? `Shoppingtips: ${allShopping[0].title}.` : 'Ta en runde i nærområdet for shopping eller lokale stopp.',
+      ],
+    });
   }
 
-  if (daysBetweenTrip >= 3) {
-    const day3Items: string[] = [];
-
-    if (opts.scope.activity && allActivities[1]?.title) {
-      day3Items.push(`Formiddagstips: ${allActivities[1].title}.`);
-    }
-
-    if (opts.scope.shopping && allShopping[1]?.title) {
-      day3Items.push(`Et siste stopp: ${allShopping[1].title}.`);
-    }
-
-    day3Items.push('Utsjekk og reis videre hjem.');
-
+  if (allActivities[1] || allShopping[1]) {
     itinerary.push({
       day: 3,
-      title: 'Avslutning og hjemreise',
-      items: day3Items,
+      title: 'Forslag for dag tre',
+      items: [
+        allActivities[1]?.title ? `Formiddagstips: ${allActivities[1].title}.` : 'Bruk dagen på en ny opplevelse.',
+        allShopping[1]?.title ? `Et siste stopp: ${allShopping[1].title}.` : 'Bruk litt tid på lokale stopp før hjemreise.',
+        'Dette er kun et enkelt forslag for de første dagene av reisen.',
+      ],
     });
   }
 
   const summary: string[] = [];
 
-  if (opts.scope.accommodation) {
-    if (selectedAccommodation) {
-      summary.push(
-        `${selectedAccommodation?.Name || selectedAccommodation?.name || 'Anbefalt overnatting'} ser ut til å passe godt for reisefølget.`
-      );
-    } else {
-      summary.push('Fant ikke verifisert overnatting i sanntidsdata akkurat nå.');
-    }
-  }
-
-  if (opts.scope.flight && selectedFlight) {
-    summary.push('Det finnes et konkret flyforslag som matcher reisen.');
-  }
-
-  if (opts.scope.activity && allActivities.length > 0) {
-    summary.push(`Fant ${allActivities.length} relevante aktivitetsforslag.`);
-  }
-
-  if (opts.scope.restaurant && allRestaurants.length > 0) {
-    summary.push(`Fant ${allRestaurants.length} relevante restaurantforslag.`);
-  }
-
-  if (opts.scope.shopping && allShopping.length > 0) {
-    summary.push(`Fant ${allShopping.length} relevante shoppingforslag.`);
-  }
+  if (selectedFlight) summary.push('Det finnes et konkret flyforslag som matcher reisen.');
+  if (selectedAccommodation) summary.push(`${selectedAccommodation?.Name || selectedAccommodation?.name || 'Anbefalt overnatting'} ser ut til å passe godt for reisefølget.`);
+  if (allActivities.length > 0) summary.push(`Fant ${allActivities.length} relevante aktivitetsforslag.`);
+  if (allRestaurants.length > 0) summary.push(`Fant ${allRestaurants.length} relevante restaurantforslag.`);
+  if (allShopping.length > 0) summary.push(`Fant ${allShopping.length} relevante shoppingforslag.`);
 
   return {
     destination: {
-      area: detectedArea || null,
+      area: destinationArea || null,
       destinationSlug,
       label: destinationLabel,
       season,
     },
-    requested: opts.scope,
     accommodation: selectedAccommodation,
     flight: selectedFlight,
     activities: allActivities,
@@ -5743,64 +4950,130 @@ async function buildTripProposal(opts: {
   };
 }
 
+function formatContentLinkSuffix(item: any): string {
+  const bits: string[] = [];
+  if (item?.app_route) bits.push(`App: ${item.app_route}`);
+  if (item?.external_url) bits.push(`Lenke: ${item.external_url}`);
+  return bits.length ? ` (${bits.join(' · ')})` : '';
+}
+
+function buildDeterministicRestaurantReply(
+  items: any[],
+  messageRaw: string,
+  history: any[]
+): string {
+  const ranked = filterAndRankTravelContentForSeason(items || [], 'unknown', messageRaw, history);
+  const concrete = ranked.filter((item) => !isGuideLikeContentItem(item));
+  const preferred = concrete.length > 0 ? concrete.slice(0, 3) : ranked.slice(0, 3);
+
+  if (preferred.length === 0) {
+    return 'Jeg fant dessverre ingen verifiserte restaurantforslag akkurat nå. Du kan gjerne prøve med destinasjon eller ønsket type mat.';
+  }
+
+  const lines: string[] = ['Her er noen verifiserte restaurantforslag fra BNO Travel:', ''];
+
+  preferred.forEach((item: any, index: number) => {
+    lines.push(`${index + 1}. ${item?.title || 'Ukjent restaurant'}`);
+    if (item?.summary) lines.push(`- ${item.summary}`);
+    const suffix = formatContentLinkSuffix(item);
+    if (suffix) lines.push(`-${suffix}`);
+    lines.push('');
+  });
+
+  return lines.join('\n');
+}
+
+function buildDeterministicShoppingReply(
+  items: any[],
+  messageRaw: string,
+  history: any[]
+): string {
+  const ranked = filterAndRankTravelContentForSeason(items || [], 'unknown', messageRaw, history);
+  const concrete = ranked.filter((item) => !isGuideLikeContentItem(item));
+  const preferred = concrete.length > 0 ? concrete.slice(0, 3) : ranked.slice(0, 3);
+
+  if (preferred.length === 0) {
+    return 'Jeg fant dessverre ingen verifiserte shoppingforslag akkurat nå. Du kan gjerne prøve med destinasjon eller type shopping.';
+  }
+
+  const lines: string[] = ['Her er noen verifiserte shoppingforslag fra BNO Travel:', ''];
+
+  preferred.forEach((item: any, index: number) => {
+    lines.push(`${index + 1}. ${item?.title || 'Ukjent shoppingsted'}`);
+    if (item?.summary) lines.push(`- ${item.summary}`);
+    const suffix = formatContentLinkSuffix(item);
+    if (suffix) lines.push(`-${suffix}`);
+    lines.push('');
+  });
+
+  return lines.join('\n');
+}
+
+function buildDeterministicActivityReply(items: any[], messageRaw: string, history: any[]): string {
+  const ranked = filterAndRankTravelContentForSeason(items || [], 'unknown', messageRaw, history);
+  const preferred = ranked.slice(0, 3);
+
+  if (preferred.length === 0) {
+    return 'Jeg fant dessverre ingen verifiserte aktivitetsforslag akkurat nå.';
+  }
+
+  const lines: string[] = ['Her er noen verifiserte aktivitetsforslag fra BNO Travel:', ''];
+
+  preferred.forEach((item: any, index: number) => {
+    lines.push(`${index + 1}. ${item?.title || 'Ukjent aktivitet'}`);
+    if (item?.summary) lines.push(`- ${item.summary}`);
+    const suffix = formatContentLinkSuffix(item);
+    if (suffix) lines.push(`-${suffix}`);
+    lines.push('');
+  });
+
+  return lines.join('\n');
+}
+
 function buildDeterministicTripPackageReply(opts: {
   tripProposal: TripProposal | null;
-  flightOffers: any[];
-  flightSearch: any | null;
-  searchRows: any[];
-  searchParams: any | null;
-  message: string;
+  includeAccommodation: boolean;
 }): string {
   const proposal = opts.tripProposal;
   if (!proposal) {
-    return 'Beklager, jeg fikk ikke satt sammen et verifisert reiseforslag akkurat nå.';
+    return 'Beklager, jeg fikk ikke laget et samlet reiseforslag akkurat nå.';
   }
 
-  const lines: string[] = [];
-  const label = proposal.destination?.label || 'valgt destinasjon';
+  const lines: string[] = [`Her er et samlet reiseforslag til ${proposal.destination?.label || 'destinasjonen'}:`, ''];
 
-  lines.push(`Her er et samlet reiseforslag til ${label}:`);
-  lines.push('');
+  if (proposal.flight) {
+    const outbound = getFlightSliceSummary(proposal.flight?.slices?.[0]);
+    const returnTrip = getFlightSliceSummary(proposal.flight?.slices?.[1]);
 
-  if (proposal.requested.flight) {
     lines.push('Fly:');
-    if (proposal.flight) {
-      const outbound = getFlightSliceSummary(proposal.flight?.slices?.[0]);
-      const returnTrip = getFlightSliceSummary(proposal.flight?.slices?.[1]);
-      lines.push(
-        `- ${proposal.flight?.owner?.name || outbound.airline || 'Ukjent flyselskap'}: ${outbound.origin} ${formatFlightTime(outbound.departure)} -> ${outbound.destination} ${formatFlightTime(outbound.arrival)}`
-      );
-      if (returnTrip?.origin || returnTrip?.destination) {
-        lines.push(
-          `- Retur: ${returnTrip.origin} ${formatFlightTime(returnTrip.departure)} -> ${returnTrip.destination} ${formatFlightTime(returnTrip.arrival)}`
-        );
-      }
-      lines.push(`- Pris: ${proposal.flight?.total_with_fee ?? proposal.flight?.total_amount ?? '-'} ${proposal.flight?.total_currency || ''}`.trim());
-      lines.push('- Flybestilling fullføres via bookingknappen i appen.');
-    } else {
-      lines.push('- Jeg fant ikke et verifisert flyforslag akkurat nå.');
+    lines.push(`- ${proposal.flight?.owner?.name || outbound.airline || 'Ukjent flyselskap'}: ${outbound.origin} ${formatFlightTime(outbound.departure)} -> ${outbound.destination} ${formatFlightTime(outbound.arrival)}`);
+    if (returnTrip?.origin || returnTrip?.destination) {
+      lines.push(`- Retur: ${returnTrip.origin} ${formatFlightTime(returnTrip.departure)} -> ${returnTrip.destination} ${formatFlightTime(returnTrip.arrival)}`);
     }
+    lines.push(`- Pris: ${proposal.flight?.total_with_fee ?? proposal.flight?.total_amount ?? '-'} ${proposal.flight?.total_currency || ''}`);
+    lines.push('- Flybestilling fullføres via bookingknappen i appen.');
+    lines.push('');
+  } else {
+    lines.push('Fly:');
+    lines.push('- Jeg fant ikke et verifisert flyforslag akkurat nå.');
     lines.push('');
   }
 
-  if (proposal.requested.accommodation) {
+  if (opts.includeAccommodation) {
     lines.push('Overnatting:');
     if (proposal.accommodation) {
       lines.push(`- ${proposal.accommodation?.Name || proposal.accommodation?.name || 'Ukjent enhet'}`);
-      lines.push(`- Område: ${proposal.accommodation?.ServiceName || proposal.accommodation?.serviceName || proposal.destination?.label || 'Ukjent område'}`);
+      lines.push(`- Område: ${proposal.accommodation?.ServiceName || proposal.accommodation?.serviceName || '-'}`);
       lines.push(`- Kapasitet: ${proposal.accommodation?.Capacity ?? proposal.accommodation?.capacity ?? '-'}`);
-      lines.push(
-        `- Pris: ${
-          proposal.accommodation?.PriceTotal != null && proposal.accommodation?.PriceCurrency
-            ? `${proposal.accommodation.PriceTotal} ${proposal.accommodation.PriceCurrency}`
-            : proposal.accommodation?.priceTotal != null && proposal.accommodation?.priceCurrency
-              ? `${proposal.accommodation.priceTotal} ${proposal.accommodation.priceCurrency}`
-              : 'Pris ikke tilgjengelig'
-        }`
-      );
-      const description = proposal.accommodation?.Description || proposal.accommodation?.description || '';
-      if (description) {
-        lines.push(`- ${description}`);
+      lines.push(`- Pris: ${
+        proposal.accommodation?.PriceTotal != null && proposal.accommodation?.PriceCurrency
+          ? `${proposal.accommodation.PriceTotal} ${proposal.accommodation.PriceCurrency}`
+          : proposal.accommodation?.priceTotal != null && proposal.accommodation?.priceCurrency
+            ? `${proposal.accommodation.priceTotal} ${proposal.accommodation.priceCurrency}`
+            : '-'
+      }`);
+      if (proposal.accommodation?.Description || proposal.accommodation?.description) {
+        lines.push(`- ${proposal.accommodation?.Description || proposal.accommodation?.description}`);
       }
       lines.push('- Overnatting bestilles via bookingknappen i appen.');
     } else {
@@ -5815,63 +5088,42 @@ function buildDeterministicTripPackageReply(opts: {
     lines.push('');
   }
 
-  if (proposal.requested.activity) {
+  if (proposal.activities.length > 0) {
     lines.push('Aktiviteter:');
-    if (proposal.activities.length > 0) {
-      proposal.activities.slice(0, 3).forEach((item: any) => {
-        lines.push(`- ${item?.title || '-'}`);
-        if (item?.summary) {
-          lines.push(`  ${item.summary}`);
-        }
-      });
-    } else {
-      lines.push('- Jeg fant ikke verifiserte aktivitetsforslag akkurat nå.');
-    }
-    lines.push('');
-  }
-
-  if (proposal.requested.restaurant) {
-    lines.push('Restauranter:');
-    if (proposal.restaurants.length > 0) {
-      proposal.restaurants.slice(0, 3).forEach((item: any) => {
-        lines.push(`- ${item?.title || '-'}`);
-        if (item?.summary) {
-          lines.push(`  ${item.summary}`);
-        }
-      });
-    } else {
-      lines.push('- Jeg fant ikke verifiserte restaurantforslag akkurat nå.');
-    }
-    lines.push('');
-  }
-
-  if (proposal.requested.shopping) {
-    lines.push('Shopping:');
-    if (proposal.shopping.length > 0) {
-      proposal.shopping.slice(0, 3).forEach((item: any) => {
-        lines.push(`- ${item?.title || '-'}`);
-        if (item?.summary) {
-          lines.push(`  ${item.summary}`);
-        }
-      });
-    } else {
-      lines.push('- Jeg fant ikke verifiserte shoppingforslag akkurat nå.');
-    }
-    lines.push('');
-  }
-
-  if (proposal.itinerary.length > 0) {
-    lines.push('Enkelt dagsprogram:');
-    proposal.itinerary.forEach((day) => {
-      lines.push(`${day.day}. ${day.title}`);
-      day.items.forEach((item) => {
-        lines.push(`- ${item}`);
-      });
+    proposal.activities.slice(0, 3).forEach((item) => {
+      lines.push(`- ${item?.title || 'Ukjent aktivitet'}`);
+      if (item?.summary) lines.push(`  ${item.summary}`);
     });
     lines.push('');
   }
 
-  return lines.join('\n').trim();
+  if (proposal.restaurants.length > 0) {
+    lines.push('Restauranter:');
+    proposal.restaurants.slice(0, 3).forEach((item) => {
+      lines.push(`- ${item?.title || 'Ukjent restaurant'}`);
+      if (item?.summary) lines.push(`  ${item.summary}`);
+    });
+    lines.push('');
+  }
+
+  if (proposal.shopping.length > 0) {
+    lines.push('Shopping:');
+    proposal.shopping.slice(0, 3).forEach((item) => {
+      lines.push(`- ${item?.title || 'Ukjent shoppingsted'}`);
+      if (item?.summary) lines.push(`  ${item.summary}`);
+    });
+    lines.push('');
+  }
+
+  if (proposal.itinerary.length > 0) {
+    lines.push('Enkelt forslag for de første dagene:');
+    proposal.itinerary.forEach((day) => {
+      lines.push(`${day.day}. ${day.title}`);
+      day.items.forEach((item) => lines.push(`- ${item}`));
+    });
+  }
+
+  return lines.join('\n');
 }
 
 app.post('/api/travel-helper', async (req, res) => {
@@ -5900,21 +5152,15 @@ app.post('/api/travel-helper', async (req, res) => {
     });
 
     if (!message || typeof message !== 'string') {
-      return res.status(400).json({
-        ok: false,
-        error: 'message_mangler',
-      });
+      return res.status(400).json({ ok: false, error: 'message_mangler' });
     }
 
     const openAiKey = String(process.env.OPENAI_API_KEY || '').trim();
     if (!openAiKey) {
-      return res.status(500).json({
-        ok: false,
-        error: 'OPENAI_API_KEY_mangler',
-      });
+      return res.status(500).json({ ok: false, error: 'OPENAI_API_KEY_mangler' });
     }
 
-    const safeHistory = Array.isArray(history) ? history.slice(-12) : [];
+    const safeHistory = Array.isArray(history) ? history.slice(-14) : [];
     const appLang =
       typeof lang === 'string' && lang.trim()
         ? lang.trim().toLowerCase()
@@ -5940,9 +5186,7 @@ app.post('/api/travel-helper', async (req, res) => {
       typeof flightSearchContext === 'object' &&
       !Array.isArray(flightSearchContext)
         ? {
-            offers: Array.isArray(flightSearchContext.offers)
-              ? flightSearchContext.offers
-              : [],
+            offers: Array.isArray(flightSearchContext.offers) ? flightSearchContext.offers : [],
             search:
               flightSearchContext.search &&
               typeof flightSearchContext.search === 'object' &&
@@ -5969,17 +5213,16 @@ app.post('/api/travel-helper', async (req, res) => {
 
     const intent = detectTravelHelperIntent(currentMessageText);
     const responseMode = detectTravelHelperResponseMode(currentMessageText, safeHistory);
-    const requestScope = detectTravelRequestScope(currentMessageText, safeHistory);
+    const contentCategory = extractTravelContentCategory(currentMessageText, safeHistory);
 
     const contentIntent =
       detectTravelContentIntent(currentMessageText) ||
       responseMode === 'restaurant_only' ||
-      responseMode === 'activity_only' ||
       responseMode === 'shopping_only' ||
+      responseMode === 'activity_only' ||
       responseMode === 'host_only' ||
       responseMode === 'trip_package';
 
-    const contentCategory = extractTravelContentCategory(currentMessageText);
     const flightIntent =
       detectTravelFlightIntent(currentMessageText) ||
       responseMode === 'flight_only' ||
@@ -5987,16 +5230,29 @@ app.post('/api/travel-helper', async (req, res) => {
 
     const tripPlanningIntent = responseMode === 'trip_package';
     const hostRentalIntent = responseMode === 'host_only';
+    const includeAccommodationInTrip =
+      responseMode === 'trip_package' &&
+      (
+        normalizeTravelHelperText(currentMessageText).includes('overnatting') ||
+        normalizeTravelHelperText(currentMessageText).includes('hotell') ||
+        normalizeTravelHelperText(currentMessageText).includes('hytte') ||
+        normalizeTravelHelperText(currentMessageText).includes('leilighet') ||
+        normalizeTravelHelperText(getPreviousUserMessage(safeHistory)).includes('overnatting') ||
+        normalizeTravelHelperText(getPreviousUserMessage(safeHistory)).includes('hotell') ||
+        normalizeTravelHelperText(getPreviousUserMessage(safeHistory)).includes('hytte') ||
+        normalizeTravelHelperText(getPreviousUserMessage(safeHistory)).includes('leilighet')
+      );
 
     const shouldRunAvailabilitySearch =
       responseMode === 'accommodation_only' ||
-      (responseMode === 'trip_package' && requestScope.accommodation);
+      includeAccommodationInTrip;
 
     let dynamicContext = '';
     let contentContext = '';
     let flightContext = '';
     let tripProposalContext = '';
     let contentItemsCount = 0;
+    let contentItemsForReply: any[] = [];
 
     let latestSearchRows: any[] = [];
     let latestSearchParams: {
@@ -6074,35 +5330,29 @@ app.post('/api/travel-helper', async (req, res) => {
     }
 
     if (shouldRunAvailabilitySearch) {
-      const allowHistoryCarry =
-        responseMode === 'accommodation_only' || responseMode === 'trip_package';
-
-      const area =
-        extractTravelDestinationArea(currentMessageText, safeHistory) ||
-        (allowHistoryCarry ? extractTravelDestinationArea(conversationText, []) : null) ||
+      const destinationArea =
+        extractTripDestinationArea(currentMessageText, safeHistory) ||
         latestSearchParams?.area ||
         null;
 
       const adults =
         extractTravelHelperAdults(currentMessageText) ||
-        (allowHistoryCarry ? extractTravelHelperAdults(conversationText) : null) ||
+        extractTravelHelperAdults(getPreviousUserMessage(safeHistory)) ||
         latestSearchParams?.adults ||
         null;
 
       const datesFromCurrent = extractTravelHelperDates(currentMessageText);
-      const datesFromHistory = allowHistoryCarry
-        ? extractTravelHelperDates(conversationText)
-        : { from: null, to: null };
+      const datesFromPrevious = extractTravelHelperDates(getPreviousUserMessage(safeHistory));
 
       const dates = {
-        from: datesFromCurrent.from || datesFromHistory.from || latestSearchParams?.from || null,
-        to: datesFromCurrent.to || datesFromHistory.to || latestSearchParams?.to || null,
+        from: datesFromCurrent.from || datesFromPrevious.from || latestSearchParams?.from || null,
+        to: datesFromCurrent.to || datesFromPrevious.to || latestSearchParams?.to || null,
       };
 
-      if (area && adults && dates.from && dates.to) {
+      if (destinationArea && adults && dates.from && dates.to) {
         try {
           const searchUrl = new URL(`http://127.0.0.1:${PORT}/api/search`);
-          searchUrl.searchParams.set('area', area);
+          searchUrl.searchParams.set('area', destinationArea);
           searchUrl.searchParams.set('from', dates.from);
           searchUrl.searchParams.set('to', dates.to);
           searchUrl.searchParams.set('adults', String(adults));
@@ -6121,7 +5371,7 @@ app.post('/api/travel-helper', async (req, res) => {
               from: dates.from,
               to: dates.to,
               adults,
-              area,
+              area: destinationArea,
               promo: '',
               lang: appLang,
             };
@@ -6135,7 +5385,7 @@ app.post('/api/travel-helper', async (req, res) => {
             dynamicContext = [
               'BNO_AVAILABILITY_CONTEXT',
               'Sanntidsoppslaget ble kjørt, men ga ingen gyldige treff.',
-              `Område: ${area}`,
+              `Område: ${destinationArea}`,
               `Fra: ${dates.from}`,
               `Til: ${dates.to}`,
               `Voksne: ${adults}`,
@@ -6152,38 +5402,18 @@ app.post('/api/travel-helper', async (req, res) => {
             'Forklar kort at sanntidsoppslaget ikke kunne fullføres akkurat nå.',
           ].join('\n');
         }
-      } else {
-        const missing: string[] = [];
-        if (!area) missing.push('destinasjon/område');
-        if (!adults) missing.push('antall personer');
-        if (!dates.from || !dates.to) missing.push('datoer');
-
-        dynamicContext = [
-          'BNO_AVAILABILITY_CONTEXT',
-          'Sanntidsoppslag ble ikke kjørt ennå.',
-          `Mangler: ${missing.join(', ')}`,
-          'Hvis brukeren spør om overnatting, skal du stille ett kort oppfølgingsspørsmål.',
-          'Be om manglende informasjon på en enkel måte.',
-          'Hvis destinasjon finnes men dato mangler, be om innsjekk og utsjekk.',
-          'Hvis destinasjon og dato finnes men antall personer mangler, be om antall voksne/gjester.',
-        ].join('\n');
       }
     }
 
     if (contentIntent || tripPlanningIntent || hostRentalIntent) {
       try {
-        const detectedArea =
-          extractTravelDestinationArea(currentMessageText, safeHistory) ||
-          (responseMode === 'trip_package' && latestFlightSearch?.destination
-            ? mapAirportCodeToArea(latestFlightSearch.destination)
-            : null) ||
+        const destinationArea =
+          extractTripDestinationArea(currentMessageText, safeHistory) ||
           latestSearchParams?.area ||
           'trysil';
 
-        const season = detectTravelSeason(
-          currentMessageText,
-          extractTravelHelperDates(conversationText)
-        );
+        const destinationSlug = mapTravelHelperAreaToContentDestinationSlug(destinationArea);
+        const season = detectTravelSeason(currentMessageText, extractTravelHelperDates(conversationText));
 
         let categoriesToFetch: string[] = [];
 
@@ -6191,15 +5421,12 @@ app.post('/api/travel-helper', async (req, res) => {
           categoriesToFetch = ['host_rental', 'travel_terms'];
         } else if (responseMode === 'restaurant_only') {
           categoriesToFetch = ['restaurant'];
-        } else if (responseMode === 'activity_only') {
-          categoriesToFetch = ['activity'];
         } else if (responseMode === 'shopping_only') {
           categoriesToFetch = ['shopping'];
+        } else if (responseMode === 'activity_only') {
+          categoriesToFetch = ['activity'];
         } else if (responseMode === 'trip_package') {
-          if (requestScope.activity) categoriesToFetch.push('activity');
-          if (requestScope.restaurant) categoriesToFetch.push('restaurant');
-          if (requestScope.shopping) categoriesToFetch.push('shopping');
-          categoriesToFetch.push('travel_terms');
+          categoriesToFetch = ['activity', 'restaurant', 'shopping'];
         } else if (contentCategory) {
           categoriesToFetch = [contentCategory];
         }
@@ -6210,11 +5437,11 @@ app.post('/api/travel-helper', async (req, res) => {
           const destinationSlugForCategory =
             category === 'travel_terms' || category === 'host_rental'
               ? 'global'
-              : mapTravelHelperAreaToContentDestinationSlug(detectedArea);
+              : destinationSlug;
 
           const items = await getTravelHelperContent({
             destinationSlug: destinationSlugForCategory,
-            category: category || null,
+            category,
             language: appLang,
             message: currentMessageText,
           });
@@ -6234,10 +5461,12 @@ app.post('/api/travel-helper', async (req, res) => {
           prioritizedItems = filterAndRankTravelContentForSeason(
             deduped,
             season,
-            currentMessageText
+            currentMessageText,
+            safeHistory
           );
         }
 
+        contentItemsForReply = prioritizedItems;
         contentItemsCount = prioritizedItems.length;
 
         if (prioritizedItems.length > 0) {
@@ -6251,26 +5480,30 @@ app.post('/api/travel-helper', async (req, res) => {
     if (responseMode === 'flight_only' || responseMode === 'trip_package') {
       try {
         const flightParams = extractTravelFlightSearchParams(currentMessageText, safeHistory);
-        const inferredArea = extractTravelAreaForTripPlanning(currentMessageText, safeHistory);
-        const inferredAirport = inferAirportFromTravelArea(inferredArea);
+        const destinationArea = extractTripDestinationArea(currentMessageText, safeHistory);
+        const inferredDestinationAirport = inferAirportFromTravelArea(destinationArea);
 
         let resolvedOrigin = flightParams.origin || null;
         let resolvedDestination = flightParams.destination || null;
 
-        if (resolvedOrigin && !resolvedDestination && inferredAirport) {
-          resolvedDestination = inferredAirport;
+        if (!resolvedDestination && inferredDestinationAirport) {
+          resolvedDestination = inferredDestinationAirport;
         }
 
-        if (!resolvedOrigin && resolvedDestination && inferredAirport) {
-          resolvedOrigin = inferredAirport;
+        if (
+          resolvedOrigin &&
+          resolvedDestination &&
+          resolvedOrigin === resolvedDestination &&
+          inferredDestinationAirport &&
+          resolvedOrigin !== inferredDestinationAirport
+        ) {
+          resolvedDestination = inferredDestinationAirport;
         }
 
         if (resolvedOrigin && resolvedDestination && flightParams.departureDate) {
           const flightSearchResponse = await fetch(`http://127.0.0.1:${PORT}/api/flights/search`, {
             method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
+            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
               origin: resolvedOrigin,
               destination: resolvedDestination,
@@ -6303,10 +5536,7 @@ app.post('/api/travel-helper', async (req, res) => {
               directOnly: flightParams.directOnly,
             };
 
-            flightContext = buildFlightContextText(
-              latestFlightOffers,
-              latestFlightSearch
-            );
+            flightContext = buildFlightContextText(latestFlightOffers, latestFlightSearch);
           } else {
             latestFlightOffers = [];
             latestFlightSearch = {
@@ -6321,7 +5551,7 @@ app.post('/api/travel-helper', async (req, res) => {
 
             flightContext = buildFlightContextText([], latestFlightSearch);
           }
-        } else {
+        } else if (responseMode === 'flight_only') {
           const missing: string[] = [];
           if (!resolvedOrigin) missing.push('avreiseflyplass');
           if (!resolvedDestination) missing.push('destinasjon/ankomstflyplass');
@@ -6358,7 +5588,7 @@ app.post('/api/travel-helper', async (req, res) => {
           message: currentMessageText,
           history: safeHistory,
           lang: appLang,
-          scope: requestScope,
+          includeAccommodation: includeAccommodationInTrip,
           availabilityRows: latestSearchRows,
           availabilityParams: latestSearchParams,
           flightOffers: latestFlightOffers,
@@ -6380,30 +5610,16 @@ app.post('/api/travel-helper', async (req, res) => {
     ].join('\n');
 
     const input = [
-      {
-        role: 'system',
-        content: systemPrompt,
-      },
-      ...(dynamicContext
-        ? [{ role: 'system', content: dynamicContext }]
-        : []),
-      ...(contentContext
-        ? [{ role: 'system', content: contentContext }]
-        : []),
-      ...(flightContext
-        ? [{ role: 'system', content: flightContext }]
-        : []),
-      ...(tripProposalContext
-        ? [{ role: 'system', content: tripProposalContext }]
-        : []),
+      { role: 'system', content: systemPrompt },
+      ...(dynamicContext ? [{ role: 'system', content: dynamicContext }] : []),
+      ...(contentContext ? [{ role: 'system', content: contentContext }] : []),
+      ...(flightContext ? [{ role: 'system', content: flightContext }] : []),
+      ...(tripProposalContext ? [{ role: 'system', content: tripProposalContext }] : []),
       ...safeHistory.map((item: any) => ({
         role: item?.role === 'assistant' ? 'assistant' : 'user',
-        content: getHistoryItemText(item),
+        content: String(item?.text || ''),
       })),
-      {
-        role: 'user',
-        content: String(message),
-      },
+      { role: 'user', content: String(message) },
     ];
 
     console.log('TRAVEL_HELPER context sizes', {
@@ -6417,7 +5633,7 @@ app.post('/api/travel-helper', async (req, res) => {
       tripPlanningIntent,
       hostRentalIntent,
       responseMode,
-      requestScope,
+      includeAccommodationInTrip,
     });
 
     const response = await fetch('https://api.openai.com/v1/responses', {
@@ -6437,21 +5653,11 @@ app.post('/api/travel-helper', async (req, res) => {
 
     try {
       data = rawResponseText ? JSON.parse(rawResponseText) : null;
-    } catch (parseError) {
-      console.error('travel-helper OpenAI non-json error', {
-        status: response.status,
-        statusText: response.statusText,
-        bodyStart: rawResponseText?.slice(0, 500),
-      });
-
-      return res.status(500).json({
-        ok: false,
-        error: 'openai_non_json_response',
-      });
+    } catch {
+      return res.status(500).json({ ok: false, error: 'openai_non_json_response' });
     }
 
     if (!response.ok) {
-      console.error('travel-helper OpenAI error', data);
       return res.status(500).json({
         ok: false,
         error: data?.error?.message || 'openai_request_failed',
@@ -6479,16 +5685,14 @@ app.post('/api/travel-helper', async (req, res) => {
         latestSearchParams?.adults || null
       );
 
-      let resolvedRoom = matchedRoom;
-
-      if (!resolvedRoom) {
-        const ranked = rankTravelHelperAvailabilityRows(
+      const resolvedRoom =
+        matchedRoom ||
+        rankTravelHelperAvailabilityRows(
           latestSearchRows,
           latestSearchParams?.adults || null,
           currentMessageText
-        );
-        resolvedRoom = ranked[0] || null;
-      }
+        )[0] ||
+        null;
 
       if (resolvedRoom) {
         bookingAction = {
@@ -6526,17 +5730,11 @@ app.post('/api/travel-helper', async (req, res) => {
     }
 
     if (latestFlightOffers.length > 0 && latestFlightSearch) {
-      const wantsFlightBooking = isTravelHelperFlightBookingIntent(currentMessageText);
-
-      if (wantsFlightBooking) {
-        let resolvedOffer = findRequestedFlightOfferFromMessage(
-          currentMessageText,
-          latestFlightOffers
-        );
-
-        if (!resolvedOffer) {
-          resolvedOffer = latestFlightOffers[0] || null;
-        }
+      if (isTravelHelperFlightBookingIntent(currentMessageText)) {
+        const resolvedOffer =
+          findRequestedFlightOfferFromMessage(currentMessageText, latestFlightOffers) ||
+          latestFlightOffers[0] ||
+          null;
 
         if (resolvedOffer) {
           const outbound = getFlightSliceSummary(resolvedOffer?.slices?.[0]);
@@ -6565,6 +5763,18 @@ app.post('/api/travel-helper', async (req, res) => {
       latestSearchParams &&
       !hostRentalIntent;
 
+    const shouldForceDeterministicRestaurantReply =
+      responseMode === 'restaurant_only' &&
+      contentItemsForReply.length > 0;
+
+    const shouldForceDeterministicShoppingReply =
+      responseMode === 'shopping_only' &&
+      contentItemsForReply.length > 0;
+
+    const shouldForceDeterministicActivityReply =
+      responseMode === 'activity_only' &&
+      contentItemsForReply.length > 0;
+
     const shouldForceDeterministicTripReply =
       responseMode === 'trip_package' &&
       !!tripProposal;
@@ -6572,16 +5782,18 @@ app.post('/api/travel-helper', async (req, res) => {
     const safeReply =
       shouldForceDeterministicAccommodationReply
         ? buildDeterministicAccommodationReply(latestSearchRows, latestSearchParams)
-        : shouldForceDeterministicTripReply
-          ? buildDeterministicTripPackageReply({
-              tripProposal,
-              flightOffers: latestFlightOffers,
-              flightSearch: latestFlightSearch,
-              searchRows: latestSearchRows,
-              searchParams: latestSearchParams,
-              message: currentMessageText,
-            })
-          : (reply || 'Beklager, jeg fikk ikke laget et svar akkurat nå.');
+        : shouldForceDeterministicRestaurantReply
+          ? buildDeterministicRestaurantReply(contentItemsForReply, currentMessageText, safeHistory)
+          : shouldForceDeterministicShoppingReply
+            ? buildDeterministicShoppingReply(contentItemsForReply, currentMessageText, safeHistory)
+            : shouldForceDeterministicActivityReply
+              ? buildDeterministicActivityReply(contentItemsForReply, currentMessageText, safeHistory)
+              : shouldForceDeterministicTripReply
+                ? buildDeterministicTripPackageReply({
+                    tripProposal,
+                    includeAccommodation: includeAccommodationInTrip,
+                  })
+                : (reply || 'Beklager, jeg fikk ikke laget et svar akkurat nå.');
 
     return res.json({
       ok: true,
@@ -6591,27 +5803,21 @@ app.post('/api/travel-helper', async (req, res) => {
       tripProposal,
       searchContext:
         latestSearchRows.length > 0 && latestSearchParams
-          ? {
-              rows: latestSearchRows,
-              params: latestSearchParams,
-            }
+          ? { rows: latestSearchRows, params: latestSearchParams }
           : null,
       flightSearchContext:
         latestFlightOffers.length > 0 && latestFlightSearch
-          ? {
-              offers: latestFlightOffers.slice(0, 5),
-              search: latestFlightSearch,
-            }
+          ? { offers: latestFlightOffers.slice(0, 5), search: latestFlightSearch }
           : null,
       meta: {
         intent,
         responseMode,
-        requestScope,
         contentIntent,
         contentCategory,
         flightIntent,
         tripPlanningIntent,
         hostRentalIntent,
+        includeAccommodationInTrip,
         usedDynamicContext: Boolean(dynamicContext),
         usedContentContext: Boolean(contentContext),
         usedFlightContext: Boolean(flightContext),
@@ -6622,14 +5828,10 @@ app.post('/api/travel-helper', async (req, res) => {
         searchRowsCount: latestSearchRows.length,
         tripProposalBuilt: Boolean(tripProposal),
         forcedDeterministicAccommodationReply: Boolean(shouldForceDeterministicAccommodationReply),
+        forcedDeterministicRestaurantReply: Boolean(shouldForceDeterministicRestaurantReply),
+        forcedDeterministicShoppingReply: Boolean(shouldForceDeterministicShoppingReply),
+        forcedDeterministicActivityReply: Boolean(shouldForceDeterministicActivityReply),
         forcedDeterministicTripReply: Boolean(shouldForceDeterministicTripReply),
-        isRestaurantOnlyQuestion: isRestaurantOnlyQuestion(currentMessageText, safeHistory),
-        isActivityOnlyQuestion: isActivityOnlyQuestion(currentMessageText, safeHistory),
-        isShoppingOnlyQuestion: isShoppingOnlyQuestion(currentMessageText, safeHistory),
-        isAccommodationOnlyQuestion: isAccommodationOnlyQuestion(currentMessageText, safeHistory),
-        isFlightOnlyQuestion: isFlightOnlyQuestion(currentMessageText, safeHistory),
-        isTripPackageQuestion: isTripPackageQuestion(currentMessageText, safeHistory),
-        isHostOnlyQuestion: isHostOnlyQuestion(currentMessageText, safeHistory),
       },
     });
   } catch (e: any) {
