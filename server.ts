@@ -4542,7 +4542,7 @@ async function getTravelHelperContent(opts: {
       )
       .order('is_featured', { ascending: false })
       .order('sort_order', { ascending: true })
-      .limit(50);
+      .limit(30);
 
     if (category) {
       query = query.eq('category', category);
@@ -4589,21 +4589,30 @@ async function getTravelHelperContent(opts: {
     return await query;
   };
 
-  let { data, error } = await runQuery(language);
+  const languagePriority =
+    language === 'nb'
+      ? ['nb', 'en']
+      : language === 'en'
+        ? ['en', 'nb']
+        : [language, 'en', 'nb'];
 
-  if (error) {
-    throw error;
-  }
+  const merged: any[] = [];
 
-  if ((!data || data.length === 0) && language !== 'nb') {
-    const fallback = await runQuery('nb');
-    if (fallback.error) {
-      throw fallback.error;
+  for (const langToUse of languagePriority) {
+    const { data, error } = await runQuery(langToUse);
+
+    if (error) {
+      throw error;
     }
-    data = fallback.data || [];
+
+    for (const item of data || []) {
+      if (!merged.find((x) => x?.slug === item?.slug)) {
+        merged.push(item);
+      }
+    }
   }
 
-  return Array.isArray(data) ? data : [];
+  return merged;
 }
 
 function scoreSeasonalContentItem(
