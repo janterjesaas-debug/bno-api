@@ -1,0 +1,1594 @@
+{
+  "id": "dest_stockholm_se_master",
+  "slug": "stockholm",
+  "locale": "en-GB",
+  "city": {
+    "name": "Stockholm",
+    "slug": "stockholm",
+    "region": "Stockholm County",
+    "latitude": 59.3293,
+    "longitude": 18.0686,
+    "timezone": "Europe/Stockholm"
+  },
+  "country": {
+    "name": "Sweden",
+    "code": "SE",
+    "slug": "sweden",
+    "continent": "Europe"
+  },
+  "editorial": {
+    "headline": "Stockholm: elegant waterfront districts, standout Nordic dining, and shopping that mixes luxury with Scandinavian design",
+    "intro": "Stockholm is a strong city-break destination for travellers who want style, waterfront scenery, quality dining, and a calm but polished capital-city feel. It works especially well for 2 to 3 days, with central districts that are easy to combine and a strong mix of culture, shopping, and restaurant options.",
+    "why_visit": [
+      "A visually striking city spread across islands with elegant central districts and waterfront views",
+      "Strong restaurant scene ranging from refined Nordic dining to polished casual favourites",
+      "Excellent shopping across luxury labels, Scandinavian fashion, and design-led stores",
+      "A compact city-break feel when planned around the right neighbourhoods"
+    ],
+    "highlights": [
+      "Very good for short premium city breaks",
+      "Strong fit for couples, design-conscious travellers, and culture-focused guests",
+      "Best experienced by combining central areas rather than trying to cover too much"
+    ],
+    "transport_tips": [
+      "Central Stockholm is highly walkable across Norrmalm, Östermalm, Gamla Stan, and parts of Södermalm.",
+      "Use SL public transport for metro, trams, buses, and ferries when moving between districts.",
+      "Book key restaurants and spa experiences in advance, especially for weekend travel.",
+      "If planning museum visits on Djurgården, group them into one area-based day."
+    ],
+    "neighborhood_tips": [
+      {
+        "name": "Norrmalm",
+        "tip": "Best for central hotels, transport convenience, major shopping, and easy city access."
+      },
+      {
+        "name": "Östermalm",
+        "tip": "Ideal for luxury hotels, refined dining, premium shopping, and a polished city feel."
+      },
+      {
+        "name": "Gamla Stan",
+        "tip": "Best for first-time visitors wanting historic atmosphere and a classic Stockholm setting."
+      },
+      {
+        "name": "Södermalm",
+        "tip": "Good for more local-feeling cafés, boutiques, creative shopping, and a less formal atmosphere."
+      },
+      {
+        "name": "Djurgården",
+        "tip": "Best for museums, green space, and a slower cultural day."
+      }
+    ]
+  },
+  "categories": {
+    "restaurants": {
+      "headline": "Recommended restaurants in Stockholm",
+      "description": "A practical mix of standout Nordic fine dining, refined classics, and polished city-break options.",
+      "items": [
+        {
+          "id": "rest_stockholm_frantzen",
+          "name": "Frantzén",
+          "slug": "frantzen",
+          "category": "restaurants",
+          "subcategory": "fine_dining",
+          "content": {
+            "title": "Frantzén",
+            "short_description": "Stockholm’s flagship dining experience for guests seeking one of the city’s most acclaimed meals.",
+            "long_description": "Frantzén is the clearest fine-dining recommendation in Stockholm for guests who want a destination restaurant experience. It suits luxury travellers, special-occasion trips, and visitors who see dining as one of the key highlights of the stay.",
+            "highlights": [
+              "Top-tier international reputation",
+              "Strong special-occasion option",
+              "Best for destination dining"
+            ],
+            "insider_tips": [
+              "Book very far in advance.",
+              "Best suited to guests who are deliberately building part of the trip around the meal."
+            ]
+          },
+          "source": {
+            "type": "hybrid",
+            "google_places": {
+              "place_id": "ChIJ_FRANTZEN_STOCKHOLM",
+              "name": "Frantzén",
+              "formatted_address": "Klara Norra kyrkogata 26, 111 22 Stockholm, Sweden",
+              "location": {
+                "latitude": 59.3316,
+                "longitude": 18.0609
+              },
+              "maps_url": "https://maps.google.com/?cid=frantzen-stockholm-placeholder",
+              "website": "https://www.restaurantfrantzen.com",
+              "international_phone_number": "+46 8 20 85 80",
+              "rating": 4.8,
+              "user_ratings_total": 720,
+              "price_level": 4,
+              "business_status": "OPERATIONAL",
+              "opening_hours": {
+                "open_now": false,
+                "weekday_text": [
+                  "Wednesday: 6:00 PM – 12:00 AM"
+                ]
+              },
+              "types": [
+                "restaurant",
+                "food",
+                "point_of_interest",
+                "establishment"
+              ]
+            },
+            "external_ids": {
+              "google_place_id": "ChIJ_FRANTZEN_STOCKHOLM"
+            },
+            "sync": {
+              "last_synced_at": "2026-04-02T22:10:00Z",
+              "sync_status": "synced",
+              "provider_version": "google-places-v1"
+            }
+          },
+          "guest_attributes": {
+            "family_friendly": false,
+            "couples_friendly": true,
+            "luxury_level": "luxury",
+            "central_location": true,
+            "booking_relevant": true
+          },
+          "tags": [
+            {
+              "key": "fine_dining",
+              "label": "Fine Dining",
+              "type": "style"
+            },
+            {
+              "key": "special_occasion",
+              "label": "Special Occasion",
+              "type": "occasion"
+            }
+          ],
+          "recommendation": {
+            "is_featured": true,
+            "priority_score": 96,
+            "editor_note": "The top recommendation when a guest wants Stockholm’s flagship dining experience.",
+            "recommended_for": [
+              "luxury travellers",
+              "special occasions",
+              "destination dining"
+            ],
+            "seasonality": [
+              "year_round"
+            ]
+          },
+          "status": "active",
+          "sort_order": 1
+        },
+        {
+          "id": "rest_stockholm_sturehof",
+          "name": "Sturehof",
+          "slug": "sturehof",
+          "category": "restaurants",
+          "subcategory": "classic_brasserie",
+          "content": {
+            "title": "Sturehof",
+            "short_description": "A classic Stockholm restaurant and one of the city’s most useful all-round dining recommendations.",
+            "long_description": "Sturehof is a strong choice for guests wanting a polished but approachable Stockholm meal in a very central location. It works especially well for seafood, business lunches, classic dinners, and travellers staying around Östermalm or central shopping districts.",
+            "highlights": [
+              "Classic Stockholm favourite",
+              "Excellent central location",
+              "Strong all-round guest appeal"
+            ],
+            "insider_tips": [
+              "Very useful for lunch or dinner after shopping in central Stockholm.",
+              "Reserve ahead for prime evening slots."
+            ]
+          },
+          "source": {
+            "type": "hybrid",
+            "google_places": {
+              "place_id": "ChIJ_STUREHOF_STOCKHOLM",
+              "name": "Sturehof",
+              "formatted_address": "Stureplan 2, 114 35 Stockholm, Sweden",
+              "location": {
+                "latitude": 59.3358,
+                "longitude": 18.0735
+              },
+              "maps_url": "https://maps.google.com/?cid=sturehof-stockholm-placeholder",
+              "website": "https://www.sturehof.com",
+              "international_phone_number": "+46 8 440 57 30",
+              "rating": 4.4,
+              "user_ratings_total": 5100,
+              "price_level": 3,
+              "business_status": "OPERATIONAL",
+              "opening_hours": {
+                "open_now": true,
+                "weekday_text": [
+                  "Thursday: 11:30 AM – 12:00 AM"
+                ]
+              },
+              "types": [
+                "restaurant",
+                "seafood_restaurant",
+                "food",
+                "point_of_interest",
+                "establishment"
+              ]
+            },
+            "external_ids": {
+              "google_place_id": "ChIJ_STUREHOF_STOCKHOLM"
+            },
+            "sync": {
+              "last_synced_at": "2026-04-02T22:10:00Z",
+              "sync_status": "synced",
+              "provider_version": "google-places-v1"
+            }
+          },
+          "guest_attributes": {
+            "family_friendly": true,
+            "couples_friendly": true,
+            "luxury_level": "upscale",
+            "central_location": true,
+            "booking_relevant": true
+          },
+          "tags": [
+            {
+              "key": "classic_stockholm",
+              "label": "Classic Stockholm",
+              "type": "theme"
+            },
+            {
+              "key": "central_dining",
+              "label": "Central Dining",
+              "type": "location"
+            }
+          ],
+          "recommendation": {
+            "is_featured": true,
+            "priority_score": 90,
+            "editor_note": "One of the most practical central restaurant recommendations in Stockholm.",
+            "recommended_for": [
+              "couples",
+              "business travellers",
+              "seafood",
+              "central stays"
+            ],
+            "seasonality": [
+              "year_round"
+            ]
+          },
+          "status": "active",
+          "sort_order": 2
+        },
+        {
+          "id": "rest_stockholm_riche",
+          "name": "Riche",
+          "slug": "riche",
+          "category": "restaurants",
+          "subcategory": "modern_brasserie",
+          "content": {
+            "title": "Riche",
+            "short_description": "A polished and lively Stockholm dining recommendation with broad appeal.",
+            "long_description": "Riche is a useful option for guests wanting a central dinner with energy, style, and a recognisable Stockholm atmosphere. It works well for couples, social dinners, and travellers staying around Östermalm or nearby luxury hotels.",
+            "highlights": [
+              "Lively atmosphere",
+              "Strong central location",
+              "Good city-break dinner option"
+            ],
+            "insider_tips": [
+              "A good recommendation when guests want a stylish, social dinner rather than a formal tasting menu.",
+              "Best booked ahead for evening dining."
+            ]
+          },
+          "source": {
+            "type": "hybrid",
+            "google_places": {
+              "place_id": "ChIJ_RICHE_STOCKHOLM",
+              "name": "Riche",
+              "formatted_address": "Birger Jarlsgatan 4, 114 34 Stockholm, Sweden",
+              "location": {
+                "latitude": 59.3355,
+                "longitude": 18.0742
+              },
+              "maps_url": "https://maps.google.com/?cid=riche-stockholm-placeholder",
+              "website": "https://www.riche.se",
+              "international_phone_number": "+46 8 545 035 60",
+              "rating": 4.3,
+              "user_ratings_total": 3900,
+              "price_level": 3,
+              "business_status": "OPERATIONAL",
+              "opening_hours": {
+                "open_now": false,
+                "weekday_text": [
+                  "Friday: 11:30 AM – 1:00 AM"
+                ]
+              },
+              "types": [
+                "restaurant",
+                "bar",
+                "food",
+                "point_of_interest",
+                "establishment"
+              ]
+            },
+            "external_ids": {
+              "google_place_id": "ChIJ_RICHE_STOCKHOLM"
+            },
+            "sync": {
+              "last_synced_at": "2026-04-02T22:10:00Z",
+              "sync_status": "synced",
+              "provider_version": "google-places-v1"
+            }
+          },
+          "guest_attributes": {
+            "family_friendly": false,
+            "couples_friendly": true,
+            "luxury_level": "upscale",
+            "central_location": true,
+            "booking_relevant": true
+          },
+          "tags": [
+            {
+              "key": "stylish_dining",
+              "label": "Stylish Dining",
+              "type": "style"
+            },
+            {
+              "key": "ostermalm",
+              "label": "Östermalm",
+              "type": "location"
+            }
+          ],
+          "recommendation": {
+            "is_featured": false,
+            "priority_score": 84,
+            "editor_note": "A strong stylish dinner recommendation with good social energy.",
+            "recommended_for": [
+              "couples",
+              "social dining",
+              "weekend trips"
+            ],
+            "seasonality": [
+              "year_round"
+            ]
+          },
+          "status": "active",
+          "sort_order": 3
+        }
+      ]
+    },
+    "activities": {
+      "headline": "Top activities in Stockholm",
+      "description": "High-value cultural and city-break recommendations that work well for 2 to 3 day stays.",
+      "items": [
+        {
+          "id": "act_stockholm_vasa_museum",
+          "name": "Vasa Museum",
+          "slug": "vasa-museum",
+          "category": "activities",
+          "subcategory": "museum",
+          "content": {
+            "title": "Vasa Museum",
+            "short_description": "One of Stockholm’s most distinctive and memorable museum experiences.",
+            "long_description": "The Vasa Museum is one of the strongest recommendations in Stockholm for first-time visitors because it is specific, memorable, and easy to understand as a major city highlight. It works especially well for families, history-focused travellers, and guests wanting one standout activity.",
+            "highlights": [
+              "One of Stockholm’s signature attractions",
+              "Strong family and first-time visitor appeal",
+              "Excellent value as a single major activity"
+            ],
+            "insider_tips": [
+              "Best combined with other Djurgården sights if guests have time.",
+              "A good option even for travellers who do not normally prioritise museums."
+            ]
+          },
+          "source": {
+            "type": "hybrid",
+            "google_places": {
+              "place_id": "ChIJ_VASA_MUSEUM_STOCKHOLM",
+              "name": "Vasa Museum",
+              "formatted_address": "Galärvarvsvägen 14, 115 21 Stockholm, Sweden",
+              "location": {
+                "latitude": 59.328,
+                "longitude": 18.0917
+              },
+              "maps_url": "https://maps.google.com/?cid=vasa-museum-stockholm-placeholder",
+              "website": "https://www.vasamuseet.se",
+              "international_phone_number": "+46 8 519 548 80",
+              "rating": 4.8,
+              "user_ratings_total": 62500,
+              "price_level": 2,
+              "business_status": "OPERATIONAL",
+              "opening_hours": {
+                "open_now": true,
+                "weekday_text": [
+                  "Thursday: 10:00 AM – 8:00 PM"
+                ]
+              },
+              "types": [
+                "museum",
+                "tourist_attraction",
+                "point_of_interest",
+                "establishment"
+              ]
+            },
+            "external_ids": {
+              "google_place_id": "ChIJ_VASA_MUSEUM_STOCKHOLM"
+            },
+            "sync": {
+              "last_synced_at": "2026-04-02T22:10:00Z",
+              "sync_status": "synced",
+              "provider_version": "google-places-v1"
+            }
+          },
+          "guest_attributes": {
+            "family_friendly": true,
+            "couples_friendly": true,
+            "luxury_level": "midrange",
+            "central_location": false,
+            "booking_relevant": true
+          },
+          "tags": [
+            {
+              "key": "museum",
+              "label": "Museum",
+              "type": "theme"
+            },
+            {
+              "key": "first_time_pick",
+              "label": "First-Time Pick",
+              "type": "audience"
+            }
+          ],
+          "recommendation": {
+            "is_featured": true,
+            "priority_score": 95,
+            "editor_note": "The most reliable single activity recommendation for many Stockholm visitors.",
+            "recommended_for": [
+              "first-time visitors",
+              "families",
+              "history"
+            ],
+            "seasonality": [
+              "year_round"
+            ]
+          },
+          "status": "active",
+          "sort_order": 1
+        },
+        {
+          "id": "act_stockholm_skansen",
+          "name": "Skansen",
+          "slug": "skansen",
+          "category": "activities",
+          "subcategory": "open_air_museum",
+          "content": {
+            "title": "Skansen",
+            "short_description": "A strong cultural and family-friendly activity with a more open-air, local feel.",
+            "long_description": "Skansen is a very useful recommendation for guests who want more than a standard indoor museum. It combines Swedish cultural context, outdoor space, and broad appeal, making it especially good for families and travellers visiting in milder weather.",
+            "highlights": [
+              "Good family appeal",
+              "More open-air and relaxed than a conventional museum",
+              "Strong Swedish cultural angle"
+            ],
+            "insider_tips": [
+              "Works especially well in spring, summer, and early autumn.",
+              "Best as part of a Djurgården day rather than a quick stop."
+            ]
+          },
+          "source": {
+            "type": "hybrid",
+            "google_places": {
+              "place_id": "ChIJ_SKANSEN_STOCKHOLM",
+              "name": "Skansen",
+              "formatted_address": "Djurgårdsslätten 49-51, 115 21 Stockholm, Sweden",
+              "location": {
+                "latitude": 59.3249,
+                "longitude": 18.1033
+              },
+              "maps_url": "https://maps.google.com/?cid=skansen-stockholm-placeholder",
+              "website": "https://www.skansen.se",
+              "international_phone_number": "+46 8 442 80 00",
+              "rating": 4.5,
+              "user_ratings_total": 32000,
+              "price_level": 2,
+              "business_status": "OPERATIONAL",
+              "opening_hours": {
+                "open_now": true,
+                "weekday_text": [
+                  "Thursday: 10:00 AM – 6:00 PM"
+                ]
+              },
+              "types": [
+                "tourist_attraction",
+                "museum",
+                "park",
+                "point_of_interest",
+                "establishment"
+              ]
+            },
+            "external_ids": {
+              "google_place_id": "ChIJ_SKANSEN_STOCKHOLM"
+            },
+            "sync": {
+              "last_synced_at": "2026-04-02T22:10:00Z",
+              "sync_status": "synced",
+              "provider_version": "google-places-v1"
+            }
+          },
+          "guest_attributes": {
+            "family_friendly": true,
+            "couples_friendly": true,
+            "luxury_level": "midrange",
+            "central_location": false,
+            "booking_relevant": true
+          },
+          "tags": [
+            {
+              "key": "family_pick",
+              "label": "Family Pick",
+              "type": "audience"
+            },
+            {
+              "key": "outdoor_culture",
+              "label": "Outdoor Culture",
+              "type": "theme"
+            }
+          ],
+          "recommendation": {
+            "is_featured": false,
+            "priority_score": 86,
+            "editor_note": "A very good recommendation for families and guests wanting a broader cultural outing.",
+            "recommended_for": [
+              "families",
+              "spring",
+              "summer",
+              "culture"
+            ],
+            "seasonality": [
+              "spring",
+              "summer",
+              "autumn"
+            ]
+          },
+          "status": "active",
+          "sort_order": 2
+        }
+      ]
+    },
+    "gyms": {
+      "headline": "Gyms and fitness options",
+      "description": "Useful choices for guests wanting a proper workout while staying in Stockholm.",
+      "items": [
+        {
+          "id": "gym_stockholm_sats_spårvagnshallarna",
+          "name": "SATS Spårvagnshallarna",
+          "slug": "sats-sparvagnshallarna",
+          "category": "gyms",
+          "subcategory": "full_service_gym",
+          "content": {
+            "title": "SATS Spårvagnshallarna",
+            "short_description": "A practical central gym recommendation with strong facilities and broad appeal.",
+            "long_description": "SATS Spårvagnshallarna is a useful gym choice for guests who want a proper fitness facility rather than a hotel gym. It suits longer stays, business travellers, and visitors who want familiar, full-service gym infrastructure.",
+            "highlights": [
+              "Well-known Nordic gym brand",
+              "Useful central access",
+              "Good for routine workouts"
+            ],
+            "insider_tips": [
+              "Best for guests staying more than a night or two.",
+              "Check visitor access and pass options in advance."
+            ]
+          },
+          "source": {
+            "type": "hybrid",
+            "google_places": {
+              "place_id": "ChIJ_SATS_SPARVAGNSHALLARNA",
+              "name": "SATS Spårvagnshallarna",
+              "formatted_address": "Birger Jarlsgatan 57C, 113 56 Stockholm, Sweden",
+              "location": {
+                "latitude": 59.3446,
+                "longitude": 18.0677
+              },
+              "maps_url": "https://maps.google.com/?cid=sats-sparvagnshallarna-placeholder",
+              "website": "https://www.sats.se",
+              "international_phone_number": "+46 10 110 68 00",
+              "rating": 4.2,
+              "user_ratings_total": 560,
+              "price_level": 2,
+              "business_status": "OPERATIONAL",
+              "opening_hours": {
+                "open_now": true,
+                "weekday_text": [
+                  "Thursday: 6:00 AM – 10:00 PM"
+                ]
+              },
+              "types": [
+                "gym",
+                "health",
+                "point_of_interest",
+                "establishment"
+              ]
+            },
+            "external_ids": {
+              "google_place_id": "ChIJ_SATS_SPARVAGNSHALLARNA"
+            },
+            "sync": {
+              "last_synced_at": "2026-04-02T22:10:00Z",
+              "sync_status": "synced",
+              "provider_version": "google-places-v1"
+            }
+          },
+          "guest_attributes": {
+            "family_friendly": false,
+            "couples_friendly": false,
+            "luxury_level": "midrange",
+            "central_location": true,
+            "booking_relevant": true
+          },
+          "tags": [
+            {
+              "key": "fitness",
+              "label": "Fitness",
+              "type": "theme"
+            },
+            {
+              "key": "practical_choice",
+              "label": "Practical Choice",
+              "type": "style"
+            }
+          ],
+          "recommendation": {
+            "is_featured": true,
+            "priority_score": 79,
+            "editor_note": "A practical and credible gym recommendation for central Stockholm stays.",
+            "recommended_for": [
+              "business travellers",
+              "routine workouts",
+              "longer stays"
+            ],
+            "seasonality": [
+              "year_round"
+            ]
+          },
+          "status": "active",
+          "sort_order": 1
+        },
+        {
+          "id": "gym_stockholm_barrys_stockholm",
+          "name": "Barry's Stockholm",
+          "slug": "barrys-stockholm",
+          "category": "gyms",
+          "subcategory": "boutique_fitness",
+          "content": {
+            "title": "Barry's Stockholm",
+            "short_description": "A useful boutique fitness recommendation for guests who prefer high-energy classes.",
+            "long_description": "Barry's Stockholm is a strong option for guests who want a premium class-based workout rather than a standard gym floor. It suits solo travellers, shorter stays, and visitors already familiar with the brand or boutique fitness format.",
+            "highlights": [
+              "Strong for class-based training",
+              "Recognisable premium format",
+              "Good short-stay option"
+            ],
+            "insider_tips": [
+              "Best for guests who like scheduled classes and a high-energy atmosphere.",
+              "Book ahead if a specific class time matters."
+            ]
+          },
+          "source": {
+            "type": "hybrid",
+            "google_places": {
+              "place_id": "ChIJ_BARRYS_STOCKHOLM",
+              "name": "Barry's Stockholm",
+              "formatted_address": "Stockholm city centre, Sweden",
+              "location": {
+                "latitude": 59.3362,
+                "longitude": 18.0728
+              },
+              "maps_url": "https://maps.google.com/?cid=barrys-stockholm-placeholder",
+              "website": "https://www.barrys.com",
+              "international_phone_number": "+46 8 00 00 00",
+              "rating": 4.5,
+              "user_ratings_total": 210,
+              "price_level": 3,
+              "business_status": "OPERATIONAL",
+              "opening_hours": {
+                "open_now": false,
+                "weekday_text": [
+                  "Friday: 6:30 AM – 8:30 PM"
+                ]
+              },
+              "types": [
+                "gym",
+                "health",
+                "point_of_interest",
+                "establishment"
+              ]
+            },
+            "external_ids": {
+              "google_place_id": "ChIJ_BARRYS_STOCKHOLM"
+            },
+            "sync": {
+              "last_synced_at": "2026-04-02T22:10:00Z",
+              "sync_status": "synced",
+              "provider_version": "google-places-v1"
+            }
+          },
+          "guest_attributes": {
+            "family_friendly": false,
+            "couples_friendly": false,
+            "luxury_level": "upscale",
+            "central_location": true,
+            "booking_relevant": true
+          },
+          "tags": [
+            {
+              "key": "boutique_fitness",
+              "label": "Boutique Fitness",
+              "type": "style"
+            },
+            {
+              "key": "short_stay_friendly",
+              "label": "Short-Stay Friendly",
+              "type": "audience"
+            }
+          ],
+          "recommendation": {
+            "is_featured": false,
+            "priority_score": 75,
+            "editor_note": "A useful recommendation for guests who prefer premium class-based workouts.",
+            "recommended_for": [
+              "solo travellers",
+              "boutique fitness",
+              "short stays"
+            ],
+            "seasonality": [
+              "year_round"
+            ]
+          },
+          "status": "active",
+          "sort_order": 2
+        }
+      ]
+    },
+    "spa_wellness": {
+      "headline": "Spa and wellness recommendations",
+      "description": "Useful premium wellness options for guests wanting treatments, relaxation, or a polished spa break in Stockholm.",
+      "items": [
+        {
+          "id": "spa_stockholm_grand_hotel_nordic_spa",
+          "name": "Nordic Spa & Fitness at Grand Hôtel Stockholm",
+          "slug": "nordic-spa-grand-hotel-stockholm",
+          "category": "spa_wellness",
+          "subcategory": "luxury_hotel_spa",
+          "content": {
+            "title": "Nordic Spa & Fitness at Grand Hôtel Stockholm",
+            "short_description": "One of Stockholm’s strongest premium spa recommendations in a flagship hotel setting.",
+            "long_description": "The Nordic Spa & Fitness at Grand Hôtel is a very strong wellness recommendation for guests seeking a polished, central, luxury-level experience. It suits couples, premium city breaks, and travellers staying around the waterfront and central luxury hotel areas.",
+            "highlights": [
+              "Luxury hotel setting",
+              "Strong central location",
+              "Excellent fit for premium stays"
+            ],
+            "insider_tips": [
+              "Best booked in advance for preferred treatment times.",
+              "Works especially well for guests already staying near central waterfront hotels."
+            ]
+          },
+          "source": {
+            "type": "hybrid",
+            "google_places": {
+              "place_id": "ChIJ_GRAND_HOTEL_SPA_STOCKHOLM",
+              "name": "Nordic Spa & Fitness",
+              "formatted_address": "Södra Blasieholmshamnen 8, 103 27 Stockholm, Sweden",
+              "location": {
+                "latitude": 59.3298,
+                "longitude": 18.0726
+              },
+              "maps_url": "https://maps.google.com/?cid=grand-hotel-spa-stockholm-placeholder",
+              "website": "https://www.grandhotel.se",
+              "international_phone_number": "+46 8 679 35 00",
+              "rating": 4.5,
+              "user_ratings_total": 260,
+              "price_level": 4,
+              "business_status": "OPERATIONAL",
+              "opening_hours": {
+                "open_now": false,
+                "weekday_text": [
+                  "Thursday: 9:00 AM – 8:00 PM"
+                ]
+              },
+              "types": [
+                "spa",
+                "health",
+                "point_of_interest",
+                "establishment"
+              ]
+            },
+            "external_ids": {
+              "google_place_id": "ChIJ_GRAND_HOTEL_SPA_STOCKHOLM"
+            },
+            "sync": {
+              "last_synced_at": "2026-04-02T22:10:00Z",
+              "sync_status": "synced",
+              "provider_version": "google-places-v1"
+            }
+          },
+          "guest_attributes": {
+            "family_friendly": false,
+            "couples_friendly": true,
+            "luxury_level": "luxury",
+            "central_location": true,
+            "booking_relevant": true
+          },
+          "tags": [
+            {
+              "key": "luxury_escape",
+              "label": "Luxury Escape",
+              "type": "style"
+            },
+            {
+              "key": "waterfront",
+              "label": "Waterfront",
+              "type": "location"
+            }
+          ],
+          "recommendation": {
+            "is_featured": true,
+            "priority_score": 91,
+            "editor_note": "The strongest premium spa recommendation for many central Stockholm stays.",
+            "recommended_for": [
+              "couples",
+              "luxury travellers",
+              "wellness"
+            ],
+            "seasonality": [
+              "year_round"
+            ]
+          },
+          "status": "active",
+          "sort_order": 1
+        },
+        {
+          "id": "spa_stockholm_sturebadet",
+          "name": "Sturebadet",
+          "slug": "sturebadet",
+          "category": "spa_wellness",
+          "subcategory": "historic_city_spa",
+          "content": {
+            "title": "Sturebadet",
+            "short_description": "A classic Stockholm wellness recommendation with a central and refined atmosphere.",
+            "long_description": "Sturebadet is a good recommendation for guests seeking a more classic city spa environment in a central location. It works particularly well for visitors staying around Östermalm or central shopping districts who want to combine wellness with a polished city day.",
+            "highlights": [
+              "Historic central wellness address",
+              "Good fit for Östermalm stays",
+              "Easy to pair with shopping plans"
+            ],
+            "insider_tips": [
+              "A useful spa recommendation when guests are staying near central shopping and dining.",
+              "Advance reservations are advisable for treatments."
+            ]
+          },
+          "source": {
+            "type": "hybrid",
+            "google_places": {
+              "place_id": "ChIJ_STUREBADET_STOCKHOLM",
+              "name": "Sturebadet",
+              "formatted_address": "Sturegallerian 36, 114 35 Stockholm, Sweden",
+              "location": {
+                "latitude": 59.3363,
+                "longitude": 18.0737
+              },
+              "maps_url": "https://maps.google.com/?cid=sturebadet-stockholm-placeholder",
+              "website": "https://www.sturebadet.se",
+              "international_phone_number": "+46 8 545 015 00",
+              "rating": 4.3,
+              "user_ratings_total": 510,
+              "price_level": 3,
+              "business_status": "OPERATIONAL",
+              "opening_hours": {
+                "open_now": true,
+                "weekday_text": [
+                  "Friday: 6:30 AM – 8:00 PM"
+                ]
+              },
+              "types": [
+                "spa",
+                "health",
+                "point_of_interest",
+                "establishment"
+              ]
+            },
+            "external_ids": {
+              "google_place_id": "ChIJ_STUREBADET_STOCKHOLM"
+            },
+            "sync": {
+              "last_synced_at": "2026-04-02T22:10:00Z",
+              "sync_status": "synced",
+              "provider_version": "google-places-v1"
+            }
+          },
+          "guest_attributes": {
+            "family_friendly": false,
+            "couples_friendly": true,
+            "luxury_level": "upscale",
+            "central_location": true,
+            "booking_relevant": true
+          },
+          "tags": [
+            {
+              "key": "central_wellness",
+              "label": "Central Wellness",
+              "type": "location"
+            },
+            {
+              "key": "classic_spa",
+              "label": "Classic Spa",
+              "type": "style"
+            }
+          ],
+          "recommendation": {
+            "is_featured": false,
+            "priority_score": 83,
+            "editor_note": "A strong city-spa option for guests near Stockholm’s premium shopping districts.",
+            "recommended_for": [
+              "shopping trips",
+              "couples",
+              "central stays"
+            ],
+            "seasonality": [
+              "year_round"
+            ]
+          },
+          "status": "active",
+          "sort_order": 2
+        }
+      ]
+    },
+    "shopping": {
+      "headline": "Shopping recommendations in Stockholm",
+      "description": "Stockholm is one of the best Nordic capitals for shopping, with luxury, premium fashion, Scandinavian design, and strong local boutique areas.",
+      "items": [
+        {
+          "id": "shop_stockholm_bibliotekstan",
+          "name": "Bibliotekstan",
+          "slug": "bibliotekstan",
+          "category": "shopping",
+          "subcategory": "luxury_shopping_district",
+          "shopping_type": "shopping_street",
+          "content": {
+            "title": "Bibliotekstan",
+            "short_description": "Stockholm’s strongest central luxury shopping district for premium labels and polished browsing.",
+            "long_description": "Bibliotekstan is the clearest recommendation for guests wanting luxury and premium shopping in central Stockholm. It suits travellers staying around Östermalm, Norrmalm, or central luxury hotels and works especially well when shopping is a key part of the stay.",
+            "highlights": [
+              "Best central luxury shopping area",
+              "Very polished city-break fit",
+              "Strong for premium fashion"
+            ],
+            "insider_tips": [
+              "Best for guests specifically interested in premium brands and elegant central shopping.",
+              "Easy to combine with Sturehof, Riche, or nearby spa options."
+            ]
+          },
+          "source": {
+            "type": "hybrid",
+            "google_places": {
+              "place_id": "ChIJ_BIBLIOTEKSTAN_STOCKHOLM",
+              "name": "Bibliotekstan",
+              "formatted_address": "Biblioteksgatan area, Stockholm, Sweden",
+              "location": {
+                "latitude": 59.3353,
+                "longitude": 18.0733
+              },
+              "maps_url": "https://maps.google.com/?cid=bibliotekstan-stockholm-placeholder",
+              "website": "https://www.bibliotekstan.se",
+              "international_phone_number": "",
+              "rating": 4.5,
+              "user_ratings_total": 2300,
+              "price_level": 4,
+              "business_status": "OPERATIONAL",
+              "opening_hours": {
+                "open_now": true,
+                "weekday_text": [
+                  "Thursday: Open 24 hours"
+                ]
+              },
+              "types": [
+                "store",
+                "point_of_interest",
+                "establishment"
+              ]
+            },
+            "external_ids": {
+              "google_place_id": "ChIJ_BIBLIOTEKSTAN_STOCKHOLM"
+            },
+            "sync": {
+              "last_synced_at": "2026-04-02T22:10:00Z",
+              "sync_status": "synced",
+              "provider_version": "google-places-v1"
+            }
+          },
+          "guest_attributes": {
+            "family_friendly": false,
+            "couples_friendly": true,
+            "luxury_level": "luxury",
+            "central_location": true,
+            "booking_relevant": false
+          },
+          "tags": [
+            {
+              "key": "luxury_shopping",
+              "label": "Luxury Shopping",
+              "type": "style"
+            },
+            {
+              "key": "ostermalm",
+              "label": "Östermalm",
+              "type": "location"
+            }
+          ],
+          "recommendation": {
+            "is_featured": true,
+            "priority_score": 94,
+            "editor_note": "The strongest central luxury shopping recommendation in Stockholm.",
+            "recommended_for": [
+              "luxury travellers",
+              "premium shopping",
+              "central stays"
+            ],
+            "seasonality": [
+              "year_round"
+            ]
+          },
+          "status": "active",
+          "sort_order": 1
+        },
+        {
+          "id": "shop_stockholm_nk",
+          "name": "Nordiska Kompaniet (NK)",
+          "slug": "nk",
+          "category": "shopping",
+          "subcategory": "department_store",
+          "shopping_type": "department_store",
+          "content": {
+            "title": "Nordiska Kompaniet (NK)",
+            "short_description": "A flagship department store and one of Stockholm’s most practical premium shopping recommendations.",
+            "long_description": "NK is an excellent choice for guests who want fashion, beauty, accessories, and a recognisable premium department-store experience in a central location. It works especially well for short stays where time is limited and convenience matters.",
+            "highlights": [
+              "Iconic premium department store",
+              "Very central location",
+              "Useful all-in-one shopping option"
+            ],
+            "insider_tips": [
+              "A strong option when guests want one major shopping stop rather than several smaller areas.",
+              "Good to combine with Bibliotekstan and central lunch plans."
+            ]
+          },
+          "source": {
+            "type": "hybrid",
+            "google_places": {
+              "place_id": "ChIJ_NK_STOCKHOLM",
+              "name": "Nordiska Kompaniet",
+              "formatted_address": "Hamngatan 18-20, 111 47 Stockholm, Sweden",
+              "location": {
+                "latitude": 59.3328,
+                "longitude": 18.0725
+              },
+              "maps_url": "https://maps.google.com/?cid=nk-stockholm-placeholder",
+              "website": "https://www.nk.se",
+              "international_phone_number": "+46 8 762 80 00",
+              "rating": 4.3,
+              "user_ratings_total": 15800,
+              "price_level": 3,
+              "business_status": "OPERATIONAL",
+              "opening_hours": {
+                "open_now": true,
+                "weekday_text": [
+                  "Thursday: 10:00 AM – 8:00 PM"
+                ]
+              },
+              "types": [
+                "department_store",
+                "store",
+                "point_of_interest",
+                "establishment"
+              ]
+            },
+            "external_ids": {
+              "google_place_id": "ChIJ_NK_STOCKHOLM"
+            },
+            "sync": {
+              "last_synced_at": "2026-04-02T22:10:00Z",
+              "sync_status": "synced",
+              "provider_version": "google-places-v1"
+            }
+          },
+          "guest_attributes": {
+            "family_friendly": true,
+            "couples_friendly": true,
+            "luxury_level": "upscale",
+            "central_location": true,
+            "booking_relevant": false
+          },
+          "tags": [
+            {
+              "key": "department_store",
+              "label": "Department Store",
+              "type": "style"
+            },
+            {
+              "key": "central_shopping",
+              "label": "Central Shopping",
+              "type": "location"
+            }
+          ],
+          "recommendation": {
+            "is_featured": true,
+            "priority_score": 90,
+            "editor_note": "One of the most practical premium shopping recommendations in Stockholm.",
+            "recommended_for": [
+              "short stays",
+              "fashion",
+              "convenient shopping"
+            ],
+            "seasonality": [
+              "year_round"
+            ]
+          },
+          "status": "active",
+          "sort_order": 2
+        },
+        {
+          "id": "shop_stockholm_mood",
+          "name": "MOOD Stockholm",
+          "slug": "mood-stockholm",
+          "category": "shopping",
+          "subcategory": "premium_shopping_center",
+          "shopping_type": "mall",
+          "content": {
+            "title": "MOOD Stockholm",
+            "short_description": "A polished central shopping option for fashion, lifestyle retail, and convenient city browsing.",
+            "long_description": "MOOD Stockholm is a useful recommendation for guests wanting a clean, central, modern shopping environment that is easy to access from major hotel and business areas. It works well for short stays and city-break itineraries.",
+            "highlights": [
+              "Central and convenient",
+              "Good modern city-shopping feel",
+              "Useful in limited-time itineraries"
+            ],
+            "insider_tips": [
+              "A practical option when guests want compact shopping without moving around too much.",
+              "Easy to combine with NK and nearby central retail streets."
+            ]
+          },
+          "source": {
+            "type": "hybrid",
+            "google_places": {
+              "place_id": "ChIJ_MOOD_STOCKHOLM",
+              "name": "MOOD Stockholm",
+              "formatted_address": "Regeringsgatan 48, 111 56 Stockholm, Sweden",
+              "location": {
+                "latitude": 59.3339,
+                "longitude": 18.0679
+              },
+              "maps_url": "https://maps.google.com/?cid=mood-stockholm-placeholder",
+              "website": "https://www.moodstockholm.se",
+              "international_phone_number": "+46 8 545 812 00",
+              "rating": 4.1,
+              "user_ratings_total": 6100,
+              "price_level": 3,
+              "business_status": "OPERATIONAL",
+              "opening_hours": {
+                "open_now": true,
+                "weekday_text": [
+                  "Thursday: 10:00 AM – 8:00 PM"
+                ]
+              },
+              "types": [
+                "shopping_mall",
+                "store",
+                "point_of_interest",
+                "establishment"
+              ]
+            },
+            "external_ids": {
+              "google_place_id": "ChIJ_MOOD_STOCKHOLM"
+            },
+            "sync": {
+              "last_synced_at": "2026-04-02T22:10:00Z",
+              "sync_status": "synced",
+              "provider_version": "google-places-v1"
+            }
+          },
+          "guest_attributes": {
+            "family_friendly": true,
+            "couples_friendly": true,
+            "luxury_level": "upscale",
+            "central_location": true,
+            "booking_relevant": false
+          },
+          "tags": [
+            {
+              "key": "premium_city_shopping",
+              "label": "Premium City Shopping",
+              "type": "style"
+            },
+            {
+              "key": "norrmalm",
+              "label": "Norrmalm",
+              "type": "location"
+            }
+          ],
+          "recommendation": {
+            "is_featured": false,
+            "priority_score": 82,
+            "editor_note": "A good central choice when convenience and compact planning matter.",
+            "recommended_for": [
+              "short stays",
+              "city breaks",
+              "fashion and lifestyle"
+            ],
+            "seasonality": [
+              "year_round"
+            ]
+          },
+          "status": "active",
+          "sort_order": 3
+        },
+        {
+          "id": "shop_stockholm_sofo",
+          "name": "SoFo, Södermalm",
+          "slug": "sofo-sodermalm",
+          "category": "shopping",
+          "subcategory": "independent_boutique_district",
+          "shopping_type": "boutique",
+          "content": {
+            "title": "SoFo, Södermalm",
+            "short_description": "The strongest shopping recommendation for guests wanting local style, independent boutiques, and a more creative Stockholm feel.",
+            "long_description": "SoFo in Södermalm is one of the best shopping suggestions for travellers who prefer independent fashion, Scandinavian lifestyle brands, smaller design stores, and a more local district atmosphere. It is especially good for repeat visitors, younger travellers, and design-conscious guests.",
+            "highlights": [
+              "Independent boutique feel",
+              "Strong local character",
+              "Good for fashion and design-led browsing"
+            ],
+            "insider_tips": [
+              "Best for guests who want something less formal and more local than the luxury districts.",
+              "Combine with cafés and casual lunch in Södermalm."
+            ]
+          },
+          "source": {
+            "type": "hybrid",
+            "google_places": {
+              "place_id": "ChIJ_SOFO_SODERMALM",
+              "name": "SoFo",
+              "formatted_address": "Södermalm, Stockholm, Sweden",
+              "location": {
+                "latitude": 59.3134,
+                "longitude": 18.0817
+              },
+              "maps_url": "https://maps.google.com/?cid=sofo-sodermalm-placeholder",
+              "website": "https://www.visitstockholm.com",
+              "international_phone_number": "",
+              "rating": 4.5,
+              "user_ratings_total": 1200,
+              "price_level": 2,
+              "business_status": "OPERATIONAL",
+              "opening_hours": {
+                "open_now": true,
+                "weekday_text": [
+                  "Thursday: Open 24 hours"
+                ]
+              },
+              "types": [
+                "store",
+                "point_of_interest",
+                "establishment"
+              ]
+            },
+            "external_ids": {
+              "google_place_id": "ChIJ_SOFO_SODERMALM"
+            },
+            "sync": {
+              "last_synced_at": "2026-04-02T22:10:00Z",
+              "sync_status": "synced",
+              "provider_version": "google-places-v1"
+            }
+          },
+          "guest_attributes": {
+            "family_friendly": true,
+            "couples_friendly": true,
+            "luxury_level": "midrange",
+            "central_location": false,
+            "booking_relevant": false
+          },
+          "tags": [
+            {
+              "key": "independent_shopping",
+              "label": "Independent Shopping",
+              "type": "style"
+            },
+            {
+              "key": "local_feel",
+              "label": "Local Feel",
+              "type": "theme"
+            }
+          ],
+          "recommendation": {
+            "is_featured": true,
+            "priority_score": 88,
+            "editor_note": "A top recommendation for guests wanting local style and independent boutiques.",
+            "recommended_for": [
+              "design-conscious travellers",
+              "repeat visitors",
+              "younger travellers"
+            ],
+            "seasonality": [
+              "year_round"
+            ]
+          },
+          "status": "active",
+          "sort_order": 4
+        },
+        {
+          "id": "shop_stockholm_svenskt_tenn",
+          "name": "Svenskt Tenn",
+          "slug": "svenskt-tenn",
+          "category": "shopping",
+          "subcategory": "design_store",
+          "shopping_type": "boutique",
+          "content": {
+            "title": "Svenskt Tenn",
+            "short_description": "A standout Stockholm recommendation for guests interested in Scandinavian design and interiors.",
+            "long_description": "Svenskt Tenn is one of the most distinctive shopping recommendations in Stockholm for guests interested in Swedish design, interiors, and premium gift shopping. It works particularly well for design-conscious travellers and guests looking for something more specific than mainstream fashion retail.",
+            "highlights": [
+              "Iconic Swedish design destination",
+              "Strong gift and interiors appeal",
+              "Distinctive Stockholm shopping experience"
+            ],
+            "insider_tips": [
+              "Best for guests interested in design rather than general fashion browsing.",
+              "Works well as a focused shopping stop in a premium itinerary."
+            ]
+          },
+          "source": {
+            "type": "hybrid",
+            "google_places": {
+              "place_id": "ChIJ_SVENSKT_TENN_STOCKHOLM",
+              "name": "Svenskt Tenn",
+              "formatted_address": "Strandvägen 5, 114 51 Stockholm, Sweden",
+              "location": {
+                "latitude": 59.3327,
+                "longitude": 18.0811
+              },
+              "maps_url": "https://maps.google.com/?cid=svenskt-tenn-stockholm-placeholder",
+              "website": "https://www.svenskttenn.com",
+              "international_phone_number": "+46 8 670 16 00",
+              "rating": 4.5,
+              "user_ratings_total": 1300,
+              "price_level": 3,
+              "business_status": "OPERATIONAL",
+              "opening_hours": {
+                "open_now": false,
+                "weekday_text": [
+                  "Friday: 10:00 AM – 6:00 PM"
+                ]
+              },
+              "types": [
+                "home_goods_store",
+                "store",
+                "point_of_interest",
+                "establishment"
+              ]
+            },
+            "external_ids": {
+              "google_place_id": "ChIJ_SVENSKT_TENN_STOCKHOLM"
+            },
+            "sync": {
+              "last_synced_at": "2026-04-02T22:10:00Z",
+              "sync_status": "synced",
+              "provider_version": "google-places-v1"
+            }
+          },
+          "guest_attributes": {
+            "family_friendly": true,
+            "couples_friendly": true,
+            "luxury_level": "upscale",
+            "central_location": true,
+            "booking_relevant": false
+          },
+          "tags": [
+            {
+              "key": "scandinavian_design",
+              "label": "Scandinavian Design",
+              "type": "theme"
+            },
+            {
+              "key": "unique_pick",
+              "label": "Unique Pick",
+              "type": "style"
+            }
+          ],
+          "recommendation": {
+            "is_featured": true,
+            "priority_score": 87,
+            "editor_note": "A standout recommendation for guests wanting design-led shopping rather than standard retail.",
+            "recommended_for": [
+              "design lovers",
+              "gift shopping",
+              "premium city breaks"
+            ],
+            "seasonality": [
+              "year_round"
+            ]
+          },
+          "status": "active",
+          "sort_order": 5
+        }
+      ]
+    }
+  },
+  "tags": [
+    {
+      "key": "city_break",
+      "label": "City Break",
+      "type": "theme"
+    },
+    {
+      "key": "design_destination",
+      "label": "Design Destination",
+      "type": "theme"
+    },
+    {
+      "key": "waterfront_city",
+      "label": "Waterfront City",
+      "type": "theme"
+    },
+    {
+      "key": "shopping_destination",
+      "label": "Shopping Destination",
+      "type": "theme"
+    },
+    {
+      "key": "food_scene",
+      "label": "Strong Food Scene",
+      "type": "theme"
+    },
+    {
+      "key": "couples_friendly",
+      "label": "Couples Friendly",
+      "type": "audience"
+    }
+  ],
+  "recommendations": {
+    "featured": [
+      {
+        "place_id": "act_stockholm_vasa_museum",
+        "category": "activities",
+        "reason": "Best single activity recommendation for many first-time Stockholm visitors.",
+        "rank": 1
+      },
+      {
+        "place_id": "shop_stockholm_bibliotekstan",
+        "category": "shopping",
+        "reason": "Top central luxury shopping recommendation.",
+        "rank": 2
+      },
+      {
+        "place_id": "rest_stockholm_sturehof",
+        "category": "restaurants",
+        "reason": "A polished and highly practical central restaurant recommendation.",
+        "rank": 3
+      }
+    ],
+    "editors_picks": [
+      {
+        "place_id": "rest_stockholm_frantzen",
+        "category": "restaurants",
+        "reason": "Stockholm’s flagship fine-dining experience for special trips.",
+        "rank": 1
+      },
+      {
+        "place_id": "shop_stockholm_sofo",
+        "category": "shopping",
+        "reason": "Best for local boutiques and a more creative side of Stockholm.",
+        "rank": 2
+      },
+      {
+        "place_id": "spa_stockholm_grand_hotel_nordic_spa",
+        "category": "spa_wellness",
+        "reason": "Top premium spa recommendation in central Stockholm.",
+        "rank": 3
+      }
+    ],
+    "personalized_slots": [
+      {
+        "slot_key": "luxury_stockholm",
+        "label": "Luxury Stockholm",
+        "items": [
+          {
+            "place_id": "rest_stockholm_frantzen",
+            "category": "restaurants",
+            "reason": "Top-end dining recommendation.",
+            "rank": 1
+          },
+          {
+            "place_id": "shop_stockholm_bibliotekstan",
+            "category": "shopping",
+            "reason": "Best fit for premium shopping.",
+            "rank": 2
+          },
+          {
+            "place_id": "spa_stockholm_grand_hotel_nordic_spa",
+            "category": "spa_wellness",
+            "reason": "Luxury wellness pairing for a premium stay.",
+            "rank": 3
+          }
+        ]
+      },
+      {
+        "slot_key": "short_stay_stockholm",
+        "label": "Short Stay Stockholm",
+        "items": [
+          {
+            "place_id": "act_stockholm_vasa_museum",
+            "category": "activities",
+            "reason": "Strong one-activity choice for limited time.",
+            "rank": 1
+          },
+          {
+            "place_id": "rest_stockholm_sturehof",
+            "category": "restaurants",
+            "reason": "Easy polished dining recommendation in a central area.",
+            "rank": 2
+          },
+          {
+            "place_id": "shop_stockholm_nk",
+            "category": "shopping",
+            "reason": "Convenient premium shopping in one stop.",
+            "rank": 3
+          }
+        ]
+      },
+      {
+        "slot_key": "design_and_local_stockholm",
+        "label": "Design & Local Stockholm",
+        "items": [
+          {
+            "place_id": "shop_stockholm_sofo",
+            "category": "shopping",
+            "reason": "Best for local boutiques and independent style.",
+            "rank": 1
+          },
+          {
+            "place_id": "shop_stockholm_svenskt_tenn",
+            "category": "shopping",
+            "reason": "Strong Swedish design and interiors recommendation.",
+            "rank": 2
+          },
+          {
+            "place_id": "rest_stockholm_riche",
+            "category": "restaurants",
+            "reason": "Stylish dinner pairing for a design-led day.",
+            "rank": 3
+          }
+        ]
+      }
+    ]
+  },
+  "seo": {
+    "meta_title": "Stockholm Travel Guide | Restaurants, Shopping, Activities & Wellness | BNO Travel",
+    "meta_description": "Explore Stockholm with curated BNO Travel recommendations for restaurants, activities, gyms, spa wellness, and shopping.",
+    "canonical_url": "https://bno.travel/stockholm",
+    "og_title": "Stockholm Travel Guide | BNO Travel",
+    "og_description": "Professional Stockholm recommendations for dining, shopping, culture, wellness, and short city stays.",
+    "og_image": "https://example.bno.travel/images/stockholm/stockholm-og.jpg",
+    "twitter_title": "Stockholm Travel Guide | BNO Travel",
+    "twitter_description": "Curated Stockholm recommendations for guests, travellers, and city-break planning.",
+    "twitter_image": "https://example.bno.travel/images/stockholm/stockholm-og.jpg",
+    "schema_type": "TravelDestination",
+    "indexable": true
+  },
+  "metadata": {
+    "status": "published",
+    "created_at": "2026-04-02T22:20:00Z",
+    "updated_at": "2026-04-02T22:35:00Z",
+    "published_at": "2026-04-02T22:40:00Z",
+    "version": 1,
+    "source_priority": [
+      "curated",
+      "google_places",
+      "partner_feed",
+      "user_generated"
+    ]
+  }
+}

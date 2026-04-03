@@ -1,0 +1,1654 @@
+{
+  "id": "dest_paris_fr_master",
+  "slug": "paris",
+  "locale": "en-GB",
+  "city": {
+    "name": "Paris",
+    "slug": "paris",
+    "region": "Île-de-France",
+    "latitude": 48.8566,
+    "longitude": 2.3522,
+    "timezone": "Europe/Paris"
+  },
+  "country": {
+    "name": "France",
+    "code": "FR",
+    "slug": "france",
+    "continent": "Europe"
+  },
+  "editorial": {
+    "headline": "Paris: classic landmarks, strong dining, luxury shopping, and neighbourhoods that shape the whole stay",
+    "intro": "Paris is one of the strongest city-break destinations for travellers wanting landmarks, polished dining, elegant hotels, and world-class shopping. It works best when the stay is planned by area, since the Right Bank, Saint-Germain, Le Marais, and the Golden Triangle all deliver very different experiences.",
+    "why_visit": [
+      "A leading destination for culture, dining, luxury stays, and iconic city experiences",
+      "Excellent shopping across luxury avenues, major department stores, local boutiques, and design-led districts",
+      "Strong fit for couples, first-time Europe trips, and premium short stays",
+      "Neighbourhood variety makes it easy to tailor the trip to style, pace, and interests"
+    ],
+    "highlights": [
+      "Very good for 2 to 4 day city breaks",
+      "Strong fit for couples, luxury travellers, and shopping-led itineraries",
+      "Best results come from planning by district rather than moving across the city too often"
+    ],
+    "transport_tips": [
+      "Use the Metro for efficient cross-city travel, but walk within each neighbourhood whenever possible.",
+      "Stay central if this is a short trip, as Paris travel time adds up quickly between areas.",
+      "Book top restaurants, major museum slots, and premium spa treatments in advance.",
+      "Taxis and rideshare are useful in the evening or when moving between shopping districts and dinner reservations."
+    ],
+    "neighborhood_tips": [
+      {
+        "name": "Saint-Germain-des-Prés",
+        "tip": "Best for elegant Left Bank stays, refined cafés, galleries, and a polished Paris atmosphere."
+      },
+      {
+        "name": "Le Marais",
+        "tip": "Ideal for boutiques, local shopping, food, and a more lively neighbourhood feel."
+      },
+      {
+        "name": "Golden Triangle",
+        "tip": "Best for luxury hotels, designer shopping, and premium city-break stays."
+      },
+      {
+        "name": "Opéra",
+        "tip": "A strong base for department-store shopping, central access, and classic Paris convenience."
+      },
+      {
+        "name": "7th arrondissement",
+        "tip": "Good for elegant streets, landmark access, and a more classic first-time Paris setting."
+      }
+    ]
+  },
+  "categories": {
+    "restaurants": {
+      "headline": "Recommended restaurants in Paris",
+      "description": "A practical mix of classic Paris institutions, polished modern dining, and strong guest-friendly recommendations.",
+      "items": [
+        {
+          "id": "rest_paris_le_train_bleu",
+          "name": "Le Train Bleu",
+          "slug": "le-train-bleu",
+          "category": "restaurants",
+          "subcategory": "classic_french",
+          "content": {
+            "short_description": "A classic Paris dining recommendation with strong atmosphere and first-time visitor appeal.",
+            "long_description": "Le Train Bleu is one of the easiest Paris restaurant recommendations for guests who want a recognisable and elegant Paris experience. It works especially well for first-time visitors, celebratory meals, and travellers wanting atmosphere as much as the meal itself.",
+            "highlights": [
+              "Classic Paris setting",
+              "Strong first-time visitor appeal",
+              "Good for a memorable lunch or dinner"
+            ],
+            "insider_tips": [
+              "A strong recommendation when guests want something visually iconic and unmistakably Parisian.",
+              "Best booked ahead for prime times."
+            ]
+          },
+          "source": {
+            "type": "hybrid",
+            "google_places": {
+              "place_id": "ChIJ_LE_TRAIN_BLEU_PARIS",
+              "name": "Le Train Bleu",
+              "formatted_address": "Place Louis-Armand, 75012 Paris, France",
+              "location": {
+                "latitude": 48.8443,
+                "longitude": 2.373
+              },
+              "maps_url": "https://maps.google.com/?cid=le-train-bleu-paris-placeholder",
+              "website": "https://www.le-train-bleu.com",
+              "international_phone_number": "+33 1 43 43 09 06",
+              "rating": 4.4,
+              "user_ratings_total": 8600,
+              "price_level": 4,
+              "business_status": "OPERATIONAL",
+              "opening_hours": {
+                "open_now": true,
+                "weekday_text": [
+                  "Thursday: 11:30 AM – 2:45 PM, 7:00 PM – 10:30 PM"
+                ]
+              },
+              "types": [
+                "restaurant",
+                "food",
+                "point_of_interest",
+                "establishment"
+              ]
+            },
+            "external_ids": {
+              "google_place_id": "ChIJ_LE_TRAIN_BLEU_PARIS"
+            },
+            "sync": {
+              "last_synced_at": "2026-04-02T22:30:00Z",
+              "sync_status": "synced",
+              "provider_version": "google-places-v1"
+            }
+          },
+          "guest_attributes": {
+            "family_friendly": true,
+            "couples_friendly": true,
+            "luxury_level": "upscale",
+            "central_location": false,
+            "booking_relevant": true
+          },
+          "tags": [
+            {
+              "key": "classic_paris",
+              "label": "Classic Paris",
+              "type": "theme"
+            },
+            {
+              "key": "iconic",
+              "label": "Iconic",
+              "type": "style"
+            }
+          ],
+          "recommendation": {
+            "is_featured": true,
+            "priority_score": 90,
+            "editor_note": "A very reliable recommendation for guests wanting a recognisable Paris dining experience.",
+            "recommended_for": [
+              "first-time visitors",
+              "special dinners",
+              "classic paris"
+            ],
+            "seasonality": [
+              "year_round"
+            ]
+          },
+          "status": "active",
+          "sort_order": 1
+        },
+        {
+          "id": "rest_paris_girafe",
+          "name": "Girafe",
+          "slug": "girafe",
+          "category": "restaurants",
+          "subcategory": "seafood_brasserie",
+          "content": {
+            "short_description": "A polished Paris recommendation with strong atmosphere and premium city-break appeal.",
+            "long_description": "Girafe is a useful recommendation for guests wanting a stylish Paris dining experience in a location that feels special. It suits couples, celebratory trips, and travellers looking for a premium dinner with strong visual impact.",
+            "highlights": [
+              "Stylish setting",
+              "Strong couples appeal",
+              "Good premium city-break option"
+            ],
+            "insider_tips": [
+              "Best for guests who value atmosphere and occasion as much as the food itself.",
+              "Advance booking is important for peak dinner periods."
+            ]
+          },
+          "source": {
+            "type": "hybrid",
+            "google_places": {
+              "place_id": "ChIJ_GIRAFE_PARIS",
+              "name": "Girafe",
+              "formatted_address": "1 Place du Trocadéro et du 11 Novembre, 75016 Paris, France",
+              "location": {
+                "latitude": 48.8633,
+                "longitude": 2.2872
+              },
+              "maps_url": "https://maps.google.com/?cid=girafe-paris-placeholder",
+              "website": "https://girafe-restaurant.com",
+              "international_phone_number": "+33 1 40 62 70 61",
+              "rating": 4.2,
+              "user_ratings_total": 3100,
+              "price_level": 4,
+              "business_status": "OPERATIONAL",
+              "opening_hours": {
+                "open_now": false,
+                "weekday_text": [
+                  "Friday: 12:00 PM – 2:30 PM, 7:00 PM – 11:00 PM"
+                ]
+              },
+              "types": [
+                "restaurant",
+                "seafood_restaurant",
+                "food",
+                "point_of_interest",
+                "establishment"
+              ]
+            },
+            "external_ids": {
+              "google_place_id": "ChIJ_GIRAFE_PARIS"
+            },
+            "sync": {
+              "last_synced_at": "2026-04-02T22:30:00Z",
+              "sync_status": "synced",
+              "provider_version": "google-places-v1"
+            }
+          },
+          "guest_attributes": {
+            "family_friendly": false,
+            "couples_friendly": true,
+            "luxury_level": "luxury",
+            "central_location": true,
+            "booking_relevant": true
+          },
+          "tags": [
+            {
+              "key": "stylish_dining",
+              "label": "Stylish Dining",
+              "type": "style"
+            },
+            {
+              "key": "romantic",
+              "label": "Romantic",
+              "type": "occasion"
+            }
+          ],
+          "recommendation": {
+            "is_featured": true,
+            "priority_score": 88,
+            "editor_note": "A strong recommendation for premium couples trips and stylish Paris dining.",
+            "recommended_for": [
+              "couples",
+              "luxury travellers",
+              "special occasions"
+            ],
+            "seasonality": [
+              "year_round"
+            ]
+          },
+          "status": "active",
+          "sort_order": 2
+        },
+        {
+          "id": "rest_paris_clamato",
+          "name": "Clamato",
+          "slug": "clamato",
+          "category": "restaurants",
+          "subcategory": "modern_seafood",
+          "content": {
+            "short_description": "A strong recommendation for guests wanting a more contemporary Paris dining option with local credibility.",
+            "long_description": "Clamato is a useful recommendation for guests who want a stylish but less formal Paris meal with strong food quality. It works especially well for couples, repeat visitors, and travellers who want something more current than classic formal dining.",
+            "highlights": [
+              "Strong food reputation",
+              "More contemporary than classic Paris institutions",
+              "Good for repeat visitors"
+            ],
+            "insider_tips": [
+              "A good recommendation when guests want a more modern and less ceremonial dining experience.",
+              "Best suited to food-led itineraries rather than formal luxury evenings."
+            ]
+          },
+          "source": {
+            "type": "hybrid",
+            "google_places": {
+              "place_id": "ChIJ_CLAMATO_PARIS",
+              "name": "Clamato",
+              "formatted_address": "80 Rue de Charonne, 75011 Paris, France",
+              "location": {
+                "latitude": 48.8525,
+                "longitude": 2.3795
+              },
+              "maps_url": "https://maps.google.com/?cid=clamato-paris-placeholder",
+              "website": "https://www.septime-charonne.fr",
+              "international_phone_number": "+33 1 43 72 74 53",
+              "rating": 4.5,
+              "user_ratings_total": 1700,
+              "price_level": 3,
+              "business_status": "OPERATIONAL",
+              "opening_hours": {
+                "open_now": false,
+                "weekday_text": [
+                  "Thursday: 12:00 PM – 2:30 PM, 7:00 PM – 10:30 PM"
+                ]
+              },
+              "types": [
+                "restaurant",
+                "food",
+                "point_of_interest",
+                "establishment"
+              ]
+            },
+            "external_ids": {
+              "google_place_id": "ChIJ_CLAMATO_PARIS"
+            },
+            "sync": {
+              "last_synced_at": "2026-04-02T22:30:00Z",
+              "sync_status": "synced",
+              "provider_version": "google-places-v1"
+            }
+          },
+          "guest_attributes": {
+            "family_friendly": false,
+            "couples_friendly": true,
+            "luxury_level": "upscale",
+            "central_location": false,
+            "booking_relevant": true
+          },
+          "tags": [
+            {
+              "key": "food_led_trip",
+              "label": "Food-Led Trip",
+              "type": "occasion"
+            },
+            {
+              "key": "modern_dining",
+              "label": "Modern Dining",
+              "type": "style"
+            }
+          ],
+          "recommendation": {
+            "is_featured": false,
+            "priority_score": 83,
+            "editor_note": "A strong recommendation for guests wanting a more current food-focused Paris meal.",
+            "recommended_for": [
+              "food lovers",
+              "repeat visitors",
+              "modern dining"
+            ],
+            "seasonality": [
+              "year_round"
+            ]
+          },
+          "status": "active",
+          "sort_order": 3
+        }
+      ]
+    },
+    "activities": {
+      "headline": "Top activities in Paris",
+      "description": "Guest-friendly recommendations that work well for short stays and first-time visits.",
+      "items": [
+        {
+          "id": "act_paris_musee_dorsay",
+          "name": "Musée d'Orsay",
+          "slug": "musee-dorsay",
+          "category": "activities",
+          "subcategory": "museum",
+          "content": {
+            "short_description": "One of Paris’s strongest museum recommendations for guests wanting a high-value cultural visit.",
+            "long_description": "Musée d'Orsay is one of the most useful Paris activity recommendations because it feels major and memorable without being as overwhelming as the largest museums. It works especially well for first-time visitors, couples, and guests wanting one standout cultural stop.",
+            "highlights": [
+              "Excellent cultural value",
+              "Strong first-time visitor appeal",
+              "More manageable than some larger museum experiences"
+            ],
+            "insider_tips": [
+              "A very good option when guests want one major museum rather than a packed culture day.",
+              "Timed entry booking is recommended."
+            ]
+          },
+          "source": {
+            "type": "hybrid",
+            "google_places": {
+              "place_id": "ChIJ_ORSAY_PARIS",
+              "name": "Musée d'Orsay",
+              "formatted_address": "1 Rue de la Légion d'Honneur, 75007 Paris, France",
+              "location": {
+                "latitude": 48.86,
+                "longitude": 2.3266
+              },
+              "maps_url": "https://maps.google.com/?cid=orsay-paris-placeholder",
+              "website": "https://www.musee-orsay.fr",
+              "international_phone_number": "+33 1 40 49 48 14",
+              "rating": 4.8,
+              "user_ratings_total": 93000,
+              "price_level": 2,
+              "business_status": "OPERATIONAL",
+              "opening_hours": {
+                "open_now": true,
+                "weekday_text": [
+                  "Thursday: 9:30 AM – 9:45 PM"
+                ]
+              },
+              "types": [
+                "museum",
+                "tourist_attraction",
+                "point_of_interest",
+                "establishment"
+              ]
+            },
+            "external_ids": {
+              "google_place_id": "ChIJ_ORSAY_PARIS"
+            },
+            "sync": {
+              "last_synced_at": "2026-04-02T22:30:00Z",
+              "sync_status": "synced",
+              "provider_version": "google-places-v1"
+            }
+          },
+          "guest_attributes": {
+            "family_friendly": true,
+            "couples_friendly": true,
+            "luxury_level": "upscale",
+            "central_location": true,
+            "booking_relevant": true
+          },
+          "tags": [
+            {
+              "key": "museum",
+              "label": "Museum",
+              "type": "theme"
+            },
+            {
+              "key": "first_time_pick",
+              "label": "First-Time Pick",
+              "type": "audience"
+            }
+          ],
+          "recommendation": {
+            "is_featured": true,
+            "priority_score": 91,
+            "editor_note": "One of the strongest single cultural recommendations in Paris.",
+            "recommended_for": [
+              "first-time visitors",
+              "couples",
+              "culture"
+            ],
+            "seasonality": [
+              "year_round"
+            ]
+          },
+          "status": "active",
+          "sort_order": 1
+        },
+        {
+          "id": "act_paris_seine_cruise",
+          "name": "Seine River Cruise",
+          "slug": "seine-river-cruise",
+          "category": "activities",
+          "subcategory": "sightseeing_cruise",
+          "content": {
+            "short_description": "A classic Paris activity recommendation with broad appeal and strong first-time visitor value.",
+            "long_description": "A Seine cruise is one of the easiest Paris recommendations because it gives guests a scenic and recognisable experience without requiring a full museum or landmark schedule. It works especially well for couples, first-time visitors, and shorter stays.",
+            "highlights": [
+              "Classic Paris experience",
+              "Broad guest appeal",
+              "Good for shorter stays"
+            ],
+            "insider_tips": [
+              "Evening departures are often strongest for atmosphere.",
+              "A useful recommendation when guests want one easy iconic activity."
+            ]
+          },
+          "source": {
+            "type": "curated",
+            "external_ids": {
+              "provider_note": "Multiple operators available"
+            },
+            "sync": {
+              "last_synced_at": "2026-04-02T22:30:00Z",
+              "sync_status": "synced",
+              "provider_version": "bno-editorial-v1"
+            }
+          },
+          "guest_attributes": {
+            "family_friendly": true,
+            "couples_friendly": true,
+            "luxury_level": "midrange",
+            "central_location": true,
+            "booking_relevant": true
+          },
+          "tags": [
+            {
+              "key": "iconic",
+              "label": "Iconic",
+              "type": "theme"
+            },
+            {
+              "key": "romantic",
+              "label": "Romantic",
+              "type": "occasion"
+            }
+          ],
+          "recommendation": {
+            "is_featured": true,
+            "priority_score": 89,
+            "editor_note": "A very useful recommendation for guests wanting one recognisable Paris activity with low planning friction.",
+            "recommended_for": [
+              "first-time visitors",
+              "couples",
+              "short stays"
+            ],
+            "seasonality": [
+              "spring",
+              "summer",
+              "autumn",
+              "winter"
+            ]
+          },
+          "status": "active",
+          "sort_order": 2
+        }
+      ]
+    },
+    "gyms": {
+      "headline": "Gyms and fitness options",
+      "description": "Useful options for guests wanting a proper workout beyond a standard hotel gym.",
+      "items": [
+        {
+          "id": "gym_paris_ken_club",
+          "name": "Ken Club",
+          "slug": "ken-club",
+          "category": "gyms",
+          "subcategory": "premium_gym",
+          "content": {
+            "short_description": "A strong premium gym recommendation for guests wanting a more polished fitness environment in Paris.",
+            "long_description": "Ken Club is a useful choice for travellers who want a more premium and club-like fitness experience than a standard hotel gym. It works best for longer stays, fitness-focused guests, and premium travellers already staying on the Right Bank or western Paris side.",
+            "highlights": [
+              "Premium fitness environment",
+              "Strong wellness feel",
+              "Good for serious workout routines"
+            ],
+            "insider_tips": [
+              "Best for guests specifically asking for a proper gym option.",
+              "Check access and visitor policies in advance."
+            ]
+          },
+          "source": {
+            "type": "hybrid",
+            "google_places": {
+              "place_id": "ChIJ_KEN_CLUB_PARIS",
+              "name": "Ken Club",
+              "formatted_address": "100 Avenue du Président Kennedy, 75016 Paris, France",
+              "location": {
+                "latitude": 48.8554,
+                "longitude": 2.2855
+              },
+              "maps_url": "https://maps.google.com/?cid=ken-club-paris-placeholder",
+              "website": "https://www.kenclub.com",
+              "international_phone_number": "+33 1 44 14 12 34",
+              "rating": 4.3,
+              "user_ratings_total": 480,
+              "price_level": 4,
+              "business_status": "OPERATIONAL",
+              "opening_hours": {
+                "open_now": true,
+                "weekday_text": [
+                  "Thursday: 7:00 AM – 10:00 PM"
+                ]
+              },
+              "types": [
+                "gym",
+                "health",
+                "point_of_interest",
+                "establishment"
+              ]
+            },
+            "external_ids": {
+              "google_place_id": "ChIJ_KEN_CLUB_PARIS"
+            },
+            "sync": {
+              "last_synced_at": "2026-04-02T22:30:00Z",
+              "sync_status": "synced",
+              "provider_version": "google-places-v1"
+            }
+          },
+          "guest_attributes": {
+            "family_friendly": false,
+            "couples_friendly": false,
+            "luxury_level": "luxury",
+            "central_location": false,
+            "booking_relevant": true
+          },
+          "tags": [
+            {
+              "key": "luxury_fitness",
+              "label": "Luxury Fitness",
+              "type": "style"
+            },
+            {
+              "key": "wellness",
+              "label": "Wellness",
+              "type": "theme"
+            }
+          ],
+          "recommendation": {
+            "is_featured": true,
+            "priority_score": 79,
+            "editor_note": "A strong premium recommendation for guests who care about workout quality in Paris.",
+            "recommended_for": [
+              "fitness travellers",
+              "luxury stays",
+              "longer stays"
+            ],
+            "seasonality": [
+              "year_round"
+            ]
+          },
+          "status": "active",
+          "sort_order": 1
+        },
+        {
+          "id": "gym_paris_epiq_raspail",
+          "name": "Episod Raspail",
+          "slug": "episod-raspail",
+          "category": "gyms",
+          "subcategory": "boutique_fitness",
+          "content": {
+            "short_description": "A useful boutique fitness option for guests who prefer structured classes and a more modern format.",
+            "long_description": "Episod Raspail is a practical recommendation for guests who prefer boutique fitness and guided classes rather than a traditional gym floor. It works well for solo travellers, shorter stays, and guests already familiar with studio-based fitness formats.",
+            "highlights": [
+              "Modern boutique format",
+              "Good for class-based fitness",
+              "Useful for short urban stays"
+            ],
+            "insider_tips": [
+              "Best for guests who prefer a scheduled workout rather than open gym training.",
+              "Book ahead if a specific class time matters."
+            ]
+          },
+          "source": {
+            "type": "hybrid",
+            "google_places": {
+              "place_id": "ChIJ_EPISOD_RASPAIL_PARIS",
+              "name": "Episod Raspail",
+              "formatted_address": "Paris, France",
+              "location": {
+                "latitude": 48.8425,
+                "longitude": 2.3298
+              },
+              "maps_url": "https://maps.google.com/?cid=episod-raspail-paris-placeholder",
+              "website": "https://www.episod.com",
+              "international_phone_number": "+33 1 00 00 00 00",
+              "rating": 4.4,
+              "user_ratings_total": 210,
+              "price_level": 3,
+              "business_status": "OPERATIONAL",
+              "opening_hours": {
+                "open_now": false,
+                "weekday_text": [
+                  "Friday: 7:00 AM – 9:00 PM"
+                ]
+              },
+              "types": [
+                "gym",
+                "health",
+                "point_of_interest",
+                "establishment"
+              ]
+            },
+            "external_ids": {
+              "google_place_id": "ChIJ_EPISOD_RASPAIL_PARIS"
+            },
+            "sync": {
+              "last_synced_at": "2026-04-02T22:30:00Z",
+              "sync_status": "synced",
+              "provider_version": "google-places-v1"
+            }
+          },
+          "guest_attributes": {
+            "family_friendly": false,
+            "couples_friendly": false,
+            "luxury_level": "upscale",
+            "central_location": true,
+            "booking_relevant": true
+          },
+          "tags": [
+            {
+              "key": "boutique_fitness",
+              "label": "Boutique Fitness",
+              "type": "style"
+            },
+            {
+              "key": "short_stay_friendly",
+              "label": "Short-Stay Friendly",
+              "type": "audience"
+            }
+          ],
+          "recommendation": {
+            "is_featured": false,
+            "priority_score": 73,
+            "editor_note": "A useful recommendation for guests who prefer modern class-based training.",
+            "recommended_for": [
+              "solo travellers",
+              "short stays",
+              "boutique fitness"
+            ],
+            "seasonality": [
+              "year_round"
+            ]
+          },
+          "status": "active",
+          "sort_order": 2
+        }
+      ]
+    },
+    "spa_wellness": {
+      "headline": "Spa and wellness recommendations",
+      "description": "Strong premium options for guests wanting treatments, relaxation, or a polished wellness break in Paris.",
+      "items": [
+        {
+          "id": "spa_paris_ritz_club_spa",
+          "name": "Ritz Club & Spa",
+          "slug": "ritz-club-and-spa",
+          "category": "spa_wellness",
+          "subcategory": "luxury_hotel_spa",
+          "content": {
+            "short_description": "One of Paris’s strongest luxury spa recommendations for premium and celebratory stays.",
+            "long_description": "Ritz Club & Spa is a very strong recommendation for guests seeking a high-end wellness experience in a classic luxury Paris setting. It works especially well for couples, luxury travellers, and guests already planning a premium city break.",
+            "highlights": [
+              "Iconic luxury hotel setting",
+              "Strong couples appeal",
+              "Excellent premium wellness option"
+            ],
+            "insider_tips": [
+              "Best booked well ahead for treatments and peak periods.",
+              "A particularly strong recommendation for luxury itineraries and celebratory stays."
+            ]
+          },
+          "source": {
+            "type": "hybrid",
+            "google_places": {
+              "place_id": "ChIJ_RITZ_SPA_PARIS",
+              "name": "Ritz Club & Spa",
+              "formatted_address": "17 Place Vendôme, 75001 Paris, France",
+              "location": {
+                "latitude": 48.8686,
+                "longitude": 2.3297
+              },
+              "maps_url": "https://maps.google.com/?cid=ritz-spa-paris-placeholder",
+              "website": "https://www.ritzparis.com",
+              "international_phone_number": "+33 1 43 16 30 60",
+              "rating": 4.7,
+              "user_ratings_total": 320,
+              "price_level": 4,
+              "business_status": "OPERATIONAL",
+              "opening_hours": {
+                "open_now": false,
+                "weekday_text": [
+                  "Thursday: 7:00 AM – 10:00 PM"
+                ]
+              },
+              "types": [
+                "spa",
+                "health",
+                "point_of_interest",
+                "establishment"
+              ]
+            },
+            "external_ids": {
+              "google_place_id": "ChIJ_RITZ_SPA_PARIS"
+            },
+            "sync": {
+              "last_synced_at": "2026-04-02T22:30:00Z",
+              "sync_status": "synced",
+              "provider_version": "google-places-v1"
+            }
+          },
+          "guest_attributes": {
+            "family_friendly": false,
+            "couples_friendly": true,
+            "luxury_level": "luxury",
+            "central_location": true,
+            "booking_relevant": true
+          },
+          "tags": [
+            {
+              "key": "luxury_escape",
+              "label": "Luxury Escape",
+              "type": "style"
+            },
+            {
+              "key": "iconic_pick",
+              "label": "Iconic Pick",
+              "type": "style"
+            }
+          ],
+          "recommendation": {
+            "is_featured": true,
+            "priority_score": 93,
+            "editor_note": "A top spa recommendation for premium Paris stays.",
+            "recommended_for": [
+              "luxury travellers",
+              "couples",
+              "celebratory trips"
+            ],
+            "seasonality": [
+              "year_round"
+            ]
+          },
+          "status": "active",
+          "sort_order": 1
+        },
+        {
+          "id": "spa_paris_cheval_blanc_dior",
+          "name": "Dior Spa Cheval Blanc Paris",
+          "slug": "dior-spa-cheval-blanc-paris",
+          "category": "spa_wellness",
+          "subcategory": "luxury_hotel_spa",
+          "content": {
+            "short_description": "A highly polished Paris wellness recommendation for guests seeking a modern luxury spa experience.",
+            "long_description": "Dior Spa Cheval Blanc Paris is a strong recommendation for guests who want a premium and contemporary spa experience in central Paris. It suits luxury travellers, couples, and guests combining high-end shopping, fine dining, and wellness in the same stay.",
+            "highlights": [
+              "Contemporary luxury setting",
+              "Excellent fit for premium city breaks",
+              "Strong central location"
+            ],
+            "insider_tips": [
+              "A particularly good recommendation for guests already focused on luxury shopping and premium dining.",
+              "Advance booking is essential."
+            ]
+          },
+          "source": {
+            "type": "hybrid",
+            "google_places": {
+              "place_id": "ChIJ_DIOR_SPA_CHEVAL_BLANC_PARIS",
+              "name": "Dior Spa Cheval Blanc Paris",
+              "formatted_address": "8 Quai du Louvre, 75001 Paris, France",
+              "location": {
+                "latitude": 48.8597,
+                "longitude": 2.341
+              },
+              "maps_url": "https://maps.google.com/?cid=dior-spa-cheval-blanc-paris-placeholder",
+              "website": "https://www.chevalblanc.com",
+              "international_phone_number": "+33 1 79 35 50 00",
+              "rating": 4.8,
+              "user_ratings_total": 120,
+              "price_level": 4,
+              "business_status": "OPERATIONAL",
+              "opening_hours": {
+                "open_now": true,
+                "weekday_text": [
+                  "Friday: 10:00 AM – 8:00 PM"
+                ]
+              },
+              "types": [
+                "spa",
+                "health",
+                "point_of_interest",
+                "establishment"
+              ]
+            },
+            "external_ids": {
+              "google_place_id": "ChIJ_DIOR_SPA_CHEVAL_BLANC_PARIS"
+            },
+            "sync": {
+              "last_synced_at": "2026-04-02T22:30:00Z",
+              "sync_status": "synced",
+              "provider_version": "google-places-v1"
+            }
+          },
+          "guest_attributes": {
+            "family_friendly": false,
+            "couples_friendly": true,
+            "luxury_level": "luxury",
+            "central_location": true,
+            "booking_relevant": true
+          },
+          "tags": [
+            {
+              "key": "hotel_spa",
+              "label": "Hotel Spa",
+              "type": "style"
+            },
+            {
+              "key": "high_end",
+              "label": "High-End",
+              "type": "budget"
+            }
+          ],
+          "recommendation": {
+            "is_featured": false,
+            "priority_score": 89,
+            "editor_note": "A strong premium spa recommendation for guests building a luxury Paris itinerary.",
+            "recommended_for": [
+              "luxury stays",
+              "couples",
+              "shopping-led trips"
+            ],
+            "seasonality": [
+              "year_round"
+            ]
+          },
+          "status": "active",
+          "sort_order": 2
+        }
+      ]
+    },
+    "shopping": {
+      "headline": "Shopping recommendations in Paris",
+      "description": "Paris is one of the world’s strongest shopping destinations, with luxury avenues, flagship department stores, premium malls, local boutiques, and design-led areas that suit very different kinds of travellers.",
+      "items": [
+        {
+          "id": "shop_paris_avenue_montaigne",
+          "name": "Avenue Montaigne",
+          "slug": "avenue-montaigne",
+          "category": "shopping",
+          "subcategory": "luxury_shopping_street",
+          "content": {
+            "short_description": "One of Paris’s strongest luxury shopping recommendations for premium fashion and designer retail.",
+            "long_description": "Avenue Montaigne is the clearest recommendation for guests seeking luxury shopping in Paris. It works especially well for premium travellers, fashion-focused trips, and anyone staying around the Golden Triangle or nearby luxury hotels.",
+            "highlights": [
+              "Top luxury shopping street",
+              "Strong designer retail concentration",
+              "Best fit for premium travellers"
+            ],
+            "insider_tips": [
+              "Best for guests specifically wanting luxury labels in a polished Paris setting.",
+              "Combine with nearby fine dining or a premium hotel-based afternoon rather than trying to cover too many shopping districts at once."
+            ]
+          },
+          "source": {
+            "type": "hybrid",
+            "google_places": {
+              "place_id": "ChIJ_AVENUE_MONTAIGNE_PARIS",
+              "name": "Avenue Montaigne",
+              "formatted_address": "Avenue Montaigne, 75008 Paris, France",
+              "location": {
+                "latitude": 48.8662,
+                "longitude": 2.3036
+              },
+              "maps_url": "https://maps.google.com/?cid=avenue-montaigne-paris-placeholder",
+              "website": "https://www.parisjetaime.com",
+              "international_phone_number": "",
+              "rating": 4.7,
+              "user_ratings_total": 5400,
+              "price_level": 4,
+              "business_status": "OPERATIONAL",
+              "opening_hours": {
+                "open_now": true,
+                "weekday_text": [
+                  "Thursday: Open 24 hours"
+                ]
+              },
+              "types": [
+                "store",
+                "point_of_interest",
+                "establishment"
+              ]
+            },
+            "external_ids": {
+              "google_place_id": "ChIJ_AVENUE_MONTAIGNE_PARIS"
+            },
+            "sync": {
+              "last_synced_at": "2026-04-02T22:30:00Z",
+              "sync_status": "synced",
+              "provider_version": "google-places-v1"
+            }
+          },
+          "guest_attributes": {
+            "family_friendly": false,
+            "couples_friendly": true,
+            "luxury_level": "luxury",
+            "central_location": true,
+            "booking_relevant": false
+          },
+          "tags": [
+            {
+              "key": "luxury_shopping",
+              "label": "Luxury Shopping",
+              "type": "style"
+            },
+            {
+              "key": "golden_triangle",
+              "label": "Golden Triangle",
+              "type": "location"
+            }
+          ],
+          "recommendation": {
+            "is_featured": true,
+            "priority_score": 96,
+            "editor_note": "The strongest Paris recommendation for luxury fashion shopping.",
+            "recommended_for": [
+              "luxury travellers",
+              "fashion trips",
+              "premium stays"
+            ],
+            "seasonality": [
+              "year_round"
+            ]
+          },
+          "status": "active",
+          "sort_order": 1
+        },
+        {
+          "id": "shop_paris_galeries_lafayette",
+          "name": "Galeries Lafayette Haussmann",
+          "slug": "galeries-lafayette-haussmann",
+          "category": "shopping",
+          "subcategory": "department_store",
+          "content": {
+            "short_description": "One of Paris’s most useful and iconic shopping recommendations for fashion, beauty, and gifting.",
+            "long_description": "Galeries Lafayette is a very practical recommendation for guests who want a recognisable Paris department-store experience with broad shopping coverage in one place. It works especially well for short stays, gift shopping, and central hotel bases around Opéra.",
+            "highlights": [
+              "Iconic Paris department store",
+              "Very practical all-in-one option",
+              "Strong for fashion and beauty"
+            ],
+            "insider_tips": [
+              "Best when guests want one major shopping stop instead of moving between several smaller areas.",
+              "Useful for short city breaks with limited shopping time."
+            ]
+          },
+          "source": {
+            "type": "hybrid",
+            "google_places": {
+              "place_id": "ChIJ_GALERIES_LAFAYETTE_PARIS",
+              "name": "Galeries Lafayette Haussmann",
+              "formatted_address": "40 Boulevard Haussmann, 75009 Paris, France",
+              "location": {
+                "latitude": 48.872,
+                "longitude": 2.3324
+              },
+              "maps_url": "https://maps.google.com/?cid=galeries-lafayette-paris-placeholder",
+              "website": "https://haussmann.galerieslafayette.com",
+              "international_phone_number": "+33 1 42 82 34 56",
+              "rating": 4.4,
+              "user_ratings_total": 91000,
+              "price_level": 3,
+              "business_status": "OPERATIONAL",
+              "opening_hours": {
+                "open_now": true,
+                "weekday_text": [
+                  "Thursday: 10:00 AM – 8:30 PM"
+                ]
+              },
+              "types": [
+                "department_store",
+                "store",
+                "point_of_interest",
+                "establishment"
+              ]
+            },
+            "external_ids": {
+              "google_place_id": "ChIJ_GALERIES_LAFAYETTE_PARIS"
+            },
+            "sync": {
+              "last_synced_at": "2026-04-02T22:30:00Z",
+              "sync_status": "synced",
+              "provider_version": "google-places-v1"
+            }
+          },
+          "guest_attributes": {
+            "family_friendly": true,
+            "couples_friendly": true,
+            "luxury_level": "upscale",
+            "central_location": true,
+            "booking_relevant": false
+          },
+          "tags": [
+            {
+              "key": "department_store",
+              "label": "Department Store",
+              "type": "style"
+            },
+            {
+              "key": "iconic",
+              "label": "Iconic",
+              "type": "style"
+            }
+          ],
+          "recommendation": {
+            "is_featured": true,
+            "priority_score": 92,
+            "editor_note": "One of the most practical and recognisable shopping recommendations in Paris.",
+            "recommended_for": [
+              "short stays",
+              "fashion",
+              "gift shopping"
+            ],
+            "seasonality": [
+              "year_round"
+            ]
+          },
+          "status": "active",
+          "sort_order": 2
+        },
+        {
+          "id": "shop_paris_le_bon_marche",
+          "name": "Le Bon Marché",
+          "slug": "le-bon-marche",
+          "category": "shopping",
+          "subcategory": "department_store",
+          "content": {
+            "short_description": "A refined Paris shopping recommendation with a more polished and less hectic feel than larger department stores.",
+            "long_description": "Le Bon Marché is a strong recommendation for guests who want a premium department-store experience in an elegant Left Bank setting. It works especially well for design-conscious travellers, luxury shoppers, and guests staying around Saint-Germain.",
+            "highlights": [
+              "Elegant premium department store",
+              "Good Left Bank location",
+              "Strong fashion and lifestyle appeal"
+            ],
+            "insider_tips": [
+              "A better fit than larger stores for guests who want a more refined pace.",
+              "Easy to pair with Saint-Germain cafés and boutique shopping."
+            ]
+          },
+          "source": {
+            "type": "hybrid",
+            "google_places": {
+              "place_id": "ChIJ_BON_MARCHE_PARIS",
+              "name": "Le Bon Marché",
+              "formatted_address": "24 Rue de Sèvres, 75007 Paris, France",
+              "location": {
+                "latitude": 48.851,
+                "longitude": 2.3241
+              },
+              "maps_url": "https://maps.google.com/?cid=bon-marche-paris-placeholder",
+              "website": "https://www.lebonmarche.com",
+              "international_phone_number": "+33 1 44 39 80 00",
+              "rating": 4.5,
+              "user_ratings_total": 22000,
+              "price_level": 4,
+              "business_status": "OPERATIONAL",
+              "opening_hours": {
+                "open_now": true,
+                "weekday_text": [
+                  "Thursday: 10:00 AM – 8:00 PM"
+                ]
+              },
+              "types": [
+                "department_store",
+                "store",
+                "point_of_interest",
+                "establishment"
+              ]
+            },
+            "external_ids": {
+              "google_place_id": "ChIJ_BON_MARCHE_PARIS"
+            },
+            "sync": {
+              "last_synced_at": "2026-04-02T22:30:00Z",
+              "sync_status": "synced",
+              "provider_version": "google-places-v1"
+            }
+          },
+          "guest_attributes": {
+            "family_friendly": true,
+            "couples_friendly": true,
+            "luxury_level": "luxury",
+            "central_location": true,
+            "booking_relevant": false
+          },
+          "tags": [
+            {
+              "key": "left_bank",
+              "label": "Left Bank",
+              "type": "location"
+            },
+            {
+              "key": "refined_shopping",
+              "label": "Refined Shopping",
+              "type": "style"
+            }
+          ],
+          "recommendation": {
+            "is_featured": true,
+            "priority_score": 90,
+            "editor_note": "A top recommendation for elegant premium shopping on the Left Bank.",
+            "recommended_for": [
+              "luxury travellers",
+              "design-conscious travellers",
+              "saint-germain stays"
+            ],
+            "seasonality": [
+              "year_round"
+            ]
+          },
+          "status": "active",
+          "sort_order": 3
+        },
+        {
+          "id": "shop_paris_westfield_forum_des_halles",
+          "name": "Westfield Forum des Halles",
+          "slug": "westfield-forum-des-halles",
+          "category": "shopping",
+          "subcategory": "premium_shopping_center",
+          "content": {
+            "short_description": "A strong practical shopping recommendation for guests wanting broad retail coverage in a central area.",
+            "long_description": "Westfield Forum des Halles is a useful recommendation when guests want convenience, variety, and central access rather than a purely luxury shopping day. It works especially well for families, longer stays, and practical city shopping needs.",
+            "highlights": [
+              "Broad retail mix",
+              "Very central location",
+              "Good for practical shopping"
+            ],
+            "insider_tips": [
+              "Not the most characterful shopping choice, but very useful when convenience matters.",
+              "Best for guests wanting a broad retail mix in one location."
+            ]
+          },
+          "source": {
+            "type": "hybrid",
+            "google_places": {
+              "place_id": "ChIJ_FORUM_DES_HALLES_PARIS",
+              "name": "Westfield Forum des Halles",
+              "formatted_address": "101 Porte Berger, 75001 Paris, France",
+              "location": {
+                "latitude": 48.8619,
+                "longitude": 2.347
+              },
+              "maps_url": "https://maps.google.com/?cid=forum-des-halles-paris-placeholder",
+              "website": "https://fr.westfield.com",
+              "international_phone_number": "+33 1 44 76 87 08",
+              "rating": 4.2,
+              "user_ratings_total": 56000,
+              "price_level": 3,
+              "business_status": "OPERATIONAL",
+              "opening_hours": {
+                "open_now": true,
+                "weekday_text": [
+                  "Thursday: 10:00 AM – 8:30 PM"
+                ]
+              },
+              "types": [
+                "shopping_mall",
+                "store",
+                "point_of_interest",
+                "establishment"
+              ]
+            },
+            "external_ids": {
+              "google_place_id": "ChIJ_FORUM_DES_HALLES_PARIS"
+            },
+            "sync": {
+              "last_synced_at": "2026-04-02T22:30:00Z",
+              "sync_status": "synced",
+              "provider_version": "google-places-v1"
+            }
+          },
+          "guest_attributes": {
+            "family_friendly": true,
+            "couples_friendly": false,
+            "luxury_level": "midrange",
+            "central_location": true,
+            "booking_relevant": false
+          },
+          "tags": [
+            {
+              "key": "shopping_center",
+              "label": "Shopping Center",
+              "type": "style"
+            },
+            {
+              "key": "practical",
+              "label": "Practical",
+              "type": "style"
+            }
+          ],
+          "recommendation": {
+            "is_featured": false,
+            "priority_score": 76,
+            "editor_note": "A practical recommendation for broad retail needs in central Paris.",
+            "recommended_for": [
+              "families",
+              "practical shopping",
+              "longer stays"
+            ],
+            "seasonality": [
+              "year_round"
+            ]
+          },
+          "status": "active",
+          "sort_order": 4
+        },
+        {
+          "id": "shop_paris_le_marais_boutiques",
+          "name": "Le Marais Boutique Area",
+          "slug": "le-marais-boutique-area",
+          "category": "shopping",
+          "subcategory": "independent_boutique_area",
+          "content": {
+            "short_description": "A strong local shopping recommendation for guests wanting boutiques, fashion, and a more characterful Paris atmosphere.",
+            "long_description": "Le Marais is one of the best shopping recommendations in Paris for travellers who prefer independent boutiques, concept stores, smaller labels, and a more local atmosphere over formal luxury avenues. It works especially well for repeat visitors, younger travellers, and design-conscious guests.",
+            "highlights": [
+              "Strong boutique shopping feel",
+              "Excellent local character",
+              "Good for fashion and lifestyle browsing"
+            ],
+            "insider_tips": [
+              "Best for guests who want atmosphere and variety rather than pure luxury retail.",
+              "Works especially well when paired with lunch and a slower neighbourhood walk."
+            ]
+          },
+          "source": {
+            "type": "hybrid",
+            "google_places": {
+              "place_id": "ChIJ_MARAIS_BOUTIQUES_PARIS",
+              "name": "Le Marais",
+              "formatted_address": "Le Marais, 75003 Paris, France",
+              "location": {
+                "latitude": 48.8586,
+                "longitude": 2.3613
+              },
+              "maps_url": "https://maps.google.com/?cid=marais-boutiques-paris-placeholder",
+              "website": "https://www.parisjetaime.com",
+              "international_phone_number": "",
+              "rating": 4.7,
+              "user_ratings_total": 13000,
+              "price_level": 3,
+              "business_status": "OPERATIONAL",
+              "opening_hours": {
+                "open_now": true,
+                "weekday_text": [
+                  "Thursday: Open 24 hours"
+                ]
+              },
+              "types": [
+                "store",
+                "point_of_interest",
+                "establishment"
+              ]
+            },
+            "external_ids": {
+              "google_place_id": "ChIJ_MARAIS_BOUTIQUES_PARIS"
+            },
+            "sync": {
+              "last_synced_at": "2026-04-02T22:30:00Z",
+              "sync_status": "synced",
+              "provider_version": "google-places-v1"
+            }
+          },
+          "guest_attributes": {
+            "family_friendly": true,
+            "couples_friendly": true,
+            "luxury_level": "upscale",
+            "central_location": true,
+            "booking_relevant": false
+          },
+          "tags": [
+            {
+              "key": "independent_shopping",
+              "label": "Independent Shopping",
+              "type": "style"
+            },
+            {
+              "key": "local_feel",
+              "label": "Local Feel",
+              "type": "theme"
+            }
+          ],
+          "recommendation": {
+            "is_featured": true,
+            "priority_score": 89,
+            "editor_note": "A top recommendation for guests wanting boutiques and a more characterful shopping day.",
+            "recommended_for": [
+              "repeat visitors",
+              "design-conscious travellers",
+              "local shopping"
+            ],
+            "seasonality": [
+              "year_round"
+            ]
+          },
+          "status": "active",
+          "sort_order": 5
+        },
+        {
+          "id": "shop_paris_merci",
+          "name": "Merci",
+          "slug": "merci",
+          "category": "shopping",
+          "subcategory": "design_store",
+          "content": {
+            "short_description": "A standout Paris recommendation for guests interested in design-led shopping, gifts, and lifestyle retail.",
+            "long_description": "Merci is one of the most useful shopping recommendations in Paris for guests who want a design-forward retail stop rather than a standard fashion store. It suits design-conscious travellers, gifting, and visitors who want something distinctive and recognisable.",
+            "highlights": [
+              "Strong design identity",
+              "Excellent for gifts and lifestyle browsing",
+              "Distinctive Paris shopping stop"
+            ],
+            "insider_tips": [
+              "Best for guests interested in interiors, lifestyle, and design rather than broad fashion shopping.",
+              "Easy to include as part of a Marais shopping plan."
+            ]
+          },
+          "source": {
+            "type": "hybrid",
+            "google_places": {
+              "place_id": "ChIJ_MERCI_PARIS",
+              "name": "Merci",
+              "formatted_address": "111 Boulevard Beaumarchais, 75003 Paris, France",
+              "location": {
+                "latitude": 48.8602,
+                "longitude": 2.3677
+              },
+              "maps_url": "https://maps.google.com/?cid=merci-paris-placeholder",
+              "website": "https://www.merci-merci.com",
+              "international_phone_number": "+33 1 42 77 00 33",
+              "rating": 4.3,
+              "user_ratings_total": 4200,
+              "price_level": 3,
+              "business_status": "OPERATIONAL",
+              "opening_hours": {
+                "open_now": true,
+                "weekday_text": [
+                  "Thursday: 10:00 AM – 7:00 PM"
+                ]
+              },
+              "types": [
+                "home_goods_store",
+                "clothing_store",
+                "store",
+                "point_of_interest",
+                "establishment"
+              ]
+            },
+            "external_ids": {
+              "google_place_id": "ChIJ_MERCI_PARIS"
+            },
+            "sync": {
+              "last_synced_at": "2026-04-02T22:30:00Z",
+              "sync_status": "synced",
+              "provider_version": "google-places-v1"
+            }
+          },
+          "guest_attributes": {
+            "family_friendly": true,
+            "couples_friendly": true,
+            "luxury_level": "upscale",
+            "central_location": true,
+            "booking_relevant": false
+          },
+          "tags": [
+            {
+              "key": "design_led",
+              "label": "Design-Led",
+              "type": "style"
+            },
+            {
+              "key": "iconic_pick",
+              "label": "Iconic Pick",
+              "type": "style"
+            }
+          ],
+          "recommendation": {
+            "is_featured": true,
+            "priority_score": 86,
+            "editor_note": "A standout shopping stop for design-conscious guests and gift-focused browsing.",
+            "recommended_for": [
+              "design lovers",
+              "gift shopping",
+              "marais plans"
+            ],
+            "seasonality": [
+              "year_round"
+            ]
+          },
+          "status": "active",
+          "sort_order": 6
+        }
+      ]
+    }
+  },
+  "tags": [
+    {
+      "key": "city_break",
+      "label": "City Break",
+      "type": "theme"
+    },
+    {
+      "key": "luxury_options",
+      "label": "Luxury Options",
+      "type": "budget"
+    },
+    {
+      "key": "shopping_destination",
+      "label": "Shopping Destination",
+      "type": "theme"
+    },
+    {
+      "key": "food_scene",
+      "label": "Strong Food Scene",
+      "type": "theme"
+    },
+    {
+      "key": "couples_friendly",
+      "label": "Couples Friendly",
+      "type": "audience"
+    },
+    {
+      "key": "first_time_friendly",
+      "label": "First-Time Friendly",
+      "type": "audience"
+    }
+  ],
+  "recommendations": {
+    "featured": [
+      {
+        "place_id": "shop_paris_avenue_montaigne",
+        "category": "shopping",
+        "reason": "Top luxury shopping recommendation in Paris.",
+        "rank": 1
+      },
+      {
+        "place_id": "rest_paris_le_train_bleu",
+        "category": "restaurants",
+        "reason": "A classic Paris dining recommendation with strong first-time visitor appeal.",
+        "rank": 2
+      },
+      {
+        "place_id": "act_paris_musee_dorsay",
+        "category": "activities",
+        "reason": "One of the strongest single cultural recommendations in Paris.",
+        "rank": 3
+      }
+    ],
+    "editors_picks": [
+      {
+        "place_id": "rest_paris_girafe",
+        "category": "restaurants",
+        "reason": "A polished premium recommendation for couples and celebratory stays.",
+        "rank": 1
+      },
+      {
+        "place_id": "shop_paris_le_marais_boutiques",
+        "category": "shopping",
+        "reason": "Best for local boutiques and a more characterful side of Paris shopping.",
+        "rank": 2
+      },
+      {
+        "place_id": "spa_paris_ritz_club_spa",
+        "category": "spa_wellness",
+        "reason": "Top luxury spa recommendation in Paris.",
+        "rank": 3
+      }
+    ],
+    "trending": [
+      {
+        "place_id": "shop_paris_merci",
+        "category": "shopping",
+        "reason": "Popular with guests looking for design-led gifts and distinctive Paris retail.",
+        "rank": 1
+      }
+    ],
+    "seasonal": [
+      {
+        "place_id": "shop_paris_galeries_lafayette",
+        "category": "shopping",
+        "reason": "Especially strong during festive shopping and holiday periods.",
+        "rank": 1
+      }
+    ],
+    "personalized_slots": [
+      {
+        "slot_key": "luxury_paris",
+        "label": "Luxury Paris",
+        "items": [
+          {
+            "place_id": "shop_paris_avenue_montaigne",
+            "category": "shopping",
+            "reason": "Best fit for premium fashion and designer shopping.",
+            "rank": 1
+          },
+          {
+            "place_id": "rest_paris_girafe",
+            "category": "restaurants",
+            "reason": "Strong premium dinner option.",
+            "rank": 2
+          },
+          {
+            "place_id": "spa_paris_cheval_blanc_dior",
+            "category": "spa_wellness",
+            "reason": "Luxury wellness pairing for a premium city stay.",
+            "rank": 3
+          }
+        ]
+      },
+      {
+        "slot_key": "short_stay_paris",
+        "label": "Short Stay Paris",
+        "items": [
+          {
+            "place_id": "act_paris_seine_cruise",
+            "category": "activities",
+            "reason": "Easy iconic activity for limited time.",
+            "rank": 1
+          },
+          {
+            "place_id": "rest_paris_le_train_bleu",
+            "category": "restaurants",
+            "reason": "Classic Paris meal recommendation.",
+            "rank": 2
+          },
+          {
+            "place_id": "shop_paris_galeries_lafayette",
+            "category": "shopping",
+            "reason": "Convenient premium shopping in one stop.",
+            "rank": 3
+          }
+        ]
+      },
+      {
+        "slot_key": "design_and_local_paris",
+        "label": "Design & Local Paris",
+        "items": [
+          {
+            "place_id": "shop_paris_le_marais_boutiques",
+            "category": "shopping",
+            "reason": "Best for boutiques and local shopping atmosphere.",
+            "rank": 1
+          },
+          {
+            "place_id": "shop_paris_merci",
+            "category": "shopping",
+            "reason": "Strong design-led and gift-focused shopping stop.",
+            "rank": 2
+          },
+          {
+            "place_id": "rest_paris_clamato",
+            "category": "restaurants",
+            "reason": "A more modern food-led dinner pairing.",
+            "rank": 3
+          }
+        ]
+      }
+    ]
+  },
+  "seo": {
+    "meta_title": "Paris Travel Guide | Restaurants, Shopping, Activities & Wellness | BNO Travel",
+    "meta_description": "Explore Paris with curated BNO Travel recommendations for restaurants, activities, gyms, spa wellness, and shopping.",
+    "canonical_url": "https://bno.travel/paris",
+    "og_title": "Paris Travel Guide | BNO Travel",
+    "og_description": "Professional Paris recommendations for dining, shopping, culture, wellness, and stylish short stays.",
+    "og_image": "https://example.bno.travel/images/paris/paris-og.jpg",
+    "twitter_title": "Paris Travel Guide | BNO Travel",
+    "twitter_description": "Curated Paris recommendations for guests, travellers, and premium city-break planning.",
+    "twitter_image": "https://example.bno.travel/images/paris/paris-og.jpg",
+    "schema_type": "TravelDestination",
+    "indexable": true
+  },
+  "metadata": {
+    "status": "published",
+    "created_at": "2026-04-02T22:40:00Z",
+    "updated_at": "2026-04-02T23:30:00Z",
+    "published_at": "2026-04-02T23:35:00Z",
+    "version": 1,
+    "source_priority": [
+      "curated",
+      "google_places",
+      "partner_feed",
+      "user_generated"
+    ]
+  }
+}

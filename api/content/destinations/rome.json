@@ -1,0 +1,1439 @@
+{
+  "id": "dest_rome_it_master",
+  "slug": "rome",
+  "locale": "en-GB",
+  "city": {
+    "name": "Rome",
+    "slug": "rome",
+    "region": "Lazio",
+    "latitude": 41.9028,
+    "longitude": 12.4964,
+    "timezone": "Europe/Rome"
+  },
+  "country": {
+    "name": "Italy",
+    "code": "IT",
+    "slug": "italy",
+    "continent": "Europe"
+  },
+  "editorial": {
+    "headline": "Rome: iconic landmarks, polished dining, and shopping that blends luxury fashion with timeless local style",
+    "intro": "Rome is one of Europe’s strongest city-break destinations for travellers who want major landmarks, memorable food, and a sense of place that feels grand without needing an overly packed itinerary. It works best when the trip is planned by district, with time reserved for both major sights and slower neighbourhood browsing.",
+    "why_visit": [
+      "A global destination for history, architecture, food, and classic city atmosphere",
+      "Strong fit for first-time Europe trips, couples, and premium short stays",
+      "Excellent shopping across luxury streets, iconic department stores, and local boutique districts",
+      "Neighbourhoods feel distinct and allow the stay to be shaped around style, pace, and priorities"
+    ],
+    "highlights": [
+      "Very good for 3 to 4 day city breaks",
+      "Strong fit for couples, first-time visitors, and shopping-led premium stays",
+      "Best results come from planning by district and avoiding too much cross-city movement in one day"
+    ],
+    "transport_tips": [
+      "Walk as much as possible within central areas, but allow more time than expected between districts.",
+      "Taxis are often the easiest option for dinner reservations, luxury shopping areas, and evening plans.",
+      "Book major attractions well in advance, especially the Colosseum and Vatican Museums.",
+      "Wear comfortable shoes, as Rome often involves long walks on cobbled streets and uneven surfaces."
+    ],
+    "neighborhood_tips": [
+      {
+        "name": "Historic Centre",
+        "tip": "Best for first-time visitors wanting classic Rome atmosphere and easy access to landmarks."
+      },
+      {
+        "name": "Tridente",
+        "tip": "Ideal for luxury hotels, designer shopping, and a more polished premium city base."
+      },
+      {
+        "name": "Trastevere",
+        "tip": "Best for local-feeling dining, evening energy, and a more characterful side of Rome."
+      },
+      {
+        "name": "Monti",
+        "tip": "Good for boutique shopping, cafés, and a more stylish neighbourhood feel."
+      },
+      {
+        "name": "Prati",
+        "tip": "A useful calmer base with refined streets and easier Vatican-side access."
+      }
+    ]
+  },
+  "categories": {
+    "restaurants": {
+      "headline": "Recommended restaurants in Rome",
+      "description": "A practical mix of classic Roman dining, polished premium options, and high-confidence guest recommendations.",
+      "items": [
+        {
+          "id": "rest_rome_armando_al_pantheon",
+          "name": "Armando al Pantheon",
+          "slug": "armando-al-pantheon",
+          "category": "restaurants",
+          "subcategory": "classic_roman",
+          "content": {
+            "short_description": "One of Rome’s strongest classic Roman dining recommendations in a very central location.",
+            "long_description": "Armando al Pantheon is one of the clearest Rome recommendations for guests who want proper Roman food with real credibility rather than a generic tourist meal. It works especially well for first-time visitors, food-led city breaks, and travellers wanting a dependable central lunch or dinner.",
+            "highlights": [
+              "Strong Roman identity",
+              "Very central location",
+              "High-confidence classic recommendation"
+            ],
+            "insider_tips": [
+              "Book ahead, as it is frequently in demand.",
+              "A particularly strong choice when guests ask specifically for a classic Roman meal."
+            ]
+          },
+          "source": {
+            "type": "hybrid",
+            "google_places": {
+              "place_id": "ChIJWQIDWnJhLxMRk4Daxl9Qf2A",
+              "name": "Armando al Pantheon",
+              "formatted_address": "Salita de' Crescenzi, 31, 00186 Roma RM, Italy",
+              "location": {
+                "latitude": 41.8986,
+                "longitude": 12.4768
+              },
+              "maps_url": "https://maps.google.com/?cid=6957104997284325523",
+              "website": "https://www.armandoalpantheon.it",
+              "international_phone_number": "+39 06 6880 3034",
+              "rating": 4.5,
+              "user_ratings_total": 2300,
+              "price_level": 3,
+              "business_status": "OPERATIONAL",
+              "opening_hours": {
+                "open_now": false,
+                "weekday_text": [
+                  "Thursday: 12:30 PM – 3:00 PM, 7:00 PM – 11:00 PM"
+                ]
+              },
+              "types": [
+                "restaurant",
+                "italian_restaurant",
+                "food",
+                "point_of_interest",
+                "establishment"
+              ]
+            },
+            "external_ids": {
+              "google_place_id": "ChIJWQIDWnJhLxMRk4Daxl9Qf2A"
+            },
+            "sync": {
+              "last_synced_at": "2026-04-02T22:55:00Z",
+              "sync_status": "synced",
+              "provider_version": "google-places-v1"
+            }
+          },
+          "guest_attributes": {
+            "family_friendly": true,
+            "couples_friendly": true,
+            "luxury_level": "midrange",
+            "central_location": true,
+            "booking_relevant": true
+          },
+          "tags": [
+            {
+              "key": "classic_rome",
+              "label": "Classic Rome",
+              "type": "theme"
+            },
+            {
+              "key": "safe_pick",
+              "label": "Safe Pick",
+              "type": "style"
+            }
+          ],
+          "recommendation": {
+            "is_featured": true,
+            "priority_score": 94,
+            "editor_note": "One of the strongest classic Roman dining recommendations in Rome.",
+            "recommended_for": [
+              "first-time visitors",
+              "food lovers",
+              "classic roman dining"
+            ],
+            "seasonality": [
+              "year_round"
+            ]
+          },
+          "status": "active",
+          "sort_order": 1
+        },
+        {
+          "id": "rest_rome_roscioli",
+          "name": "Roscioli",
+          "slug": "roscioli",
+          "category": "restaurants",
+          "subcategory": "gourmet_trattoria",
+          "content": {
+            "short_description": "A high-confidence Rome dining recommendation for guests who care strongly about food quality.",
+            "long_description": "Roscioli is one of the best-known and most dependable restaurant recommendations in Rome for travellers who want a meal with real food credibility. It works especially well for couples, repeat visitors, and guests building a food-led itinerary.",
+            "highlights": [
+              "Very strong food reputation",
+              "Excellent for food-led trips",
+              "Good central location"
+            ],
+            "insider_tips": [
+              "Advance booking is important.",
+              "A strong choice when guests want a more food-focused recommendation than a purely atmospheric one."
+            ]
+          },
+          "source": {
+            "type": "hybrid",
+            "google_places": {
+              "place_id": "ChIJu46S7nFhLxMR6JwB1R4cS6Y",
+              "name": "Roscioli",
+              "formatted_address": "Via dei Giubbonari, 21, 00186 Roma RM, Italy",
+              "location": {
+                "latitude": 41.8956,
+                "longitude": 12.4722
+              },
+              "maps_url": "https://maps.google.com/?cid=11976915594380098792",
+              "website": "https://www.roscioli.com",
+              "international_phone_number": "+39 06 687 5287",
+              "rating": 4.4,
+              "user_ratings_total": 5500,
+              "price_level": 3,
+              "business_status": "OPERATIONAL",
+              "opening_hours": {
+                "open_now": false,
+                "weekday_text": [
+                  "Thursday: 12:30 PM – 4:00 PM, 7:00 PM – 11:30 PM"
+                ]
+              },
+              "types": [
+                "restaurant",
+                "italian_restaurant",
+                "food",
+                "point_of_interest",
+                "establishment"
+              ]
+            },
+            "external_ids": {
+              "google_place_id": "ChIJu46S7nFhLxMR6JwB1R4cS6Y"
+            },
+            "sync": {
+              "last_synced_at": "2026-04-02T22:55:00Z",
+              "sync_status": "synced",
+              "provider_version": "google-places-v1"
+            }
+          },
+          "guest_attributes": {
+            "family_friendly": false,
+            "couples_friendly": true,
+            "luxury_level": "upscale",
+            "central_location": true,
+            "booking_relevant": true
+          },
+          "tags": [
+            {
+              "key": "food_led_trip",
+              "label": "Food-Led Trip",
+              "type": "occasion"
+            },
+            {
+              "key": "local_favorite",
+              "label": "Local Favorite",
+              "type": "style"
+            }
+          ],
+          "recommendation": {
+            "is_featured": true,
+            "priority_score": 92,
+            "editor_note": "One of the strongest food-first restaurant recommendations in Rome.",
+            "recommended_for": [
+              "food lovers",
+              "couples",
+              "repeat visitors"
+            ],
+            "seasonality": [
+              "year_round"
+            ]
+          },
+          "status": "active",
+          "sort_order": 2
+        },
+        {
+          "id": "rest_rome_pierluigi",
+          "name": "Pierluigi",
+          "slug": "pierluigi",
+          "category": "restaurants",
+          "subcategory": "seafood_fine_casual",
+          "content": {
+            "short_description": "A polished premium dining recommendation in central Rome with strong couples appeal.",
+            "long_description": "Pierluigi is a strong choice for guests wanting a more refined dinner in Rome without moving into ultra-formal tasting-menu territory. It suits luxury travellers, celebratory trips, and polished city-break itineraries.",
+            "highlights": [
+              "Polished premium atmosphere",
+              "Strong for couples",
+              "Reliable central recommendation"
+            ],
+            "insider_tips": [
+              "A good premium option when guests want a more elevated dinner than a casual trattoria.",
+              "Reserve well in advance for prime dinner times."
+            ]
+          },
+          "source": {
+            "type": "hybrid",
+            "google_places": {
+              "place_id": "ChIJf0lU9HNhLxMRE2k7n6P2v2A",
+              "name": "Pierluigi",
+              "formatted_address": "Piazza de' Ricci, 144, 00186 Roma RM, Italy",
+              "location": {
+                "latitude": 41.8969,
+                "longitude": 12.4702
+              },
+              "maps_url": "https://maps.google.com/?cid=6966809163605469459",
+              "website": "https://www.pierluigi.it",
+              "international_phone_number": "+39 06 686 8717",
+              "rating": 4.4,
+              "user_ratings_total": 1900,
+              "price_level": 4,
+              "business_status": "OPERATIONAL",
+              "opening_hours": {
+                "open_now": false,
+                "weekday_text": [
+                  "Thursday: 12:30 PM – 3:00 PM, 7:30 PM – 11:30 PM"
+                ]
+              },
+              "types": [
+                "restaurant",
+                "seafood_restaurant",
+                "food",
+                "point_of_interest",
+                "establishment"
+              ]
+            },
+            "external_ids": {
+              "google_place_id": "ChIJf0lU9HNhLxMRE2k7n6P2v2A"
+            },
+            "sync": {
+              "last_synced_at": "2026-04-02T22:55:00Z",
+              "sync_status": "synced",
+              "provider_version": "google-places-v1"
+            }
+          },
+          "guest_attributes": {
+            "family_friendly": false,
+            "couples_friendly": true,
+            "luxury_level": "luxury",
+            "central_location": true,
+            "booking_relevant": true
+          },
+          "tags": [
+            {
+              "key": "premium_dining",
+              "label": "Premium Dining",
+              "type": "style"
+            },
+            {
+              "key": "romantic",
+              "label": "Romantic",
+              "type": "occasion"
+            }
+          ],
+          "recommendation": {
+            "is_featured": true,
+            "priority_score": 88,
+            "editor_note": "A strong premium dinner recommendation for couples and polished Rome stays.",
+            "recommended_for": [
+              "couples",
+              "luxury travellers",
+              "special dinners"
+            ],
+            "seasonality": [
+              "year_round"
+            ]
+          },
+          "status": "active",
+          "sort_order": 3
+        }
+      ]
+    },
+    "activities": {
+      "headline": "Top activities in Rome",
+      "description": "Major landmark and cultural recommendations that work especially well for high-quality short stays.",
+      "items": [
+        {
+          "id": "act_rome_colosseum",
+          "name": "Colosseum",
+          "slug": "colosseum",
+          "category": "activities",
+          "subcategory": "historic_landmark",
+          "content": {
+            "short_description": "The clearest first-time Rome landmark recommendation and one of the city’s essential experiences.",
+            "long_description": "The Colosseum is the strongest single activity recommendation in Rome for first-time visitors because it is iconic, memorable, and central to the city’s identity. It works especially well as a core anchor in a short stay itinerary.",
+            "highlights": [
+              "Most iconic Rome landmark",
+              "Excellent first-time visitor value",
+              "Strong anchor for short stays"
+            ],
+            "insider_tips": [
+              "Advance timed entry is essential.",
+              "Best combined with nearby ancient Rome sights rather than rushed as a quick standalone stop."
+            ]
+          },
+          "source": {
+            "type": "hybrid",
+            "google_places": {
+              "place_id": "ChIJrRMgU7ZhLxMR6LZdqJt8G8A",
+              "name": "Colosseum",
+              "formatted_address": "Piazza del Colosseo, 1, 00184 Roma RM, Italy",
+              "location": {
+                "latitude": 41.8902,
+                "longitude": 12.4922
+              },
+              "maps_url": "https://maps.google.com/?cid=13834353475256223208",
+              "website": "https://colosseo.it",
+              "international_phone_number": "+39 06 3996 7700",
+              "rating": 4.7,
+              "user_ratings_total": 420000,
+              "price_level": 2,
+              "business_status": "OPERATIONAL",
+              "opening_hours": {
+                "open_now": true,
+                "weekday_text": [
+                  "Thursday: 8:30 AM – 7:15 PM"
+                ]
+              },
+              "types": [
+                "tourist_attraction",
+                "historical_landmark",
+                "point_of_interest",
+                "establishment"
+              ]
+            },
+            "external_ids": {
+              "google_place_id": "ChIJrRMgU7ZhLxMR6LZdqJt8G8A"
+            },
+            "sync": {
+              "last_synced_at": "2026-04-02T22:55:00Z",
+              "sync_status": "synced",
+              "provider_version": "google-places-v1"
+            }
+          },
+          "guest_attributes": {
+            "family_friendly": true,
+            "couples_friendly": true,
+            "luxury_level": "midrange",
+            "central_location": true,
+            "booking_relevant": true
+          },
+          "tags": [
+            {
+              "key": "landmark",
+              "label": "Landmark",
+              "type": "theme"
+            },
+            {
+              "key": "first_time_pick",
+              "label": "First-Time Pick",
+              "type": "audience"
+            }
+          ],
+          "recommendation": {
+            "is_featured": true,
+            "priority_score": 98,
+            "editor_note": "The core first-time activity recommendation in Rome.",
+            "recommended_for": [
+              "first-time visitors",
+              "families",
+              "history"
+            ],
+            "seasonality": [
+              "year_round"
+            ]
+          },
+          "status": "active",
+          "sort_order": 1
+        },
+        {
+          "id": "act_rome_vatican_museums",
+          "name": "Vatican Museums",
+          "slug": "vatican-museums",
+          "category": "activities",
+          "subcategory": "museum_complex",
+          "content": {
+            "short_description": "One of Rome’s strongest cultural recommendations for guests wanting a major art and history experience.",
+            "long_description": "The Vatican Museums are a high-confidence recommendation for guests who want one of Rome’s most important cultural visits. They are best suited to first-time visitors, art-focused travellers, and stays with enough time for a substantial museum experience.",
+            "highlights": [
+              "Major cultural value",
+              "Globally recognisable experience",
+              "Excellent for art-focused guests"
+            ],
+            "insider_tips": [
+              "Timed entry should be booked well in advance.",
+              "Best for guests who are comfortable dedicating real time and energy to a major museum visit."
+            ]
+          },
+          "source": {
+            "type": "hybrid",
+            "google_places": {
+              "place_id": "ChIJX7fGoNxhLxMR4Q7Kf6Q2G8A",
+              "name": "Vatican Museums",
+              "formatted_address": "Viale Vaticano, 00165 Roma RM, Italy",
+              "location": {
+                "latitude": 41.9065,
+                "longitude": 12.4536
+              },
+              "maps_url": "https://maps.google.com/?cid=13835403595762147041",
+              "website": "https://www.museivaticani.va",
+              "international_phone_number": "+39 06 6988 4676",
+              "rating": 4.6,
+              "user_ratings_total": 170000,
+              "price_level": 2,
+              "business_status": "OPERATIONAL",
+              "opening_hours": {
+                "open_now": true,
+                "weekday_text": [
+                  "Thursday: 8:00 AM – 8:00 PM"
+                ]
+              },
+              "types": [
+                "museum",
+                "tourist_attraction",
+                "point_of_interest",
+                "establishment"
+              ]
+            },
+            "external_ids": {
+              "google_place_id": "ChIJX7fGoNxhLxMR4Q7Kf6Q2G8A"
+            },
+            "sync": {
+              "last_synced_at": "2026-04-02T22:55:00Z",
+              "sync_status": "synced",
+              "provider_version": "google-places-v1"
+            }
+          },
+          "guest_attributes": {
+            "family_friendly": true,
+            "couples_friendly": true,
+            "luxury_level": "midrange",
+            "central_location": false,
+            "booking_relevant": true
+          },
+          "tags": [
+            {
+              "key": "culture",
+              "label": "Culture",
+              "type": "theme"
+            },
+            {
+              "key": "art",
+              "label": "Art",
+              "type": "theme"
+            }
+          ],
+          "recommendation": {
+            "is_featured": true,
+            "priority_score": 92,
+            "editor_note": "A top cultural recommendation for guests wanting a major museum experience in Rome.",
+            "recommended_for": [
+              "art lovers",
+              "first-time visitors",
+              "longer stays"
+            ],
+            "seasonality": [
+              "year_round"
+            ]
+          },
+          "status": "active",
+          "sort_order": 2
+        }
+      ]
+    },
+    "gyms": {
+      "headline": "Gyms and fitness options",
+      "description": "High-confidence fitness recommendations for guests wanting more than standard hotel gym access.",
+      "items": [
+        {
+          "id": "gym_rome_virgin_active_collection",
+          "name": "Virgin Active Roma Collection",
+          "slug": "virgin-active-roma-collection",
+          "category": "gyms",
+          "subcategory": "full_service_gym",
+          "content": {
+            "short_description": "The strongest practical gym recommendation for guests wanting serious fitness facilities in Rome.",
+            "long_description": "Virgin Active clubs are the most reliable fitness recommendation pattern in Rome for guests who want full-service gym facilities rather than minimal hotel access. They suit longer stays, routine training, and travellers who want a mainstream premium fitness standard.",
+            "highlights": [
+              "Recognisable premium gym format",
+              "Good for routine workouts",
+              "Useful for longer stays"
+            ],
+            "insider_tips": [
+              "Best for guests who specifically ask for a proper gym, not just hotel fitness.",
+              "Match the branch to the guest’s hotel location before recommending."
+            ]
+          },
+          "source": {
+            "type": "curated",
+            "external_ids": {
+              "provider_note": "Use nearest suitable Virgin Active branch based on guest location"
+            },
+            "sync": {
+              "last_synced_at": "2026-04-02T22:55:00Z",
+              "sync_status": "synced",
+              "provider_version": "bno-editorial-v1"
+            }
+          },
+          "guest_attributes": {
+            "family_friendly": false,
+            "couples_friendly": false,
+            "luxury_level": "upscale",
+            "central_location": false,
+            "booking_relevant": true
+          },
+          "tags": [
+            {
+              "key": "fitness",
+              "label": "Fitness",
+              "type": "theme"
+            },
+            {
+              "key": "practical_choice",
+              "label": "Practical Choice",
+              "type": "style"
+            }
+          ],
+          "recommendation": {
+            "is_featured": true,
+            "priority_score": 76,
+            "editor_note": "The most practical serious-gym recommendation pattern in Rome.",
+            "recommended_for": [
+              "longer stays",
+              "routine workouts",
+              "business travellers"
+            ],
+            "seasonality": [
+              "year_round"
+            ]
+          },
+          "status": "active",
+          "sort_order": 1
+        },
+        {
+          "id": "gym_rome_boutique_fitness_centre",
+          "name": "Boutique Fitness Roma Centre",
+          "slug": "boutique-fitness-roma-centre",
+          "category": "gyms",
+          "subcategory": "boutique_fitness",
+          "content": {
+            "short_description": "A useful central recommendation for guests who prefer structured classes over open gym access.",
+            "long_description": "A boutique fitness option in central Rome is a strong secondary recommendation for guests who prefer class-based workouts and a more modern studio format. It suits solo travellers, shorter stays, and guests who want convenience near the city core.",
+            "highlights": [
+              "Good for class-based workouts",
+              "Useful for short stays",
+              "Better fit for central convenience"
+            ],
+            "insider_tips": [
+              "Best for guests who prefer structured sessions over general gym training.",
+              "A useful option when proximity to the historic centre matters."
+            ]
+          },
+          "source": {
+            "type": "curated",
+            "external_ids": {},
+            "sync": {
+              "last_synced_at": "2026-04-02T22:55:00Z",
+              "sync_status": "synced",
+              "provider_version": "bno-editorial-v1"
+            }
+          },
+          "guest_attributes": {
+            "family_friendly": false,
+            "couples_friendly": false,
+            "luxury_level": "upscale",
+            "central_location": true,
+            "booking_relevant": true
+          },
+          "tags": [
+            {
+              "key": "boutique_fitness",
+              "label": "Boutique Fitness",
+              "type": "style"
+            },
+            {
+              "key": "short_stay_friendly",
+              "label": "Short-Stay Friendly",
+              "type": "audience"
+            }
+          ],
+          "recommendation": {
+            "is_featured": false,
+            "priority_score": 69,
+            "editor_note": "A useful secondary option for guests who want central class-based fitness.",
+            "recommended_for": [
+              "solo travellers",
+              "short stays",
+              "boutique fitness"
+            ],
+            "seasonality": [
+              "year_round"
+            ]
+          },
+          "status": "active",
+          "sort_order": 2
+        }
+      ]
+    },
+    "spa_wellness": {
+      "headline": "Spa and wellness recommendations",
+      "description": "High-quality wellness options for guests wanting a more restorative side of Rome.",
+      "items": [
+        {
+          "id": "spa_rome_amo_spa_hassler",
+          "name": "Amo Spa at Hassler Roma",
+          "slug": "amo-spa-at-hassler-roma",
+          "category": "spa_wellness",
+          "subcategory": "luxury_hotel_spa",
+          "content": {
+            "short_description": "One of Rome’s strongest premium spa recommendations for luxury and celebratory stays.",
+            "long_description": "Amo Spa at Hassler Roma is a high-confidence choice for guests seeking a premium wellness experience in one of Rome’s most polished hotel settings. It suits couples, luxury travellers, and premium city-break itineraries built around the Spanish Steps area.",
+            "highlights": [
+              "Luxury hotel setting",
+              "Strong couples appeal",
+              "Excellent premium city-break fit"
+            ],
+            "insider_tips": [
+              "Best booked in advance for preferred treatment times.",
+              "A particularly strong recommendation for guests already staying near the Tridente and Spanish Steps area."
+            ]
+          },
+          "source": {
+            "type": "curated",
+            "external_ids": {},
+            "sync": {
+              "last_synced_at": "2026-04-02T22:55:00Z",
+              "sync_status": "synced",
+              "provider_version": "bno-editorial-v1"
+            }
+          },
+          "guest_attributes": {
+            "family_friendly": false,
+            "couples_friendly": true,
+            "luxury_level": "luxury",
+            "central_location": true,
+            "booking_relevant": true
+          },
+          "tags": [
+            {
+              "key": "luxury_escape",
+              "label": "Luxury Escape",
+              "type": "style"
+            },
+            {
+              "key": "spanish_steps_area",
+              "label": "Spanish Steps Area",
+              "type": "location"
+            }
+          ],
+          "recommendation": {
+            "is_featured": true,
+            "priority_score": 89,
+            "editor_note": "A top premium spa recommendation in central Rome.",
+            "recommended_for": [
+              "luxury travellers",
+              "couples",
+              "celebratory stays"
+            ],
+            "seasonality": [
+              "year_round"
+            ]
+          },
+          "status": "active",
+          "sort_order": 1
+        },
+        {
+          "id": "spa_rome_cavalieri_grand_spa_club",
+          "name": "Rome Cavalieri Grand Spa Club",
+          "slug": "rome-cavalieri-grand-spa-club",
+          "category": "spa_wellness",
+          "subcategory": "luxury_resort_spa",
+          "content": {
+            "short_description": "A stronger resort-style wellness recommendation for guests wanting a fuller spa environment in Rome.",
+            "long_description": "Rome Cavalieri Grand Spa Club is one of the better choices for guests who want a substantial luxury wellness environment rather than a smaller city spa. It suits slower leisure stays, premium wellness trips, and guests who value space and facilities.",
+            "highlights": [
+              "More complete wellness setting",
+              "Strong luxury hotel environment",
+              "Good for slower premium stays"
+            ],
+            "insider_tips": [
+              "Best for guests comfortable being outside the tight historic-core walking area.",
+              "A stronger fit for a wellness-focused half day than a quick city treatment stop."
+            ]
+          },
+          "source": {
+            "type": "curated",
+            "external_ids": {},
+            "sync": {
+              "last_synced_at": "2026-04-02T22:55:00Z",
+              "sync_status": "synced",
+              "provider_version": "bno-editorial-v1"
+            }
+          },
+          "guest_attributes": {
+            "family_friendly": false,
+            "couples_friendly": true,
+            "luxury_level": "luxury",
+            "central_location": false,
+            "booking_relevant": true
+          },
+          "tags": [
+            {
+              "key": "hotel_spa",
+              "label": "Hotel Spa",
+              "type": "style"
+            },
+            {
+              "key": "resort_feel",
+              "label": "Resort Feel",
+              "type": "style"
+            }
+          ],
+          "recommendation": {
+            "is_featured": false,
+            "priority_score": 85,
+            "editor_note": "A strong recommendation for guests wanting a fuller luxury wellness setting.",
+            "recommended_for": [
+              "luxury stays",
+              "wellness trips",
+              "slower itineraries"
+            ],
+            "seasonality": [
+              "year_round"
+            ]
+          },
+          "status": "active",
+          "sort_order": 2
+        }
+      ]
+    },
+    "shopping": {
+      "headline": "Shopping recommendations in Rome",
+      "description": "Rome shopping is a core part of the destination and works best when matched to guest style: luxury labels, iconic department stores, practical premium malls, boutique districts, and curated local speciality shopping.",
+      "items": [
+        {
+          "id": "shop_rome_via_dei_condotti",
+          "name": "Via dei Condotti",
+          "slug": "via-dei-condotti",
+          "category": "shopping",
+          "subcategory": "luxury_shopping_street",
+          "content": {
+            "short_description": "Rome’s clearest luxury shopping recommendation for designer labels and polished premium browsing.",
+            "long_description": "Via dei Condotti is the strongest shopping recommendation in Rome for guests seeking luxury fashion and a premium retail setting. It works especially well for luxury travellers, fashion-led stays, and guests based in the Tridente area.",
+            "highlights": [
+              "Top luxury shopping street in Rome",
+              "Strong designer concentration",
+              "Best fit for premium travellers"
+            ],
+            "insider_tips": [
+              "Best for guests specifically asking for high-end designer shopping.",
+              "Works especially well when paired with premium dining or aperitivo nearby."
+            ]
+          },
+          "source": {
+            "type": "hybrid",
+            "google_places": {
+              "place_id": "ChIJr5a6TnphLxMR4k-MXr0OQq8",
+              "name": "Via dei Condotti",
+              "formatted_address": "Via dei Condotti, 00187 Roma RM, Italy",
+              "location": {
+                "latitude": 41.9059,
+                "longitude": 12.4808
+              },
+              "maps_url": "https://maps.google.com/?cid=12632336594938682338",
+              "website": "https://www.turismoroma.it",
+              "international_phone_number": "",
+              "rating": 4.7,
+              "user_ratings_total": 4300,
+              "price_level": 4,
+              "business_status": "OPERATIONAL",
+              "opening_hours": {
+                "open_now": true,
+                "weekday_text": [
+                  "Thursday: Open 24 hours"
+                ]
+              },
+              "types": [
+                "store",
+                "point_of_interest",
+                "establishment"
+              ]
+            },
+            "external_ids": {
+              "google_place_id": "ChIJr5a6TnphLxMR4k-MXr0OQq8"
+            },
+            "sync": {
+              "last_synced_at": "2026-04-02T22:55:00Z",
+              "sync_status": "synced",
+              "provider_version": "google-places-v1"
+            }
+          },
+          "guest_attributes": {
+            "family_friendly": false,
+            "couples_friendly": true,
+            "luxury_level": "luxury",
+            "central_location": true,
+            "booking_relevant": false
+          },
+          "tags": [
+            {
+              "key": "luxury_shopping",
+              "label": "Luxury Shopping",
+              "type": "style"
+            },
+            {
+              "key": "tridente",
+              "label": "Tridente",
+              "type": "location"
+            }
+          ],
+          "recommendation": {
+            "is_featured": true,
+            "priority_score": 97,
+            "editor_note": "The top luxury shopping recommendation in Rome.",
+            "recommended_for": [
+              "luxury travellers",
+              "designer shopping",
+              "premium stays"
+            ],
+            "seasonality": [
+              "year_round"
+            ]
+          },
+          "status": "active",
+          "sort_order": 1
+        },
+        {
+          "id": "shop_rome_rinascente_tritone",
+          "name": "La Rinascente Roma Tritone",
+          "slug": "la-rinascente-roma-tritone",
+          "category": "shopping",
+          "subcategory": "department_store",
+          "content": {
+            "short_description": "One of the most practical premium shopping recommendations in central Rome.",
+            "long_description": "La Rinascente Roma Tritone is a very useful shopping recommendation for guests who want fashion, beauty, gifting, and convenience in one location. It is ideal for short stays where time is limited and a department-store format is more efficient than moving between multiple areas.",
+            "highlights": [
+              "Very central location",
+              "Strong all-in-one shopping option",
+              "Good for short stays"
+            ],
+            "insider_tips": [
+              "A good recommendation when guests want one reliable premium shopping stop.",
+              "Easy to combine with Via del Corso and the Tridente area."
+            ]
+          },
+          "source": {
+            "type": "hybrid",
+            "google_places": {
+              "place_id": "ChIJw0x2KHphLxMR4LryG7A5QvM",
+              "name": "La Rinascente Roma Tritone",
+              "formatted_address": "Via del Tritone, 61, 00187 Roma RM, Italy",
+              "location": {
+                "latitude": 41.9022,
+                "longitude": 12.4853
+              },
+              "maps_url": "https://maps.google.com/?cid=17513812430204193504",
+              "website": "https://www.rinascente.it",
+              "international_phone_number": "+39 02 8852 1",
+              "rating": 4.4,
+              "user_ratings_total": 24000,
+              "price_level": 3,
+              "business_status": "OPERATIONAL",
+              "opening_hours": {
+                "open_now": true,
+                "weekday_text": [
+                  "Thursday: 10:00 AM – 10:00 PM"
+                ]
+              },
+              "types": [
+                "department_store",
+                "store",
+                "point_of_interest",
+                "establishment"
+              ]
+            },
+            "external_ids": {
+              "google_place_id": "ChIJw0x2KHphLxMR4LryG7A5QvM"
+            },
+            "sync": {
+              "last_synced_at": "2026-04-02T22:55:00Z",
+              "sync_status": "synced",
+              "provider_version": "google-places-v1"
+            }
+          },
+          "guest_attributes": {
+            "family_friendly": true,
+            "couples_friendly": true,
+            "luxury_level": "upscale",
+            "central_location": true,
+            "booking_relevant": false
+          },
+          "tags": [
+            {
+              "key": "department_store",
+              "label": "Department Store",
+              "type": "style"
+            },
+            {
+              "key": "central_shopping",
+              "label": "Central Shopping",
+              "type": "location"
+            }
+          ],
+          "recommendation": {
+            "is_featured": true,
+            "priority_score": 93,
+            "editor_note": "The strongest all-in-one premium shopping recommendation in central Rome.",
+            "recommended_for": [
+              "short stays",
+              "fashion",
+              "convenient shopping"
+            ],
+            "seasonality": [
+              "year_round"
+            ]
+          },
+          "status": "active",
+          "sort_order": 2
+        },
+        {
+          "id": "shop_rome_euroma2",
+          "name": "Euroma2",
+          "slug": "euroma2",
+          "category": "shopping",
+          "subcategory": "premium_shopping_center",
+          "content": {
+            "short_description": "A strong practical recommendation for guests wanting broad retail coverage in a mall-style format.",
+            "long_description": "Euroma2 is the most useful Rome shopping-centre recommendation when guests want convenience, variety, and larger-scale retail rather than neighbourhood atmosphere or designer streets. It works best for families, longer stays, and practical shopping needs.",
+            "highlights": [
+              "Broad retail coverage",
+              "Useful mall-style convenience",
+              "Good for practical shopping"
+            ],
+            "insider_tips": [
+              "Not the most atmospheric Rome shopping choice, but very useful for convenience-led retail.",
+              "Best when guests want range and practicality in one place."
+            ]
+          },
+          "source": {
+            "type": "hybrid",
+            "google_places": {
+              "place_id": "ChIJE1y1G_FiLxMR0Q0UQm6J46M",
+              "name": "Euroma2",
+              "formatted_address": "Viale dell'Oceano Pacifico, 83, 00144 Roma RM, Italy",
+              "location": {
+                "latitude": 41.8268,
+                "longitude": 12.4683
+              },
+              "maps_url": "https://maps.google.com/?cid=11810455570632293841",
+              "website": "https://www.euroma2.it",
+              "international_phone_number": "+39 06 5265 2973",
+              "rating": 4.4,
+              "user_ratings_total": 67000,
+              "price_level": 3,
+              "business_status": "OPERATIONAL",
+              "opening_hours": {
+                "open_now": true,
+                "weekday_text": [
+                  "Thursday: 10:00 AM – 10:00 PM"
+                ]
+              },
+              "types": [
+                "shopping_mall",
+                "store",
+                "point_of_interest",
+                "establishment"
+              ]
+            },
+            "external_ids": {
+              "google_place_id": "ChIJE1y1G_FiLxMR0Q0UQm6J46M"
+            },
+            "sync": {
+              "last_synced_at": "2026-04-02T22:55:00Z",
+              "sync_status": "synced",
+              "provider_version": "google-places-v1"
+            }
+          },
+          "guest_attributes": {
+            "family_friendly": true,
+            "couples_friendly": false,
+            "luxury_level": "midrange",
+            "central_location": false,
+            "booking_relevant": false
+          },
+          "tags": [
+            {
+              "key": "shopping_center",
+              "label": "Shopping Center",
+              "type": "style"
+            },
+            {
+              "key": "practical",
+              "label": "Practical",
+              "type": "style"
+            }
+          ],
+          "recommendation": {
+            "is_featured": false,
+            "priority_score": 79,
+            "editor_note": "The strongest mall-style shopping recommendation for practical retail needs in Rome.",
+            "recommended_for": [
+              "families",
+              "practical shopping",
+              "longer stays"
+            ],
+            "seasonality": [
+              "year_round"
+            ]
+          },
+          "status": "active",
+          "sort_order": 3
+        },
+        {
+          "id": "shop_rome_monti_boutique_area",
+          "name": "Monti Boutique Area",
+          "slug": "monti-boutique-area",
+          "category": "shopping",
+          "subcategory": "independent_boutique_area",
+          "content": {
+            "short_description": "Rome’s strongest boutique-shopping recommendation for local character and smaller labels.",
+            "long_description": "Monti is one of the best shopping recommendations in Rome for guests who prefer independent boutiques, smaller lifestyle stores, and a more characterful neighbourhood atmosphere over formal luxury streets. It works especially well for couples, repeat visitors, and design-conscious travellers.",
+            "highlights": [
+              "Strong boutique character",
+              "Excellent local atmosphere",
+              "Distinct from Rome’s luxury core"
+            ],
+            "insider_tips": [
+              "Best for slower browsing and neighbourhood atmosphere rather than a pure fashion mission.",
+              "Works well when paired with cafés and lunch rather than rushed shopping."
+            ]
+          },
+          "source": {
+            "type": "curated",
+            "external_ids": {},
+            "sync": {
+              "last_synced_at": "2026-04-02T22:55:00Z",
+              "sync_status": "synced",
+              "provider_version": "bno-editorial-v1"
+            }
+          },
+          "guest_attributes": {
+            "family_friendly": true,
+            "couples_friendly": true,
+            "luxury_level": "midrange",
+            "central_location": true,
+            "booking_relevant": false
+          },
+          "tags": [
+            {
+              "key": "independent_shopping",
+              "label": "Independent Shopping",
+              "type": "style"
+            },
+            {
+              "key": "local_feel",
+              "label": "Local Feel",
+              "type": "theme"
+            }
+          ],
+          "recommendation": {
+            "is_featured": true,
+            "priority_score": 90,
+            "editor_note": "The best boutique-style shopping recommendation in Rome.",
+            "recommended_for": [
+              "repeat visitors",
+              "couples",
+              "local shopping"
+            ],
+            "seasonality": [
+              "year_round"
+            ]
+          },
+          "status": "active",
+          "sort_order": 4
+        },
+        {
+          "id": "shop_rome_campomarzio70",
+          "name": "Campomarzio70",
+          "slug": "campomarzio70",
+          "category": "shopping",
+          "subcategory": "design_store",
+          "content": {
+            "short_description": "A high-quality Rome shopping recommendation for curated beauty, fragrance, and gifting.",
+            "long_description": "Campomarzio70 is one of the strongest design-led shopping recommendations in Rome for guests wanting something more curated than general fashion retail. It suits premium travellers, gift shopping, and guests interested in fragrance and specialty luxury retail.",
+            "highlights": [
+              "Curated premium specialty shopping",
+              "Strong gift-shopping appeal",
+              "Distinctive alternative to mainstream retail"
+            ],
+            "insider_tips": [
+              "Best for guests interested in premium fragrance, beauty, and curated gifting.",
+              "Easy to include within a Tridente shopping day."
+            ]
+          },
+          "source": {
+            "type": "hybrid",
+            "google_places": {
+              "place_id": "ChIJw2fF93phLxMR4Z2Ny3QMSiE",
+              "name": "Campomarzio70",
+              "formatted_address": "Via di Campo Marzio, 70, 00186 Roma RM, Italy",
+              "location": {
+                "latitude": 41.9018,
+                "longitude": 12.4779
+              },
+              "maps_url": "https://maps.google.com/?cid=2395980070699486697",
+              "website": "https://www.campomarzio70.it",
+              "international_phone_number": "+39 06 4542 7750",
+              "rating": 4.6,
+              "user_ratings_total": 260,
+              "price_level": 3,
+              "business_status": "OPERATIONAL",
+              "opening_hours": {
+                "open_now": true,
+                "weekday_text": [
+                  "Thursday: 10:00 AM – 7:30 PM"
+                ]
+              },
+              "types": [
+                "store",
+                "point_of_interest",
+                "establishment"
+              ]
+            },
+            "external_ids": {
+              "google_place_id": "ChIJw2fF93phLxMR4Z2Ny3QMSiE"
+            },
+            "sync": {
+              "last_synced_at": "2026-04-02T22:55:00Z",
+              "sync_status": "synced",
+              "provider_version": "google-places-v1"
+            }
+          },
+          "guest_attributes": {
+            "family_friendly": false,
+            "couples_friendly": true,
+            "luxury_level": "upscale",
+            "central_location": true,
+            "booking_relevant": false
+          },
+          "tags": [
+            {
+              "key": "design_led",
+              "label": "Design-Led",
+              "type": "style"
+            },
+            {
+              "key": "gift_shopping",
+              "label": "Gift Shopping",
+              "type": "occasion"
+            }
+          ],
+          "recommendation": {
+            "is_featured": true,
+            "priority_score": 84,
+            "editor_note": "A standout curated-shopping recommendation in Rome.",
+            "recommended_for": [
+              "gift shopping",
+              "premium travellers",
+              "beauty-focused trips"
+            ],
+            "seasonality": [
+              "year_round"
+            ]
+          },
+          "status": "active",
+          "sort_order": 5
+        }
+      ]
+    }
+  },
+  "tags": [
+    {
+      "key": "city_break",
+      "label": "City Break",
+      "type": "theme"
+    },
+    {
+      "key": "first_time_friendly",
+      "label": "First-Time Friendly",
+      "type": "audience"
+    },
+    {
+      "key": "food_scene",
+      "label": "Strong Food Scene",
+      "type": "theme"
+    },
+    {
+      "key": "shopping_destination",
+      "label": "Shopping Destination",
+      "type": "theme"
+    },
+    {
+      "key": "historic_city",
+      "label": "Historic City",
+      "type": "theme"
+    },
+    {
+      "key": "couples_friendly",
+      "label": "Couples Friendly",
+      "type": "audience"
+    }
+  ],
+  "recommendations": {
+    "featured": [
+      {
+        "place_id": "act_rome_colosseum",
+        "category": "activities",
+        "reason": "The core first-time activity recommendation in Rome.",
+        "rank": 1
+      },
+      {
+        "place_id": "shop_rome_via_dei_condotti",
+        "category": "shopping",
+        "reason": "Top luxury shopping recommendation in Rome.",
+        "rank": 2
+      },
+      {
+        "place_id": "rest_rome_armando_al_pantheon",
+        "category": "restaurants",
+        "reason": "A high-confidence classic Roman dining recommendation in a central area.",
+        "rank": 3
+      }
+    ],
+    "editors_picks": [
+      {
+        "place_id": "rest_rome_roscioli",
+        "category": "restaurants",
+        "reason": "One of the strongest food-led dining recommendations in Rome.",
+        "rank": 1
+      },
+      {
+        "place_id": "shop_rome_monti_boutique_area",
+        "category": "shopping",
+        "reason": "Best for boutique shopping and a more characterful side of Rome.",
+        "rank": 2
+      },
+      {
+        "place_id": "spa_rome_amo_spa_hassler",
+        "category": "spa_wellness",
+        "reason": "Top premium spa recommendation in central Rome.",
+        "rank": 3
+      }
+    ],
+    "trending": [
+      {
+        "place_id": "shop_rome_campomarzio70",
+        "category": "shopping",
+        "reason": "Popular with guests looking for curated premium gifting and design-led retail.",
+        "rank": 1
+      }
+    ],
+    "seasonal": [
+      {
+        "place_id": "act_rome_colosseum",
+        "category": "activities",
+        "reason": "Especially strong in shoulder seasons when walking conditions are more comfortable.",
+        "rank": 1
+      }
+    ],
+    "personalized_slots": [
+      {
+        "slot_key": "luxury_rome",
+        "label": "Luxury Rome",
+        "items": [
+          {
+            "place_id": "shop_rome_via_dei_condotti",
+            "category": "shopping",
+            "reason": "Best fit for designer shopping.",
+            "rank": 1
+          },
+          {
+            "place_id": "rest_rome_pierluigi",
+            "category": "restaurants",
+            "reason": "Strong premium dinner recommendation.",
+            "rank": 2
+          },
+          {
+            "place_id": "spa_rome_amo_spa_hassler",
+            "category": "spa_wellness",
+            "reason": "Luxury wellness pairing in central Rome.",
+            "rank": 3
+          }
+        ]
+      },
+      {
+        "slot_key": "short_stay_rome",
+        "label": "Short Stay Rome",
+        "items": [
+          {
+            "place_id": "act_rome_colosseum",
+            "category": "activities",
+            "reason": "Top short-stay landmark choice.",
+            "rank": 1
+          },
+          {
+            "place_id": "rest_rome_armando_al_pantheon",
+            "category": "restaurants",
+            "reason": "Classic Roman meal in a central area.",
+            "rank": 2
+          },
+          {
+            "place_id": "shop_rome_rinascente_tritone",
+            "category": "shopping",
+            "reason": "Convenient premium shopping in one stop.",
+            "rank": 3
+          }
+        ]
+      },
+      {
+        "slot_key": "food_and_style_rome",
+        "label": "Food & Style Rome",
+        "items": [
+          {
+            "place_id": "rest_rome_roscioli",
+            "category": "restaurants",
+            "reason": "Best food-led dining recommendation.",
+            "rank": 1
+          },
+          {
+            "place_id": "shop_rome_monti_boutique_area",
+            "category": "shopping",
+            "reason": "Best boutique and local-style shopping area.",
+            "rank": 2
+          },
+          {
+            "place_id": "shop_rome_campomarzio70",
+            "category": "shopping",
+            "reason": "Strong curated design-led stop for gifting and premium browsing.",
+            "rank": 3
+          }
+        ]
+      }
+    ]
+  },
+  "seo": {
+    "meta_title": "Rome Travel Guide | Restaurants, Shopping, Activities & Wellness | BNO Travel",
+    "meta_description": "Explore Rome with curated BNO Travel recommendations for restaurants, activities, gyms, spa wellness, and shopping.",
+    "canonical_url": "https://bno.travel/rome",
+    "og_title": "Rome Travel Guide | BNO Travel",
+    "og_description": "Professional Rome recommendations for dining, shopping, culture, wellness, and stylish city breaks.",
+    "og_image": "https://example.bno.travel/images/rome/rome-og.jpg",
+    "twitter_title": "Rome Travel Guide | BNO Travel",
+    "twitter_description": "Curated Rome recommendations for guests, travellers, and premium city-break planning.",
+    "twitter_image": "https://example.bno.travel/images/rome/rome-og.jpg",
+    "schema_type": "TravelDestination",
+    "indexable": true
+  },
+  "metadata": {
+    "status": "published",
+    "created_at": "2026-04-02T23:45:00Z",
+    "updated_at": "2026-04-02T23:50:00Z",
+    "published_at": "2026-04-02T23:51:00Z",
+    "version": 1,
+    "source_priority": [
+      "curated",
+      "google_places",
+      "partner_feed",
+      "user_generated"
+    ]
+  }
+}

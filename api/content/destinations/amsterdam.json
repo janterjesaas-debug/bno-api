@@ -1,0 +1,1443 @@
+{
+  "id": "dest_amsterdam_nl_master",
+  "slug": "amsterdam",
+  "locale": "en-GB",
+  "city": {
+    "name": "Amsterdam",
+    "slug": "amsterdam",
+    "region": "North Holland",
+    "latitude": 52.3676,
+    "longitude": 4.9041,
+    "timezone": "Europe/Amsterdam"
+  },
+  "country": {
+    "name": "Netherlands",
+    "code": "NL",
+    "slug": "netherlands",
+    "continent": "Europe"
+  },
+  "editorial": {
+    "headline": "Amsterdam: canal-side elegance, strong dining, and shopping that blends luxury with local design-led character",
+    "intro": "Amsterdam is one of Europe’s strongest short-break cities for travellers who want canal atmosphere, polished dining, and highly walkable neighbourhoods. It works especially well for 2 to 3 days, with premium hotels, major museums, boutique shopping, and classic city experiences all within manageable reach.",
+    "why_visit": [
+      "A compact capital that works especially well for high-quality short stays",
+      "Strong shopping across luxury streets, iconic department stores, boutique districts, and Dutch design-led stores",
+      "Excellent fit for couples, first-time Europe trips, and premium weekend travel",
+      "A distinctive canal setting that gives even simple plans a memorable sense of place"
+    ],
+    "highlights": [
+      "Very good for 2 to 3 day city breaks",
+      "Strong fit for couples, design-conscious travellers, and premium short stays",
+      "Best enjoyed district by district rather than trying to over-plan the schedule"
+    ],
+    "transport_tips": [
+      "Central Amsterdam is highly walkable, and most short-stay guests can cover key areas on foot.",
+      "Use trams or taxis for comfort when moving farther between hotels, dinner, and museum districts.",
+      "Book key museums and top dinner reservations in advance, especially on weekends.",
+      "Canal cruises are best treated as a planned experience rather than a last-minute filler activity."
+    ],
+    "neighborhood_tips": [
+      {
+        "name": "Canal Belt",
+        "tip": "Best for elegant stays, classic Amsterdam atmosphere, and polished city-break planning."
+      },
+      {
+        "name": "Museum Quarter",
+        "tip": "Ideal for first-time visitors combining museums, luxury hotels, and premium shopping."
+      },
+      {
+        "name": "Nine Streets",
+        "tip": "Best for boutique shopping, canal-side browsing, and one of the city’s strongest local-style shopping experiences."
+      },
+      {
+        "name": "Jordaan",
+        "tip": "Good for a more local and stylish atmosphere with cafés, galleries, and slower browsing."
+      },
+      {
+        "name": "De Pijp",
+        "tip": "Best for a more lively local feel, food, and younger city energy."
+      }
+    ]
+  },
+  "categories": {
+    "restaurants": {
+      "headline": "Recommended restaurants in Amsterdam",
+      "description": "A practical mix of polished classics, strong food-led picks, and safe high-quality recommendations for short stays.",
+      "items": [
+        {
+          "id": "rest_amsterdam_de_kas",
+          "name": "De Kas",
+          "slug": "de-kas",
+          "category": "restaurants",
+          "subcategory": "modern_european",
+          "content": {
+            "short_description": "One of Amsterdam’s strongest food-led dining recommendations for guests wanting a polished and memorable meal.",
+            "long_description": "De Kas is one of the clearest premium restaurant recommendations in Amsterdam for guests who want a meal that feels distinctive and high quality without being overly formal. It works especially well for couples, food-focused stays, and stylish city-break itineraries.",
+            "highlights": [
+              "Strong food reputation",
+              "Distinctive dining experience",
+              "Good premium recommendation"
+            ],
+            "insider_tips": [
+              "Best for guests who see dinner as one of the highlights of the trip.",
+              "Advance booking is strongly recommended."
+            ]
+          },
+          "source": {
+            "type": "hybrid",
+            "google_places": {
+              "place_id": "ChIJM2Wjv8sJxkcRr8c7J0mM2Q8",
+              "name": "Restaurant De Kas",
+              "formatted_address": "Kamerlingh Onneslaan 3, 1097 DE Amsterdam, Netherlands",
+              "location": {
+                "latitude": 52.3606,
+                "longitude": 4.9299
+              },
+              "maps_url": "https://maps.google.com/?cid=1144433078958716719",
+              "website": "https://restaurantdekas.com",
+              "international_phone_number": "+31 20 462 4562",
+              "rating": 4.6,
+              "user_ratings_total": 2500,
+              "price_level": 4,
+              "business_status": "OPERATIONAL",
+              "opening_hours": {
+                "open_now": false,
+                "weekday_text": [
+                  "Friday: 12:00 PM – 2:00 PM, 6:30 PM – 10:00 PM"
+                ]
+              },
+              "types": [
+                "restaurant",
+                "food",
+                "point_of_interest",
+                "establishment"
+              ]
+            },
+            "external_ids": {
+              "google_place_id": "ChIJM2Wjv8sJxkcRr8c7J0mM2Q8"
+            },
+            "sync": {
+              "last_synced_at": "2026-04-02T23:40:00Z",
+              "sync_status": "synced",
+              "provider_version": "google-places-v1"
+            }
+          },
+          "guest_attributes": {
+            "family_friendly": false,
+            "couples_friendly": true,
+            "luxury_level": "upscale",
+            "central_location": false,
+            "booking_relevant": true
+          },
+          "tags": [
+            {
+              "key": "food_led_trip",
+              "label": "Food-Led Trip",
+              "type": "occasion"
+            },
+            {
+              "key": "premium_dining",
+              "label": "Premium Dining",
+              "type": "style"
+            }
+          ],
+          "recommendation": {
+            "is_featured": true,
+            "priority_score": 92,
+            "editor_note": "One of the strongest food-first restaurant recommendations in Amsterdam.",
+            "recommended_for": [
+              "couples",
+              "food lovers",
+              "premium city breaks"
+            ],
+            "seasonality": [
+              "year_round"
+            ]
+          },
+          "status": "active",
+          "sort_order": 1
+        },
+        {
+          "id": "rest_amsterdam_brasserie_ambassade",
+          "name": "Brasserie Ambassade",
+          "slug": "brasserie-ambassade",
+          "category": "restaurants",
+          "subcategory": "classic_brasserie",
+          "content": {
+            "short_description": "A safe and polished canal-belt restaurant recommendation with broad appeal.",
+            "long_description": "Brasserie Ambassade is one of the most useful Amsterdam recommendations for guests wanting a central, elegant, and dependable meal in the canal area. It works especially well for couples, first-time visitors, and premium short stays.",
+            "highlights": [
+              "Excellent canal-belt location",
+              "Polished but approachable",
+              "Good safe recommendation"
+            ],
+            "insider_tips": [
+              "A strong choice when guests want something central, stylish, and dependable.",
+              "Works well for lunch or dinner in a classic city-break itinerary."
+            ]
+          },
+          "source": {
+            "type": "hybrid",
+            "google_places": {
+              "place_id": "ChIJH4mJxsoJxkcRjA5k2w5l7vM",
+              "name": "Brasserie Ambassade",
+              "formatted_address": "Herengracht 339, 1016 AZ Amsterdam, Netherlands",
+              "location": {
+                "latitude": 52.3702,
+                "longitude": 4.8856
+              },
+              "maps_url": "https://maps.google.com/?cid=17526202578617634444",
+              "website": "https://ambassade-hotel.nl/brasserie-ambassade",
+              "international_phone_number": "+31 20 555 0222",
+              "rating": 4.5,
+              "user_ratings_total": 2400,
+              "price_level": 3,
+              "business_status": "OPERATIONAL",
+              "opening_hours": {
+                "open_now": false,
+                "weekday_text": [
+                  "Friday: 12:00 PM – 3:00 PM, 6:00 PM – 10:30 PM"
+                ]
+              },
+              "types": [
+                "restaurant",
+                "brasserie",
+                "food",
+                "point_of_interest",
+                "establishment"
+              ]
+            },
+            "external_ids": {
+              "google_place_id": "ChIJH4mJxsoJxkcRjA5k2w5l7vM"
+            },
+            "sync": {
+              "last_synced_at": "2026-04-02T23:40:00Z",
+              "sync_status": "synced",
+              "provider_version": "google-places-v1"
+            }
+          },
+          "guest_attributes": {
+            "family_friendly": true,
+            "couples_friendly": true,
+            "luxury_level": "upscale",
+            "central_location": true,
+            "booking_relevant": true
+          },
+          "tags": [
+            {
+              "key": "canal_belt",
+              "label": "Canal Belt",
+              "type": "location"
+            },
+            {
+              "key": "safe_pick",
+              "label": "Safe Pick",
+              "type": "style"
+            }
+          ],
+          "recommendation": {
+            "is_featured": true,
+            "priority_score": 88,
+            "editor_note": "A highly practical and polished recommendation for central Amsterdam stays.",
+            "recommended_for": [
+              "couples",
+              "first-time visitors",
+              "central stays"
+            ],
+            "seasonality": [
+              "year_round"
+            ]
+          },
+          "status": "active",
+          "sort_order": 2
+        },
+        {
+          "id": "rest_amsterdam_cafe_de_klos",
+          "name": "Café de Klos",
+          "slug": "cafe-de-klos",
+          "category": "restaurants",
+          "subcategory": "casual_local",
+          "content": {
+            "short_description": "A safe and well-known Amsterdam recommendation for a relaxed, hearty, no-fuss meal.",
+            "long_description": "Café de Klos is a useful recommendation for guests who want something informal, well known, and easy to enjoy without a premium dining structure. It works especially well for casual evenings, mixed groups, and guests wanting a straightforward local-style meal.",
+            "highlights": [
+              "Relaxed atmosphere",
+              "Well-known casual option",
+              "Good for uncomplicated dining"
+            ],
+            "insider_tips": [
+              "Best when guests want a laid-back and reliable meal rather than a polished restaurant experience.",
+              "Useful as a midrange or casual recommendation."
+            ]
+          },
+          "source": {
+            "type": "hybrid",
+            "google_places": {
+              "place_id": "ChIJ2wM2s8oJxkcR7XW5m1Ljw4Q",
+              "name": "Café de Klos",
+              "formatted_address": "Kerkstraat 41, 1017 GB Amsterdam, Netherlands",
+              "location": {
+                "latitude": 52.3657,
+                "longitude": 4.8851
+              },
+              "maps_url": "https://maps.google.com/?cid=9563679892153077229",
+              "website": "https://cafedeklos.nl",
+              "international_phone_number": "+31 20 625 3730",
+              "rating": 4.7,
+              "user_ratings_total": 7600,
+              "price_level": 2,
+              "business_status": "OPERATIONAL",
+              "opening_hours": {
+                "open_now": false,
+                "weekday_text": [
+                  "Friday: 4:00 PM – 12:00 AM"
+                ]
+              },
+              "types": [
+                "restaurant",
+                "bar",
+                "food",
+                "point_of_interest",
+                "establishment"
+              ]
+            },
+            "external_ids": {
+              "google_place_id": "ChIJ2wM2s8oJxkcR7XW5m1Ljw4Q"
+            },
+            "sync": {
+              "last_synced_at": "2026-04-02T23:40:00Z",
+              "sync_status": "synced",
+              "provider_version": "google-places-v1"
+            }
+          },
+          "guest_attributes": {
+            "family_friendly": false,
+            "couples_friendly": true,
+            "luxury_level": "midrange",
+            "central_location": true,
+            "booking_relevant": false
+          },
+          "tags": [
+            {
+              "key": "casual_favorite",
+              "label": "Casual Favorite",
+              "type": "style"
+            },
+            {
+              "key": "midrange",
+              "label": "Midrange",
+              "type": "budget"
+            }
+          ],
+          "recommendation": {
+            "is_featured": false,
+            "priority_score": 82,
+            "editor_note": "A strong casual and midrange restaurant recommendation in central Amsterdam.",
+            "recommended_for": [
+              "casual dining",
+              "mixed groups",
+              "midrange stays"
+            ],
+            "seasonality": [
+              "year_round"
+            ]
+          },
+          "status": "active",
+          "sort_order": 3
+        }
+      ]
+    },
+    "activities": {
+      "headline": "Top activities in Amsterdam",
+      "description": "High-quality activity recommendations that work especially well for short stays and first-time visits.",
+      "items": [
+        {
+          "id": "act_amsterdam_rijksmuseum",
+          "name": "Rijksmuseum",
+          "slug": "rijksmuseum",
+          "category": "activities",
+          "subcategory": "museum",
+          "content": {
+            "short_description": "Amsterdam’s clearest major museum recommendation for first-time visitors and culture-focused stays.",
+            "long_description": "The Rijksmuseum is one of the strongest activity recommendations in Amsterdam because it feels major, memorable, and central to the city’s cultural identity. It works especially well for first-time visitors, couples, and premium short stays.",
+            "highlights": [
+              "Major cultural value",
+              "Strong first-time visitor appeal",
+              "Excellent Museum Quarter fit"
+            ],
+            "insider_tips": [
+              "Timed entry should be booked in advance.",
+              "Works best as the main cultural anchor in a short stay rather than part of an overloaded museum day."
+            ]
+          },
+          "source": {
+            "type": "hybrid",
+            "google_places": {
+              "place_id": "ChIJVXealLU_xkcRja_At0z9AGY",
+              "name": "Rijksmuseum",
+              "formatted_address": "Museumstraat 1, 1071 XX Amsterdam, Netherlands",
+              "location": {
+                "latitude": 52.36,
+                "longitude": 4.8852
+              },
+              "maps_url": "https://maps.google.com/?cid=7343654573273825165",
+              "website": "https://www.rijksmuseum.nl",
+              "international_phone_number": "+31 20 674 7000",
+              "rating": 4.7,
+              "user_ratings_total": 118000,
+              "price_level": 2,
+              "business_status": "OPERATIONAL",
+              "opening_hours": {
+                "open_now": true,
+                "weekday_text": [
+                  "Friday: 9:00 AM – 5:00 PM"
+                ]
+              },
+              "types": [
+                "museum",
+                "tourist_attraction",
+                "point_of_interest",
+                "establishment"
+              ]
+            },
+            "external_ids": {
+              "google_place_id": "ChIJVXealLU_xkcRja_At0z9AGY"
+            },
+            "sync": {
+              "last_synced_at": "2026-04-02T23:40:00Z",
+              "sync_status": "synced",
+              "provider_version": "google-places-v1"
+            }
+          },
+          "guest_attributes": {
+            "family_friendly": true,
+            "couples_friendly": true,
+            "luxury_level": "upscale",
+            "central_location": true,
+            "booking_relevant": true
+          },
+          "tags": [
+            {
+              "key": "museum",
+              "label": "Museum",
+              "type": "theme"
+            },
+            {
+              "key": "first_time_pick",
+              "label": "First-Time Pick",
+              "type": "audience"
+            }
+          ],
+          "recommendation": {
+            "is_featured": true,
+            "priority_score": 95,
+            "editor_note": "The strongest general museum recommendation in Amsterdam.",
+            "recommended_for": [
+              "first-time visitors",
+              "culture",
+              "couples"
+            ],
+            "seasonality": [
+              "year_round"
+            ]
+          },
+          "status": "active",
+          "sort_order": 1
+        },
+        {
+          "id": "act_amsterdam_canal_cruise",
+          "name": "Amsterdam Canal Cruise",
+          "slug": "amsterdam-canal-cruise",
+          "category": "activities",
+          "subcategory": "sightseeing_cruise",
+          "content": {
+            "short_description": "A classic Amsterdam recommendation with broad appeal and very high short-stay value.",
+            "long_description": "A canal cruise is one of the easiest Amsterdam activity recommendations because it gives guests a strong sense of the city quickly and comfortably. It works especially well for first-time visitors, couples, and travellers with limited time.",
+            "highlights": [
+              "Classic Amsterdam experience",
+              "Broad guest appeal",
+              "Very good for shorter stays"
+            ],
+            "insider_tips": [
+              "Evening departures often offer the strongest atmosphere.",
+              "A very useful recommendation when guests want one easy and recognisable Amsterdam activity."
+            ]
+          },
+          "source": {
+            "type": "curated",
+            "external_ids": {
+              "provider_note": "Multiple premium and standard operators available"
+            },
+            "sync": {
+              "last_synced_at": "2026-04-02T23:40:00Z",
+              "sync_status": "synced",
+              "provider_version": "bno-editorial-v1"
+            }
+          },
+          "guest_attributes": {
+            "family_friendly": true,
+            "couples_friendly": true,
+            "luxury_level": "midrange",
+            "central_location": true,
+            "booking_relevant": true
+          },
+          "tags": [
+            {
+              "key": "iconic",
+              "label": "Iconic",
+              "type": "theme"
+            },
+            {
+              "key": "romantic",
+              "label": "Romantic",
+              "type": "occasion"
+            }
+          ],
+          "recommendation": {
+            "is_featured": true,
+            "priority_score": 92,
+            "editor_note": "One of the easiest and most effective activity recommendations for Amsterdam.",
+            "recommended_for": [
+              "first-time visitors",
+              "couples",
+              "short stays"
+            ],
+            "seasonality": [
+              "spring",
+              "summer",
+              "autumn",
+              "winter"
+            ]
+          },
+          "status": "active",
+          "sort_order": 2
+        }
+      ]
+    },
+    "gyms": {
+      "headline": "Gyms and fitness options",
+      "description": "High-confidence options for guests wanting proper fitness access during an Amsterdam stay.",
+      "items": [
+        {
+          "id": "gym_amsterdam_trainmore_collection",
+          "name": "TrainMore Amsterdam Collection",
+          "slug": "trainmore-amsterdam-collection",
+          "category": "gyms",
+          "subcategory": "full_service_gym",
+          "content": {
+            "short_description": "The strongest practical gym recommendation pattern for guests wanting convenient fitness access in Amsterdam.",
+            "long_description": "TrainMore clubs are the most useful mainstream gym recommendation pattern in Amsterdam for guests who want reliable workout access in the city without depending on hotel facilities. They suit routine training, business travel, and short-to-medium stays.",
+            "highlights": [
+              "Practical city gym access",
+              "Useful central locations",
+              "Good for routine workouts"
+            ],
+            "insider_tips": [
+              "Best when matched to the guest’s hotel area.",
+              "A practical recommendation rather than a luxury wellness experience."
+            ]
+          },
+          "source": {
+            "type": "curated",
+            "external_ids": {
+              "provider_note": "Use nearest suitable TrainMore branch based on guest location"
+            },
+            "sync": {
+              "last_synced_at": "2026-04-02T23:40:00Z",
+              "sync_status": "synced",
+              "provider_version": "bno-editorial-v1"
+            }
+          },
+          "guest_attributes": {
+            "family_friendly": false,
+            "couples_friendly": false,
+            "luxury_level": "midrange",
+            "central_location": true,
+            "booking_relevant": true
+          },
+          "tags": [
+            {
+              "key": "fitness",
+              "label": "Fitness",
+              "type": "theme"
+            },
+            {
+              "key": "practical_choice",
+              "label": "Practical Choice",
+              "type": "style"
+            }
+          ],
+          "recommendation": {
+            "is_featured": true,
+            "priority_score": 74,
+            "editor_note": "The most practical serious-gym recommendation pattern in Amsterdam.",
+            "recommended_for": [
+              "routine workouts",
+              "business travellers",
+              "short stays"
+            ],
+            "seasonality": [
+              "year_round"
+            ]
+          },
+          "status": "active",
+          "sort_order": 1
+        },
+        {
+          "id": "gym_amsterdam_saints_stars_placeholder",
+          "name": "Boutique Fitness Amsterdam Zuid",
+          "slug": "boutique-fitness-amsterdam-zuid",
+          "category": "gyms",
+          "subcategory": "boutique_fitness",
+          "content": {
+            "short_description": "A useful high-quality option for guests who prefer structured classes and a more modern fitness format.",
+            "long_description": "A boutique fitness recommendation in Amsterdam Zuid is useful for guests who prefer class-based training, stylish studio environments, and shorter focused workouts. It suits solo travellers, premium short stays, and guests who want convenience near the Museum Quarter and Zuid area.",
+            "highlights": [
+              "Good for classes",
+              "Modern workout format",
+              "Useful for shorter stays"
+            ],
+            "insider_tips": [
+              "Best for guests who prefer classes over open gym time.",
+              "A strong secondary recommendation when convenience and format matter more than gym size."
+            ]
+          },
+          "source": {
+            "type": "curated",
+            "external_ids": {},
+            "sync": {
+              "last_synced_at": "2026-04-02T23:40:00Z",
+              "sync_status": "synced",
+              "provider_version": "bno-editorial-v1"
+            }
+          },
+          "guest_attributes": {
+            "family_friendly": false,
+            "couples_friendly": false,
+            "luxury_level": "upscale",
+            "central_location": false,
+            "booking_relevant": true
+          },
+          "tags": [
+            {
+              "key": "boutique_fitness",
+              "label": "Boutique Fitness",
+              "type": "style"
+            },
+            {
+              "key": "short_stay_friendly",
+              "label": "Short-Stay Friendly",
+              "type": "audience"
+            }
+          ],
+          "recommendation": {
+            "is_featured": false,
+            "priority_score": 69,
+            "editor_note": "A useful secondary recommendation for guests wanting class-based fitness in Amsterdam.",
+            "recommended_for": [
+              "solo travellers",
+              "short stays",
+              "boutique fitness"
+            ],
+            "seasonality": [
+              "year_round"
+            ]
+          },
+          "status": "active",
+          "sort_order": 2
+        }
+      ]
+    },
+    "spa_wellness": {
+      "headline": "Spa and wellness recommendations",
+      "description": "High-quality wellness options for guests wanting a more restorative side of Amsterdam.",
+      "items": [
+        {
+          "id": "spa_amsterdam_waldorf_guerlain",
+          "name": "Guerlain Spa at Waldorf Astoria Amsterdam",
+          "slug": "guerlain-spa-at-waldorf-astoria-amsterdam",
+          "category": "spa_wellness",
+          "subcategory": "luxury_hotel_spa",
+          "content": {
+            "short_description": "The strongest premium spa recommendation in central Amsterdam for luxury and celebratory stays.",
+            "long_description": "Guerlain Spa at Waldorf Astoria is the clearest high-end wellness recommendation in Amsterdam for guests seeking a premium spa experience in an elegant canal-side setting. It works especially well for couples, luxury travellers, and premium short breaks.",
+            "highlights": [
+              "Luxury canal-side hotel setting",
+              "Strong couples appeal",
+              "Best fit for premium stays"
+            ],
+            "insider_tips": [
+              "Best booked ahead for treatments and preferred times.",
+              "An especially strong recommendation for luxury canal-belt stays."
+            ]
+          },
+          "source": {
+            "type": "curated",
+            "external_ids": {},
+            "sync": {
+              "last_synced_at": "2026-04-02T23:40:00Z",
+              "sync_status": "synced",
+              "provider_version": "bno-editorial-v1"
+            }
+          },
+          "guest_attributes": {
+            "family_friendly": false,
+            "couples_friendly": true,
+            "luxury_level": "luxury",
+            "central_location": true,
+            "booking_relevant": true
+          },
+          "tags": [
+            {
+              "key": "luxury_escape",
+              "label": "Luxury Escape",
+              "type": "style"
+            },
+            {
+              "key": "canal_belt",
+              "label": "Canal Belt",
+              "type": "location"
+            }
+          ],
+          "recommendation": {
+            "is_featured": true,
+            "priority_score": 93,
+            "editor_note": "The top premium spa recommendation in Amsterdam.",
+            "recommended_for": [
+              "luxury travellers",
+              "couples",
+              "premium weekends"
+            ],
+            "seasonality": [
+              "year_round"
+            ]
+          },
+          "status": "active",
+          "sort_order": 1
+        },
+        {
+          "id": "spa_amsterdam_akasha_conservatorium",
+          "name": "Akasha Holistic Wellbeing at Conservatorium Hotel",
+          "slug": "akasha-holistic-wellbeing-at-conservatorium-hotel",
+          "category": "spa_wellness",
+          "subcategory": "luxury_hotel_spa",
+          "content": {
+            "short_description": "A strong premium wellness recommendation near Amsterdam’s museum and luxury shopping core.",
+            "long_description": "Akasha is one of the strongest Amsterdam spa recommendations for guests who want a polished luxury wellness experience close to premium hotels, museums, and shopping. It suits couples, premium city-break travellers, and guests based in the Museum Quarter.",
+            "highlights": [
+              "Strong Museum Quarter location",
+              "Good fit for premium city breaks",
+              "Useful shopping-and-spa pairing"
+            ],
+            "insider_tips": [
+              "A particularly useful recommendation for guests combining museum visits, shopping, and wellness.",
+              "Reserve treatments in advance."
+            ]
+          },
+          "source": {
+            "type": "curated",
+            "external_ids": {},
+            "sync": {
+              "last_synced_at": "2026-04-02T23:40:00Z",
+              "sync_status": "synced",
+              "provider_version": "bno-editorial-v1"
+            }
+          },
+          "guest_attributes": {
+            "family_friendly": false,
+            "couples_friendly": true,
+            "luxury_level": "luxury",
+            "central_location": true,
+            "booking_relevant": true
+          },
+          "tags": [
+            {
+              "key": "hotel_spa",
+              "label": "Hotel Spa",
+              "type": "style"
+            },
+            {
+              "key": "museum_quarter",
+              "label": "Museum Quarter",
+              "type": "location"
+            }
+          ],
+          "recommendation": {
+            "is_featured": false,
+            "priority_score": 89,
+            "editor_note": "A high-quality spa recommendation for premium Amsterdam stays.",
+            "recommended_for": [
+              "luxury travellers",
+              "couples",
+              "museum quarter stays"
+            ],
+            "seasonality": [
+              "year_round"
+            ]
+          },
+          "status": "active",
+          "sort_order": 2
+        }
+      ]
+    },
+    "shopping": {
+      "headline": "Shopping recommendations in Amsterdam",
+      "description": "Amsterdam shopping is a core part of the destination and works best when matched to guest style: luxury fashion, iconic department stores, practical premium retail, canal-side boutiques, and design-led Dutch shopping.",
+      "items": [
+        {
+          "id": "shop_amsterdam_pc_hooftstraat",
+          "name": "P.C. Hooftstraat",
+          "slug": "pc-hooftstraat",
+          "category": "shopping",
+          "subcategory": "luxury_shopping_street",
+          "content": {
+            "short_description": "Amsterdam’s clearest luxury shopping recommendation for premium fashion and designer retail.",
+            "long_description": "P.C. Hooftstraat is the strongest shopping recommendation in Amsterdam for guests seeking luxury labels and premium fashion. It works especially well for luxury travellers, fashion-led stays, and guests based near the Museum Quarter.",
+            "highlights": [
+              "Top luxury shopping street",
+              "Strong designer presence",
+              "Best fit for premium travellers"
+            ],
+            "insider_tips": [
+              "Best for guests specifically seeking designer shopping.",
+              "Works well when paired with Museum Quarter hotels and nearby spa or dining plans."
+            ]
+          },
+          "source": {
+            "type": "hybrid",
+            "google_places": {
+              "place_id": "ChIJ2f7YB7U_xkcRP2x4Xr3QWy8",
+              "name": "P.C. Hooftstraat",
+              "formatted_address": "P.C. Hooftstraat, Amsterdam, Netherlands",
+              "location": {
+                "latitude": 52.3585,
+                "longitude": 4.8797
+              },
+              "maps_url": "https://maps.google.com/?cid=3419474690694597695",
+              "website": "https://www.iamsterdam.com",
+              "international_phone_number": "",
+              "rating": 4.6,
+              "user_ratings_total": 3900,
+              "price_level": 4,
+              "business_status": "OPERATIONAL",
+              "opening_hours": {
+                "open_now": true,
+                "weekday_text": [
+                  "Friday: Open 24 hours"
+                ]
+              },
+              "types": [
+                "store",
+                "point_of_interest",
+                "establishment"
+              ]
+            },
+            "external_ids": {
+              "google_place_id": "ChIJ2f7YB7U_xkcRP2x4Xr3QWy8"
+            },
+            "sync": {
+              "last_synced_at": "2026-04-02T23:40:00Z",
+              "sync_status": "synced",
+              "provider_version": "google-places-v1"
+            }
+          },
+          "guest_attributes": {
+            "family_friendly": false,
+            "couples_friendly": true,
+            "luxury_level": "luxury",
+            "central_location": true,
+            "booking_relevant": false
+          },
+          "tags": [
+            {
+              "key": "luxury_shopping",
+              "label": "Luxury Shopping",
+              "type": "style"
+            },
+            {
+              "key": "museum_quarter",
+              "label": "Museum Quarter",
+              "type": "location"
+            }
+          ],
+          "recommendation": {
+            "is_featured": true,
+            "priority_score": 96,
+            "editor_note": "The top luxury shopping recommendation in Amsterdam.",
+            "recommended_for": [
+              "luxury travellers",
+              "fashion trips",
+              "premium stays"
+            ],
+            "seasonality": [
+              "year_round"
+            ]
+          },
+          "status": "active",
+          "sort_order": 1
+        },
+        {
+          "id": "shop_amsterdam_de_bijenkorf",
+          "name": "De Bijenkorf Amsterdam",
+          "slug": "de-bijenkorf-amsterdam",
+          "category": "shopping",
+          "subcategory": "department_store",
+          "content": {
+            "short_description": "Amsterdam’s strongest department-store recommendation for premium fashion, beauty, and gifting in one place.",
+            "long_description": "De Bijenkorf is one of the most useful shopping recommendations in Amsterdam for guests who want a central, recognisable, and high-quality department-store experience. It works especially well for short stays where convenience and range matter.",
+            "highlights": [
+              "Iconic department store",
+              "Very central location",
+              "Strong all-in-one premium shopping option"
+            ],
+            "insider_tips": [
+              "A strong recommendation when guests want one major shopping stop rather than several smaller areas.",
+              "Very easy to combine with Dam area plans."
+            ]
+          },
+          "source": {
+            "type": "hybrid",
+            "google_places": {
+              "place_id": "ChIJb7cQ6coJxkcR0m4bK8cT0hA",
+              "name": "De Bijenkorf Amsterdam",
+              "formatted_address": "Dam 1, 1012 JS Amsterdam, Netherlands",
+              "location": {
+                "latitude": 52.3731,
+                "longitude": 4.8922
+              },
+              "maps_url": "https://maps.google.com/?cid=1211828762769530322",
+              "website": "https://www.debijenkorf.nl",
+              "international_phone_number": "+31 88 245 4488",
+              "rating": 4.4,
+              "user_ratings_total": 29000,
+              "price_level": 3,
+              "business_status": "OPERATIONAL",
+              "opening_hours": {
+                "open_now": true,
+                "weekday_text": [
+                  "Friday: 10:00 AM – 9:00 PM"
+                ]
+              },
+              "types": [
+                "department_store",
+                "store",
+                "point_of_interest",
+                "establishment"
+              ]
+            },
+            "external_ids": {
+              "google_place_id": "ChIJb7cQ6coJxkcR0m4bK8cT0hA"
+            },
+            "sync": {
+              "last_synced_at": "2026-04-02T23:40:00Z",
+              "sync_status": "synced",
+              "provider_version": "google-places-v1"
+            }
+          },
+          "guest_attributes": {
+            "family_friendly": true,
+            "couples_friendly": true,
+            "luxury_level": "upscale",
+            "central_location": true,
+            "booking_relevant": false
+          },
+          "tags": [
+            {
+              "key": "department_store",
+              "label": "Department Store",
+              "type": "style"
+            },
+            {
+              "key": "central_shopping",
+              "label": "Central Shopping",
+              "type": "location"
+            }
+          ],
+          "recommendation": {
+            "is_featured": true,
+            "priority_score": 92,
+            "editor_note": "The strongest department-store shopping recommendation in Amsterdam.",
+            "recommended_for": [
+              "short stays",
+              "fashion",
+              "convenient shopping"
+            ],
+            "seasonality": [
+              "year_round"
+            ]
+          },
+          "status": "active",
+          "sort_order": 2
+        },
+        {
+          "id": "shop_amsterdam_gelderlandplein",
+          "name": "Gelderlandplein",
+          "slug": "gelderlandplein",
+          "category": "shopping",
+          "subcategory": "premium_shopping_center",
+          "content": {
+            "short_description": "A strong practical premium shopping-centre recommendation for guests wanting range and convenience in Amsterdam.",
+            "long_description": "Gelderlandplein is the best shopping-centre recommendation in Amsterdam for guests who want broader retail coverage, convenience, and a more practical shopping format than canal-side boutique browsing. It suits families, longer stays, and guests with clear retail needs.",
+            "highlights": [
+              "Good premium retail mix",
+              "Useful practical option",
+              "Better for convenience-led shopping"
+            ],
+            "insider_tips": [
+              "Not the most atmospheric shopping choice, but highly useful when guests want practical retail in one location.",
+              "Best for planned shopping rather than casual canal-side browsing."
+            ]
+          },
+          "source": {
+            "type": "hybrid",
+            "google_places": {
+              "place_id": "ChIJW6W2oLU_xkcRTyM5x3mP2N0",
+              "name": "Gelderlandplein",
+              "formatted_address": "Gelderlandplein 1, 1082 KZ Amsterdam, Netherlands",
+              "location": {
+                "latitude": 52.3325,
+                "longitude": 4.8764
+              },
+              "maps_url": "https://maps.google.com/?cid=15988244635549713231",
+              "website": "https://www.gelderlandplein.nl",
+              "international_phone_number": "+31 20 661 4545",
+              "rating": 4.3,
+              "user_ratings_total": 11000,
+              "price_level": 3,
+              "business_status": "OPERATIONAL",
+              "opening_hours": {
+                "open_now": true,
+                "weekday_text": [
+                  "Friday: 9:30 AM – 8:00 PM"
+                ]
+              },
+              "types": [
+                "shopping_mall",
+                "store",
+                "point_of_interest",
+                "establishment"
+              ]
+            },
+            "external_ids": {
+              "google_place_id": "ChIJW6W2oLU_xkcRTyM5x3mP2N0"
+            },
+            "sync": {
+              "last_synced_at": "2026-04-02T23:40:00Z",
+              "sync_status": "synced",
+              "provider_version": "google-places-v1"
+            }
+          },
+          "guest_attributes": {
+            "family_friendly": true,
+            "couples_friendly": false,
+            "luxury_level": "midrange",
+            "central_location": false,
+            "booking_relevant": false
+          },
+          "tags": [
+            {
+              "key": "shopping_center",
+              "label": "Shopping Center",
+              "type": "style"
+            },
+            {
+              "key": "practical",
+              "label": "Practical",
+              "type": "style"
+            }
+          ],
+          "recommendation": {
+            "is_featured": false,
+            "priority_score": 78,
+            "editor_note": "The strongest practical shopping-centre recommendation in Amsterdam.",
+            "recommended_for": [
+              "families",
+              "practical shopping",
+              "longer stays"
+            ],
+            "seasonality": [
+              "year_round"
+            ]
+          },
+          "status": "active",
+          "sort_order": 3
+        },
+        {
+          "id": "shop_amsterdam_nine_streets",
+          "name": "De 9 Straatjes",
+          "slug": "de-9-straatjes",
+          "category": "shopping",
+          "subcategory": "independent_boutique_area",
+          "content": {
+            "short_description": "Amsterdam’s strongest boutique-shopping recommendation for canal-side browsing, local labels, and style-led retail.",
+            "long_description": "De 9 Straatjes is one of the best shopping recommendations in Amsterdam for guests who want boutiques, concept stores, and local character instead of purely luxury retail. It works especially well for couples, repeat visitors, and design-conscious travellers.",
+            "highlights": [
+              "Best boutique-shopping area in central Amsterdam",
+              "Strong canal-side atmosphere",
+              "Good for slower browsing and local style"
+            ],
+            "insider_tips": [
+              "Best for guests who want shopping to feel like part of the city experience rather than a retail task.",
+              "Works especially well with lunch, coffee, and canal wandering."
+            ]
+          },
+          "source": {
+            "type": "hybrid",
+            "google_places": {
+              "place_id": "ChIJ8z2x8MoJxkcRklM6q7mdw0Q",
+              "name": "De 9 Straatjes",
+              "formatted_address": "De 9 Straatjes, Amsterdam, Netherlands",
+              "location": {
+                "latitude": 52.3711,
+                "longitude": 4.8836
+              },
+              "maps_url": "https://maps.google.com/?cid=4954965080824109970",
+              "website": "https://de9straatjes.nl",
+              "international_phone_number": "",
+              "rating": 4.6,
+              "user_ratings_total": 8600,
+              "price_level": 3,
+              "business_status": "OPERATIONAL",
+              "opening_hours": {
+                "open_now": true,
+                "weekday_text": [
+                  "Friday: Open 24 hours"
+                ]
+              },
+              "types": [
+                "store",
+                "point_of_interest",
+                "establishment"
+              ]
+            },
+            "external_ids": {
+              "google_place_id": "ChIJ8z2x8MoJxkcRklM6q7mdw0Q"
+            },
+            "sync": {
+              "last_synced_at": "2026-04-02T23:40:00Z",
+              "sync_status": "synced",
+              "provider_version": "google-places-v1"
+            }
+          },
+          "guest_attributes": {
+            "family_friendly": true,
+            "couples_friendly": true,
+            "luxury_level": "midrange",
+            "central_location": true,
+            "booking_relevant": false
+          },
+          "tags": [
+            {
+              "key": "independent_shopping",
+              "label": "Independent Shopping",
+              "type": "style"
+            },
+            {
+              "key": "local_feel",
+              "label": "Local Feel",
+              "type": "theme"
+            }
+          ],
+          "recommendation": {
+            "is_featured": true,
+            "priority_score": 93,
+            "editor_note": "The best boutique and local-style shopping recommendation in Amsterdam.",
+            "recommended_for": [
+              "couples",
+              "repeat visitors",
+              "design-conscious travellers"
+            ],
+            "seasonality": [
+              "year_round"
+            ]
+          },
+          "status": "active",
+          "sort_order": 4
+        },
+        {
+          "id": "shop_amsterdam_moooi_store",
+          "name": "Moooi Amsterdam Brand Store",
+          "slug": "moooi-amsterdam-brand-store",
+          "category": "shopping",
+          "subcategory": "design_store",
+          "content": {
+            "short_description": "A standout Amsterdam recommendation for guests interested in Dutch design and interiors.",
+            "long_description": "Moooi is one of the strongest design-led shopping recommendations in Amsterdam for guests who want something more distinctive than general fashion retail. It suits design-conscious travellers, premium gifting, and city breaks built around architecture and interiors.",
+            "highlights": [
+              "Strong Dutch design identity",
+              "Distinctive specialty retail",
+              "Excellent for design-conscious travellers"
+            ],
+            "insider_tips": [
+              "Best for guests interested in interiors and Dutch design rather than broad fashion shopping.",
+              "A strong add-on recommendation for premium or design-led itineraries."
+            ]
+          },
+          "source": {
+            "type": "hybrid",
+            "google_places": {
+              "place_id": "ChIJW7J7vsoJxkcROQdQX6IhWkQ",
+              "name": "Moooi Amsterdam Brand Store",
+              "formatted_address": "Westerstraat 187, 1015 MA Amsterdam, Netherlands",
+              "location": {
+                "latitude": 52.3766,
+                "longitude": 4.8823
+              },
+              "maps_url": "https://maps.google.com/?cid=4926866276061912889",
+              "website": "https://www.moooi.com",
+              "international_phone_number": "+31 20 523 1395",
+              "rating": 4.6,
+              "user_ratings_total": 180,
+              "price_level": 3,
+              "business_status": "OPERATIONAL",
+              "opening_hours": {
+                "open_now": false,
+                "weekday_text": [
+                  "Friday: 10:00 AM – 6:00 PM"
+                ]
+              },
+              "types": [
+                "home_goods_store",
+                "store",
+                "point_of_interest",
+                "establishment"
+              ]
+            },
+            "external_ids": {
+              "google_place_id": "ChIJW7J7vsoJxkcROQdQX6IhWkQ"
+            },
+            "sync": {
+              "last_synced_at": "2026-04-02T23:40:00Z",
+              "sync_status": "synced",
+              "provider_version": "google-places-v1"
+            }
+          },
+          "guest_attributes": {
+            "family_friendly": false,
+            "couples_friendly": true,
+            "luxury_level": "upscale",
+            "central_location": true,
+            "booking_relevant": false
+          },
+          "tags": [
+            {
+              "key": "dutch_design",
+              "label": "Dutch Design",
+              "type": "theme"
+            },
+            {
+              "key": "design_led",
+              "label": "Design-Led",
+              "type": "style"
+            }
+          ],
+          "recommendation": {
+            "is_featured": true,
+            "priority_score": 85,
+            "editor_note": "A standout recommendation for Dutch design and interiors-focused shopping in Amsterdam.",
+            "recommended_for": [
+              "design lovers",
+              "premium travellers",
+              "gift shopping"
+            ],
+            "seasonality": [
+              "year_round"
+            ]
+          },
+          "status": "active",
+          "sort_order": 5
+        }
+      ]
+    }
+  },
+  "tags": [
+    {
+      "key": "city_break",
+      "label": "City Break",
+      "type": "theme"
+    },
+    {
+      "key": "shopping_destination",
+      "label": "Shopping Destination",
+      "type": "theme"
+    },
+    {
+      "key": "design_destination",
+      "label": "Design Destination",
+      "type": "theme"
+    },
+    {
+      "key": "couples_friendly",
+      "label": "Couples Friendly",
+      "type": "audience"
+    },
+    {
+      "key": "first_time_friendly",
+      "label": "First-Time Friendly",
+      "type": "audience"
+    },
+    {
+      "key": "food_scene",
+      "label": "Strong Food Scene",
+      "type": "theme"
+    }
+  ],
+  "recommendations": {
+    "featured": [
+      {
+        "place_id": "act_amsterdam_rijksmuseum",
+        "category": "activities",
+        "reason": "The strongest general museum and first-time cultural recommendation in Amsterdam.",
+        "rank": 1
+      },
+      {
+        "place_id": "shop_amsterdam_pc_hooftstraat",
+        "category": "shopping",
+        "reason": "Top luxury shopping recommendation in Amsterdam.",
+        "rank": 2
+      },
+      {
+        "place_id": "rest_amsterdam_brasserie_ambassade",
+        "category": "restaurants",
+        "reason": "A safe, polished, and very practical central dining recommendation.",
+        "rank": 3
+      }
+    ],
+    "editors_picks": [
+      {
+        "place_id": "rest_amsterdam_de_kas",
+        "category": "restaurants",
+        "reason": "One of the strongest food-led dining recommendations in Amsterdam.",
+        "rank": 1
+      },
+      {
+        "place_id": "shop_amsterdam_nine_streets",
+        "category": "shopping",
+        "reason": "Best for boutique shopping and local Amsterdam character.",
+        "rank": 2
+      },
+      {
+        "place_id": "spa_amsterdam_waldorf_guerlain",
+        "category": "spa_wellness",
+        "reason": "Top premium spa recommendation in Amsterdam.",
+        "rank": 3
+      }
+    ],
+    "trending": [
+      {
+        "place_id": "shop_amsterdam_moooi_store",
+        "category": "shopping",
+        "reason": "Popular with guests seeking Dutch design and more distinctive local shopping.",
+        "rank": 1
+      }
+    ],
+    "seasonal": [
+      {
+        "place_id": "act_amsterdam_canal_cruise",
+        "category": "activities",
+        "reason": "Especially strong in spring and summer, but still relevant year-round.",
+        "rank": 1
+      }
+    ],
+    "personalized_slots": [
+      {
+        "slot_key": "luxury_amsterdam",
+        "label": "Luxury Amsterdam",
+        "items": [
+          {
+            "place_id": "shop_amsterdam_pc_hooftstraat",
+            "category": "shopping",
+            "reason": "Best fit for premium fashion shopping.",
+            "rank": 1
+          },
+          {
+            "place_id": "rest_amsterdam_de_kas",
+            "category": "restaurants",
+            "reason": "Top food-led premium dining option.",
+            "rank": 2
+          },
+          {
+            "place_id": "spa_amsterdam_waldorf_guerlain",
+            "category": "spa_wellness",
+            "reason": "Luxury wellness pairing in the canal belt.",
+            "rank": 3
+          }
+        ]
+      },
+      {
+        "slot_key": "short_stay_amsterdam",
+        "label": "Short Stay Amsterdam",
+        "items": [
+          {
+            "place_id": "act_amsterdam_canal_cruise",
+            "category": "activities",
+            "reason": "Easy and high-value signature activity for limited time.",
+            "rank": 1
+          },
+          {
+            "place_id": "rest_amsterdam_brasserie_ambassade",
+            "category": "restaurants",
+            "reason": "Polished and practical central dining option.",
+            "rank": 2
+          },
+          {
+            "place_id": "shop_amsterdam_de_bijenkorf",
+            "category": "shopping",
+            "reason": "Convenient premium shopping in one stop.",
+            "rank": 3
+          }
+        ]
+      },
+      {
+        "slot_key": "design_and_local_amsterdam",
+        "label": "Design & Local Amsterdam",
+        "items": [
+          {
+            "place_id": "shop_amsterdam_nine_streets",
+            "category": "shopping",
+            "reason": "Best for boutique shopping and canal-side local browsing.",
+            "rank": 1
+          },
+          {
+            "place_id": "shop_amsterdam_moooi_store",
+            "category": "shopping",
+            "reason": "Strong Dutch design-led shopping stop.",
+            "rank": 2
+          },
+          {
+            "place_id": "rest_amsterdam_de_kas",
+            "category": "restaurants",
+            "reason": "A strong premium dining pairing for a design-led city day.",
+            "rank": 3
+          }
+        ]
+      }
+    ]
+  },
+  "seo": {
+    "meta_title": "Amsterdam Travel Guide | Restaurants, Shopping, Activities & Wellness | BNO Travel",
+    "meta_description": "Explore Amsterdam with curated BNO Travel recommendations for restaurants, activities, gyms, spa wellness, and shopping.",
+    "canonical_url": "https://bno.travel/amsterdam",
+    "og_title": "Amsterdam Travel Guide | BNO Travel",
+    "og_description": "Professional Amsterdam recommendations for dining, shopping, culture, wellness, and stylish short stays.",
+    "og_image": "https://example.bno.travel/images/amsterdam/amsterdam-og.jpg",
+    "twitter_title": "Amsterdam Travel Guide | BNO Travel",
+    "twitter_description": "Curated Amsterdam recommendations for guests, travellers, and premium city-break planning.",
+    "twitter_image": "https://example.bno.travel/images/amsterdam/amsterdam-og.jpg",
+    "schema_type": "TravelDestination",
+    "indexable": true
+  },
+  "metadata": {
+    "status": "published",
+    "created_at": "2026-04-02T23:55:00Z",
+    "updated_at": "2026-04-03T00:43:00Z",
+    "published_at": "2026-04-03T00:44:00Z",
+    "version": 1,
+    "source_priority": [
+      "curated",
+      "google_places",
+      "partner_feed",
+      "user_generated"
+    ]
+  }
+}

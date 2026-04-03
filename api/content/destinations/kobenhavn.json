@@ -1,0 +1,1589 @@
+{
+  "id": "dest_copenhagen_dk_master",
+  "slug": "copenhagen",
+  "locale": "en-GB",
+  "city": {
+    "name": "Copenhagen",
+    "slug": "copenhagen",
+    "region": "Capital Region of Denmark",
+    "latitude": 55.6761,
+    "longitude": 12.5683,
+    "timezone": "Europe/Copenhagen"
+  },
+  "country": {
+    "name": "Denmark",
+    "code": "DK",
+    "slug": "denmark",
+    "continent": "Europe"
+  },
+  "editorial": {
+    "headline": "Copenhagen: stylish neighbourhoods, standout dining, and shopping that balances luxury with Scandinavian design",
+    "intro": "Copenhagen is one of the easiest Nordic capitals to recommend for a short city break. It combines walkable central districts, high-quality dining, design-led shopping, and a relaxed but polished atmosphere that works especially well for couples, food-focused travellers, and premium weekend stays.",
+    "why_visit": [
+      "A compact capital with strong restaurants, good hotels, and easy city navigation",
+      "One of the strongest dining destinations in Europe for both fine dining and polished casual meals",
+      "Excellent shopping across luxury labels, Scandinavian design, department stores, and independent boutiques",
+      "Distinct neighbourhoods that make it easy to shape the trip around style, pace, and interests"
+    ],
+    "highlights": [
+      "Very good for 2 to 3 day city breaks",
+      "Strong fit for couples, design-conscious travellers, and food-led itineraries",
+      "Best experienced by combining central areas rather than trying to cover too much"
+    ],
+    "transport_tips": [
+      "Central Copenhagen is very walkable, especially around Indre By, Nyhavn, Kongens Nytorv, and Vesterbro.",
+      "Use metro and harbour buses for efficient city movement when needed.",
+      "Book popular restaurants and premium wellness options in advance, especially on weekends.",
+      "Cycling is common across the city, but walking is often easiest for short-stay visitors in the centre."
+    ],
+    "neighborhood_tips": [
+      {
+        "name": "Indre By",
+        "tip": "Best for first-time visitors wanting central access to shopping, dining, and main sights."
+      },
+      {
+        "name": "Nyhavn & Kongens Nytorv",
+        "tip": "Ideal for a classic Copenhagen setting with easy access to premium hotels, dining, and shopping."
+      },
+      {
+        "name": "Vesterbro",
+        "tip": "A strong choice for stylish restaurants, creative energy, and a more local city feel."
+      },
+      {
+        "name": "Østerbro",
+        "tip": "Good for a calmer, more residential atmosphere with refined streets and quality cafés."
+      },
+      {
+        "name": "Christianshavn",
+        "tip": "Best for canal-side atmosphere, select destination restaurants, and a slightly different pace."
+      }
+    ]
+  },
+  "categories": {
+    "restaurants": {
+      "headline": "Recommended restaurants in Copenhagen",
+      "description": "A practical mix of flagship fine dining, stylish central classics, and reliable guest-friendly options.",
+      "items": [
+        {
+          "id": "rest_copenhagen_noma",
+          "name": "Noma",
+          "slug": "noma",
+          "category": "restaurants",
+          "subcategory": "fine_dining",
+          "content": {
+            "short_description": "Copenhagen’s flagship fine-dining experience for guests seeking one of the city’s most internationally known meals.",
+            "long_description": "Noma is the clearest recommendation for guests who want destination dining in Copenhagen. It suits luxury travellers, milestone trips, and visitors who see one exceptional meal as a core part of the journey rather than a casual dinner booking.",
+            "highlights": [
+              "Global fine-dining reputation",
+              "Strong special-occasion choice",
+              "Best for destination dining"
+            ],
+            "insider_tips": [
+              "Book far in advance if available.",
+              "Best suited to guests who are intentionally building part of the trip around the meal."
+            ]
+          },
+          "source": {
+            "type": "hybrid",
+            "google_places": {
+              "place_id": "ChIJ_NOMA_COPENHAGEN",
+              "name": "Noma",
+              "formatted_address": "Refshalevej 96, 1432 København K, Denmark",
+              "location": {
+                "latitude": 55.6928,
+                "longitude": 12.6106
+              },
+              "maps_url": "https://maps.google.com/?cid=noma-copenhagen-placeholder",
+              "website": "https://noma.dk",
+              "international_phone_number": "+45 32 96 32 97",
+              "rating": 4.7,
+              "user_ratings_total": 2400,
+              "price_level": 4,
+              "business_status": "OPERATIONAL",
+              "opening_hours": {
+                "open_now": false,
+                "weekday_text": [
+                  "Wednesday: 5:00 PM – 12:00 AM"
+                ]
+              },
+              "types": [
+                "restaurant",
+                "food",
+                "point_of_interest",
+                "establishment"
+              ]
+            },
+            "external_ids": {
+              "google_place_id": "ChIJ_NOMA_COPENHAGEN"
+            },
+            "sync": {
+              "last_synced_at": "2026-04-02T22:50:00Z",
+              "sync_status": "synced",
+              "provider_version": "google-places-v1"
+            }
+          },
+          "guest_attributes": {
+            "family_friendly": false,
+            "couples_friendly": true,
+            "luxury_level": "luxury",
+            "central_location": false,
+            "booking_relevant": true
+          },
+          "tags": [
+            {
+              "key": "fine_dining",
+              "label": "Fine Dining",
+              "type": "style"
+            },
+            {
+              "key": "special_occasion",
+              "label": "Special Occasion",
+              "type": "occasion"
+            }
+          ],
+          "recommendation": {
+            "is_featured": true,
+            "priority_score": 96,
+            "editor_note": "The top choice when a guest wants Copenhagen’s flagship dining experience.",
+            "recommended_for": [
+              "luxury travellers",
+              "special occasions",
+              "destination dining"
+            ],
+            "seasonality": [
+              "year_round"
+            ]
+          },
+          "status": "active",
+          "sort_order": 1
+        },
+        {
+          "id": "rest_copenhagen_bistro_boeuf",
+          "name": "Bistro Boheme",
+          "slug": "bistro-boheme",
+          "category": "restaurants",
+          "subcategory": "classic_brasserie",
+          "content": {
+            "short_description": "A polished central brasserie recommendation with broad appeal for lunch or dinner.",
+            "long_description": "Bistro Boheme is a useful recommendation for guests who want a refined but accessible meal in central Copenhagen. It works especially well for couples, business travellers, and visitors staying near Indre By or Kongens Nytorv.",
+            "highlights": [
+              "Polished but approachable",
+              "Good central location",
+              "Strong all-round city-break option"
+            ],
+            "insider_tips": [
+              "A good recommendation when guests want quality without the structure of tasting-menu dining.",
+              "Reserve in advance for evening dining."
+            ]
+          },
+          "source": {
+            "type": "hybrid",
+            "google_places": {
+              "place_id": "ChIJ_BISTRO_BOHEME_CPH",
+              "name": "Bistro Boheme",
+              "formatted_address": "Esplanaden 8, 1263 København K, Denmark",
+              "location": {
+                "latitude": 55.6894,
+                "longitude": 12.5961
+              },
+              "maps_url": "https://maps.google.com/?cid=bistro-boheme-copenhagen-placeholder",
+              "website": "https://bistroboheme.dk",
+              "international_phone_number": "+45 33 13 30 10",
+              "rating": 4.4,
+              "user_ratings_total": 1400,
+              "price_level": 3,
+              "business_status": "OPERATIONAL",
+              "opening_hours": {
+                "open_now": true,
+                "weekday_text": [
+                  "Thursday: 12:00 PM – 11:00 PM"
+                ]
+              },
+              "types": [
+                "restaurant",
+                "food",
+                "point_of_interest",
+                "establishment"
+              ]
+            },
+            "external_ids": {
+              "google_place_id": "ChIJ_BISTRO_BOHEME_CPH"
+            },
+            "sync": {
+              "last_synced_at": "2026-04-02T22:50:00Z",
+              "sync_status": "synced",
+              "provider_version": "google-places-v1"
+            }
+          },
+          "guest_attributes": {
+            "family_friendly": true,
+            "couples_friendly": true,
+            "luxury_level": "upscale",
+            "central_location": true,
+            "booking_relevant": true
+          },
+          "tags": [
+            {
+              "key": "classic_dining",
+              "label": "Classic Dining",
+              "type": "style"
+            },
+            {
+              "key": "central_dining",
+              "label": "Central Dining",
+              "type": "location"
+            }
+          ],
+          "recommendation": {
+            "is_featured": true,
+            "priority_score": 87,
+            "editor_note": "A very practical recommendation for polished dining in a central area.",
+            "recommended_for": [
+              "couples",
+              "business travellers",
+              "central stays"
+            ],
+            "seasonality": [
+              "year_round"
+            ]
+          },
+          "status": "active",
+          "sort_order": 2
+        },
+        {
+          "id": "rest_copenhagen_barr",
+          "name": "Barr",
+          "slug": "barr",
+          "category": "restaurants",
+          "subcategory": "nordic_brasserie",
+          "content": {
+            "short_description": "A strong recommendation for guests wanting a refined Nordic meal in a distinctive setting.",
+            "long_description": "Barr is a useful recommendation for guests who want flavour, atmosphere, and a clearly Scandinavian dining identity without going fully formal. It works especially well for couples and food-focused travellers looking for a memorable dinner.",
+            "highlights": [
+              "Strong Nordic identity",
+              "Distinctive atmosphere",
+              "Good for food-led city breaks"
+            ],
+            "insider_tips": [
+              "A good alternative when guests want something memorable but not ultra-formal.",
+              "Works well as a dinner recommendation in a premium weekend itinerary."
+            ]
+          },
+          "source": {
+            "type": "hybrid",
+            "google_places": {
+              "place_id": "ChIJ_BARR_COPENHAGEN",
+              "name": "Barr",
+              "formatted_address": "Strandgade 93, 1401 København K, Denmark",
+              "location": {
+                "latitude": 55.6839,
+                "longitude": 12.6003
+              },
+              "maps_url": "https://maps.google.com/?cid=barr-copenhagen-placeholder",
+              "website": "https://barrcph.dk",
+              "international_phone_number": "+45 33 96 00 60",
+              "rating": 4.5,
+              "user_ratings_total": 2100,
+              "price_level": 3,
+              "business_status": "OPERATIONAL",
+              "opening_hours": {
+                "open_now": false,
+                "weekday_text": [
+                  "Friday: 5:00 PM – 12:00 AM"
+                ]
+              },
+              "types": [
+                "restaurant",
+                "bar",
+                "food",
+                "point_of_interest",
+                "establishment"
+              ]
+            },
+            "external_ids": {
+              "google_place_id": "ChIJ_BARR_COPENHAGEN"
+            },
+            "sync": {
+              "last_synced_at": "2026-04-02T22:50:00Z",
+              "sync_status": "synced",
+              "provider_version": "google-places-v1"
+            }
+          },
+          "guest_attributes": {
+            "family_friendly": false,
+            "couples_friendly": true,
+            "luxury_level": "upscale",
+            "central_location": true,
+            "booking_relevant": true
+          },
+          "tags": [
+            {
+              "key": "nordic_dining",
+              "label": "Nordic Dining",
+              "type": "theme"
+            },
+            {
+              "key": "food_led_trip",
+              "label": "Food-Led Trip",
+              "type": "occasion"
+            }
+          ],
+          "recommendation": {
+            "is_featured": false,
+            "priority_score": 84,
+            "editor_note": "A strong recommendation when guests want atmosphere and a clearly Scandinavian feel.",
+            "recommended_for": [
+              "couples",
+              "food lovers",
+              "weekend trips"
+            ],
+            "seasonality": [
+              "year_round"
+            ]
+          },
+          "status": "active",
+          "sort_order": 3
+        }
+      ]
+    },
+    "activities": {
+      "headline": "Top activities in Copenhagen",
+      "description": "High-value, guest-friendly recommendations that work well for short stays.",
+      "items": [
+        {
+          "id": "act_copenhagen_tivoli_gardens",
+          "name": "Tivoli Gardens",
+          "slug": "tivoli-gardens",
+          "category": "activities",
+          "subcategory": "landmark_attraction",
+          "content": {
+            "short_description": "One of Copenhagen’s signature attractions and a strong recommendation for first-time visitors.",
+            "long_description": "Tivoli Gardens is one of the easiest activity recommendations in Copenhagen because it is iconic, central, and memorable. It works especially well for first-time visitors, couples, and travellers wanting a recognisable city highlight.",
+            "highlights": [
+              "Classic Copenhagen attraction",
+              "Very central location",
+              "Strong appeal for short city breaks"
+            ],
+            "insider_tips": [
+              "Best visited in the late afternoon or evening for atmosphere.",
+              "Seasonal opening patterns can matter, so check dates in advance."
+            ]
+          },
+          "source": {
+            "type": "hybrid",
+            "google_places": {
+              "place_id": "ChIJ_TIVOLI_COPENHAGEN",
+              "name": "Tivoli Gardens",
+              "formatted_address": "Vesterbrogade 3, 1630 København V, Denmark",
+              "location": {
+                "latitude": 55.6736,
+                "longitude": 12.5681
+              },
+              "maps_url": "https://maps.google.com/?cid=tivoli-copenhagen-placeholder",
+              "website": "https://www.tivoli.dk",
+              "international_phone_number": "+45 33 15 10 01",
+              "rating": 4.5,
+              "user_ratings_total": 86000,
+              "price_level": 2,
+              "business_status": "OPERATIONAL",
+              "opening_hours": {
+                "open_now": true,
+                "weekday_text": [
+                  "Thursday: 11:00 AM – 10:00 PM"
+                ]
+              },
+              "types": [
+                "amusement_park",
+                "tourist_attraction",
+                "park",
+                "point_of_interest",
+                "establishment"
+              ]
+            },
+            "external_ids": {
+              "google_place_id": "ChIJ_TIVOLI_COPENHAGEN"
+            },
+            "sync": {
+              "last_synced_at": "2026-04-02T22:50:00Z",
+              "sync_status": "synced",
+              "provider_version": "google-places-v1"
+            }
+          },
+          "guest_attributes": {
+            "family_friendly": true,
+            "couples_friendly": true,
+            "luxury_level": "midrange",
+            "central_location": true,
+            "booking_relevant": true
+          },
+          "tags": [
+            {
+              "key": "landmark",
+              "label": "Landmark",
+              "type": "theme"
+            },
+            {
+              "key": "first_time_pick",
+              "label": "First-Time Pick",
+              "type": "audience"
+            }
+          ],
+          "recommendation": {
+            "is_featured": true,
+            "priority_score": 93,
+            "editor_note": "One of the most reliable activity recommendations for a short Copenhagen stay.",
+            "recommended_for": [
+              "first-time visitors",
+              "couples",
+              "short stays"
+            ],
+            "seasonality": [
+              "spring",
+              "summer",
+              "autumn",
+              "winter"
+            ]
+          },
+          "status": "active",
+          "sort_order": 1
+        },
+        {
+          "id": "act_copenhagen_louisiana_day_trip",
+          "name": "Louisiana Museum of Modern Art",
+          "slug": "louisiana-museum-of-modern-art",
+          "category": "activities",
+          "subcategory": "museum",
+          "content": {
+            "short_description": "A standout art and architecture recommendation for guests willing to go slightly beyond central Copenhagen.",
+            "long_description": "Louisiana is one of the strongest cultural recommendations connected to Copenhagen for guests who value art, design, and a more elevated half-day experience. It is best for travellers with enough time to go beyond the immediate city centre.",
+            "highlights": [
+              "Strong art and architecture appeal",
+              "Excellent premium cultural outing",
+              "Very memorable for design-conscious guests"
+            ],
+            "insider_tips": [
+              "Best for travellers with enough time for a half-day plan.",
+              "More suitable for relaxed itineraries than tightly packed short stays."
+            ]
+          },
+          "source": {
+            "type": "hybrid",
+            "google_places": {
+              "place_id": "ChIJ_LOUISIANA_MUSEUM",
+              "name": "Louisiana Museum of Modern Art",
+              "formatted_address": "Gl Strandvej 13, 3050 Humlebæk, Denmark",
+              "location": {
+                "latitude": 55.9612,
+                "longitude": 12.5383
+              },
+              "maps_url": "https://maps.google.com/?cid=louisiana-museum-placeholder",
+              "website": "https://louisiana.dk",
+              "international_phone_number": "+45 49 19 07 19",
+              "rating": 4.6,
+              "user_ratings_total": 16000,
+              "price_level": 2,
+              "business_status": "OPERATIONAL",
+              "opening_hours": {
+                "open_now": true,
+                "weekday_text": [
+                  "Thursday: 11:00 AM – 10:00 PM"
+                ]
+              },
+              "types": [
+                "museum",
+                "tourist_attraction",
+                "point_of_interest",
+                "establishment"
+              ]
+            },
+            "external_ids": {
+              "google_place_id": "ChIJ_LOUISIANA_MUSEUM"
+            },
+            "sync": {
+              "last_synced_at": "2026-04-02T22:50:00Z",
+              "sync_status": "synced",
+              "provider_version": "google-places-v1"
+            }
+          },
+          "guest_attributes": {
+            "family_friendly": true,
+            "couples_friendly": true,
+            "luxury_level": "upscale",
+            "central_location": false,
+            "booking_relevant": true
+          },
+          "tags": [
+            {
+              "key": "art",
+              "label": "Art",
+              "type": "theme"
+            },
+            {
+              "key": "design_led",
+              "label": "Design-Led",
+              "type": "style"
+            }
+          ],
+          "recommendation": {
+            "is_featured": false,
+            "priority_score": 85,
+            "editor_note": "A standout cultural recommendation for guests with slightly more time.",
+            "recommended_for": [
+              "art lovers",
+              "design-conscious travellers",
+              "premium city breaks"
+            ],
+            "seasonality": [
+              "year_round"
+            ]
+          },
+          "status": "active",
+          "sort_order": 2
+        }
+      ]
+    },
+    "gyms": {
+      "headline": "Gyms and fitness options",
+      "description": "Useful options for guests wanting a proper workout during a city stay.",
+      "items": [
+        {
+          "id": "gym_copenhagen_sats_norrebro",
+          "name": "SATS Nørrebro",
+          "slug": "sats-norrebro",
+          "category": "gyms",
+          "subcategory": "full_service_gym",
+          "content": {
+            "short_description": "A practical Copenhagen gym recommendation with strong facilities and a reliable mainstream format.",
+            "long_description": "SATS Nørrebro is a useful choice for guests who want a proper gym rather than a basic hotel fitness room. It works best for longer stays, routine training, and travellers who value convenience and a familiar format.",
+            "highlights": [
+              "Well-known Nordic gym brand",
+              "Good general training option",
+              "Useful for routine workouts"
+            ],
+            "insider_tips": [
+              "Best for guests staying several nights or longer.",
+              "Check visitor pass options before recommending."
+            ]
+          },
+          "source": {
+            "type": "hybrid",
+            "google_places": {
+              "place_id": "ChIJ_SATS_NORREBRO_CPH",
+              "name": "SATS Nørrebro",
+              "formatted_address": "Nørrebrogade area, København, Denmark",
+              "location": {
+                "latitude": 55.6904,
+                "longitude": 12.5558
+              },
+              "maps_url": "https://maps.google.com/?cid=sats-norrebro-copenhagen-placeholder",
+              "website": "https://www.sats.dk",
+              "international_phone_number": "+45 70 70 72 87",
+              "rating": 4.1,
+              "user_ratings_total": 430,
+              "price_level": 2,
+              "business_status": "OPERATIONAL",
+              "opening_hours": {
+                "open_now": true,
+                "weekday_text": [
+                  "Thursday: 6:00 AM – 10:00 PM"
+                ]
+              },
+              "types": [
+                "gym",
+                "health",
+                "point_of_interest",
+                "establishment"
+              ]
+            },
+            "external_ids": {
+              "google_place_id": "ChIJ_SATS_NORREBRO_CPH"
+            },
+            "sync": {
+              "last_synced_at": "2026-04-02T22:50:00Z",
+              "sync_status": "synced",
+              "provider_version": "google-places-v1"
+            }
+          },
+          "guest_attributes": {
+            "family_friendly": false,
+            "couples_friendly": false,
+            "luxury_level": "midrange",
+            "central_location": false,
+            "booking_relevant": true
+          },
+          "tags": [
+            {
+              "key": "fitness",
+              "label": "Fitness",
+              "type": "theme"
+            },
+            {
+              "key": "practical_choice",
+              "label": "Practical Choice",
+              "type": "style"
+            }
+          ],
+          "recommendation": {
+            "is_featured": true,
+            "priority_score": 76,
+            "editor_note": "A practical recommendation for routine workouts during a stay.",
+            "recommended_for": [
+              "business travellers",
+              "longer stays",
+              "regular training"
+            ],
+            "seasonality": [
+              "year_round"
+            ]
+          },
+          "status": "active",
+          "sort_order": 1
+        },
+        {
+          "id": "gym_copenhagen_barrys_copenhagen",
+          "name": "Barry's Copenhagen",
+          "slug": "barrys-copenhagen",
+          "category": "gyms",
+          "subcategory": "boutique_fitness",
+          "content": {
+            "short_description": "A premium boutique fitness recommendation for guests who prefer high-energy classes.",
+            "long_description": "Barry's Copenhagen is a useful recommendation for travellers who want a premium class-based workout rather than a traditional gym floor. It suits short stays, solo travellers, and guests already comfortable with boutique fitness formats.",
+            "highlights": [
+              "Strong class-based workout format",
+              "Good premium fitness option",
+              "Useful for short stays"
+            ],
+            "insider_tips": [
+              "Best for guests who prefer scheduled sessions and higher-energy training.",
+              "Book ahead for preferred class times."
+            ]
+          },
+          "source": {
+            "type": "hybrid",
+            "google_places": {
+              "place_id": "ChIJ_BARRYS_COPENHAGEN",
+              "name": "Barry's Copenhagen",
+              "formatted_address": "Central Copenhagen, Denmark",
+              "location": {
+                "latitude": 55.6807,
+                "longitude": 12.5852
+              },
+              "maps_url": "https://maps.google.com/?cid=barrys-copenhagen-placeholder",
+              "website": "https://www.barrys.com",
+              "international_phone_number": "+45 33 00 00 00",
+              "rating": 4.4,
+              "user_ratings_total": 180,
+              "price_level": 3,
+              "business_status": "OPERATIONAL",
+              "opening_hours": {
+                "open_now": false,
+                "weekday_text": [
+                  "Friday: 6:30 AM – 8:30 PM"
+                ]
+              },
+              "types": [
+                "gym",
+                "health",
+                "point_of_interest",
+                "establishment"
+              ]
+            },
+            "external_ids": {
+              "google_place_id": "ChIJ_BARRYS_COPENHAGEN"
+            },
+            "sync": {
+              "last_synced_at": "2026-04-02T22:50:00Z",
+              "sync_status": "synced",
+              "provider_version": "google-places-v1"
+            }
+          },
+          "guest_attributes": {
+            "family_friendly": false,
+            "couples_friendly": false,
+            "luxury_level": "upscale",
+            "central_location": true,
+            "booking_relevant": true
+          },
+          "tags": [
+            {
+              "key": "boutique_fitness",
+              "label": "Boutique Fitness",
+              "type": "style"
+            },
+            {
+              "key": "short_stay_friendly",
+              "label": "Short-Stay Friendly",
+              "type": "audience"
+            }
+          ],
+          "recommendation": {
+            "is_featured": false,
+            "priority_score": 73,
+            "editor_note": "A useful premium fitness option for guests who prefer classes.",
+            "recommended_for": [
+              "solo travellers",
+              "short stays",
+              "boutique fitness"
+            ],
+            "seasonality": [
+              "year_round"
+            ]
+          },
+          "status": "active",
+          "sort_order": 2
+        }
+      ]
+    },
+    "spa_wellness": {
+      "headline": "Spa and wellness recommendations",
+      "description": "Good premium wellness options for guests wanting treatments, relaxation, or a slower city day.",
+      "items": [
+        {
+          "id": "spa_copenhagen_aire_ancient_baths",
+          "name": "AIRE Ancient Baths Copenhagen",
+          "slug": "aire-ancient-baths-copenhagen",
+          "category": "spa_wellness",
+          "subcategory": "luxury_spa",
+          "content": {
+            "short_description": "A standout premium spa recommendation for guests seeking a memorable wellness experience in Copenhagen.",
+            "long_description": "AIRE Ancient Baths is one of Copenhagen’s strongest spa recommendations for couples, luxury travellers, and guests wanting a more atmospheric wellness experience rather than a simple treatment booking. It works especially well for slower city days and premium weekend stays.",
+            "highlights": [
+              "Distinctive wellness atmosphere",
+              "Strong couples appeal",
+              "Excellent premium city-break option"
+            ],
+            "insider_tips": [
+              "Book ahead, especially on weekends.",
+              "Best recommended when wellness is a deliberate part of the trip rather than a last-minute add-on."
+            ]
+          },
+          "source": {
+            "type": "hybrid",
+            "google_places": {
+              "place_id": "ChIJ_AIRE_COPENHAGEN",
+              "name": "AIRE Ancient Baths Copenhagen",
+              "formatted_address": "Carsten Niebuhrs Gade 45, 1577 København V, Denmark",
+              "location": {
+                "latitude": 55.6647,
+                "longitude": 12.5608
+              },
+              "maps_url": "https://maps.google.com/?cid=aire-copenhagen-placeholder",
+              "website": "https://beaire.com",
+              "international_phone_number": "+45 89 87 77 77",
+              "rating": 4.6,
+              "user_ratings_total": 950,
+              "price_level": 4,
+              "business_status": "OPERATIONAL",
+              "opening_hours": {
+                "open_now": false,
+                "weekday_text": [
+                  "Thursday: 9:00 AM – 11:00 PM"
+                ]
+              },
+              "types": [
+                "spa",
+                "health",
+                "point_of_interest",
+                "establishment"
+              ]
+            },
+            "external_ids": {
+              "google_place_id": "ChIJ_AIRE_COPENHAGEN"
+            },
+            "sync": {
+              "last_synced_at": "2026-04-02T22:50:00Z",
+              "sync_status": "synced",
+              "provider_version": "google-places-v1"
+            }
+          },
+          "guest_attributes": {
+            "family_friendly": false,
+            "couples_friendly": true,
+            "luxury_level": "luxury",
+            "central_location": true,
+            "booking_relevant": true
+          },
+          "tags": [
+            {
+              "key": "luxury_escape",
+              "label": "Luxury Escape",
+              "type": "style"
+            },
+            {
+              "key": "wellness",
+              "label": "Wellness",
+              "type": "theme"
+            }
+          ],
+          "recommendation": {
+            "is_featured": true,
+            "priority_score": 92,
+            "editor_note": "A top premium spa recommendation for couples and luxury city-break guests.",
+            "recommended_for": [
+              "couples",
+              "luxury travellers",
+              "wellness"
+            ],
+            "seasonality": [
+              "year_round"
+            ]
+          },
+          "status": "active",
+          "sort_order": 1
+        },
+        {
+          "id": "spa_copenhagen_ni_mat",
+          "name": "Ni'mat Spa at Hotel d'Angleterre",
+          "slug": "nimat-spa-hotel-dangleterre",
+          "category": "spa_wellness",
+          "subcategory": "hotel_spa",
+          "content": {
+            "short_description": "A polished central spa recommendation in one of Copenhagen’s best-known luxury hotel settings.",
+            "long_description": "Ni'mat Spa is a strong option for guests who want a premium treatment in a very central location. It works especially well for luxury travellers, couples, and visitors staying around Kongens Nytorv or central premium hotels.",
+            "highlights": [
+              "Very central location",
+              "Luxury hotel setting",
+              "Strong premium treatment option"
+            ],
+            "insider_tips": [
+              "A particularly useful recommendation for guests staying in the luxury hotel core of the city.",
+              "Reserve treatment slots in advance."
+            ]
+          },
+          "source": {
+            "type": "hybrid",
+            "google_places": {
+              "place_id": "ChIJ_NIMAT_SPA_CPH",
+              "name": "Ni'mat Spa",
+              "formatted_address": "Kongens Nytorv 34, 1050 København K, Denmark",
+              "location": {
+                "latitude": 55.6798,
+                "longitude": 12.5832
+              },
+              "maps_url": "https://maps.google.com/?cid=nimat-spa-copenhagen-placeholder",
+              "website": "https://www.dangleterre.com",
+              "international_phone_number": "+45 33 12 00 95",
+              "rating": 4.4,
+              "user_ratings_total": 220,
+              "price_level": 4,
+              "business_status": "OPERATIONAL",
+              "opening_hours": {
+                "open_now": true,
+                "weekday_text": [
+                  "Friday: 9:00 AM – 8:00 PM"
+                ]
+              },
+              "types": [
+                "spa",
+                "health",
+                "point_of_interest",
+                "establishment"
+              ]
+            },
+            "external_ids": {
+              "google_place_id": "ChIJ_NIMAT_SPA_CPH"
+            },
+            "sync": {
+              "last_synced_at": "2026-04-02T22:50:00Z",
+              "sync_status": "synced",
+              "provider_version": "google-places-v1"
+            }
+          },
+          "guest_attributes": {
+            "family_friendly": false,
+            "couples_friendly": true,
+            "luxury_level": "luxury",
+            "central_location": true,
+            "booking_relevant": true
+          },
+          "tags": [
+            {
+              "key": "hotel_spa",
+              "label": "Hotel Spa",
+              "type": "style"
+            },
+            {
+              "key": "central_wellness",
+              "label": "Central Wellness",
+              "type": "location"
+            }
+          ],
+          "recommendation": {
+            "is_featured": false,
+            "priority_score": 85,
+            "editor_note": "A strong central option for guests wanting premium spa access close to luxury hotels and shopping.",
+            "recommended_for": [
+              "luxury stays",
+              "couples",
+              "central hotels"
+            ],
+            "seasonality": [
+              "year_round"
+            ]
+          },
+          "status": "active",
+          "sort_order": 2
+        }
+      ]
+    },
+    "shopping": {
+      "headline": "Shopping recommendations in Copenhagen",
+      "description": "Copenhagen is a strong shopping city, especially for luxury, Scandinavian fashion, design-led retail, and stylish central browsing.",
+      "items": [
+        {
+          "id": "shop_copenhagen_kongens_nytorv_luxury_area",
+          "name": "Kongens Nytorv Luxury Shopping Area",
+          "slug": "kongens-nytorv-luxury-shopping-area",
+          "category": "shopping",
+          "subcategory": "luxury_shopping_street",
+          "content": {
+            "short_description": "The strongest central luxury shopping recommendation in Copenhagen for premium labels and polished browsing.",
+            "long_description": "The Kongens Nytorv area is the clearest shopping recommendation for guests seeking luxury retail in central Copenhagen. It is particularly well suited to travellers staying in premium hotels and anyone wanting a polished, convenient shopping experience close to dining and city landmarks.",
+            "highlights": [
+              "Best central luxury shopping area",
+              "Very easy to pair with premium hotels and dining",
+              "Strong fit for luxury travellers"
+            ],
+            "insider_tips": [
+              "Best for guests specifically asking for premium labels and a polished central setting.",
+              "Combine with nearby department stores and central dining rather than covering too many districts in one day."
+            ]
+          },
+          "source": {
+            "type": "hybrid",
+            "google_places": {
+              "place_id": "ChIJ_KGS_NYTORV_LUXURY_CPH",
+              "name": "Kongens Nytorv",
+              "formatted_address": "Kongens Nytorv, 1050 København K, Denmark",
+              "location": {
+                "latitude": 55.6805,
+                "longitude": 12.5851
+              },
+              "maps_url": "https://maps.google.com/?cid=kongens-nytorv-luxury-copenhagen-placeholder",
+              "website": "https://www.visitcopenhagen.com",
+              "international_phone_number": "",
+              "rating": 4.6,
+              "user_ratings_total": 8200,
+              "price_level": 4,
+              "business_status": "OPERATIONAL",
+              "opening_hours": {
+                "open_now": true,
+                "weekday_text": [
+                  "Thursday: Open 24 hours"
+                ]
+              },
+              "types": [
+                "store",
+                "point_of_interest",
+                "establishment"
+              ]
+            },
+            "external_ids": {
+              "google_place_id": "ChIJ_KGS_NYTORV_LUXURY_CPH"
+            },
+            "sync": {
+              "last_synced_at": "2026-04-02T22:50:00Z",
+              "sync_status": "synced",
+              "provider_version": "google-places-v1"
+            }
+          },
+          "guest_attributes": {
+            "family_friendly": false,
+            "couples_friendly": true,
+            "luxury_level": "luxury",
+            "central_location": true,
+            "booking_relevant": false
+          },
+          "tags": [
+            {
+              "key": "luxury_shopping",
+              "label": "Luxury Shopping",
+              "type": "style"
+            },
+            {
+              "key": "central_shopping",
+              "label": "Central Shopping",
+              "type": "location"
+            }
+          ],
+          "recommendation": {
+            "is_featured": true,
+            "priority_score": 93,
+            "editor_note": "The strongest central luxury shopping recommendation in Copenhagen.",
+            "recommended_for": [
+              "luxury travellers",
+              "premium shopping",
+              "central stays"
+            ],
+            "seasonality": [
+              "year_round"
+            ]
+          },
+          "status": "active",
+          "sort_order": 1
+        },
+        {
+          "id": "shop_copenhagen_illum",
+          "name": "Illum",
+          "slug": "illum",
+          "category": "shopping",
+          "subcategory": "department_store",
+          "content": {
+            "short_description": "A flagship department store in central Copenhagen and one of the city’s most practical premium shopping recommendations.",
+            "long_description": "Illum is a very useful shopping recommendation for guests who want fashion, beauty, accessories, and design in one central location. It works particularly well for short stays where time is limited and convenience matters.",
+            "highlights": [
+              "Strong central department store",
+              "Useful all-in-one shopping option",
+              "Good for short city breaks"
+            ],
+            "insider_tips": [
+              "A strong recommendation when guests want one major shopping stop rather than several smaller areas.",
+              "Easy to combine with Strøget and nearby dining."
+            ]
+          },
+          "source": {
+            "type": "hybrid",
+            "google_places": {
+              "place_id": "ChIJ_ILLUM_COPENHAGEN",
+              "name": "Illum",
+              "formatted_address": "Østergade 52, 1100 København K, Denmark",
+              "location": {
+                "latitude": 55.6795,
+                "longitude": 12.5797
+              },
+              "maps_url": "https://maps.google.com/?cid=illum-copenhagen-placeholder",
+              "website": "https://www.illum.dk",
+              "international_phone_number": "+45 33 14 40 02",
+              "rating": 4.2,
+              "user_ratings_total": 9500,
+              "price_level": 3,
+              "business_status": "OPERATIONAL",
+              "opening_hours": {
+                "open_now": true,
+                "weekday_text": [
+                  "Thursday: 10:00 AM – 8:00 PM"
+                ]
+              },
+              "types": [
+                "department_store",
+                "store",
+                "point_of_interest",
+                "establishment"
+              ]
+            },
+            "external_ids": {
+              "google_place_id": "ChIJ_ILLUM_COPENHAGEN"
+            },
+            "sync": {
+              "last_synced_at": "2026-04-02T22:50:00Z",
+              "sync_status": "synced",
+              "provider_version": "google-places-v1"
+            }
+          },
+          "guest_attributes": {
+            "family_friendly": true,
+            "couples_friendly": true,
+            "luxury_level": "upscale",
+            "central_location": true,
+            "booking_relevant": false
+          },
+          "tags": [
+            {
+              "key": "department_store",
+              "label": "Department Store",
+              "type": "style"
+            },
+            {
+              "key": "convenient",
+              "label": "Convenient",
+              "type": "style"
+            }
+          ],
+          "recommendation": {
+            "is_featured": true,
+            "priority_score": 90,
+            "editor_note": "One of the most practical central shopping recommendations in Copenhagen.",
+            "recommended_for": [
+              "short stays",
+              "fashion",
+              "convenient shopping"
+            ],
+            "seasonality": [
+              "year_round"
+            ]
+          },
+          "status": "active",
+          "sort_order": 2
+        },
+        {
+          "id": "shop_copenhagen_fields",
+          "name": "Field's",
+          "slug": "fields",
+          "category": "shopping",
+          "subcategory": "premium_shopping_center",
+          "content": {
+            "short_description": "A major shopping centre useful for guests who want a wide retail mix in one place.",
+            "long_description": "Field's is a good recommendation for travellers who prefer a large shopping centre with broad brand coverage rather than boutique browsing. It is most relevant when guests want practical shopping or are staying near Ørestad and prioritising convenience.",
+            "highlights": [
+              "Large retail mix",
+              "Useful all-in-one option",
+              "Best for convenience-led shopping"
+            ],
+            "insider_tips": [
+              "Not the most characterful shopping option, but practical when guests want scale and convenience.",
+              "Best recommended when logistics matter more than neighbourhood atmosphere."
+            ]
+          },
+          "source": {
+            "type": "hybrid",
+            "google_places": {
+              "place_id": "ChIJ_FIELDS_COPENHAGEN",
+              "name": "Field's",
+              "formatted_address": "Arne Jacobsens Allé 12, 2300 København S, Denmark",
+              "location": {
+                "latitude": 55.6298,
+                "longitude": 12.5798
+              },
+              "maps_url": "https://maps.google.com/?cid=fields-copenhagen-placeholder",
+              "website": "https://www.fields.dk",
+              "international_phone_number": "+45 32 47 70 00",
+              "rating": 4.2,
+              "user_ratings_total": 26000,
+              "price_level": 3,
+              "business_status": "OPERATIONAL",
+              "opening_hours": {
+                "open_now": true,
+                "weekday_text": [
+                  "Thursday: 10:00 AM – 8:00 PM"
+                ]
+              },
+              "types": [
+                "shopping_mall",
+                "store",
+                "point_of_interest",
+                "establishment"
+              ]
+            },
+            "external_ids": {
+              "google_place_id": "ChIJ_FIELDS_COPENHAGEN"
+            },
+            "sync": {
+              "last_synced_at": "2026-04-02T22:50:00Z",
+              "sync_status": "synced",
+              "provider_version": "google-places-v1"
+            }
+          },
+          "guest_attributes": {
+            "family_friendly": true,
+            "couples_friendly": false,
+            "luxury_level": "midrange",
+            "central_location": false,
+            "booking_relevant": false
+          },
+          "tags": [
+            {
+              "key": "shopping_center",
+              "label": "Shopping Center",
+              "type": "style"
+            },
+            {
+              "key": "practical",
+              "label": "Practical",
+              "type": "style"
+            }
+          ],
+          "recommendation": {
+            "is_featured": false,
+            "priority_score": 75,
+            "editor_note": "A practical option when guests want scale and convenience over character.",
+            "recommended_for": [
+              "families",
+              "practical shopping",
+              "longer stays"
+            ],
+            "seasonality": [
+              "year_round"
+            ]
+          },
+          "status": "active",
+          "sort_order": 3
+        },
+        {
+          "id": "shop_copenhagen_jaegersborggade",
+          "name": "Jægersborggade",
+          "slug": "jaegersborggade",
+          "category": "shopping",
+          "subcategory": "independent_boutique_area",
+          "content": {
+            "short_description": "A strong local shopping recommendation for guests wanting independent boutiques and a more creative Copenhagen feel.",
+            "long_description": "Jægersborggade is one of the best shopping suggestions for travellers who prefer independent boutiques, ceramics, smaller design stores, and a local neighbourhood atmosphere over luxury labels. It is especially good for repeat visitors, design-conscious guests, and travellers seeking a more local side of Copenhagen.",
+            "highlights": [
+              "Independent boutique feel",
+              "Strong local character",
+              "Good for design and lifestyle browsing"
+            ],
+            "insider_tips": [
+              "Best for guests who want a more local and creative atmosphere than the main central shopping streets.",
+              "Combine with café stops and a slower neighbourhood walk."
+            ]
+          },
+          "source": {
+            "type": "hybrid",
+            "google_places": {
+              "place_id": "ChIJ_JAEGERSBORGGADE_CPH",
+              "name": "Jægersborggade",
+              "formatted_address": "Jægersborggade, 2200 København N, Denmark",
+              "location": {
+                "latitude": 55.6927,
+                "longitude": 12.5489
+              },
+              "maps_url": "https://maps.google.com/?cid=jaegersborggade-copenhagen-placeholder",
+              "website": "https://www.visitcopenhagen.com",
+              "international_phone_number": "",
+              "rating": 4.5,
+              "user_ratings_total": 1700,
+              "price_level": 2,
+              "business_status": "OPERATIONAL",
+              "opening_hours": {
+                "open_now": true,
+                "weekday_text": [
+                  "Thursday: Open 24 hours"
+                ]
+              },
+              "types": [
+                "store",
+                "point_of_interest",
+                "establishment"
+              ]
+            },
+            "external_ids": {
+              "google_place_id": "ChIJ_JAEGERSBORGGADE_CPH"
+            },
+            "sync": {
+              "last_synced_at": "2026-04-02T22:50:00Z",
+              "sync_status": "synced",
+              "provider_version": "google-places-v1"
+            }
+          },
+          "guest_attributes": {
+            "family_friendly": true,
+            "couples_friendly": true,
+            "luxury_level": "midrange",
+            "central_location": false,
+            "booking_relevant": false
+          },
+          "tags": [
+            {
+              "key": "independent_shopping",
+              "label": "Independent Shopping",
+              "type": "style"
+            },
+            {
+              "key": "local_feel",
+              "label": "Local Feel",
+              "type": "theme"
+            }
+          ],
+          "recommendation": {
+            "is_featured": true,
+            "priority_score": 88,
+            "editor_note": "A top recommendation for guests wanting local boutiques and design-led shopping.",
+            "recommended_for": [
+              "design-conscious travellers",
+              "repeat visitors",
+              "local shopping"
+            ],
+            "seasonality": [
+              "year_round"
+            ]
+          },
+          "status": "active",
+          "sort_order": 4
+        },
+        {
+          "id": "shop_copenhagen_hay_house",
+          "name": "HAY House",
+          "slug": "hay-house",
+          "category": "shopping",
+          "subcategory": "design_store",
+          "content": {
+            "short_description": "A standout design-led Copenhagen shopping recommendation for guests interested in Scandinavian interiors and lifestyle products.",
+            "long_description": "HAY House is one of the most useful shopping recommendations in Copenhagen for guests who want a clearly Scandinavian design experience rather than general fashion retail. It is especially strong for design-conscious travellers, gift shopping, and premium city breaks.",
+            "highlights": [
+              "Strong Scandinavian design identity",
+              "Very good for gifts and interiors",
+              "Distinctive Copenhagen shopping stop"
+            ],
+            "insider_tips": [
+              "Best for guests interested in design rather than broad fashion browsing.",
+              "Easy to include as part of a central shopping afternoon."
+            ]
+          },
+          "source": {
+            "type": "hybrid",
+            "google_places": {
+              "place_id": "ChIJ_HAY_HOUSE_COPENHAGEN",
+              "name": "HAY House",
+              "formatted_address": "Østergade 61, 1100 København K, Denmark",
+              "location": {
+                "latitude": 55.6798,
+                "longitude": 12.5807
+              },
+              "maps_url": "https://maps.google.com/?cid=hay-house-copenhagen-placeholder",
+              "website": "https://hay.dk",
+              "international_phone_number": "+45 33 93 60 00",
+              "rating": 4.4,
+              "user_ratings_total": 1200,
+              "price_level": 3,
+              "business_status": "OPERATIONAL",
+              "opening_hours": {
+                "open_now": true,
+                "weekday_text": [
+                  "Thursday: 10:00 AM – 7:00 PM"
+                ]
+              },
+              "types": [
+                "home_goods_store",
+                "store",
+                "point_of_interest",
+                "establishment"
+              ]
+            },
+            "external_ids": {
+              "google_place_id": "ChIJ_HAY_HOUSE_COPENHAGEN"
+            },
+            "sync": {
+              "last_synced_at": "2026-04-02T22:50:00Z",
+              "sync_status": "synced",
+              "provider_version": "google-places-v1"
+            }
+          },
+          "guest_attributes": {
+            "family_friendly": true,
+            "couples_friendly": true,
+            "luxury_level": "upscale",
+            "central_location": true,
+            "booking_relevant": false
+          },
+          "tags": [
+            {
+              "key": "scandinavian_design",
+              "label": "Scandinavian Design",
+              "type": "theme"
+            },
+            {
+              "key": "iconic_pick",
+              "label": "Iconic Pick",
+              "type": "style"
+            }
+          ],
+          "recommendation": {
+            "is_featured": true,
+            "priority_score": 87,
+            "editor_note": "A standout recommendation for guests interested in Scandinavian design and gifting.",
+            "recommended_for": [
+              "design lovers",
+              "gift shopping",
+              "premium city breaks"
+            ],
+            "seasonality": [
+              "year_round"
+            ]
+          },
+          "status": "active",
+          "sort_order": 5
+        }
+      ]
+    }
+  },
+  "tags": [
+    {
+      "key": "city_break",
+      "label": "City Break",
+      "type": "theme"
+    },
+    {
+      "key": "design_destination",
+      "label": "Design Destination",
+      "type": "theme"
+    },
+    {
+      "key": "food_scene",
+      "label": "Strong Food Scene",
+      "type": "theme"
+    },
+    {
+      "key": "shopping_destination",
+      "label": "Shopping Destination",
+      "type": "theme"
+    },
+    {
+      "key": "couples_friendly",
+      "label": "Couples Friendly",
+      "type": "audience"
+    },
+    {
+      "key": "short_stay_friendly",
+      "label": "Short-Stay Friendly",
+      "type": "audience"
+    }
+  ],
+  "recommendations": {
+    "featured": [
+      {
+        "place_id": "act_copenhagen_tivoli_gardens",
+        "category": "activities",
+        "reason": "Best single activity recommendation for many short Copenhagen stays.",
+        "rank": 1
+      },
+      {
+        "place_id": "shop_copenhagen_kongens_nytorv_luxury_area",
+        "category": "shopping",
+        "reason": "Top central luxury shopping recommendation.",
+        "rank": 2
+      },
+      {
+        "place_id": "rest_copenhagen_bistro_boeuf",
+        "category": "restaurants",
+        "reason": "A polished and practical central dining recommendation.",
+        "rank": 3
+      }
+    ],
+    "editors_picks": [
+      {
+        "place_id": "rest_copenhagen_noma",
+        "category": "restaurants",
+        "reason": "Copenhagen’s flagship dining experience for special trips.",
+        "rank": 1
+      },
+      {
+        "place_id": "shop_copenhagen_jaegersborggade",
+        "category": "shopping",
+        "reason": "Best for local boutiques and a more characterful side of Copenhagen shopping.",
+        "rank": 2
+      },
+      {
+        "place_id": "spa_copenhagen_aire_ancient_baths",
+        "category": "spa_wellness",
+        "reason": "Top premium spa recommendation for couples and luxury travellers.",
+        "rank": 3
+      }
+    ],
+    "trending": [
+      {
+        "place_id": "shop_copenhagen_hay_house",
+        "category": "shopping",
+        "reason": "Popular with guests seeking Scandinavian design and gift shopping.",
+        "rank": 1
+      }
+    ],
+    "seasonal": [
+      {
+        "place_id": "act_copenhagen_tivoli_gardens",
+        "category": "activities",
+        "reason": "Especially strong during seasonal openings and festive periods.",
+        "rank": 1
+      }
+    ],
+    "personalized_slots": [
+      {
+        "slot_key": "luxury_copenhagen",
+        "label": "Luxury Copenhagen",
+        "items": [
+          {
+            "place_id": "rest_copenhagen_noma",
+            "category": "restaurants",
+            "reason": "Top-end dining recommendation.",
+            "rank": 1
+          },
+          {
+            "place_id": "shop_copenhagen_kongens_nytorv_luxury_area",
+            "category": "shopping",
+            "reason": "Best fit for premium shopping.",
+            "rank": 2
+          },
+          {
+            "place_id": "spa_copenhagen_ni_mat",
+            "category": "spa_wellness",
+            "reason": "Luxury hotel spa pairing in a central area.",
+            "rank": 3
+          }
+        ]
+      },
+      {
+        "slot_key": "short_stay_copenhagen",
+        "label": "Short Stay Copenhagen",
+        "items": [
+          {
+            "place_id": "act_copenhagen_tivoli_gardens",
+            "category": "activities",
+            "reason": "Strong one-activity choice for limited time.",
+            "rank": 1
+          },
+          {
+            "place_id": "rest_copenhagen_bistro_boeuf",
+            "category": "restaurants",
+            "reason": "Easy polished central dining option.",
+            "rank": 2
+          },
+          {
+            "place_id": "shop_copenhagen_illum",
+            "category": "shopping",
+            "reason": "Convenient premium shopping in one stop.",
+            "rank": 3
+          }
+        ]
+      },
+      {
+        "slot_key": "design_and_local_copenhagen",
+        "label": "Design & Local Copenhagen",
+        "items": [
+          {
+            "place_id": "shop_copenhagen_jaegersborggade",
+            "category": "shopping",
+            "reason": "Best for local boutiques and creative browsing.",
+            "rank": 1
+          },
+          {
+            "place_id": "shop_copenhagen_hay_house",
+            "category": "shopping",
+            "reason": "Strong Scandinavian design recommendation.",
+            "rank": 2
+          },
+          {
+            "place_id": "rest_copenhagen_barr",
+            "category": "restaurants",
+            "reason": "Memorable Nordic dinner pairing for a design-led day.",
+            "rank": 3
+          }
+        ]
+      }
+    ]
+  },
+  "seo": {
+    "meta_title": "Copenhagen Travel Guide | Restaurants, Shopping, Activities & Wellness | BNO Travel",
+    "meta_description": "Explore Copenhagen with curated BNO Travel recommendations for restaurants, activities, gyms, spa wellness, and shopping.",
+    "canonical_url": "https://bno.travel/copenhagen",
+    "og_title": "Copenhagen Travel Guide | BNO Travel",
+    "og_description": "Professional Copenhagen recommendations for dining, shopping, culture, wellness, and short city stays.",
+    "og_image": "https://example.bno.travel/images/copenhagen/copenhagen-og.jpg",
+    "twitter_title": "Copenhagen Travel Guide | BNO Travel",
+    "twitter_description": "Curated Copenhagen recommendations for guests, travellers, and city-break planning.",
+    "twitter_image": "https://example.bno.travel/images/copenhagen/copenhagen-og.jpg",
+    "schema_type": "TravelDestination",
+    "indexable": true
+  },
+  "metadata": {
+    "status": "published",
+    "created_at": "2026-04-02T22:55:00Z",
+    "updated_at": "2026-04-02T23:10:00Z",
+    "published_at": "2026-04-02T23:15:00Z",
+    "version": 1,
+    "source_priority": [
+      "curated",
+      "google_places",
+      "partner_feed",
+      "user_generated"
+    ]
+  }
+}

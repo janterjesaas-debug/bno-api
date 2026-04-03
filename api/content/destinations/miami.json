@@ -1,0 +1,1589 @@
+{
+  "id": "dest_miami_us_master",
+  "slug": "miami",
+  "locale": "en-US",
+  "city": {
+    "name": "Miami",
+    "slug": "miami",
+    "region": "Florida",
+    "latitude": 25.7617,
+    "longitude": -80.1918,
+    "timezone": "America/New_York"
+  },
+  "country": {
+    "name": "United States",
+    "code": "US",
+    "slug": "united-states",
+    "continent": "North America"
+  },
+  "editorial": {
+    "headline": "Miami: beach energy, standout dining, luxury shopping, and neighbourhoods with very different moods",
+    "intro": "Miami is a strong destination for travellers who want warm weather, stylish hotels, polished dining, and a mix of beach time, nightlife, shopping, and city energy. It works best when the stay is planned by area, since South Beach, Brickell, Design District, and Wynwood each offer a very different experience.",
+    "why_visit": [
+      "A strong mix of beach, dining, nightlife, and city-break appeal",
+      "Excellent options for luxury travellers, couples, and short celebratory trips",
+      "Very good shopping across designer labels, premium malls, and fashion-led districts",
+      "Distinct neighbourhood identities that allow highly tailored recommendations"
+    ],
+    "highlights": [
+      "Very good for 3 to 4 day leisure stays",
+      "Strong fit for couples, luxury travellers, and shopping-led trips",
+      "Best results come from area-based planning rather than trying to move around too much each day"
+    ],
+    "transport_tips": [
+      "Plan by neighbourhood because travel times can stretch more than visitors expect.",
+      "Rideshare is often the simplest option between key visitor areas.",
+      "South Beach works best for beach-led stays, while Brickell suits a more polished urban base.",
+      "Book top restaurants, beach clubs, and spa appointments in advance, especially on weekends."
+    ],
+    "neighborhood_tips": [
+      {
+        "name": "South Beach",
+        "tip": "Best for beach access, lively atmosphere, and a classic Miami short-stay experience."
+      },
+      {
+        "name": "Brickell",
+        "tip": "Ideal for a polished city base with luxury hotels, rooftop dining, and easy business-leisure crossover."
+      },
+      {
+        "name": "Design District",
+        "tip": "Best for luxury shopping, fashion, design, and premium lunch-to-shopping days."
+      },
+      {
+        "name": "Wynwood",
+        "tip": "Good for a more creative, casual, and social side of Miami with art and trend-led dining."
+      },
+      {
+        "name": "Bal Harbour",
+        "tip": "Best for luxury shopping, quieter premium stays, and a more refined pace."
+      }
+    ]
+  },
+  "categories": {
+    "restaurants": {
+      "headline": "Recommended restaurants in Miami",
+      "description": "A practical mix of flagship dining, polished crowd-pleasers, and guest-friendly special-occasion options.",
+      "items": [
+        {
+          "id": "rest_miami_joes_stone_crab",
+          "name": "Joe's Stone Crab",
+          "slug": "joes-stone-crab",
+          "category": "restaurants",
+          "subcategory": "seafood_icon",
+          "content": {
+            "short_description": "One of Miami’s classic restaurant recommendations and a strong seafood choice for first-time visitors.",
+            "long_description": "Joe's Stone Crab is one of the easiest Miami restaurant recommendations because it is iconic, well known, and strongly associated with the city. It suits first-time visitors, celebratory meals, and guests wanting a classic Miami dining experience.",
+            "highlights": [
+              "Classic Miami dining institution",
+              "Strong seafood reputation",
+              "Good first-time visitor appeal"
+            ],
+            "insider_tips": [
+              "Best when guests want something recognisable and iconic rather than trend-driven.",
+              "Peak demand periods can be busy, so planning ahead helps."
+            ]
+          },
+          "source": {
+            "type": "hybrid",
+            "google_places": {
+              "place_id": "ChIJ_JOES_STONE_CRAB_MIAMI",
+              "name": "Joe's Stone Crab",
+              "formatted_address": "11 Washington Ave, Miami Beach, FL 33139, United States",
+              "location": {
+                "latitude": 25.7698,
+                "longitude": -80.1341
+              },
+              "maps_url": "https://maps.google.com/?cid=joes-stone-crab-miami-placeholder",
+              "website": "https://www.joesstonecrab.com",
+              "international_phone_number": "+1 305-673-0365",
+              "rating": 4.5,
+              "user_ratings_total": 12000,
+              "price_level": 4,
+              "business_status": "OPERATIONAL",
+              "opening_hours": {
+                "open_now": true,
+                "weekday_text": [
+                  "Thursday: 11:30 AM – 10:00 PM"
+                ]
+              },
+              "types": [
+                "restaurant",
+                "seafood_restaurant",
+                "food",
+                "point_of_interest",
+                "establishment"
+              ]
+            },
+            "external_ids": {
+              "google_place_id": "ChIJ_JOES_STONE_CRAB_MIAMI"
+            },
+            "sync": {
+              "last_synced_at": "2026-04-02T23:00:00Z",
+              "sync_status": "synced",
+              "provider_version": "google-places-v1"
+            }
+          },
+          "guest_attributes": {
+            "family_friendly": true,
+            "couples_friendly": true,
+            "luxury_level": "upscale",
+            "central_location": false,
+            "booking_relevant": true
+          },
+          "tags": [
+            {
+              "key": "classic_miami",
+              "label": "Classic Miami",
+              "type": "theme"
+            },
+            {
+              "key": "seafood",
+              "label": "Seafood",
+              "type": "theme"
+            }
+          ],
+          "recommendation": {
+            "is_featured": true,
+            "priority_score": 92,
+            "editor_note": "A very reliable recommendation for guests wanting a classic Miami meal.",
+            "recommended_for": [
+              "first-time visitors",
+              "special dinners",
+              "seafood"
+            ],
+            "seasonality": [
+              "year_round"
+            ]
+          },
+          "status": "active",
+          "sort_order": 1
+        },
+        {
+          "id": "rest_miami_zuma",
+          "name": "Zuma Miami",
+          "slug": "zuma-miami",
+          "category": "restaurants",
+          "subcategory": "modern_japanese",
+          "content": {
+            "short_description": "A polished waterfront Miami recommendation with broad luxury and business-travel appeal.",
+            "long_description": "Zuma is one of the strongest all-round premium dining recommendations in Miami. It works especially well for Brickell and Downtown guests, couples, and travellers looking for a stylish, dependable dinner with a luxury city feel.",
+            "highlights": [
+              "Strong waterfront setting",
+              "Polished premium atmosphere",
+              "Very useful for Brickell and Downtown stays"
+            ],
+            "insider_tips": [
+              "A strong recommendation when guests want a stylish dinner in a central urban location.",
+              "Best booked ahead for prime evening times."
+            ]
+          },
+          "source": {
+            "type": "hybrid",
+            "google_places": {
+              "place_id": "ChIJ_ZUMA_MIAMI",
+              "name": "Zuma Miami",
+              "formatted_address": "270 Biscayne Blvd Way, Miami, FL 33131, United States",
+              "location": {
+                "latitude": 25.7702,
+                "longitude": -80.1891
+              },
+              "maps_url": "https://maps.google.com/?cid=zuma-miami-placeholder",
+              "website": "https://zumarestaurant.com",
+              "international_phone_number": "+1 305-577-0277",
+              "rating": 4.5,
+              "user_ratings_total": 5400,
+              "price_level": 4,
+              "business_status": "OPERATIONAL",
+              "opening_hours": {
+                "open_now": false,
+                "weekday_text": [
+                  "Friday: 12:00 PM – 3:00 PM, 6:00 PM – 12:00 AM"
+                ]
+              },
+              "types": [
+                "restaurant",
+                "bar",
+                "food",
+                "point_of_interest",
+                "establishment"
+              ]
+            },
+            "external_ids": {
+              "google_place_id": "ChIJ_ZUMA_MIAMI"
+            },
+            "sync": {
+              "last_synced_at": "2026-04-02T23:00:00Z",
+              "sync_status": "synced",
+              "provider_version": "google-places-v1"
+            }
+          },
+          "guest_attributes": {
+            "family_friendly": false,
+            "couples_friendly": true,
+            "luxury_level": "luxury",
+            "central_location": true,
+            "booking_relevant": true
+          },
+          "tags": [
+            {
+              "key": "waterfront_dining",
+              "label": "Waterfront Dining",
+              "type": "style"
+            },
+            {
+              "key": "brickell_adjacent",
+              "label": "Brickell Adjacent",
+              "type": "location"
+            }
+          ],
+          "recommendation": {
+            "is_featured": true,
+            "priority_score": 90,
+            "editor_note": "A very strong premium dining recommendation for urban Miami stays.",
+            "recommended_for": [
+              "luxury travellers",
+              "couples",
+              "business travellers"
+            ],
+            "seasonality": [
+              "year_round"
+            ]
+          },
+          "status": "active",
+          "sort_order": 2
+        },
+        {
+          "id": "rest_miami_michaelis_genuine",
+          "name": "Michael's Genuine Food & Drink",
+          "slug": "michaels-genuine-food-and-drink",
+          "category": "restaurants",
+          "subcategory": "modern_american",
+          "content": {
+            "short_description": "A useful Design District dining recommendation with broad city-break appeal.",
+            "long_description": "Michael's Genuine is a very practical recommendation for guests spending time in the Design District or looking for a polished but relaxed meal in a strong shopping area. It works well for lunch, early dinners, and fashion-led days.",
+            "highlights": [
+              "Excellent Design District location",
+              "Good lunch and early dinner option",
+              "Easy to pair with shopping"
+            ],
+            "insider_tips": [
+              "A very good recommendation when guests are already planning a shopping day in the area.",
+              "Useful for a polished but not overly formal meal."
+            ]
+          },
+          "source": {
+            "type": "hybrid",
+            "google_places": {
+              "place_id": "ChIJ_MICHAELS_GENUINE_MIAMI",
+              "name": "Michael's Genuine Food & Drink",
+              "formatted_address": "130 NE 40th St, Miami, FL 33137, United States",
+              "location": {
+                "latitude": 25.8131,
+                "longitude": -80.1937
+              },
+              "maps_url": "https://maps.google.com/?cid=michaels-genuine-miami-placeholder",
+              "website": "https://michaelsgenuine.com",
+              "international_phone_number": "+1 305-573-5550",
+              "rating": 4.5,
+              "user_ratings_total": 2500,
+              "price_level": 3,
+              "business_status": "OPERATIONAL",
+              "opening_hours": {
+                "open_now": true,
+                "weekday_text": [
+                  "Thursday: 11:30 AM – 10:00 PM"
+                ]
+              },
+              "types": [
+                "restaurant",
+                "food",
+                "point_of_interest",
+                "establishment"
+              ]
+            },
+            "external_ids": {
+              "google_place_id": "ChIJ_MICHAELS_GENUINE_MIAMI"
+            },
+            "sync": {
+              "last_synced_at": "2026-04-02T23:00:00Z",
+              "sync_status": "synced",
+              "provider_version": "google-places-v1"
+            }
+          },
+          "guest_attributes": {
+            "family_friendly": true,
+            "couples_friendly": true,
+            "luxury_level": "upscale",
+            "central_location": false,
+            "booking_relevant": true
+          },
+          "tags": [
+            {
+              "key": "design_district",
+              "label": "Design District",
+              "type": "location"
+            },
+            {
+              "key": "shopping_pairing",
+              "label": "Shopping Pairing",
+              "type": "occasion"
+            }
+          ],
+          "recommendation": {
+            "is_featured": false,
+            "priority_score": 84,
+            "editor_note": "A very useful dining recommendation to pair with a shopping-focused day.",
+            "recommended_for": [
+              "shopping trips",
+              "couples",
+              "lunch"
+            ],
+            "seasonality": [
+              "year_round"
+            ]
+          },
+          "status": "active",
+          "sort_order": 3
+        }
+      ]
+    },
+    "activities": {
+      "headline": "Top activities in Miami",
+      "description": "Guest-friendly recommendations that work well for short leisure stays and first-time visits.",
+      "items": [
+        {
+          "id": "act_miami_perez_art_museum",
+          "name": "Pérez Art Museum Miami",
+          "slug": "perez-art-museum-miami",
+          "category": "activities",
+          "subcategory": "museum",
+          "content": {
+            "short_description": "A strong cultural recommendation for guests wanting one polished indoor activity in Miami.",
+            "long_description": "Pérez Art Museum Miami is a very good recommendation for travellers who want art, architecture, and a more elevated activity option beyond the beach. It works especially well for couples, design-conscious travellers, and guests staying in Brickell or Downtown.",
+            "highlights": [
+              "Strong architecture and setting",
+              "Good cultural option for urban stays",
+              "Useful in warm or rainy weather"
+            ],
+            "insider_tips": [
+              "Works well as part of a Downtown or waterfront plan.",
+              "A good option when guests want one meaningful activity beyond shopping and dining."
+            ]
+          },
+          "source": {
+            "type": "hybrid",
+            "google_places": {
+              "place_id": "ChIJ_PAMM_MIAMI",
+              "name": "Pérez Art Museum Miami",
+              "formatted_address": "1103 Biscayne Blvd, Miami, FL 33132, United States",
+              "location": {
+                "latitude": 25.785,
+                "longitude": -80.1861
+              },
+              "maps_url": "https://maps.google.com/?cid=pamm-miami-placeholder",
+              "website": "https://www.pamm.org",
+              "international_phone_number": "+1 305-375-3000",
+              "rating": 4.5,
+              "user_ratings_total": 7700,
+              "price_level": 2,
+              "business_status": "OPERATIONAL",
+              "opening_hours": {
+                "open_now": true,
+                "weekday_text": [
+                  "Thursday: 11:00 AM – 9:00 PM"
+                ]
+              },
+              "types": [
+                "museum",
+                "tourist_attraction",
+                "point_of_interest",
+                "establishment"
+              ]
+            },
+            "external_ids": {
+              "google_place_id": "ChIJ_PAMM_MIAMI"
+            },
+            "sync": {
+              "last_synced_at": "2026-04-02T23:00:00Z",
+              "sync_status": "synced",
+              "provider_version": "google-places-v1"
+            }
+          },
+          "guest_attributes": {
+            "family_friendly": true,
+            "couples_friendly": true,
+            "luxury_level": "upscale",
+            "central_location": true,
+            "booking_relevant": true
+          },
+          "tags": [
+            {
+              "key": "art",
+              "label": "Art",
+              "type": "theme"
+            },
+            {
+              "key": "culture",
+              "label": "Culture",
+              "type": "theme"
+            }
+          ],
+          "recommendation": {
+            "is_featured": true,
+            "priority_score": 88,
+            "editor_note": "A strong activity recommendation for guests who want a polished cultural option in Miami.",
+            "recommended_for": [
+              "couples",
+              "art lovers",
+              "urban stays"
+            ],
+            "seasonality": [
+              "year_round"
+            ]
+          },
+          "status": "active",
+          "sort_order": 1
+        },
+        {
+          "id": "act_miami_vizcaya",
+          "name": "Vizcaya Museum & Gardens",
+          "slug": "vizcaya-museum-and-gardens",
+          "category": "activities",
+          "subcategory": "historic_estate",
+          "content": {
+            "short_description": "A strong Miami recommendation for guests wanting something scenic, iconic, and different from the beach scene.",
+            "long_description": "Vizcaya is one of the most useful activity recommendations in Miami for guests who want architecture, gardens, and a more elegant experience than a standard sightseeing stop. It works well for couples, first-time visitors, and travellers wanting strong photos and atmosphere.",
+            "highlights": [
+              "Very photogenic setting",
+              "Good for couples and first-time visitors",
+              "Distinctive alternative to beach-only plans"
+            ],
+            "insider_tips": [
+              "Best in a relaxed daytime schedule rather than packed into a beach-heavy itinerary.",
+              "Very good for guests who enjoy scenic cultural stops."
+            ]
+          },
+          "source": {
+            "type": "hybrid",
+            "google_places": {
+              "place_id": "ChIJ_VIZCAYA_MIAMI",
+              "name": "Vizcaya Museum & Gardens",
+              "formatted_address": "3251 S Miami Ave, Miami, FL 33129, United States",
+              "location": {
+                "latitude": 25.744,
+                "longitude": -80.2107
+              },
+              "maps_url": "https://maps.google.com/?cid=vizcaya-miami-placeholder",
+              "website": "https://vizcaya.org",
+              "international_phone_number": "+1 305-250-9133",
+              "rating": 4.7,
+              "user_ratings_total": 17000,
+              "price_level": 2,
+              "business_status": "OPERATIONAL",
+              "opening_hours": {
+                "open_now": true,
+                "weekday_text": [
+                  "Thursday: 9:30 AM – 4:30 PM"
+                ]
+              },
+              "types": [
+                "museum",
+                "tourist_attraction",
+                "park",
+                "point_of_interest",
+                "establishment"
+              ]
+            },
+            "external_ids": {
+              "google_place_id": "ChIJ_VIZCAYA_MIAMI"
+            },
+            "sync": {
+              "last_synced_at": "2026-04-02T23:00:00Z",
+              "sync_status": "synced",
+              "provider_version": "google-places-v1"
+            }
+          },
+          "guest_attributes": {
+            "family_friendly": true,
+            "couples_friendly": true,
+            "luxury_level": "upscale",
+            "central_location": false,
+            "booking_relevant": true
+          },
+          "tags": [
+            {
+              "key": "iconic",
+              "label": "Iconic",
+              "type": "theme"
+            },
+            {
+              "key": "romantic",
+              "label": "Romantic",
+              "type": "occasion"
+            }
+          ],
+          "recommendation": {
+            "is_featured": true,
+            "priority_score": 90,
+            "editor_note": "A standout recommendation when guests want one scenic, memorable activity in Miami.",
+            "recommended_for": [
+              "couples",
+              "first-time visitors",
+              "scenic experiences"
+            ],
+            "seasonality": [
+              "year_round"
+            ]
+          },
+          "status": "active",
+          "sort_order": 2
+        }
+      ]
+    },
+    "gyms": {
+      "headline": "Gyms and fitness options",
+      "description": "Useful recommendations for guests wanting a proper workout beyond the hotel gym.",
+      "items": [
+        {
+          "id": "gym_miami_anatomy_mid_beach",
+          "name": "Anatomy Miami Beach",
+          "slug": "anatomy-miami-beach",
+          "category": "gyms",
+          "subcategory": "premium_gym",
+          "content": {
+            "short_description": "A strong premium fitness recommendation for guests staying in or around Miami Beach.",
+            "long_description": "Anatomy is one of the more credible gym recommendations in Miami for guests who care about workout quality, design, and a premium wellness atmosphere. It works especially well for longer stays, fitness-focused travellers, and guests used to upscale club-style gyms.",
+            "highlights": [
+              "Premium fitness environment",
+              "Strong for wellness-focused travellers",
+              "Good fit for Miami Beach stays"
+            ],
+            "insider_tips": [
+              "Best for guests specifically asking for a serious workout option.",
+              "Check day-pass or visitor access in advance."
+            ]
+          },
+          "source": {
+            "type": "hybrid",
+            "google_places": {
+              "place_id": "ChIJ_ANATOMY_MIAMI_BEACH",
+              "name": "Anatomy Miami Beach",
+              "formatted_address": "1220 20th St, Miami Beach, FL 33139, United States",
+              "location": {
+                "latitude": 25.7948,
+                "longitude": -80.1404
+              },
+              "maps_url": "https://maps.google.com/?cid=anatomy-miami-beach-placeholder",
+              "website": "https://anatomyfitness.com",
+              "international_phone_number": "+1 305-674-9998",
+              "rating": 4.5,
+              "user_ratings_total": 420,
+              "price_level": 3,
+              "business_status": "OPERATIONAL",
+              "opening_hours": {
+                "open_now": true,
+                "weekday_text": [
+                  "Thursday: 6:00 AM – 9:00 PM"
+                ]
+              },
+              "types": [
+                "gym",
+                "health",
+                "point_of_interest",
+                "establishment"
+              ]
+            },
+            "external_ids": {
+              "google_place_id": "ChIJ_ANATOMY_MIAMI_BEACH"
+            },
+            "sync": {
+              "last_synced_at": "2026-04-02T23:00:00Z",
+              "sync_status": "synced",
+              "provider_version": "google-places-v1"
+            }
+          },
+          "guest_attributes": {
+            "family_friendly": false,
+            "couples_friendly": false,
+            "luxury_level": "upscale",
+            "central_location": false,
+            "booking_relevant": true
+          },
+          "tags": [
+            {
+              "key": "fitness",
+              "label": "Fitness",
+              "type": "theme"
+            },
+            {
+              "key": "premium",
+              "label": "Premium",
+              "type": "budget"
+            }
+          ],
+          "recommendation": {
+            "is_featured": true,
+            "priority_score": 81,
+            "editor_note": "A strong premium gym recommendation for Miami Beach stays.",
+            "recommended_for": [
+              "fitness travellers",
+              "wellness stays",
+              "longer stays"
+            ],
+            "seasonality": [
+              "year_round"
+            ]
+          },
+          "status": "active",
+          "sort_order": 1
+        },
+        {
+          "id": "gym_miami_equinox_brickell",
+          "name": "Equinox Brickell Heights",
+          "slug": "equinox-brickell-heights",
+          "category": "gyms",
+          "subcategory": "luxury_gym",
+          "content": {
+            "short_description": "A polished Brickell fitness recommendation for guests wanting a premium urban gym environment.",
+            "long_description": "Equinox Brickell Heights is a useful recommendation for guests staying in Brickell who want a familiar luxury fitness brand in a central city setting. It suits business travellers, premium urban stays, and guests who want a dependable high-end gym experience.",
+            "highlights": [
+              "Strong Brickell location",
+              "Luxury gym brand recognition",
+              "Useful for premium urban stays"
+            ],
+            "insider_tips": [
+              "Best for guests already staying in Brickell or nearby.",
+              "Check access policies before recommending."
+            ]
+          },
+          "source": {
+            "type": "hybrid",
+            "google_places": {
+              "place_id": "ChIJ_EQUINOX_BRICKELL",
+              "name": "Equinox Brickell Heights",
+              "formatted_address": "25 SW 9th St, Miami, FL 33130, United States",
+              "location": {
+                "latitude": 25.7654,
+                "longitude": -80.1949
+              },
+              "maps_url": "https://maps.google.com/?cid=equinox-brickell-placeholder",
+              "website": "https://www.equinox.com",
+              "international_phone_number": "+1 305-340-2590",
+              "rating": 4.3,
+              "user_ratings_total": 300,
+              "price_level": 4,
+              "business_status": "OPERATIONAL",
+              "opening_hours": {
+                "open_now": false,
+                "weekday_text": [
+                  "Friday: 5:30 AM – 10:00 PM"
+                ]
+              },
+              "types": [
+                "gym",
+                "health",
+                "point_of_interest",
+                "establishment"
+              ]
+            },
+            "external_ids": {
+              "google_place_id": "ChIJ_EQUINOX_BRICKELL"
+            },
+            "sync": {
+              "last_synced_at": "2026-04-02T23:00:00Z",
+              "sync_status": "synced",
+              "provider_version": "google-places-v1"
+            }
+          },
+          "guest_attributes": {
+            "family_friendly": false,
+            "couples_friendly": false,
+            "luxury_level": "luxury",
+            "central_location": true,
+            "booking_relevant": true
+          },
+          "tags": [
+            {
+              "key": "brickell",
+              "label": "Brickell",
+              "type": "location"
+            },
+            {
+              "key": "luxury_fitness",
+              "label": "Luxury Fitness",
+              "type": "style"
+            }
+          ],
+          "recommendation": {
+            "is_featured": false,
+            "priority_score": 78,
+            "editor_note": "A good recommendation for premium guests based in Brickell.",
+            "recommended_for": [
+              "business travellers",
+              "luxury travellers",
+              "urban stays"
+            ],
+            "seasonality": [
+              "year_round"
+            ]
+          },
+          "status": "active",
+          "sort_order": 2
+        }
+      ]
+    },
+    "spa_wellness": {
+      "headline": "Spa and wellness recommendations",
+      "description": "Strong options for guests wanting premium treatments, relaxation, or a slower luxury day in Miami.",
+      "items": [
+        {
+          "id": "spa_miami_lapis_fontainebleau",
+          "name": "Lapis Spa at Fontainebleau",
+          "slug": "lapis-spa-at-fontainebleau",
+          "category": "spa_wellness",
+          "subcategory": "luxury_resort_spa",
+          "content": {
+            "short_description": "One of Miami’s strongest spa recommendations for guests wanting a premium resort-style wellness experience.",
+            "long_description": "Lapis Spa is a high-confidence recommendation for guests looking for a luxury spa experience in Miami Beach. It works especially well for couples, celebratory stays, and travellers who want a clearly elevated wellness environment rather than a simple treatment booking.",
+            "highlights": [
+              "Luxury resort spa setting",
+              "Strong couples appeal",
+              "Very good premium wellness choice"
+            ],
+            "insider_tips": [
+              "Best booked ahead for weekends and popular treatment times.",
+              "Works particularly well as part of a slower beach-and-spa day."
+            ]
+          },
+          "source": {
+            "type": "hybrid",
+            "google_places": {
+              "place_id": "ChIJ_LAPIS_SPA_MIAMI",
+              "name": "Lapis Spa",
+              "formatted_address": "4441 Collins Ave, Miami Beach, FL 33140, United States",
+              "location": {
+                "latitude": 25.8175,
+                "longitude": -80.1229
+              },
+              "maps_url": "https://maps.google.com/?cid=lapis-spa-miami-placeholder",
+              "website": "https://www.fontainebleau.com",
+              "international_phone_number": "+1 305-674-4772",
+              "rating": 4.5,
+              "user_ratings_total": 820,
+              "price_level": 4,
+              "business_status": "OPERATIONAL",
+              "opening_hours": {
+                "open_now": false,
+                "weekday_text": [
+                  "Thursday: 9:00 AM – 7:00 PM"
+                ]
+              },
+              "types": [
+                "spa",
+                "health",
+                "point_of_interest",
+                "establishment"
+              ]
+            },
+            "external_ids": {
+              "google_place_id": "ChIJ_LAPIS_SPA_MIAMI"
+            },
+            "sync": {
+              "last_synced_at": "2026-04-02T23:00:00Z",
+              "sync_status": "synced",
+              "provider_version": "google-places-v1"
+            }
+          },
+          "guest_attributes": {
+            "family_friendly": false,
+            "couples_friendly": true,
+            "luxury_level": "luxury",
+            "central_location": false,
+            "booking_relevant": true
+          },
+          "tags": [
+            {
+              "key": "luxury_escape",
+              "label": "Luxury Escape",
+              "type": "style"
+            },
+            {
+              "key": "miami_beach",
+              "label": "Miami Beach",
+              "type": "location"
+            }
+          ],
+          "recommendation": {
+            "is_featured": true,
+            "priority_score": 91,
+            "editor_note": "A top spa recommendation for beachside luxury stays in Miami.",
+            "recommended_for": [
+              "couples",
+              "luxury travellers",
+              "wellness"
+            ],
+            "seasonality": [
+              "year_round"
+            ]
+          },
+          "status": "active",
+          "sort_order": 1
+        },
+        {
+          "id": "spa_miami_mandarin_oriental",
+          "name": "The Spa at Mandarin Oriental, Miami",
+          "slug": "the-spa-at-mandarin-oriental-miami",
+          "category": "spa_wellness",
+          "subcategory": "luxury_hotel_spa",
+          "content": {
+            "short_description": "A polished and reliable luxury spa recommendation for guests staying in or near Brickell.",
+            "long_description": "The Spa at Mandarin Oriental is one of the strongest city-side wellness recommendations in Miami for guests who want a premium hotel spa with a calmer, more polished atmosphere. It suits couples, luxury travellers, and premium urban stays.",
+            "highlights": [
+              "Luxury hotel spa setting",
+              "Strong fit for Brickell stays",
+              "Good premium urban wellness option"
+            ],
+            "insider_tips": [
+              "A very good recommendation for guests who want spa access without staying on the beach.",
+              "Reserve treatments ahead for prime times."
+            ]
+          },
+          "source": {
+            "type": "hybrid",
+            "google_places": {
+              "place_id": "ChIJ_MO_SPA_MIAMI",
+              "name": "The Spa at Mandarin Oriental, Miami",
+              "formatted_address": "500 Brickell Key Dr, Miami, FL 33131, United States",
+              "location": {
+                "latitude": 25.7651,
+                "longitude": -80.1858
+              },
+              "maps_url": "https://maps.google.com/?cid=mo-spa-miami-placeholder",
+              "website": "https://www.mandarinoriental.com",
+              "international_phone_number": "+1 305-913-8332",
+              "rating": 4.7,
+              "user_ratings_total": 260,
+              "price_level": 4,
+              "business_status": "OPERATIONAL",
+              "opening_hours": {
+                "open_now": true,
+                "weekday_text": [
+                  "Friday: 10:00 AM – 7:00 PM"
+                ]
+              },
+              "types": [
+                "spa",
+                "health",
+                "point_of_interest",
+                "establishment"
+              ]
+            },
+            "external_ids": {
+              "google_place_id": "ChIJ_MO_SPA_MIAMI"
+            },
+            "sync": {
+              "last_synced_at": "2026-04-02T23:00:00Z",
+              "sync_status": "synced",
+              "provider_version": "google-places-v1"
+            }
+          },
+          "guest_attributes": {
+            "family_friendly": false,
+            "couples_friendly": true,
+            "luxury_level": "luxury",
+            "central_location": true,
+            "booking_relevant": true
+          },
+          "tags": [
+            {
+              "key": "brickell",
+              "label": "Brickell",
+              "type": "location"
+            },
+            {
+              "key": "hotel_spa",
+              "label": "Hotel Spa",
+              "type": "style"
+            }
+          ],
+          "recommendation": {
+            "is_featured": false,
+            "priority_score": 87,
+            "editor_note": "A strong spa recommendation for premium guests based in the city rather than on the beach.",
+            "recommended_for": [
+              "luxury stays",
+              "couples",
+              "brickell stays"
+            ],
+            "seasonality": [
+              "year_round"
+            ]
+          },
+          "status": "active",
+          "sort_order": 2
+        }
+      ]
+    },
+    "shopping": {
+      "headline": "Shopping recommendations in Miami",
+      "description": "Miami is one of the strongest shopping destinations in the US for luxury retail, designer labels, open-air premium centres, and stylish neighbourhood browsing.",
+      "items": [
+        {
+          "id": "shop_miami_design_district",
+          "name": "Miami Design District",
+          "slug": "miami-design-district",
+          "category": "shopping",
+          "subcategory": "luxury_shopping_district",
+          "content": {
+            "short_description": "Miami’s strongest recommendation for luxury shopping, fashion, design, and premium browsing.",
+            "long_description": "The Miami Design District is the clearest shopping recommendation for guests looking for luxury retail in a polished, destination-style setting. It works especially well for premium travellers, fashion-focused trips, and visitors who want shopping to be a core part of the day.",
+            "highlights": [
+              "Top luxury shopping recommendation in Miami",
+              "Excellent fashion and design mix",
+              "Strong pairing with premium lunch plans"
+            ],
+            "insider_tips": [
+              "Best for guests specifically asking for designer labels and polished retail.",
+              "Plan the day around the district rather than trying to combine it with too many distant areas."
+            ]
+          },
+          "source": {
+            "type": "hybrid",
+            "google_places": {
+              "place_id": "ChIJ_DESIGN_DISTRICT_MIAMI",
+              "name": "Miami Design District",
+              "formatted_address": "3841 NE 2nd Ave, Miami, FL 33137, United States",
+              "location": {
+                "latitude": 25.8122,
+                "longitude": -80.1932
+              },
+              "maps_url": "https://maps.google.com/?cid=design-district-miami-placeholder",
+              "website": "https://www.miamidesigndistrict.net",
+              "international_phone_number": "+1 305-573-5311",
+              "rating": 4.7,
+              "user_ratings_total": 17500,
+              "price_level": 4,
+              "business_status": "OPERATIONAL",
+              "opening_hours": {
+                "open_now": true,
+                "weekday_text": [
+                  "Thursday: 11:00 AM – 8:00 PM"
+                ]
+              },
+              "types": [
+                "shopping_mall",
+                "store",
+                "point_of_interest",
+                "establishment"
+              ]
+            },
+            "external_ids": {
+              "google_place_id": "ChIJ_DESIGN_DISTRICT_MIAMI"
+            },
+            "sync": {
+              "last_synced_at": "2026-04-02T23:00:00Z",
+              "sync_status": "synced",
+              "provider_version": "google-places-v1"
+            }
+          },
+          "guest_attributes": {
+            "family_friendly": true,
+            "couples_friendly": true,
+            "luxury_level": "luxury",
+            "central_location": false,
+            "booking_relevant": false
+          },
+          "tags": [
+            {
+              "key": "luxury_shopping",
+              "label": "Luxury Shopping",
+              "type": "style"
+            },
+            {
+              "key": "design_led",
+              "label": "Design-Led",
+              "type": "style"
+            }
+          ],
+          "recommendation": {
+            "is_featured": true,
+            "priority_score": 96,
+            "editor_note": "The strongest shopping recommendation in Miami for luxury and fashion-led trips.",
+            "recommended_for": [
+              "luxury travellers",
+              "shopping trips",
+              "fashion lovers"
+            ],
+            "seasonality": [
+              "year_round"
+            ]
+          },
+          "status": "active",
+          "sort_order": 1
+        },
+        {
+          "id": "shop_miami_bal_harbour_shops",
+          "name": "Bal Harbour Shops",
+          "slug": "bal-harbour-shops",
+          "category": "shopping",
+          "subcategory": "luxury_shopping_center",
+          "content": {
+            "short_description": "A flagship luxury shopping recommendation for guests wanting premium brands in a more refined setting.",
+            "long_description": "Bal Harbour Shops is one of Miami’s strongest shopping options for luxury travellers who want a quieter, more refined retail environment than the busier core city districts. It works especially well for premium beach stays and shopping-led trips.",
+            "highlights": [
+              "Top-tier luxury shopping",
+              "Refined and polished atmosphere",
+              "Strong fit for premium leisure stays"
+            ],
+            "insider_tips": [
+              "Best for guests who want luxury retail in a calmer, more premium environment.",
+              "Works very well as part of a dedicated shopping day."
+            ]
+          },
+          "source": {
+            "type": "hybrid",
+            "google_places": {
+              "place_id": "ChIJ_BAL_HARBOUR_SHOPS",
+              "name": "Bal Harbour Shops",
+              "formatted_address": "9700 Collins Ave, Bal Harbour, FL 33154, United States",
+              "location": {
+                "latitude": 25.8917,
+                "longitude": -80.1226
+              },
+              "maps_url": "https://maps.google.com/?cid=bal-harbour-shops-placeholder",
+              "website": "https://www.balharbourshops.com",
+              "international_phone_number": "+1 305-866-0311",
+              "rating": 4.7,
+              "user_ratings_total": 11000,
+              "price_level": 4,
+              "business_status": "OPERATIONAL",
+              "opening_hours": {
+                "open_now": true,
+                "weekday_text": [
+                  "Thursday: 11:00 AM – 9:00 PM"
+                ]
+              },
+              "types": [
+                "shopping_mall",
+                "store",
+                "point_of_interest",
+                "establishment"
+              ]
+            },
+            "external_ids": {
+              "google_place_id": "ChIJ_BAL_HARBOUR_SHOPS"
+            },
+            "sync": {
+              "last_synced_at": "2026-04-02T23:00:00Z",
+              "sync_status": "synced",
+              "provider_version": "google-places-v1"
+            }
+          },
+          "guest_attributes": {
+            "family_friendly": true,
+            "couples_friendly": true,
+            "luxury_level": "luxury",
+            "central_location": false,
+            "booking_relevant": false
+          },
+          "tags": [
+            {
+              "key": "bal_harbour",
+              "label": "Bal Harbour",
+              "type": "location"
+            },
+            {
+              "key": "quiet_luxury",
+              "label": "Quiet Luxury",
+              "type": "style"
+            }
+          ],
+          "recommendation": {
+            "is_featured": true,
+            "priority_score": 94,
+            "editor_note": "A top luxury shopping recommendation for refined premium retail.",
+            "recommended_for": [
+              "luxury travellers",
+              "shopping-led trips",
+              "premium beach stays"
+            ],
+            "seasonality": [
+              "year_round"
+            ]
+          },
+          "status": "active",
+          "sort_order": 2
+        },
+        {
+          "id": "shop_miami_brickell_city_centre",
+          "name": "Brickell City Centre",
+          "slug": "brickell-city-centre",
+          "category": "shopping",
+          "subcategory": "premium_shopping_center",
+          "content": {
+            "short_description": "A polished urban shopping recommendation for guests staying in or near Brickell.",
+            "long_description": "Brickell City Centre is a strong shopping recommendation for guests who want premium retail, easy access, and a modern city setting. It is especially useful for short stays, business-leisure trips, and travellers based in Brickell.",
+            "highlights": [
+              "Strong Brickell location",
+              "Useful premium city shopping",
+              "Good for short urban stays"
+            ],
+            "insider_tips": [
+              "A very practical recommendation for guests staying in Brickell who do not want a longer shopping transfer.",
+              "Works well with lunch, spa, or rooftop plans nearby."
+            ]
+          },
+          "source": {
+            "type": "hybrid",
+            "google_places": {
+              "place_id": "ChIJ_BRICKELL_CITY_CENTRE",
+              "name": "Brickell City Centre",
+              "formatted_address": "701 S Miami Ave, Miami, FL 33131, United States",
+              "location": {
+                "latitude": 25.7684,
+                "longitude": -80.1931
+              },
+              "maps_url": "https://maps.google.com/?cid=brickell-city-centre-placeholder",
+              "website": "https://www.brickellcitycentre.com",
+              "international_phone_number": "+1 786-465-6514",
+              "rating": 4.6,
+              "user_ratings_total": 23000,
+              "price_level": 3,
+              "business_status": "OPERATIONAL",
+              "opening_hours": {
+                "open_now": true,
+                "weekday_text": [
+                  "Thursday: 10:00 AM – 9:00 PM"
+                ]
+              },
+              "types": [
+                "shopping_mall",
+                "store",
+                "point_of_interest",
+                "establishment"
+              ]
+            },
+            "external_ids": {
+              "google_place_id": "ChIJ_BRICKELL_CITY_CENTRE"
+            },
+            "sync": {
+              "last_synced_at": "2026-04-02T23:00:00Z",
+              "sync_status": "synced",
+              "provider_version": "google-places-v1"
+            }
+          },
+          "guest_attributes": {
+            "family_friendly": true,
+            "couples_friendly": true,
+            "luxury_level": "upscale",
+            "central_location": true,
+            "booking_relevant": false
+          },
+          "tags": [
+            {
+              "key": "brickell",
+              "label": "Brickell",
+              "type": "location"
+            },
+            {
+              "key": "urban_shopping",
+              "label": "Urban Shopping",
+              "type": "style"
+            }
+          ],
+          "recommendation": {
+            "is_featured": true,
+            "priority_score": 88,
+            "editor_note": "A very practical premium shopping recommendation for guests based in the city.",
+            "recommended_for": [
+              "business travellers",
+              "short stays",
+              "urban shopping"
+            ],
+            "seasonality": [
+              "year_round"
+            ]
+          },
+          "status": "active",
+          "sort_order": 3
+        },
+        {
+          "id": "shop_miami_lincoln_road",
+          "name": "Lincoln Road",
+          "slug": "lincoln-road",
+          "category": "shopping",
+          "subcategory": "shopping_street",
+          "content": {
+            "short_description": "A strong Miami Beach shopping recommendation for casual browsing, people-watching, and easy central access.",
+            "long_description": "Lincoln Road is a useful recommendation for guests staying in South Beach who want a walkable shopping area with broad appeal. It is more lifestyle-led than ultra-luxury, and works well for casual shopping, cafés, and easy daytime plans.",
+            "highlights": [
+              "Walkable Miami Beach shopping area",
+              "Good for casual browsing",
+              "Easy fit for South Beach stays"
+            ],
+            "insider_tips": [
+              "Best for relaxed daytime browsing rather than serious luxury shopping.",
+              "Works well when paired with beach time or casual lunch."
+            ]
+          },
+          "source": {
+            "type": "hybrid",
+            "google_places": {
+              "place_id": "ChIJ_LINCOLN_ROAD_MIAMI",
+              "name": "Lincoln Road",
+              "formatted_address": "Lincoln Rd, Miami Beach, FL, United States",
+              "location": {
+                "latitude": 25.7906,
+                "longitude": -80.1401
+              },
+              "maps_url": "https://maps.google.com/?cid=lincoln-road-miami-placeholder",
+              "website": "https://www.miamibeachfl.gov",
+              "international_phone_number": "",
+              "rating": 4.6,
+              "user_ratings_total": 52000,
+              "price_level": 2,
+              "business_status": "OPERATIONAL",
+              "opening_hours": {
+                "open_now": true,
+                "weekday_text": [
+                  "Thursday: Open 24 hours"
+                ]
+              },
+              "types": [
+                "shopping_mall",
+                "store",
+                "point_of_interest",
+                "establishment"
+              ]
+            },
+            "external_ids": {
+              "google_place_id": "ChIJ_LINCOLN_ROAD_MIAMI"
+            },
+            "sync": {
+              "last_synced_at": "2026-04-02T23:00:00Z",
+              "sync_status": "synced",
+              "provider_version": "google-places-v1"
+            }
+          },
+          "guest_attributes": {
+            "family_friendly": true,
+            "couples_friendly": true,
+            "luxury_level": "midrange",
+            "central_location": true,
+            "booking_relevant": false
+          },
+          "tags": [
+            {
+              "key": "south_beach",
+              "label": "South Beach",
+              "type": "location"
+            },
+            {
+              "key": "lifestyle",
+              "label": "Lifestyle",
+              "type": "style"
+            }
+          ],
+          "recommendation": {
+            "is_featured": false,
+            "priority_score": 82,
+            "editor_note": "A strong walkable shopping option for South Beach-based guests.",
+            "recommended_for": [
+              "south beach stays",
+              "casual shopping",
+              "daytime browsing"
+            ],
+            "seasonality": [
+              "year_round"
+            ]
+          },
+          "status": "active",
+          "sort_order": 4
+        },
+        {
+          "id": "shop_miami_wynwood_boutiques",
+          "name": "Wynwood Boutique Area",
+          "slug": "wynwood-boutique-area",
+          "category": "shopping",
+          "subcategory": "independent_boutique_area",
+          "content": {
+            "short_description": "A useful recommendation for guests wanting a more local, trend-led, and creative shopping experience in Miami.",
+            "long_description": "Wynwood works well for guests who prefer independent boutiques, streetwear, local labels, and a more creative atmosphere over luxury malls and designer retail. It is particularly good for repeat visitors, younger travellers, and guests spending time in the area anyway.",
+            "highlights": [
+              "Creative local feel",
+              "Good for independent and trend-led shopping",
+              "Strong pairing with Wynwood dining and art"
+            ],
+            "insider_tips": [
+              "Best for guests who want atmosphere and local style rather than premium luxury retail.",
+              "Works well as part of a slower Wynwood afternoon."
+            ]
+          },
+          "source": {
+            "type": "hybrid",
+            "google_places": {
+              "place_id": "ChIJ_WYNWOOD_BOUTIQUES_MIAMI",
+              "name": "Wynwood",
+              "formatted_address": "Wynwood, Miami, FL, United States",
+              "location": {
+                "latitude": 25.8004,
+                "longitude": -80.1996
+              },
+              "maps_url": "https://maps.google.com/?cid=wynwood-boutiques-miami-placeholder",
+              "website": "https://wynwoodmiami.com",
+              "international_phone_number": "",
+              "rating": 4.6,
+              "user_ratings_total": 9800,
+              "price_level": 2,
+              "business_status": "OPERATIONAL",
+              "opening_hours": {
+                "open_now": true,
+                "weekday_text": [
+                  "Thursday: Open 24 hours"
+                ]
+              },
+              "types": [
+                "store",
+                "tourist_attraction",
+                "point_of_interest",
+                "establishment"
+              ]
+            },
+            "external_ids": {
+              "google_place_id": "ChIJ_WYNWOOD_BOUTIQUES_MIAMI"
+            },
+            "sync": {
+              "last_synced_at": "2026-04-02T23:00:00Z",
+              "sync_status": "synced",
+              "provider_version": "google-places-v1"
+            }
+          },
+          "guest_attributes": {
+            "family_friendly": true,
+            "couples_friendly": true,
+            "luxury_level": "midrange",
+            "central_location": false,
+            "booking_relevant": false
+          },
+          "tags": [
+            {
+              "key": "independent_shopping",
+              "label": "Independent Shopping",
+              "type": "style"
+            },
+            {
+              "key": "creative",
+              "label": "Creative",
+              "type": "theme"
+            }
+          ],
+          "recommendation": {
+            "is_featured": true,
+            "priority_score": 85,
+            "editor_note": "A strong recommendation for guests wanting a more local and creative side of Miami shopping.",
+            "recommended_for": [
+              "repeat visitors",
+              "younger travellers",
+              "local style"
+            ],
+            "seasonality": [
+              "year_round"
+            ]
+          },
+          "status": "active",
+          "sort_order": 5
+        }
+      ]
+    }
+  },
+  "tags": [
+    {
+      "key": "beach_city",
+      "label": "Beach City",
+      "type": "theme"
+    },
+    {
+      "key": "luxury_options",
+      "label": "Luxury Options",
+      "type": "budget"
+    },
+    {
+      "key": "shopping_destination",
+      "label": "Shopping Destination",
+      "type": "theme"
+    },
+    {
+      "key": "food_scene",
+      "label": "Strong Food Scene",
+      "type": "theme"
+    },
+    {
+      "key": "couples_friendly",
+      "label": "Couples Friendly",
+      "type": "audience"
+    },
+    {
+      "key": "warm_weather_escape",
+      "label": "Warm Weather Escape",
+      "type": "theme"
+    }
+  ],
+  "recommendations": {
+    "featured": [
+      {
+        "place_id": "shop_miami_design_district",
+        "category": "shopping",
+        "reason": "Top luxury shopping recommendation in Miami.",
+        "rank": 1
+      },
+      {
+        "place_id": "rest_miami_joes_stone_crab",
+        "category": "restaurants",
+        "reason": "A classic Miami dining recommendation with strong first-time visitor appeal.",
+        "rank": 2
+      },
+      {
+        "place_id": "act_miami_vizcaya",
+        "category": "activities",
+        "reason": "One of the most memorable and guest-friendly activity picks in Miami.",
+        "rank": 3
+      }
+    ],
+    "editors_picks": [
+      {
+        "place_id": "rest_miami_zuma",
+        "category": "restaurants",
+        "reason": "A polished premium dinner recommendation for Brickell and urban luxury stays.",
+        "rank": 1
+      },
+      {
+        "place_id": "shop_miami_bal_harbour_shops",
+        "category": "shopping",
+        "reason": "Best for refined high-end shopping in a premium setting.",
+        "rank": 2
+      },
+      {
+        "place_id": "spa_miami_lapis_fontainebleau",
+        "category": "spa_wellness",
+        "reason": "Top beachside spa recommendation for luxury and couples stays.",
+        "rank": 3
+      }
+    ],
+    "trending": [
+      {
+        "place_id": "shop_miami_wynwood_boutiques",
+        "category": "shopping",
+        "reason": "Popular with guests looking for a more creative and local side of Miami.",
+        "rank": 1
+      }
+    ],
+    "seasonal": [
+      {
+        "place_id": "shop_miami_design_district",
+        "category": "shopping",
+        "reason": "Especially strong during winter-sun and festive shopping periods.",
+        "rank": 1
+      }
+    ],
+    "personalized_slots": [
+      {
+        "slot_key": "luxury_miami",
+        "label": "Luxury Miami",
+        "items": [
+          {
+            "place_id": "shop_miami_bal_harbour_shops",
+            "category": "shopping",
+            "reason": "Best fit for refined luxury retail.",
+            "rank": 1
+          },
+          {
+            "place_id": "rest_miami_zuma",
+            "category": "restaurants",
+            "reason": "Strong premium dinner option.",
+            "rank": 2
+          },
+          {
+            "place_id": "spa_miami_mandarin_oriental",
+            "category": "spa_wellness",
+            "reason": "Luxury urban wellness pairing.",
+            "rank": 3
+          }
+        ]
+      },
+      {
+        "slot_key": "short_stay_miami",
+        "label": "Short Stay Miami",
+        "items": [
+          {
+            "place_id": "act_miami_vizcaya",
+            "category": "activities",
+            "reason": "A memorable single activity recommendation.",
+            "rank": 1
+          },
+          {
+            "place_id": "rest_miami_joes_stone_crab",
+            "category": "restaurants",
+            "reason": "Classic Miami meal recommendation.",
+            "rank": 2
+          },
+          {
+            "place_id": "shop_miami_brickell_city_centre",
+            "category": "shopping",
+            "reason": "Convenient premium shopping for limited time.",
+            "rank": 3
+          }
+        ]
+      },
+      {
+        "slot_key": "shopping_led_miami",
+        "label": "Shopping-Led Miami",
+        "items": [
+          {
+            "place_id": "shop_miami_design_district",
+            "category": "shopping",
+            "reason": "Best overall luxury and fashion shopping district.",
+            "rank": 1
+          },
+          {
+            "place_id": "shop_miami_bal_harbour_shops",
+            "category": "shopping",
+            "reason": "Refined premium shopping centre option.",
+            "rank": 2
+          },
+          {
+            "place_id": "shop_miami_wynwood_boutiques",
+            "category": "shopping",
+            "reason": "Best local and creative boutique shopping contrast.",
+            "rank": 3
+          }
+        ]
+      }
+    ]
+  },
+  "seo": {
+    "meta_title": "Miami Travel Guide | Restaurants, Shopping, Activities & Wellness | BNO Travel",
+    "meta_description": "Explore Miami with curated BNO Travel recommendations for restaurants, activities, gyms, spa wellness, and shopping.",
+    "canonical_url": "https://bno.travel/miami",
+    "og_title": "Miami Travel Guide | BNO Travel",
+    "og_description": "Professional Miami recommendations for dining, shopping, culture, wellness, and luxury city-beach stays.",
+    "og_image": "https://example.bno.travel/images/miami/miami-og.jpg",
+    "twitter_title": "Miami Travel Guide | BNO Travel",
+    "twitter_description": "Curated Miami recommendations for guests, travellers, and stylish short stays.",
+    "twitter_image": "https://example.bno.travel/images/miami/miami-og.jpg",
+    "schema_type": "TravelDestination",
+    "indexable": true
+  },
+  "metadata": {
+    "status": "published",
+    "created_at": "2026-04-02T23:05:00Z",
+    "updated_at": "2026-04-02T23:20:00Z",
+    "published_at": "2026-04-02T23:22:00Z",
+    "version": 1,
+    "source_priority": [
+      "curated",
+      "google_places",
+      "partner_feed",
+      "user_generated"
+    ]
+  }
+}

@@ -1,0 +1,1587 @@
+{
+  "id": "dest_oslo_no_master",
+  "slug": "oslo",
+  "locale": "en-GB",
+  "city": {
+    "name": "Oslo",
+    "slug": "oslo",
+    "region": "Oslo",
+    "latitude": 59.9139,
+    "longitude": 10.7522,
+    "timezone": "Europe/Oslo"
+  },
+  "country": {
+    "name": "Norway",
+    "code": "NO",
+    "slug": "norway",
+    "continent": "Europe"
+  },
+  "editorial": {
+    "headline": "Oslo: waterfront culture, strong food, design-led shopping, and easy city access to nature",
+    "intro": "Oslo works especially well for travellers who want a clean, walkable capital with strong museums, quality dining, and a calmer pace than larger European cities. It is compact by capital-city standards, making it easy to combine central sightseeing, neighbourhood dining, and shopping in a short stay.",
+    "why_visit": [
+      "A compact capital that is easy to navigate for short city breaks",
+      "Excellent access to waterfront areas, museums, and contemporary architecture",
+      "Strong restaurant scene with Nordic, seafood, and seasonal dining options",
+      "Good shopping across luxury labels, Scandinavian design, and independent boutiques"
+    ],
+    "highlights": [
+      "Very good for 2 to 3 day stays",
+      "Strong fit for couples, culture-focused travellers, and design-conscious guests",
+      "Best experienced by combining central districts with one or two standout bookings"
+    ],
+    "transport_tips": [
+      "Central Oslo is very walkable, especially around Sentrum, Aker Brygge, Bjørvika, and Karl Johans gate.",
+      "Use Ruter public transport for trams, metro, buses, and ferries if moving beyond the centre.",
+      "Book key restaurants and spa treatments in advance, especially on weekends.",
+      "If visiting museums on Bygdøy, check seasonal ferry and opening schedules before planning the day."
+    ],
+    "neighborhood_tips": [
+      {
+        "name": "Sentrum",
+        "tip": "Best for first-time visitors wanting easy access to transport, shopping, and major central sights."
+      },
+      {
+        "name": "Bjørvika",
+        "tip": "Ideal for modern waterfront stays, architecture, the Opera House, and the MUNCH museum."
+      },
+      {
+        "name": "Aker Brygge & Tjuvholmen",
+        "tip": "A strong choice for waterfront dining, galleries, and a more polished city-break feel."
+      },
+      {
+        "name": "Frogner",
+        "tip": "Good for elegant residential streets, upscale boutiques, and a quieter premium atmosphere."
+      },
+      {
+        "name": "Grünerløkka",
+        "tip": "Best for independent shops, cafés, and a more local, creative side of Oslo."
+      }
+    ]
+  },
+  "categories": {
+    "restaurants": {
+      "headline": "Recommended restaurants in Oslo",
+      "description": "A practical mix of reliable Nordic dining, seafood, and more refined special-occasion options.",
+      "items": [
+        {
+          "id": "rest_oslo_maaemo",
+          "name": "Maaemo",
+          "slug": "maaemo",
+          "category": "restaurants",
+          "subcategory": "fine_dining",
+          "content": {
+            "title": "Maaemo",
+            "short_description": "Oslo’s flagship fine-dining experience for guests seeking a top-tier Nordic meal.",
+            "long_description": "Maaemo is one of Oslo’s standout restaurant recommendations for guests who want a destination dining experience. It suits luxury travellers, special occasions, and visitors who specifically want one of the city’s most acclaimed meals rather than a casual dinner.",
+            "highlights": [
+              "Exceptional fine dining reputation",
+              "Strong special-occasion option",
+              "Top-end Nordic tasting experience"
+            ],
+            "insider_tips": [
+              "Book well in advance.",
+              "Best recommended when dining is a major part of the trip rather than a last-minute choice."
+            ]
+          },
+          "source": {
+            "type": "hybrid",
+            "google_places": {
+              "place_id": "ChIJ_MAAEMO_OSLO",
+              "name": "Maaemo",
+              "formatted_address": "Schweigaards gate 15B, 0191 Oslo, Norway",
+              "location": {
+                "latitude": 59.9108,
+                "longitude": 10.7604
+              },
+              "maps_url": "https://maps.google.com/?cid=maaemo-oslo-placeholder",
+              "website": "https://www.maaemo.no",
+              "international_phone_number": "+47 22 22 33 22",
+              "rating": 4.8,
+              "user_ratings_total": 640,
+              "price_level": 4,
+              "business_status": "OPERATIONAL",
+              "opening_hours": {
+                "open_now": false,
+                "weekday_text": [
+                  "Wednesday: 6:00 PM – 12:00 AM"
+                ]
+              },
+              "types": [
+                "restaurant",
+                "food",
+                "point_of_interest",
+                "establishment"
+              ]
+            },
+            "external_ids": {
+              "google_place_id": "ChIJ_MAAEMO_OSLO"
+            },
+            "sync": {
+              "last_synced_at": "2026-04-02T21:30:00Z",
+              "sync_status": "synced",
+              "provider_version": "google-places-v1"
+            }
+          },
+          "guest_attributes": {
+            "family_friendly": false,
+            "couples_friendly": true,
+            "luxury_level": "luxury",
+            "central_location": true,
+            "booking_relevant": true
+          },
+          "tags": [
+            {
+              "key": "fine_dining",
+              "label": "Fine Dining",
+              "type": "style"
+            },
+            {
+              "key": "special_occasion",
+              "label": "Special Occasion",
+              "type": "occasion"
+            }
+          ],
+          "recommendation": {
+            "is_featured": true,
+            "priority_score": 95,
+            "editor_note": "The top choice when a guest wants Oslo’s flagship dining experience.",
+            "recommended_for": [
+              "luxury travellers",
+              "special occasions",
+              "destination dining"
+            ],
+            "seasonality": [
+              "year_round"
+            ]
+          },
+          "status": "active",
+          "sort_order": 1
+        },
+        {
+          "id": "rest_oslo_fiskeriet_youngstorget",
+          "name": "Fiskeriet Youngstorget",
+          "slug": "fiskeriet-youngstorget",
+          "category": "restaurants",
+          "subcategory": "seafood_casual",
+          "content": {
+            "title": "Fiskeriet Youngstorget",
+            "short_description": "A reliable Oslo seafood recommendation with broad appeal and a central location.",
+            "long_description": "Fiskeriet is a useful recommendation for guests who want fresh seafood in a relaxed setting without turning the meal into a formal event. It suits lunch, casual dinners, and visitors wanting something distinctly Norwegian but easygoing.",
+            "highlights": [
+              "Strong seafood option",
+              "Good casual atmosphere",
+              "Very practical for short stays"
+            ],
+            "insider_tips": [
+              "A very good lunch recommendation.",
+              "Useful when guests want local seafood without a fine-dining format."
+            ]
+          },
+          "source": {
+            "type": "hybrid",
+            "google_places": {
+              "place_id": "ChIJ_FISKERIET_OSLO",
+              "name": "Fiskeriet Youngstorget",
+              "formatted_address": "Youngstorget 2B, 0181 Oslo, Norway",
+              "location": {
+                "latitude": 59.9149,
+                "longitude": 10.7486
+              },
+              "maps_url": "https://maps.google.com/?cid=fiskeriet-oslo-placeholder",
+              "website": "https://www.fiskeriet.net",
+              "international_phone_number": "+47 22 41 45 40",
+              "rating": 4.4,
+              "user_ratings_total": 2300,
+              "price_level": 2,
+              "business_status": "OPERATIONAL",
+              "opening_hours": {
+                "open_now": true,
+                "weekday_text": [
+                  "Thursday: 11:00 AM – 10:00 PM"
+                ]
+              },
+              "types": [
+                "restaurant",
+                "seafood_restaurant",
+                "food",
+                "point_of_interest",
+                "establishment"
+              ]
+            },
+            "external_ids": {
+              "google_place_id": "ChIJ_FISKERIET_OSLO"
+            },
+            "sync": {
+              "last_synced_at": "2026-04-02T21:30:00Z",
+              "sync_status": "synced",
+              "provider_version": "google-places-v1"
+            }
+          },
+          "guest_attributes": {
+            "family_friendly": true,
+            "couples_friendly": true,
+            "luxury_level": "midrange",
+            "central_location": true,
+            "booking_relevant": true
+          },
+          "tags": [
+            {
+              "key": "seafood",
+              "label": "Seafood",
+              "type": "theme"
+            },
+            {
+              "key": "casual",
+              "label": "Casual",
+              "type": "style"
+            }
+          ],
+          "recommendation": {
+            "is_featured": true,
+            "priority_score": 89,
+            "editor_note": "A dependable seafood recommendation with broad guest appeal.",
+            "recommended_for": [
+              "first-time visitors",
+              "seafood",
+              "casual dining"
+            ],
+            "seasonality": [
+              "year_round"
+            ]
+          },
+          "status": "active",
+          "sort_order": 2
+        },
+        {
+          "id": "rest_oslo_etta",
+          "name": "Etta",
+          "slug": "etta",
+          "category": "restaurants",
+          "subcategory": "modern_european",
+          "content": {
+            "title": "Etta",
+            "short_description": "A polished central restaurant suited to guests wanting a stylish but approachable dinner.",
+            "long_description": "Etta is a strong recommendation for guests who want a refined meal without going fully formal. It works well for couples, business travellers, and visitors looking for a quality dinner in central Oslo.",
+            "highlights": [
+              "Stylish setting",
+              "Good fit for date nights",
+              "Useful central location"
+            ],
+            "insider_tips": [
+              "A good alternative when guests want quality without the intensity of tasting-menu dining.",
+              "Reserve ahead for weekend evenings."
+            ]
+          },
+          "source": {
+            "type": "hybrid",
+            "google_places": {
+              "place_id": "ChIJ_ETTA_OSLO",
+              "name": "Etta",
+              "formatted_address": "Karl Johans gate area, Oslo, Norway",
+              "location": {
+                "latitude": 59.9127,
+                "longitude": 10.7409
+              },
+              "maps_url": "https://maps.google.com/?cid=etta-oslo-placeholder",
+              "website": "https://www.etta.no",
+              "international_phone_number": "+47 22 00 00 00",
+              "rating": 4.5,
+              "user_ratings_total": 380,
+              "price_level": 3,
+              "business_status": "OPERATIONAL",
+              "opening_hours": {
+                "open_now": false,
+                "weekday_text": [
+                  "Friday: 5:00 PM – 11:00 PM"
+                ]
+              },
+              "types": [
+                "restaurant",
+                "food",
+                "point_of_interest",
+                "establishment"
+              ]
+            },
+            "external_ids": {
+              "google_place_id": "ChIJ_ETTA_OSLO"
+            },
+            "sync": {
+              "last_synced_at": "2026-04-02T21:30:00Z",
+              "sync_status": "synced",
+              "provider_version": "google-places-v1"
+            }
+          },
+          "guest_attributes": {
+            "family_friendly": false,
+            "couples_friendly": true,
+            "luxury_level": "upscale",
+            "central_location": true,
+            "booking_relevant": true
+          },
+          "tags": [
+            {
+              "key": "date_night",
+              "label": "Date Night",
+              "type": "occasion"
+            },
+            {
+              "key": "central_dining",
+              "label": "Central Dining",
+              "type": "location"
+            }
+          ],
+          "recommendation": {
+            "is_featured": false,
+            "priority_score": 84,
+            "editor_note": "A useful polished option for a stylish central dinner.",
+            "recommended_for": [
+              "couples",
+              "business travellers",
+              "evening dining"
+            ],
+            "seasonality": [
+              "year_round"
+            ]
+          },
+          "status": "active",
+          "sort_order": 3
+        }
+      ]
+    },
+    "activities": {
+      "headline": "Top activities in Oslo",
+      "description": "Compact, high-value recommendations that work especially well in a short stay.",
+      "items": [
+        {
+          "id": "act_oslo_munch",
+          "name": "MUNCH",
+          "slug": "munch",
+          "category": "activities",
+          "subcategory": "museum",
+          "content": {
+            "title": "MUNCH",
+            "short_description": "A standout cultural stop in Bjørvika and one of Oslo’s strongest museum recommendations.",
+            "long_description": "MUNCH is one of the most useful activity recommendations in Oslo for guests wanting modern architecture, strong cultural content, and an easy-to-reach waterfront location. It works well for art-focused travellers and shorter city breaks.",
+            "highlights": [
+              "Strong visual impact",
+              "Good Bjørvika location",
+              "Excellent modern cultural recommendation"
+            ],
+            "insider_tips": [
+              "Combine with the Opera House and waterfront walking nearby.",
+              "A good option for a half-day cultural plan."
+            ]
+          },
+          "source": {
+            "type": "hybrid",
+            "google_places": {
+              "place_id": "ChIJ_MUNCH_OSLO",
+              "name": "MUNCH",
+              "formatted_address": "Edvard Munchs Plass 1, 0194 Oslo, Norway",
+              "location": {
+                "latitude": 59.9074,
+                "longitude": 10.7615
+              },
+              "maps_url": "https://maps.google.com/?cid=munch-oslo-placeholder",
+              "website": "https://www.munchmuseet.no",
+              "international_phone_number": "+47 23 49 35 00",
+              "rating": 4.4,
+              "user_ratings_total": 6800,
+              "price_level": 2,
+              "business_status": "OPERATIONAL",
+              "opening_hours": {
+                "open_now": true,
+                "weekday_text": [
+                  "Thursday: 10:00 AM – 9:00 PM"
+                ]
+              },
+              "types": [
+                "museum",
+                "tourist_attraction",
+                "point_of_interest",
+                "establishment"
+              ]
+            },
+            "external_ids": {
+              "google_place_id": "ChIJ_MUNCH_OSLO"
+            },
+            "sync": {
+              "last_synced_at": "2026-04-02T21:30:00Z",
+              "sync_status": "synced",
+              "provider_version": "google-places-v1"
+            }
+          },
+          "guest_attributes": {
+            "family_friendly": true,
+            "couples_friendly": true,
+            "luxury_level": "midrange",
+            "central_location": true,
+            "booking_relevant": true
+          },
+          "tags": [
+            {
+              "key": "museum",
+              "label": "Museum",
+              "type": "theme"
+            },
+            {
+              "key": "modern_oslo",
+              "label": "Modern Oslo",
+              "type": "theme"
+            }
+          ],
+          "recommendation": {
+            "is_featured": true,
+            "priority_score": 92,
+            "editor_note": "A top cultural recommendation for guests wanting one strong Oslo activity.",
+            "recommended_for": [
+              "art lovers",
+              "short stays",
+              "culture"
+            ],
+            "seasonality": [
+              "year_round"
+            ]
+          },
+          "status": "active",
+          "sort_order": 1
+        },
+        {
+          "id": "act_oslo_fram_museum",
+          "name": "Fram Museum",
+          "slug": "fram-museum",
+          "category": "activities",
+          "subcategory": "museum",
+          "content": {
+            "title": "Fram Museum",
+            "short_description": "One of Oslo’s most distinctive museum experiences, especially for first-time visitors.",
+            "long_description": "The Fram Museum is a very good recommendation for guests looking for something clearly Norwegian and memorable. It is especially strong for families, curious first-time visitors, and anyone interested in exploration history.",
+            "highlights": [
+              "Distinctive Norwegian subject matter",
+              "Strong family appeal",
+              "More memorable than a generic museum visit"
+            ],
+            "insider_tips": [
+              "Works best as part of a Bygdøy museum day.",
+              "Check transport timing in advance if relying on seasonal ferry services."
+            ]
+          },
+          "source": {
+            "type": "hybrid",
+            "google_places": {
+              "place_id": "ChIJ_FRAM_MUSEUM_OSLO",
+              "name": "Fram Museum",
+              "formatted_address": "Bygdøynesveien 39, 0286 Oslo, Norway",
+              "location": {
+                "latitude": 59.9033,
+                "longitude": 10.6996
+              },
+              "maps_url": "https://maps.google.com/?cid=fram-museum-oslo-placeholder",
+              "website": "https://frammuseum.no",
+              "international_phone_number": "+47 24 11 41 00",
+              "rating": 4.7,
+              "user_ratings_total": 11600,
+              "price_level": 2,
+              "business_status": "OPERATIONAL",
+              "opening_hours": {
+                "open_now": true,
+                "weekday_text": [
+                  "Thursday: 10:00 AM – 5:00 PM"
+                ]
+              },
+              "types": [
+                "museum",
+                "tourist_attraction",
+                "point_of_interest",
+                "establishment"
+              ]
+            },
+            "external_ids": {
+              "google_place_id": "ChIJ_FRAM_MUSEUM_OSLO"
+            },
+            "sync": {
+              "last_synced_at": "2026-04-02T21:30:00Z",
+              "sync_status": "synced",
+              "provider_version": "google-places-v1"
+            }
+          },
+          "guest_attributes": {
+            "family_friendly": true,
+            "couples_friendly": true,
+            "luxury_level": "midrange",
+            "central_location": false,
+            "booking_relevant": true
+          },
+          "tags": [
+            {
+              "key": "norwegian_history",
+              "label": "Norwegian History",
+              "type": "theme"
+            },
+            {
+              "key": "family_pick",
+              "label": "Family Pick",
+              "type": "audience"
+            }
+          ],
+          "recommendation": {
+            "is_featured": true,
+            "priority_score": 88,
+            "editor_note": "A strong recommendation when guests want something unique to Oslo and Norway.",
+            "recommended_for": [
+              "families",
+              "history",
+              "first-time visitors"
+            ],
+            "seasonality": [
+              "year_round"
+            ]
+          },
+          "status": "active",
+          "sort_order": 2
+        }
+      ]
+    },
+    "gyms": {
+      "headline": "Gyms and fitness options",
+      "description": "Useful fitness picks for guests who want more than a standard hotel gym.",
+      "items": [
+        {
+          "id": "gym_oslo_sats_bislett",
+          "name": "SATS Bislett",
+          "slug": "sats-bislett",
+          "category": "gyms",
+          "subcategory": "full_service_gym",
+          "content": {
+            "title": "SATS Bislett",
+            "short_description": "A practical central gym recommendation with a broad fitness offering.",
+            "long_description": "SATS Bislett is a useful choice for guests who want a serious gym rather than a basic hotel fitness room. It is especially practical for longer stays, business travellers, and visitors familiar with mainstream gym formats.",
+            "highlights": [
+              "Well-known Nordic gym brand",
+              "Good central access",
+              "Suitable for regular training"
+            ],
+            "insider_tips": [
+              "Best for guests staying more than a night or two.",
+              "Check pass access and visitor policies in advance."
+            ]
+          },
+          "source": {
+            "type": "hybrid",
+            "google_places": {
+              "place_id": "ChIJ_SATS_BISLETT",
+              "name": "SATS Bislett",
+              "formatted_address": "Pilestredet 109, 0354 Oslo, Norway",
+              "location": {
+                "latitude": 59.9253,
+                "longitude": 10.7318
+              },
+              "maps_url": "https://maps.google.com/?cid=sats-bislett-placeholder",
+              "website": "https://www.sats.no",
+              "international_phone_number": "+47 40 00 00 00",
+              "rating": 4.2,
+              "user_ratings_total": 510,
+              "price_level": 2,
+              "business_status": "OPERATIONAL",
+              "opening_hours": {
+                "open_now": true,
+                "weekday_text": [
+                  "Thursday: 6:00 AM – 10:00 PM"
+                ]
+              },
+              "types": [
+                "gym",
+                "health",
+                "point_of_interest",
+                "establishment"
+              ]
+            },
+            "external_ids": {
+              "google_place_id": "ChIJ_SATS_BISLETT"
+            },
+            "sync": {
+              "last_synced_at": "2026-04-02T21:30:00Z",
+              "sync_status": "synced",
+              "provider_version": "google-places-v1"
+            }
+          },
+          "guest_attributes": {
+            "family_friendly": false,
+            "couples_friendly": false,
+            "luxury_level": "midrange",
+            "central_location": true,
+            "booking_relevant": true
+          },
+          "tags": [
+            {
+              "key": "fitness",
+              "label": "Fitness",
+              "type": "theme"
+            },
+            {
+              "key": "practical_choice",
+              "label": "Practical Choice",
+              "type": "style"
+            }
+          ],
+          "recommendation": {
+            "is_featured": true,
+            "priority_score": 78,
+            "editor_note": "A practical gym recommendation for regular training during a stay.",
+            "recommended_for": [
+              "business travellers",
+              "longer stays",
+              "routine workouts"
+            ],
+            "seasonality": [
+              "year_round"
+            ]
+          },
+          "status": "active",
+          "sort_order": 1
+        },
+        {
+          "id": "gym_oslo_barrys_oslo",
+          "name": "Barry's Oslo",
+          "slug": "barrys-oslo",
+          "category": "gyms",
+          "subcategory": "boutique_fitness",
+          "content": {
+            "title": "Barry's Oslo",
+            "short_description": "A strong boutique fitness option for guests who prefer classes over a standard gym floor.",
+            "long_description": "Barry's Oslo is a good recommendation for travellers who want a premium class-based workout in a central location. It suits short stays, solo travellers, and guests already familiar with boutique fitness formats.",
+            "highlights": [
+              "Recognisable premium format",
+              "Good central access",
+              "Strong for class-based training"
+            ],
+            "insider_tips": [
+              "Best for guests who enjoy high-energy scheduled classes.",
+              "Book ahead for preferred time slots."
+            ]
+          },
+          "source": {
+            "type": "hybrid",
+            "google_places": {
+              "place_id": "ChIJ_BARRYS_OSLO",
+              "name": "Barry's Oslo",
+              "formatted_address": "Oslo city centre, Norway",
+              "location": {
+                "latitude": 59.9141,
+                "longitude": 10.7424
+              },
+              "maps_url": "https://maps.google.com/?cid=barrys-oslo-placeholder",
+              "website": "https://www.barrys.com",
+              "international_phone_number": "+47 22 11 11 11",
+              "rating": 4.5,
+              "user_ratings_total": 190,
+              "price_level": 3,
+              "business_status": "OPERATIONAL",
+              "opening_hours": {
+                "open_now": false,
+                "weekday_text": [
+                  "Friday: 6:30 AM – 8:30 PM"
+                ]
+              },
+              "types": [
+                "gym",
+                "health",
+                "point_of_interest",
+                "establishment"
+              ]
+            },
+            "external_ids": {
+              "google_place_id": "ChIJ_BARRYS_OSLO"
+            },
+            "sync": {
+              "last_synced_at": "2026-04-02T21:30:00Z",
+              "sync_status": "synced",
+              "provider_version": "google-places-v1"
+            }
+          },
+          "guest_attributes": {
+            "family_friendly": false,
+            "couples_friendly": false,
+            "luxury_level": "upscale",
+            "central_location": true,
+            "booking_relevant": true
+          },
+          "tags": [
+            {
+              "key": "boutique_fitness",
+              "label": "Boutique Fitness",
+              "type": "style"
+            },
+            {
+              "key": "short_stay_friendly",
+              "label": "Short-Stay Friendly",
+              "type": "audience"
+            }
+          ],
+          "recommendation": {
+            "is_featured": false,
+            "priority_score": 74,
+            "editor_note": "A useful recommendation for guests who prefer premium classes over standard gym access.",
+            "recommended_for": [
+              "solo travellers",
+              "boutique fitness",
+              "short stays"
+            ],
+            "seasonality": [
+              "year_round"
+            ]
+          },
+          "status": "active",
+          "sort_order": 2
+        }
+      ]
+    },
+    "spa_wellness": {
+      "headline": "Spa and wellness recommendations",
+      "description": "Good options for guests looking for premium treatments, relaxation, or a wellness break within the city.",
+      "items": [
+        {
+          "id": "spa_oslo_the_thief_spa",
+          "name": "THE THIEF SPA",
+          "slug": "the-thief-spa",
+          "category": "spa_wellness",
+          "subcategory": "luxury_hotel_spa",
+          "content": {
+            "title": "THE THIEF SPA",
+            "short_description": "One of Oslo’s strongest premium spa recommendations in a polished waterfront setting.",
+            "long_description": "THE THIEF SPA is a strong wellness recommendation for guests seeking a premium city spa experience in Oslo. It works especially well for couples, luxury travellers, and anyone staying around Tjuvholmen or Aker Brygge.",
+            "highlights": [
+              "Luxury waterfront setting",
+              "Strong couples appeal",
+              "Good fit for premium stays"
+            ],
+            "insider_tips": [
+              "Best booked ahead for treatments and weekend slots.",
+              "Works well as part of a slower luxury city day."
+            ]
+          },
+          "source": {
+            "type": "hybrid",
+            "google_places": {
+              "place_id": "ChIJ_THIEF_SPA_OSLO",
+              "name": "THE THIEF SPA",
+              "formatted_address": "Landgangen 1, 0252 Oslo, Norway",
+              "location": {
+                "latitude": 59.9083,
+                "longitude": 10.7187
+              },
+              "maps_url": "https://maps.google.com/?cid=the-thief-spa-oslo-placeholder",
+              "website": "https://thethief.com/spa",
+              "international_phone_number": "+47 24 00 40 00",
+              "rating": 4.4,
+              "user_ratings_total": 370,
+              "price_level": 4,
+              "business_status": "OPERATIONAL",
+              "opening_hours": {
+                "open_now": false,
+                "weekday_text": [
+                  "Thursday: 10:00 AM – 8:00 PM"
+                ]
+              },
+              "types": [
+                "spa",
+                "health",
+                "point_of_interest",
+                "establishment"
+              ]
+            },
+            "external_ids": {
+              "google_place_id": "ChIJ_THIEF_SPA_OSLO"
+            },
+            "sync": {
+              "last_synced_at": "2026-04-02T21:30:00Z",
+              "sync_status": "synced",
+              "provider_version": "google-places-v1"
+            }
+          },
+          "guest_attributes": {
+            "family_friendly": false,
+            "couples_friendly": true,
+            "luxury_level": "luxury",
+            "central_location": true,
+            "booking_relevant": true
+          },
+          "tags": [
+            {
+              "key": "luxury_escape",
+              "label": "Luxury Escape",
+              "type": "style"
+            },
+            {
+              "key": "waterfront",
+              "label": "Waterfront",
+              "type": "location"
+            }
+          ],
+          "recommendation": {
+            "is_featured": true,
+            "priority_score": 91,
+            "editor_note": "A high-confidence premium spa recommendation in Oslo.",
+            "recommended_for": [
+              "couples",
+              "luxury travellers",
+              "wellness"
+            ],
+            "seasonality": [
+              "year_round"
+            ]
+          },
+          "status": "active",
+          "sort_order": 1
+        },
+        {
+          "id": "spa_oslo_farris_bad_city_reference",
+          "name": "Artesia Spa Grand Hotel Oslo",
+          "slug": "artesia-spa-grand-hotel-oslo",
+          "category": "spa_wellness",
+          "subcategory": "city_spa",
+          "content": {
+            "title": "Artesia Spa Grand Hotel Oslo",
+            "short_description": "A very central spa recommendation suited to guests wanting convenience and a polished setting.",
+            "long_description": "Artesia Spa at the Grand Hotel is a practical wellness recommendation for guests staying in central Oslo who want a treatment or relaxation option without travelling across the city. It is best for short stays and premium city-break itineraries.",
+            "highlights": [
+              "Very central location",
+              "Easy to pair with shopping and dining",
+              "Useful short-stay wellness option"
+            ],
+            "insider_tips": [
+              "Best for central hotel guests wanting convenience.",
+              "Reserve treatment times in advance, particularly on weekends."
+            ]
+          },
+          "source": {
+            "type": "hybrid",
+            "google_places": {
+              "place_id": "ChIJ_ARTESIA_GRAND_OSLO",
+              "name": "Artesia Spa Grand Hotel",
+              "formatted_address": "Karl Johans gate 31, 0159 Oslo, Norway",
+              "location": {
+                "latitude": 59.9131,
+                "longitude": 10.7394
+              },
+              "maps_url": "https://maps.google.com/?cid=artesia-grand-oslo-placeholder",
+              "website": "https://www.artesiaspa.no",
+              "international_phone_number": "+47 22 98 60 70",
+              "rating": 4.2,
+              "user_ratings_total": 160,
+              "price_level": 3,
+              "business_status": "OPERATIONAL",
+              "opening_hours": {
+                "open_now": true,
+                "weekday_text": [
+                  "Friday: 10:00 AM – 7:00 PM"
+                ]
+              },
+              "types": [
+                "spa",
+                "health",
+                "point_of_interest",
+                "establishment"
+              ]
+            },
+            "external_ids": {
+              "google_place_id": "ChIJ_ARTESIA_GRAND_OSLO"
+            },
+            "sync": {
+              "last_synced_at": "2026-04-02T21:30:00Z",
+              "sync_status": "synced",
+              "provider_version": "google-places-v1"
+            }
+          },
+          "guest_attributes": {
+            "family_friendly": false,
+            "couples_friendly": true,
+            "luxury_level": "upscale",
+            "central_location": true,
+            "booking_relevant": true
+          },
+          "tags": [
+            {
+              "key": "central_wellness",
+              "label": "Central Wellness",
+              "type": "location"
+            },
+            {
+              "key": "hotel_spa",
+              "label": "Hotel Spa",
+              "type": "style"
+            }
+          ],
+          "recommendation": {
+            "is_featured": false,
+            "priority_score": 82,
+            "editor_note": "A strong practical spa recommendation for centrally based guests.",
+            "recommended_for": [
+              "short stays",
+              "central hotels",
+              "wellness breaks"
+            ],
+            "seasonality": [
+              "year_round"
+            ]
+          },
+          "status": "active",
+          "sort_order": 2
+        }
+      ]
+    },
+    "shopping": {
+      "headline": "Shopping recommendations in Oslo",
+      "description": "Oslo shopping is strongest when matched to guest style: luxury and premium labels, Scandinavian design, department stores, and independent boutiques.",
+      "items": [
+        {
+          "id": "shop_oslo_nedre_slottsgate",
+          "name": "Nedre Slottsgate",
+          "slug": "nedre-slottsgate",
+          "category": "shopping",
+          "subcategory": "luxury_shopping_street",
+          "shopping_type": "shopping_street",
+          "content": {
+            "title": "Nedre Slottsgate",
+            "short_description": "Oslo’s strongest central luxury shopping street for premium labels and polished browsing.",
+            "long_description": "Nedre Slottsgate is the clearest recommendation for guests wanting luxury shopping in central Oslo. It is compact, easy to reach, and works especially well for visitors staying around Karl Johans gate, the Grand Hotel area, or central business hotels.",
+            "highlights": [
+              "Best central luxury shopping area",
+              "Easy to combine with Sentrum hotels",
+              "Good fit for premium travellers"
+            ],
+            "insider_tips": [
+              "Best for guests specifically looking for premium labels.",
+              "Combine with nearby department stores and Karl Johans gate for a fuller shopping afternoon."
+            ]
+          },
+          "source": {
+            "type": "hybrid",
+            "google_places": {
+              "place_id": "ChIJ_NEDRE_SLOTTSGATE_OSLO",
+              "name": "Nedre Slottsgate",
+              "formatted_address": "Nedre Slottsgate, 0157 Oslo, Norway",
+              "location": {
+                "latitude": 59.9128,
+                "longitude": 10.7419
+              },
+              "maps_url": "https://maps.google.com/?cid=nedre-slottsgate-oslo-placeholder",
+              "website": "https://www.visitoslo.com",
+              "international_phone_number": "",
+              "rating": 4.4,
+              "user_ratings_total": 980,
+              "price_level": 4,
+              "business_status": "OPERATIONAL",
+              "opening_hours": {
+                "open_now": true,
+                "weekday_text": [
+                  "Thursday: Open 24 hours"
+                ]
+              },
+              "types": [
+                "store",
+                "point_of_interest",
+                "establishment"
+              ]
+            },
+            "external_ids": {
+              "google_place_id": "ChIJ_NEDRE_SLOTTSGATE_OSLO"
+            },
+            "sync": {
+              "last_synced_at": "2026-04-02T21:30:00Z",
+              "sync_status": "synced",
+              "provider_version": "google-places-v1"
+            }
+          },
+          "guest_attributes": {
+            "family_friendly": false,
+            "couples_friendly": true,
+            "luxury_level": "luxury",
+            "central_location": true,
+            "booking_relevant": false
+          },
+          "tags": [
+            {
+              "key": "luxury_shopping",
+              "label": "Luxury Shopping",
+              "type": "style"
+            },
+            {
+              "key": "sentrum",
+              "label": "Sentrum",
+              "type": "location"
+            }
+          ],
+          "recommendation": {
+            "is_featured": true,
+            "priority_score": 91,
+            "editor_note": "The strongest central luxury shopping recommendation in Oslo.",
+            "recommended_for": [
+              "luxury travellers",
+              "premium shopping",
+              "central stays"
+            ],
+            "seasonality": [
+              "year_round"
+            ]
+          },
+          "status": "active",
+          "sort_order": 1
+        },
+        {
+          "id": "shop_oslo_steen_strom",
+          "name": "Steen & Strøm",
+          "slug": "steen-and-strom",
+          "category": "shopping",
+          "subcategory": "department_store",
+          "shopping_type": "department_store",
+          "content": {
+            "title": "Steen & Strøm",
+            "short_description": "A central department store that is practical for fashion, beauty, and convenient city shopping.",
+            "long_description": "Steen & Strøm is a useful recommendation for guests who want one central shopping stop rather than moving between multiple streets and smaller stores. It works well for fashion, beauty, and straightforward shopping in the heart of Oslo.",
+            "highlights": [
+              "Very central location",
+              "Easy all-in-one shopping option",
+              "Useful in short stays"
+            ],
+            "insider_tips": [
+              "A good recommendation when time is limited.",
+              "Works well alongside nearby premium streets and Karl Johans gate."
+            ]
+          },
+          "source": {
+            "type": "hybrid",
+            "google_places": {
+              "place_id": "ChIJ_STEEN_STROM_OSLO",
+              "name": "Steen & Strøm Department Store",
+              "formatted_address": "Nedre Slottsgate 8, 0157 Oslo, Norway",
+              "location": {
+                "latitude": 59.9126,
+                "longitude": 10.7425
+              },
+              "maps_url": "https://maps.google.com/?cid=steen-strom-oslo-placeholder",
+              "website": "https://www.steenogstromoslo.no",
+              "international_phone_number": "+47 23 08 81 00",
+              "rating": 4.1,
+              "user_ratings_total": 7400,
+              "price_level": 3,
+              "business_status": "OPERATIONAL",
+              "opening_hours": {
+                "open_now": true,
+                "weekday_text": [
+                  "Thursday: 10:00 AM – 9:00 PM"
+                ]
+              },
+              "types": [
+                "department_store",
+                "store",
+                "point_of_interest",
+                "establishment"
+              ]
+            },
+            "external_ids": {
+              "google_place_id": "ChIJ_STEEN_STROM_OSLO"
+            },
+            "sync": {
+              "last_synced_at": "2026-04-02T21:30:00Z",
+              "sync_status": "synced",
+              "provider_version": "google-places-v1"
+            }
+          },
+          "guest_attributes": {
+            "family_friendly": true,
+            "couples_friendly": true,
+            "luxury_level": "upscale",
+            "central_location": true,
+            "booking_relevant": false
+          },
+          "tags": [
+            {
+              "key": "department_store",
+              "label": "Department Store",
+              "type": "style"
+            },
+            {
+              "key": "central_shopping",
+              "label": "Central Shopping",
+              "type": "location"
+            }
+          ],
+          "recommendation": {
+            "is_featured": true,
+            "priority_score": 86,
+            "editor_note": "A very practical central shopping recommendation for short stays.",
+            "recommended_for": [
+              "short stays",
+              "fashion",
+              "convenient shopping"
+            ],
+            "seasonality": [
+              "year_round"
+            ]
+          },
+          "status": "active",
+          "sort_order": 2
+        },
+        {
+          "id": "shop_oslo_paleet",
+          "name": "Paleet",
+          "slug": "paleet",
+          "category": "shopping",
+          "subcategory": "premium_shopping_center",
+          "shopping_type": "mall",
+          "content": {
+            "title": "Paleet",
+            "short_description": "A polished central shopping destination with fashion, accessories, and premium city-break appeal.",
+            "long_description": "Paleet is a strong recommendation for guests wanting a polished central shopping stop with a more premium feel. It is useful for fashion-led browsing and works particularly well for visitors staying around Karl Johans gate and central Oslo hotels.",
+            "highlights": [
+              "Premium central retail option",
+              "Easy to access from main hotel areas",
+              "Useful for fashion-led shopping"
+            ],
+            "insider_tips": [
+              "Good when guests want compact, convenient shopping in a central area.",
+              "Easy to combine with lunch and nearby department stores."
+            ]
+          },
+          "source": {
+            "type": "hybrid",
+            "google_places": {
+              "place_id": "ChIJ_PALEET_OSLO",
+              "name": "Paleet",
+              "formatted_address": "Karl Johans gate 37-43, 0162 Oslo, Norway",
+              "location": {
+                "latitude": 59.9134,
+                "longitude": 10.7391
+              },
+              "maps_url": "https://maps.google.com/?cid=paleet-oslo-placeholder",
+              "website": "https://www.paleet.no",
+              "international_phone_number": "+47 22 41 01 10",
+              "rating": 4.1,
+              "user_ratings_total": 2200,
+              "price_level": 3,
+              "business_status": "OPERATIONAL",
+              "opening_hours": {
+                "open_now": true,
+                "weekday_text": [
+                  "Thursday: 10:00 AM – 8:00 PM"
+                ]
+              },
+              "types": [
+                "shopping_mall",
+                "store",
+                "point_of_interest",
+                "establishment"
+              ]
+            },
+            "external_ids": {
+              "google_place_id": "ChIJ_PALEET_OSLO"
+            },
+            "sync": {
+              "last_synced_at": "2026-04-02T21:30:00Z",
+              "sync_status": "synced",
+              "provider_version": "google-places-v1"
+            }
+          },
+          "guest_attributes": {
+            "family_friendly": true,
+            "couples_friendly": true,
+            "luxury_level": "upscale",
+            "central_location": true,
+            "booking_relevant": false
+          },
+          "tags": [
+            {
+              "key": "premium_city_shopping",
+              "label": "Premium City Shopping",
+              "type": "style"
+            },
+            {
+              "key": "karl_johan",
+              "label": "Karl Johan",
+              "type": "location"
+            }
+          ],
+          "recommendation": {
+            "is_featured": false,
+            "priority_score": 82,
+            "editor_note": "A useful premium central option when guests want compact and easy shopping.",
+            "recommended_for": [
+              "fashion",
+              "short stays",
+              "central hotels"
+            ],
+            "seasonality": [
+              "year_round"
+            ]
+          },
+          "status": "active",
+          "sort_order": 3
+        },
+        {
+          "id": "shop_oslo_grunerlokka_markveien",
+          "name": "Markveien, Grünerløkka",
+          "slug": "markveien-grunerlokka",
+          "category": "shopping",
+          "subcategory": "independent_boutique_area",
+          "shopping_type": "boutique",
+          "content": {
+            "title": "Markveien, Grünerløkka",
+            "short_description": "A strong shopping recommendation for guests seeking independent boutiques and a more local Oslo feel.",
+            "long_description": "Markveien in Grünerløkka is one of the most useful shopping suggestions for guests who prefer independent boutiques, design-led stores, and a neighbourhood atmosphere over luxury labels. It is especially good for younger travellers, repeat visitors, and anyone wanting a more local side of Oslo.",
+            "highlights": [
+              "Independent boutique feel",
+              "Stronger local character",
+              "Good for design and lifestyle browsing"
+            ],
+            "insider_tips": [
+              "Best for guests who want something more local than the main central shopping streets.",
+              "Combine with cafés and casual lunch in Grünerløkka."
+            ]
+          },
+          "source": {
+            "type": "hybrid",
+            "google_places": {
+              "place_id": "ChIJ_MARKVEIEN_GRUNERLOKKA",
+              "name": "Markveien",
+              "formatted_address": "Markveien, 0554 Oslo, Norway",
+              "location": {
+                "latitude": 59.9232,
+                "longitude": 10.7574
+              },
+              "maps_url": "https://maps.google.com/?cid=markveien-grunerlokka-placeholder",
+              "website": "https://www.visitoslo.com",
+              "international_phone_number": "",
+              "rating": 4.5,
+              "user_ratings_total": 860,
+              "price_level": 2,
+              "business_status": "OPERATIONAL",
+              "opening_hours": {
+                "open_now": true,
+                "weekday_text": [
+                  "Thursday: Open 24 hours"
+                ]
+              },
+              "types": [
+                "store",
+                "point_of_interest",
+                "establishment"
+              ]
+            },
+            "external_ids": {
+              "google_place_id": "ChIJ_MARKVEIEN_GRUNERLOKKA"
+            },
+            "sync": {
+              "last_synced_at": "2026-04-02T21:30:00Z",
+              "sync_status": "synced",
+              "provider_version": "google-places-v1"
+            }
+          },
+          "guest_attributes": {
+            "family_friendly": true,
+            "couples_friendly": true,
+            "luxury_level": "midrange",
+            "central_location": false,
+            "booking_relevant": false
+          },
+          "tags": [
+            {
+              "key": "independent_shopping",
+              "label": "Independent Shopping",
+              "type": "style"
+            },
+            {
+              "key": "local_feel",
+              "label": "Local Feel",
+              "type": "theme"
+            }
+          ],
+          "recommendation": {
+            "is_featured": true,
+            "priority_score": 87,
+            "editor_note": "A very good recommendation when guests want local style and independent shops.",
+            "recommended_for": [
+              "repeat visitors",
+              "younger travellers",
+              "design-led browsing"
+            ],
+            "seasonality": [
+              "year_round"
+            ]
+          },
+          "status": "active",
+          "sort_order": 4
+        },
+        {
+          "id": "shop_oslo_frogner_design_boutiques",
+          "name": "Frogner Boutique Area",
+          "slug": "frogner-boutique-area",
+          "category": "shopping",
+          "subcategory": "upscale_boutique_district",
+          "shopping_type": "boutique",
+          "content": {
+            "title": "Frogner Boutique Area",
+            "short_description": "An elegant district for guests wanting quieter premium shopping with a more residential Oslo feel.",
+            "long_description": "Frogner is a strong shopping recommendation for guests who prefer stylish boutiques, interior design, and a calmer premium atmosphere rather than central retail streets. It works especially well for couples and design-conscious travellers.",
+            "highlights": [
+              "Elegant atmosphere",
+              "Good boutique and design appeal",
+              "Less crowded than main central retail areas"
+            ],
+            "insider_tips": [
+              "Best for a slower, more curated shopping afternoon.",
+              "Combine with café stops or a walk through Frogner’s residential streets."
+            ]
+          },
+          "source": {
+            "type": "hybrid",
+            "google_places": {
+              "place_id": "ChIJ_FROGNER_BOUTIQUES_OSLO",
+              "name": "Frogner boutique area",
+              "formatted_address": "Frogner, Oslo, Norway",
+              "location": {
+                "latitude": 59.9195,
+                "longitude": 10.7081
+              },
+              "maps_url": "https://maps.google.com/?cid=frogner-boutiques-oslo-placeholder",
+              "website": "https://www.visitoslo.com",
+              "international_phone_number": "",
+              "rating": 4.4,
+              "user_ratings_total": 420,
+              "price_level": 3,
+              "business_status": "OPERATIONAL",
+              "opening_hours": {
+                "open_now": true,
+                "weekday_text": [
+                  "Thursday: Open 24 hours"
+                ]
+              },
+              "types": [
+                "store",
+                "point_of_interest",
+                "establishment"
+              ]
+            },
+            "external_ids": {
+              "google_place_id": "ChIJ_FROGNER_BOUTIQUES_OSLO"
+            },
+            "sync": {
+              "last_synced_at": "2026-04-02T21:30:00Z",
+              "sync_status": "synced",
+              "provider_version": "google-places-v1"
+            }
+          },
+          "guest_attributes": {
+            "family_friendly": true,
+            "couples_friendly": true,
+            "luxury_level": "upscale",
+            "central_location": false,
+            "booking_relevant": false
+          },
+          "tags": [
+            {
+              "key": "quiet_premium",
+              "label": "Quiet Premium",
+              "type": "style"
+            },
+            {
+              "key": "design_led",
+              "label": "Design-Led",
+              "type": "style"
+            }
+          ],
+          "recommendation": {
+            "is_featured": false,
+            "priority_score": 80,
+            "editor_note": "A good recommendation for guests who prefer boutique shopping over larger retail areas.",
+            "recommended_for": [
+              "couples",
+              "design-conscious travellers",
+              "slower city breaks"
+            ],
+            "seasonality": [
+              "year_round"
+            ]
+          },
+          "status": "active",
+          "sort_order": 5
+        }
+      ]
+    }
+  },
+  "tags": [
+    {
+      "key": "city_break",
+      "label": "City Break",
+      "type": "theme"
+    },
+    {
+      "key": "design_destination",
+      "label": "Design Destination",
+      "type": "theme"
+    },
+    {
+      "key": "waterfront_city",
+      "label": "Waterfront City",
+      "type": "theme"
+    },
+    {
+      "key": "food_scene",
+      "label": "Strong Food Scene",
+      "type": "theme"
+    },
+    {
+      "key": "walkable",
+      "label": "Walkable",
+      "type": "style"
+    },
+    {
+      "key": "shopping_destination",
+      "label": "Shopping Destination",
+      "type": "theme"
+    }
+  ],
+  "recommendations": {
+    "featured": [
+      {
+        "place_id": "act_oslo_munch",
+        "category": "activities",
+        "reason": "Top cultural recommendation for a short Oslo stay.",
+        "rank": 1
+      },
+      {
+        "place_id": "shop_oslo_nedre_slottsgate",
+        "category": "shopping",
+        "reason": "Best central luxury shopping recommendation in Oslo.",
+        "rank": 2
+      },
+      {
+        "place_id": "rest_oslo_fiskeriet_youngstorget",
+        "category": "restaurants",
+        "reason": "A reliable and guest-friendly seafood recommendation.",
+        "rank": 3
+      }
+    ],
+    "editors_picks": [
+      {
+        "place_id": "rest_oslo_maaemo",
+        "category": "restaurants",
+        "reason": "Oslo’s flagship fine-dining experience for special occasions.",
+        "rank": 1
+      },
+      {
+        "place_id": "shop_oslo_grunerlokka_markveien",
+        "category": "shopping",
+        "reason": "Best for local boutiques and a more characterful side of Oslo shopping.",
+        "rank": 2
+      },
+      {
+        "place_id": "spa_oslo_the_thief_spa",
+        "category": "spa_wellness",
+        "reason": "Top premium spa recommendation in the city.",
+        "rank": 3
+      }
+    ],
+    "personalized_slots": [
+      {
+        "slot_key": "luxury_oslo",
+        "label": "Luxury Oslo",
+        "items": [
+          {
+            "place_id": "rest_oslo_maaemo",
+            "category": "restaurants",
+            "reason": "Top-end dining recommendation.",
+            "rank": 1
+          },
+          {
+            "place_id": "shop_oslo_nedre_slottsgate",
+            "category": "shopping",
+            "reason": "Best fit for luxury shopping.",
+            "rank": 2
+          },
+          {
+            "place_id": "spa_oslo_the_thief_spa",
+            "category": "spa_wellness",
+            "reason": "Premium wellness pairing for a luxury stay.",
+            "rank": 3
+          }
+        ]
+      },
+      {
+        "slot_key": "short_stay_oslo",
+        "label": "Short Stay Oslo",
+        "items": [
+          {
+            "place_id": "act_oslo_munch",
+            "category": "activities",
+            "reason": "Strong one-activity cultural pick in a central area.",
+            "rank": 1
+          },
+          {
+            "place_id": "rest_oslo_fiskeriet_youngstorget",
+            "category": "restaurants",
+            "reason": "Easy and local-feeling dining recommendation.",
+            "rank": 2
+          },
+          {
+            "place_id": "shop_oslo_steen_strom",
+            "category": "shopping",
+            "reason": "Convenient central shopping for limited time.",
+            "rank": 3
+          }
+        ]
+      },
+      {
+        "slot_key": "design_and_local_oslo",
+        "label": "Design & Local Oslo",
+        "items": [
+          {
+            "place_id": "shop_oslo_grunerlokka_markveien",
+            "category": "shopping",
+            "reason": "Best for local boutiques and independent shopping.",
+            "rank": 1
+          },
+          {
+            "place_id": "shop_oslo_frogner_design_boutiques",
+            "category": "shopping",
+            "reason": "A calmer premium boutique area.",
+            "rank": 2
+          },
+          {
+            "place_id": "rest_oslo_etta",
+            "category": "restaurants",
+            "reason": "Stylish dinner pairing for a design-led city day.",
+            "rank": 3
+          }
+        ]
+      }
+    ]
+  },
+  "seo": {
+    "meta_title": "Oslo Travel Guide | Restaurants, Shopping, Activities & Wellness | BNO Travel",
+    "meta_description": "Explore Oslo with curated BNO Travel recommendations for restaurants, activities, gyms, spa wellness, and shopping.",
+    "canonical_url": "https://bno.travel/oslo",
+    "og_title": "Oslo Travel Guide | BNO Travel",
+    "og_description": "Professional Oslo recommendations for dining, shopping, culture, wellness, and short city stays.",
+    "og_image": "https://example.bno.travel/images/oslo/oslo-og.jpg",
+    "twitter_title": "Oslo Travel Guide | BNO Travel",
+    "twitter_description": "Curated Oslo recommendations for guests, travellers, and city-break planning.",
+    "twitter_image": "https://example.bno.travel/images/oslo/oslo-og.jpg",
+    "schema_type": "TravelDestination",
+    "indexable": true
+  },
+  "metadata": {
+    "status": "published",
+    "created_at": "2026-04-02T21:45:00Z",
+    "updated_at": "2026-04-02T22:00:00Z",
+    "published_at": "2026-04-02T22:05:00Z",
+    "version": 1,
+    "source_priority": [
+      "curated",
+      "google_places",
+      "partner_feed",
+      "user_generated"
+    ]
+  }
+}

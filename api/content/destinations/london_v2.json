@@ -1,0 +1,1653 @@
+{
+  "id": "dest_london_gb_master",
+  "slug": "london",
+  "locale": "en-GB",
+  "city": {
+    "name": "London",
+    "slug": "london",
+    "region": "England",
+    "latitude": 51.5074,
+    "longitude": -0.1278,
+    "timezone": "Europe/London"
+  },
+  "country": {
+    "name": "United Kingdom",
+    "code": "GB",
+    "slug": "united-kingdom",
+    "continent": "Europe"
+  },
+  "editorial": {
+    "headline": "London: iconic sights, standout dining, and world-class shopping across distinct neighbourhoods",
+    "intro": "London is one of Europe’s most versatile city destinations, working equally well for first-time visitors, shopping trips, luxury stays, and culture-led weekends. The key is choosing the right areas and making a few strong bookings in advance.",
+    "why_visit": [
+      "A global capital for landmarks, museums, theatre, and major city experiences",
+      "Excellent restaurant range from lively casual favourites to classic fine dining",
+      "Outstanding shopping across luxury streets, iconic department stores, and design-led boutiques",
+      "Neighbourhood variety that allows guests to shape the trip around pace and style"
+    ],
+    "highlights": [
+      "Strong fit for 2 to 4 day city breaks",
+      "Very good for couples, families, and luxury travellers",
+      "Best results come from area-based planning rather than trying to cover everything"
+    ],
+    "transport_tips": [
+      "Use contactless payment or Oyster for Tube and bus travel.",
+      "For short stays, choosing a central base saves significant travel time.",
+      "Book key restaurants, premium spa experiences, and major attractions in advance.",
+      "Allow extra time for travel during weekday rush hours."
+    ],
+    "neighborhood_tips": [
+      {
+        "name": "Mayfair",
+        "tip": "Best for luxury hotels, polished dining, and premium shopping."
+      },
+      {
+        "name": "Covent Garden",
+        "tip": "Ideal for first-time visitors wanting walkability, restaurants, and theatre access."
+      },
+      {
+        "name": "South Kensington",
+        "tip": "A good option for museums, elegant streets, and family-friendly stays."
+      },
+      {
+        "name": "Soho",
+        "tip": "Best for lively dining, nightlife, and a more energetic city atmosphere."
+      },
+      {
+        "name": "Notting Hill",
+        "tip": "A stylish choice for boutiques, cafés, and a more residential London feel."
+      }
+    ]
+  },
+  "categories": {
+    "restaurants": {
+      "headline": "Recommended restaurants in London",
+      "description": "A practical mix of central crowd-pleasers, refined classics, and guest-friendly dining picks.",
+      "items": [
+        {
+          "id": "rest_london_dishoom_covent_garden",
+          "name": "Dishoom Covent Garden",
+          "slug": "dishoom-covent-garden",
+          "category": "restaurants",
+          "subcategory": "casual_dining",
+          "content": {
+            "title": "Dishoom Covent Garden",
+            "short_description": "A reliable central London restaurant with strong atmosphere and broad guest appeal.",
+            "long_description": "Dishoom Covent Garden is one of the easiest restaurant recommendations in central London. It works well for first-time visitors, groups, and anyone wanting a lively but polished casual meal near Covent Garden and the West End.",
+            "highlights": [
+              "Central location",
+              "Consistently popular",
+              "Good for groups and casual dinners"
+            ],
+            "insider_tips": [
+              "Very useful before or after a West End show.",
+              "Peak dinner times can be busy, so booking helps."
+            ]
+          },
+          "source": {
+            "type": "hybrid",
+            "google_places": {
+              "place_id": "ChIJ_DISHOOM_COVENT_GARDEN",
+              "name": "Dishoom Covent Garden",
+              "formatted_address": "12 Upper St Martin's Ln, London WC2H 9FB, United Kingdom",
+              "location": {
+                "latitude": 51.5129,
+                "longitude": -0.1267
+              },
+              "maps_url": "https://maps.google.com/?cid=dishoom-covent-garden-placeholder",
+              "website": "https://www.dishoom.com",
+              "international_phone_number": "+44 20 7420 9320",
+              "rating": 4.6,
+              "user_ratings_total": 12840,
+              "price_level": 2,
+              "business_status": "OPERATIONAL",
+              "opening_hours": {
+                "open_now": true,
+                "weekday_text": [
+                  "Monday: 8:00 AM – 11:00 PM"
+                ]
+              },
+              "types": [
+                "restaurant",
+                "food",
+                "point_of_interest",
+                "establishment"
+              ]
+            },
+            "external_ids": {
+              "google_place_id": "ChIJ_DISHOOM_COVENT_GARDEN"
+            },
+            "sync": {
+              "last_synced_at": "2026-04-02T20:00:00Z",
+              "sync_status": "synced",
+              "provider_version": "google-places-v1"
+            }
+          },
+          "guest_attributes": {
+            "family_friendly": true,
+            "couples_friendly": true,
+            "luxury_level": "midrange",
+            "central_location": true,
+            "booking_relevant": true
+          },
+          "tags": [
+            {
+              "key": "central",
+              "label": "Central",
+              "type": "location"
+            },
+            {
+              "key": "group_friendly",
+              "label": "Group Friendly",
+              "type": "audience"
+            }
+          ],
+          "recommendation": {
+            "is_featured": true,
+            "priority_score": 91,
+            "editor_note": "One of the easiest all-round central dining recommendations.",
+            "recommended_for": [
+              "first-time visitors",
+              "casual dining",
+              "pre-theatre"
+            ],
+            "seasonality": [
+              "year_round"
+            ]
+          },
+          "status": "active",
+          "sort_order": 1
+        },
+        {
+          "id": "rest_london_scotts_mayfair",
+          "name": "Scott's Mayfair",
+          "slug": "scotts-mayfair",
+          "category": "restaurants",
+          "subcategory": "fine_dining",
+          "content": {
+            "title": "Scott's Mayfair",
+            "short_description": "A polished Mayfair classic for seafood and special-occasion dining.",
+            "long_description": "Scott's is a strong recommendation for guests staying in Mayfair or looking for a more refined London dinner. It suits couples, luxury travellers, and anyone wanting a classic rather than trend-driven dining experience.",
+            "highlights": [
+              "Prestige Mayfair address",
+              "Strong seafood reputation",
+              "Excellent for luxury itineraries"
+            ],
+            "insider_tips": [
+              "Book well in advance for dinner.",
+              "Pairs naturally with Bond Street or Mount Street shopping."
+            ]
+          },
+          "source": {
+            "type": "hybrid",
+            "google_places": {
+              "place_id": "ChIJ_SCOTTS_MAYFAIR",
+              "name": "Scott's",
+              "formatted_address": "20 Mount St, London W1K 2HE, United Kingdom",
+              "location": {
+                "latitude": 51.5104,
+                "longitude": -0.1491
+              },
+              "maps_url": "https://maps.google.com/?cid=scotts-mayfair-placeholder",
+              "website": "https://www.scotts-restaurant.com",
+              "international_phone_number": "+44 20 7495 7309",
+              "rating": 4.5,
+              "user_ratings_total": 2450,
+              "price_level": 4,
+              "business_status": "OPERATIONAL",
+              "opening_hours": {
+                "open_now": false,
+                "weekday_text": [
+                  "Monday: 12:00 PM – 11:00 PM"
+                ]
+              },
+              "types": [
+                "restaurant",
+                "food",
+                "point_of_interest",
+                "establishment"
+              ]
+            },
+            "external_ids": {
+              "google_place_id": "ChIJ_SCOTTS_MAYFAIR"
+            },
+            "sync": {
+              "last_synced_at": "2026-04-02T20:00:00Z",
+              "sync_status": "synced",
+              "provider_version": "google-places-v1"
+            }
+          },
+          "guest_attributes": {
+            "family_friendly": false,
+            "couples_friendly": true,
+            "luxury_level": "luxury",
+            "central_location": true,
+            "booking_relevant": true
+          },
+          "tags": [
+            {
+              "key": "mayfair",
+              "label": "Mayfair",
+              "type": "location"
+            },
+            {
+              "key": "luxury_dining",
+              "label": "Luxury Dining",
+              "type": "style"
+            }
+          ],
+          "recommendation": {
+            "is_featured": true,
+            "priority_score": 94,
+            "editor_note": "A dependable premium choice for Mayfair-based guests.",
+            "recommended_for": [
+              "luxury stays",
+              "special occasions",
+              "date night"
+            ],
+            "seasonality": [
+              "year_round"
+            ]
+          },
+          "status": "active",
+          "sort_order": 2
+        },
+        {
+          "id": "rest_london_the_wolseley",
+          "name": "The Wolseley",
+          "slug": "the-wolseley",
+          "category": "restaurants",
+          "subcategory": "classic_european",
+          "content": {
+            "title": "The Wolseley",
+            "short_description": "A classic all-day dining room in St James's with broad guest appeal.",
+            "long_description": "The Wolseley is a very useful London recommendation because it works for breakfast, lunch, afternoon meetings, and elegant but not overly formal dinners. It is particularly strong for guests staying around Mayfair, Green Park, or Piccadilly.",
+            "highlights": [
+              "Strong breakfast and lunch option",
+              "Elegant but approachable",
+              "Excellent central location"
+            ],
+            "insider_tips": [
+              "Especially useful for breakfast or a polished midday meal.",
+              "Book ahead for prime times."
+            ]
+          },
+          "source": {
+            "type": "hybrid",
+            "google_places": {
+              "place_id": "ChIJ_THE_WOLSELEY",
+              "name": "The Wolseley",
+              "formatted_address": "160 Piccadilly, St. James's, London W1J 9EB, United Kingdom",
+              "location": {
+                "latitude": 51.5078,
+                "longitude": -0.1418
+              },
+              "maps_url": "https://maps.google.com/?cid=the-wolseley-placeholder",
+              "website": "https://www.thewolseley.com",
+              "international_phone_number": "+44 20 7499 6996",
+              "rating": 4.5,
+              "user_ratings_total": 6900,
+              "price_level": 3,
+              "business_status": "OPERATIONAL",
+              "opening_hours": {
+                "open_now": true,
+                "weekday_text": [
+                  "Tuesday: 7:00 AM – 11:00 PM"
+                ]
+              },
+              "types": [
+                "restaurant",
+                "cafe",
+                "food",
+                "point_of_interest",
+                "establishment"
+              ]
+            },
+            "external_ids": {
+              "google_place_id": "ChIJ_THE_WOLSELEY"
+            },
+            "sync": {
+              "last_synced_at": "2026-04-02T20:00:00Z",
+              "sync_status": "synced",
+              "provider_version": "google-places-v1"
+            }
+          },
+          "guest_attributes": {
+            "family_friendly": true,
+            "couples_friendly": true,
+            "luxury_level": "upscale",
+            "central_location": true,
+            "booking_relevant": true
+          },
+          "tags": [
+            {
+              "key": "classic_london",
+              "label": "Classic London",
+              "type": "theme"
+            },
+            {
+              "key": "all_day_dining",
+              "label": "All-Day Dining",
+              "type": "style"
+            }
+          ],
+          "recommendation": {
+            "is_featured": false,
+            "priority_score": 88,
+            "editor_note": "A very practical recommendation because it works at several times of day.",
+            "recommended_for": [
+              "breakfast",
+              "central stays",
+              "classic London dining"
+            ],
+            "seasonality": [
+              "year_round"
+            ]
+          },
+          "status": "active",
+          "sort_order": 3
+        }
+      ]
+    },
+    "activities": {
+      "headline": "Top activities in London",
+      "description": "Landmark and culture recommendations that work especially well for short stays.",
+      "items": [
+        {
+          "id": "act_london_tower_of_london",
+          "name": "Tower of London",
+          "slug": "tower-of-london",
+          "category": "activities",
+          "subcategory": "historic_landmark",
+          "content": {
+            "title": "Tower of London",
+            "short_description": "One of London’s strongest first-time visitor attractions.",
+            "long_description": "The Tower of London is a high-confidence recommendation for guests who want one major landmark experience. It combines history, setting, and strong visitor value, especially on shorter stays.",
+            "highlights": [
+              "Iconic London landmark",
+              "Excellent for first-time visitors",
+              "Easy to combine with Tower Bridge"
+            ],
+            "insider_tips": [
+              "Go earlier in the day for a smoother visit.",
+              "Book in advance if travelling during busy periods."
+            ]
+          },
+          "source": {
+            "type": "hybrid",
+            "google_places": {
+              "place_id": "ChIJ_TOWER_OF_LONDON",
+              "name": "Tower of London",
+              "formatted_address": "London EC3N 4AB, United Kingdom",
+              "location": {
+                "latitude": 51.5081,
+                "longitude": -0.0759
+              },
+              "maps_url": "https://maps.google.com/?cid=tower-of-london-placeholder",
+              "website": "https://www.hrp.org.uk/tower-of-london",
+              "international_phone_number": "+44 333 320 6000",
+              "rating": 4.7,
+              "user_ratings_total": 112000,
+              "price_level": 2,
+              "business_status": "OPERATIONAL",
+              "opening_hours": {
+                "open_now": true,
+                "weekday_text": [
+                  "Monday: 9:00 AM – 5:30 PM"
+                ]
+              },
+              "types": [
+                "tourist_attraction",
+                "museum",
+                "point_of_interest",
+                "establishment"
+              ]
+            },
+            "external_ids": {
+              "google_place_id": "ChIJ_TOWER_OF_LONDON"
+            },
+            "sync": {
+              "last_synced_at": "2026-04-02T20:00:00Z",
+              "sync_status": "synced",
+              "provider_version": "google-places-v1"
+            }
+          },
+          "guest_attributes": {
+            "family_friendly": true,
+            "couples_friendly": true,
+            "luxury_level": "midrange",
+            "central_location": true,
+            "booking_relevant": true
+          },
+          "tags": [
+            {
+              "key": "landmark",
+              "label": "Landmark",
+              "type": "theme"
+            },
+            {
+              "key": "first_time_pick",
+              "label": "First-Time Pick",
+              "type": "audience"
+            }
+          ],
+          "recommendation": {
+            "is_featured": true,
+            "priority_score": 97,
+            "editor_note": "The best single activity recommendation for many first-time London visitors.",
+            "recommended_for": [
+              "first-time visitors",
+              "families",
+              "history"
+            ],
+            "seasonality": [
+              "year_round"
+            ]
+          },
+          "status": "active",
+          "sort_order": 1
+        },
+        {
+          "id": "act_london_british_museum",
+          "name": "The British Museum",
+          "slug": "the-british-museum",
+          "category": "activities",
+          "subcategory": "museum",
+          "content": {
+            "title": "The British Museum",
+            "short_description": "A major cultural stop that is easy to recommend in most itineraries.",
+            "long_description": "The British Museum is one of the most practical culture recommendations in London thanks to its central location, broad appeal, and ability to fit into half-day plans. It is especially useful on rainy days or for guests staying around Covent Garden or Bloomsbury.",
+            "highlights": [
+              "Central location",
+              "Strong cultural value",
+              "Good for flexible itineraries"
+            ],
+            "insider_tips": [
+              "Plan a focused visit rather than trying to cover everything.",
+              "Works very well on a rainy afternoon."
+            ]
+          },
+          "source": {
+            "type": "hybrid",
+            "google_places": {
+              "place_id": "ChIJ_BRITISH_MUSEUM",
+              "name": "The British Museum",
+              "formatted_address": "Great Russell St, London WC1B 3DG, United Kingdom",
+              "location": {
+                "latitude": 51.5194,
+                "longitude": -0.127
+              },
+              "maps_url": "https://maps.google.com/?cid=british-museum-placeholder",
+              "website": "https://www.britishmuseum.org",
+              "international_phone_number": "+44 20 7323 8299",
+              "rating": 4.7,
+              "user_ratings_total": 158000,
+              "price_level": 0,
+              "business_status": "OPERATIONAL",
+              "opening_hours": {
+                "open_now": true,
+                "weekday_text": [
+                  "Tuesday: 10:00 AM – 5:00 PM"
+                ]
+              },
+              "types": [
+                "museum",
+                "tourist_attraction",
+                "point_of_interest",
+                "establishment"
+              ]
+            },
+            "external_ids": {
+              "google_place_id": "ChIJ_BRITISH_MUSEUM"
+            },
+            "sync": {
+              "last_synced_at": "2026-04-02T20:00:00Z",
+              "sync_status": "synced",
+              "provider_version": "google-places-v1"
+            }
+          },
+          "guest_attributes": {
+            "family_friendly": true,
+            "couples_friendly": true,
+            "luxury_level": "budget",
+            "central_location": true,
+            "booking_relevant": true
+          },
+          "tags": [
+            {
+              "key": "museum",
+              "label": "Museum",
+              "type": "theme"
+            },
+            {
+              "key": "rainy_day",
+              "label": "Rainy Day",
+              "type": "occasion"
+            }
+          ],
+          "recommendation": {
+            "is_featured": true,
+            "priority_score": 90,
+            "editor_note": "A highly practical cultural recommendation in a central area.",
+            "recommended_for": [
+              "culture",
+              "families",
+              "rainy weather"
+            ],
+            "seasonality": [
+              "year_round"
+            ]
+          },
+          "status": "active",
+          "sort_order": 2
+        }
+      ]
+    },
+    "gyms": {
+      "headline": "Gyms and fitness options",
+      "description": "Useful choices for guests who want quality training facilities while in London.",
+      "items": [
+        {
+          "id": "gym_london_third_space_tower_bridge",
+          "name": "Third Space Tower Bridge",
+          "slug": "third-space-tower-bridge",
+          "category": "gyms",
+          "subcategory": "premium_gym",
+          "content": {
+            "title": "Third Space Tower Bridge",
+            "short_description": "A premium gym option with polished facilities and strong appeal for fitness-focused travellers.",
+            "long_description": "Third Space Tower Bridge is one of the more credible gym recommendations for guests who care about workout quality while travelling. It suits premium travellers, longer stays, and guests asking specifically for a serious gym rather than a hotel fitness room.",
+            "highlights": [
+              "Premium equipment",
+              "Upscale feel",
+              "Strong for dedicated fitness travellers"
+            ],
+            "insider_tips": [
+              "Best for guests staying nearby or specifically seeking a high-end gym.",
+              "Check day pass or access options in advance."
+            ]
+          },
+          "source": {
+            "type": "hybrid",
+            "google_places": {
+              "place_id": "ChIJ_THIRD_SPACE_TB",
+              "name": "Third Space Tower Bridge",
+              "formatted_address": "Third Space, London, United Kingdom",
+              "location": {
+                "latitude": 51.5055,
+                "longitude": -0.0754
+              },
+              "maps_url": "https://maps.google.com/?cid=third-space-tower-bridge-placeholder",
+              "website": "https://www.thirdspace.london",
+              "international_phone_number": "+44 20 0000 0000",
+              "rating": 4.5,
+              "user_ratings_total": 320,
+              "price_level": 3,
+              "business_status": "OPERATIONAL",
+              "opening_hours": {
+                "open_now": true,
+                "weekday_text": [
+                  "Wednesday: 6:00 AM – 10:00 PM"
+                ]
+              },
+              "types": [
+                "gym",
+                "health",
+                "point_of_interest",
+                "establishment"
+              ]
+            },
+            "external_ids": {
+              "google_place_id": "ChIJ_THIRD_SPACE_TB"
+            },
+            "sync": {
+              "last_synced_at": "2026-04-02T20:00:00Z",
+              "sync_status": "synced",
+              "provider_version": "google-places-v1"
+            }
+          },
+          "guest_attributes": {
+            "family_friendly": false,
+            "couples_friendly": false,
+            "luxury_level": "upscale",
+            "central_location": true,
+            "booking_relevant": true
+          },
+          "tags": [
+            {
+              "key": "fitness",
+              "label": "Fitness",
+              "type": "theme"
+            },
+            {
+              "key": "premium",
+              "label": "Premium",
+              "type": "budget"
+            }
+          ],
+          "recommendation": {
+            "is_featured": true,
+            "priority_score": 83,
+            "editor_note": "Best when guests ask specifically for a strong gym experience.",
+            "recommended_for": [
+              "fitness travellers",
+              "longer stays",
+              "premium training"
+            ],
+            "seasonality": [
+              "year_round"
+            ]
+          },
+          "status": "active",
+          "sort_order": 1
+        },
+        {
+          "id": "gym_london_barrys_central",
+          "name": "Barry's Central London",
+          "slug": "barrys-central-london",
+          "category": "gyms",
+          "subcategory": "boutique_fitness",
+          "content": {
+            "title": "Barry's Central London",
+            "short_description": "A useful boutique fitness recommendation for guests who prefer class-based workouts.",
+            "long_description": "Barry's is a practical recommendation for travellers who want a premium class experience instead of a traditional gym floor. It works best for short stays, motivated solo travellers, and guests already familiar with the brand or format.",
+            "highlights": [
+              "Strong for class-based fitness",
+              "Recognisable premium brand",
+              "Good short-stay option"
+            ],
+            "insider_tips": [
+              "Best for guests who enjoy scheduled high-intensity classes.",
+              "Booking ahead is often important."
+            ]
+          },
+          "source": {
+            "type": "hybrid",
+            "google_places": {
+              "place_id": "ChIJ_BARRYS_CENTRAL_LONDON",
+              "name": "Barry's",
+              "formatted_address": "Central London location, United Kingdom",
+              "location": {
+                "latitude": 51.513,
+                "longitude": -0.136
+              },
+              "maps_url": "https://maps.google.com/?cid=barrys-central-london-placeholder",
+              "website": "https://www.barrys.com",
+              "international_phone_number": "+44 20 0000 1111",
+              "rating": 4.6,
+              "user_ratings_total": 410,
+              "price_level": 3,
+              "business_status": "OPERATIONAL",
+              "opening_hours": {
+                "open_now": false,
+                "weekday_text": [
+                  "Thursday: 6:30 AM – 8:30 PM"
+                ]
+              },
+              "types": [
+                "gym",
+                "health",
+                "point_of_interest",
+                "establishment"
+              ]
+            },
+            "external_ids": {
+              "google_place_id": "ChIJ_BARRYS_CENTRAL_LONDON"
+            },
+            "sync": {
+              "last_synced_at": "2026-04-02T20:00:00Z",
+              "sync_status": "synced",
+              "provider_version": "google-places-v1"
+            }
+          },
+          "guest_attributes": {
+            "family_friendly": false,
+            "couples_friendly": false,
+            "luxury_level": "upscale",
+            "central_location": true,
+            "booking_relevant": true
+          },
+          "tags": [
+            {
+              "key": "boutique_fitness",
+              "label": "Boutique Fitness",
+              "type": "style"
+            },
+            {
+              "key": "short_stay_friendly",
+              "label": "Short-Stay Friendly",
+              "type": "audience"
+            }
+          ],
+          "recommendation": {
+            "is_featured": false,
+            "priority_score": 78,
+            "editor_note": "Good for guests who prefer classes over general gym access.",
+            "recommended_for": [
+              "boutique fitness",
+              "solo travellers",
+              "short stays"
+            ],
+            "seasonality": [
+              "year_round"
+            ]
+          },
+          "status": "active",
+          "sort_order": 2
+        }
+      ]
+    },
+    "spa_wellness": {
+      "headline": "Spa and wellness recommendations",
+      "description": "Strong options for guests seeking relaxation, treatments, or a more premium wellness experience.",
+      "items": [
+        {
+          "id": "spa_london_espalife_corinthia",
+          "name": "ESPA Life at Corinthia",
+          "slug": "espa-life-at-corinthia",
+          "category": "spa_wellness",
+          "subcategory": "luxury_spa",
+          "content": {
+            "title": "ESPA Life at Corinthia",
+            "short_description": "A standout luxury spa recommendation in central London.",
+            "long_description": "ESPA Life at Corinthia is one of the strongest spa recommendations in London for guests who want a premium treatment and wellness experience rather than a quick appointment. It suits couples, special occasions, and luxury-led city breaks.",
+            "highlights": [
+              "Luxury setting",
+              "Strong couples appeal",
+              "Excellent premium wellness option"
+            ],
+            "insider_tips": [
+              "Best booked well in advance, especially on weekends.",
+              "Pairs very well with a luxury hotel stay or slower city day."
+            ]
+          },
+          "source": {
+            "type": "hybrid",
+            "google_places": {
+              "place_id": "ChIJ_ESPA_CORINTHIA",
+              "name": "ESPA Life at Corinthia",
+              "formatted_address": "Whitehall Pl, London SW1A 2BD, United Kingdom",
+              "location": {
+                "latitude": 51.5069,
+                "longitude": -0.1248
+              },
+              "maps_url": "https://maps.google.com/?cid=espa-corinthia-placeholder",
+              "website": "https://www.corinthia.com/london/spa",
+              "international_phone_number": "+44 20 7321 3050",
+              "rating": 4.6,
+              "user_ratings_total": 410,
+              "price_level": 4,
+              "business_status": "OPERATIONAL",
+              "opening_hours": {
+                "open_now": false,
+                "weekday_text": [
+                  "Thursday: 9:00 AM – 9:00 PM"
+                ]
+              },
+              "types": [
+                "spa",
+                "health",
+                "point_of_interest",
+                "establishment"
+              ]
+            },
+            "external_ids": {
+              "google_place_id": "ChIJ_ESPA_CORINTHIA"
+            },
+            "sync": {
+              "last_synced_at": "2026-04-02T20:00:00Z",
+              "sync_status": "synced",
+              "provider_version": "google-places-v1"
+            }
+          },
+          "guest_attributes": {
+            "family_friendly": false,
+            "couples_friendly": true,
+            "luxury_level": "luxury",
+            "central_location": true,
+            "booking_relevant": true
+          },
+          "tags": [
+            {
+              "key": "wellness",
+              "label": "Wellness",
+              "type": "theme"
+            },
+            {
+              "key": "luxury_escape",
+              "label": "Luxury Escape",
+              "type": "style"
+            }
+          ],
+          "recommendation": {
+            "is_featured": true,
+            "priority_score": 95,
+            "editor_note": "A high-confidence recommendation for premium spa requests.",
+            "recommended_for": [
+              "couples",
+              "luxury stays",
+              "special occasions"
+            ],
+            "seasonality": [
+              "year_round"
+            ]
+          },
+          "status": "active",
+          "sort_order": 1
+        },
+        {
+          "id": "spa_london_akasha_hotel_cafe_royal",
+          "name": "Akasha Holistic Wellbeing at Hotel Café Royal",
+          "slug": "akasha-hotel-cafe-royal",
+          "category": "spa_wellness",
+          "subcategory": "hotel_spa",
+          "content": {
+            "title": "Akasha Holistic Wellbeing at Hotel Café Royal",
+            "short_description": "A polished central wellness recommendation close to Soho and Regent Street.",
+            "long_description": "Akasha is a strong option for guests wanting a premium spa in a very central location. It works particularly well for travellers staying around Piccadilly, Mayfair, or Soho who want to add a treatment or wellness pause without leaving the heart of the city.",
+            "highlights": [
+              "Very central location",
+              "Premium hotel spa environment",
+              "Good add-on to shopping or luxury stays"
+            ],
+            "insider_tips": [
+              "Useful when guests want spa access near central shopping districts.",
+              "Advance booking is recommended for peak treatment times."
+            ]
+          },
+          "source": {
+            "type": "hybrid",
+            "google_places": {
+              "place_id": "ChIJ_AKASHA_CAFE_ROYAL",
+              "name": "Akasha Holistic Wellbeing",
+              "formatted_address": "68 Regent St., London W1B 4DY, United Kingdom",
+              "location": {
+                "latitude": 51.5098,
+                "longitude": -0.1366
+              },
+              "maps_url": "https://maps.google.com/?cid=akasha-cafe-royal-placeholder",
+              "website": "https://www.hotelcaferoyal.com/wellbeing",
+              "international_phone_number": "+44 20 7406 3333",
+              "rating": 4.5,
+              "user_ratings_total": 230,
+              "price_level": 4,
+              "business_status": "OPERATIONAL",
+              "opening_hours": {
+                "open_now": true,
+                "weekday_text": [
+                  "Friday: 10:00 AM – 8:00 PM"
+                ]
+              },
+              "types": [
+                "spa",
+                "health",
+                "point_of_interest",
+                "establishment"
+              ]
+            },
+            "external_ids": {
+              "google_place_id": "ChIJ_AKASHA_CAFE_ROYAL"
+            },
+            "sync": {
+              "last_synced_at": "2026-04-02T20:00:00Z",
+              "sync_status": "synced",
+              "provider_version": "google-places-v1"
+            }
+          },
+          "guest_attributes": {
+            "family_friendly": false,
+            "couples_friendly": true,
+            "luxury_level": "luxury",
+            "central_location": true,
+            "booking_relevant": true
+          },
+          "tags": [
+            {
+              "key": "central_wellness",
+              "label": "Central Wellness",
+              "type": "location"
+            },
+            {
+              "key": "hotel_spa",
+              "label": "Hotel Spa",
+              "type": "style"
+            }
+          ],
+          "recommendation": {
+            "is_featured": false,
+            "priority_score": 87,
+            "editor_note": "Very useful for guests who want a spa close to central shopping and dining.",
+            "recommended_for": [
+              "central stays",
+              "luxury travellers",
+              "wellness breaks"
+            ],
+            "seasonality": [
+              "year_round"
+            ]
+          },
+          "status": "active",
+          "sort_order": 2
+        }
+      ]
+    },
+    "shopping": {
+      "headline": "Shopping recommendations in London",
+      "description": "London is one of Europe’s strongest shopping cities, and the best recommendations depend on whether guests want luxury, iconic stores, unique design, or dedicated outlet time.",
+      "items": [
+        {
+          "id": "shop_london_bond_street",
+          "name": "Bond Street",
+          "slug": "bond-street",
+          "category": "shopping",
+          "subcategory": "luxury_shopping_street",
+          "shopping_type": "shopping_street",
+          "content": {
+            "title": "Bond Street",
+            "short_description": "One of London’s strongest luxury shopping recommendations in a polished central setting.",
+            "long_description": "Bond Street is the clearest recommendation for guests seeking luxury shopping in central London. It works especially well for travellers staying in Mayfair, looking for premium brands, or wanting a smooth shopping experience that can easily be paired with lunch, dinner, or a hotel nearby.",
+            "highlights": [
+              "Leading luxury shopping street",
+              "Very central and easy to pair with Mayfair plans",
+              "Strong fit for premium travellers"
+            ],
+            "insider_tips": [
+              "Best combined with Mount Street, Mayfair hotels, or lunch nearby.",
+              "A better fit than outlet shopping when guests want convenience and polish."
+            ]
+          },
+          "source": {
+            "type": "hybrid",
+            "google_places": {
+              "place_id": "ChIJ_BOND_STREET",
+              "name": "Bond Street",
+              "formatted_address": "Bond Street, London, United Kingdom",
+              "location": {
+                "latitude": 51.5142,
+                "longitude": -0.1494
+              },
+              "maps_url": "https://maps.google.com/?cid=bond-street-placeholder",
+              "website": "https://www.newwestend.com",
+              "international_phone_number": "",
+              "rating": 4.6,
+              "user_ratings_total": 5400,
+              "price_level": 4,
+              "business_status": "OPERATIONAL",
+              "opening_hours": {
+                "open_now": true,
+                "weekday_text": [
+                  "Thursday: Open 24 hours"
+                ]
+              },
+              "types": [
+                "shopping_mall",
+                "point_of_interest",
+                "establishment"
+              ]
+            },
+            "external_ids": {
+              "google_place_id": "ChIJ_BOND_STREET"
+            },
+            "sync": {
+              "last_synced_at": "2026-04-02T20:00:00Z",
+              "sync_status": "synced",
+              "provider_version": "google-places-v1"
+            }
+          },
+          "guest_attributes": {
+            "family_friendly": false,
+            "couples_friendly": true,
+            "luxury_level": "luxury",
+            "central_location": true,
+            "booking_relevant": true
+          },
+          "tags": [
+            {
+              "key": "luxury_shopping",
+              "label": "Luxury Shopping",
+              "type": "style"
+            },
+            {
+              "key": "mayfair_adjacent",
+              "label": "Mayfair Adjacent",
+              "type": "location"
+            }
+          ],
+          "recommendation": {
+            "is_featured": true,
+            "priority_score": 96,
+            "editor_note": "The strongest central luxury shopping recommendation in London.",
+            "recommended_for": [
+              "luxury travellers",
+              "shopping",
+              "couples"
+            ],
+            "seasonality": [
+              "year_round"
+            ]
+          },
+          "status": "active",
+          "sort_order": 1
+        },
+        {
+          "id": "shop_london_liberty",
+          "name": "Liberty London",
+          "slug": "liberty-london",
+          "category": "shopping",
+          "subcategory": "designer_department_store",
+          "shopping_type": "department_store",
+          "content": {
+            "title": "Liberty London",
+            "short_description": "A stylish and recognisable London shopping pick with strong character and design appeal.",
+            "long_description": "Liberty is one of the most useful shopping recommendations for guests who want something iconic and distinctly London rather than a standard department store. It works well for fashion, gifts, beauty, and browsing in a central location near Soho and Regent Street.",
+            "highlights": [
+              "Iconic London store",
+              "Strong for gifts and fashion",
+              "Very easy to combine with Soho and Carnaby"
+            ],
+            "insider_tips": [
+              "A strong recommendation when guests want one memorable shopping stop.",
+              "Works especially well for design-conscious travellers."
+            ]
+          },
+          "source": {
+            "type": "hybrid",
+            "google_places": {
+              "place_id": "ChIJ_LIBERTY_LONDON",
+              "name": "Liberty London",
+              "formatted_address": "Regent St., Carnaby, London W1B 5AH, United Kingdom",
+              "location": {
+                "latitude": 51.5138,
+                "longitude": -0.1402
+              },
+              "maps_url": "https://maps.google.com/?cid=liberty-london-placeholder",
+              "website": "https://www.libertylondon.com",
+              "international_phone_number": "+44 20 7734 1234",
+              "rating": 4.6,
+              "user_ratings_total": 18600,
+              "price_level": 3,
+              "business_status": "OPERATIONAL",
+              "opening_hours": {
+                "open_now": true,
+                "weekday_text": [
+                  "Thursday: 10:00 AM – 8:00 PM"
+                ]
+              },
+              "types": [
+                "department_store",
+                "store",
+                "point_of_interest",
+                "establishment"
+              ]
+            },
+            "external_ids": {
+              "google_place_id": "ChIJ_LIBERTY_LONDON"
+            },
+            "sync": {
+              "last_synced_at": "2026-04-02T20:00:00Z",
+              "sync_status": "synced",
+              "provider_version": "google-places-v1"
+            }
+          },
+          "guest_attributes": {
+            "family_friendly": true,
+            "couples_friendly": true,
+            "luxury_level": "upscale",
+            "central_location": true,
+            "booking_relevant": false
+          },
+          "tags": [
+            {
+              "key": "iconic_store",
+              "label": "Iconic Store",
+              "type": "theme"
+            },
+            {
+              "key": "design_led",
+              "label": "Design-Led",
+              "type": "style"
+            }
+          ],
+          "recommendation": {
+            "is_featured": true,
+            "priority_score": 90,
+            "editor_note": "A central shopping recommendation with broad guest appeal and strong character.",
+            "recommended_for": [
+              "gifts",
+              "fashion",
+              "central itineraries"
+            ],
+            "seasonality": [
+              "year_round"
+            ]
+          },
+          "status": "active",
+          "sort_order": 2
+        },
+        {
+          "id": "shop_london_harrods",
+          "name": "Harrods",
+          "slug": "harrods",
+          "category": "shopping",
+          "subcategory": "luxury_department_store",
+          "shopping_type": "department_store",
+          "content": {
+            "title": "Harrods",
+            "short_description": "A classic London luxury shopping address with global recognition.",
+            "long_description": "Harrods is one of the most recognisable London shopping recommendations and remains useful for luxury travellers, gift-focused visits, and guests who want a major retail experience rather than a smaller boutique stop. It is especially relevant for Knightsbridge stays and premium itineraries.",
+            "highlights": [
+              "Global luxury reputation",
+              "Strong for gifts, beauty, and fashion",
+              "Good fit for Knightsbridge and premium travellers"
+            ],
+            "insider_tips": [
+              "Best when guests want an iconic store experience.",
+              "Combine with nearby Knightsbridge shopping rather than trying to mix too many districts in one day."
+            ]
+          },
+          "source": {
+            "type": "hybrid",
+            "google_places": {
+              "place_id": "ChIJ_HARRODS",
+              "name": "Harrods",
+              "formatted_address": "87-135 Brompton Rd, London SW1X 7XL, United Kingdom",
+              "location": {
+                "latitude": 51.4996,
+                "longitude": -0.1632
+              },
+              "maps_url": "https://maps.google.com/?cid=harrods-placeholder",
+              "website": "https://www.harrods.com",
+              "international_phone_number": "+44 20 7730 1234",
+              "rating": 4.4,
+              "user_ratings_total": 118000,
+              "price_level": 4,
+              "business_status": "OPERATIONAL",
+              "opening_hours": {
+                "open_now": true,
+                "weekday_text": [
+                  "Thursday: 10:00 AM – 9:00 PM"
+                ]
+              },
+              "types": [
+                "department_store",
+                "store",
+                "point_of_interest",
+                "establishment"
+              ]
+            },
+            "external_ids": {
+              "google_place_id": "ChIJ_HARRODS"
+            },
+            "sync": {
+              "last_synced_at": "2026-04-02T20:00:00Z",
+              "sync_status": "synced",
+              "provider_version": "google-places-v1"
+            }
+          },
+          "guest_attributes": {
+            "family_friendly": true,
+            "couples_friendly": true,
+            "luxury_level": "luxury",
+            "central_location": true,
+            "booking_relevant": false
+          },
+          "tags": [
+            {
+              "key": "iconic_luxury",
+              "label": "Iconic Luxury",
+              "type": "theme"
+            },
+            {
+              "key": "knightsbridge",
+              "label": "Knightsbridge",
+              "type": "location"
+            }
+          ],
+          "recommendation": {
+            "is_featured": true,
+            "priority_score": 92,
+            "editor_note": "A classic recommendation when guests ask for iconic London luxury shopping.",
+            "recommended_for": [
+              "luxury travellers",
+              "gifts",
+              "iconic experiences"
+            ],
+            "seasonality": [
+              "year_round"
+            ]
+          },
+          "status": "active",
+          "sort_order": 3
+        },
+        {
+          "id": "shop_london_mount_street",
+          "name": "Mount Street",
+          "slug": "mount-street",
+          "category": "shopping",
+          "subcategory": "luxury_boutique_street",
+          "shopping_type": "boutique",
+          "content": {
+            "title": "Mount Street",
+            "short_description": "A polished Mayfair shopping street with a more discreet luxury feel than Bond Street.",
+            "long_description": "Mount Street is a very strong recommendation for guests who want luxury shopping in a quieter, more refined setting. It works especially well for high-end travellers who prefer premium boutiques, elegant surroundings, and a smoother pace than the larger main shopping streets.",
+            "highlights": [
+              "Refined boutique shopping",
+              "Excellent Mayfair setting",
+              "Strong luxury alternative to Bond Street"
+            ],
+            "insider_tips": [
+              "Best for guests who want luxury without the busiest retail atmosphere.",
+              "Easy to combine with Scott's, The Connaught, or other Mayfair plans."
+            ]
+          },
+          "source": {
+            "type": "hybrid",
+            "google_places": {
+              "place_id": "ChIJ_MOUNT_STREET",
+              "name": "Mount Street",
+              "formatted_address": "Mount St, London, United Kingdom",
+              "location": {
+                "latitude": 51.5105,
+                "longitude": -0.1507
+              },
+              "maps_url": "https://maps.google.com/?cid=mount-street-placeholder",
+              "website": "https://www.mountstreet.com",
+              "international_phone_number": "",
+              "rating": 4.6,
+              "user_ratings_total": 940,
+              "price_level": 4,
+              "business_status": "OPERATIONAL",
+              "opening_hours": {
+                "open_now": true,
+                "weekday_text": [
+                  "Thursday: Open 24 hours"
+                ]
+              },
+              "types": [
+                "store",
+                "point_of_interest",
+                "establishment"
+              ]
+            },
+            "external_ids": {
+              "google_place_id": "ChIJ_MOUNT_STREET"
+            },
+            "sync": {
+              "last_synced_at": "2026-04-02T20:00:00Z",
+              "sync_status": "synced",
+              "provider_version": "google-places-v1"
+            }
+          },
+          "guest_attributes": {
+            "family_friendly": false,
+            "couples_friendly": true,
+            "luxury_level": "luxury",
+            "central_location": true,
+            "booking_relevant": true
+          },
+          "tags": [
+            {
+              "key": "quiet_luxury",
+              "label": "Quiet Luxury",
+              "type": "style"
+            },
+            {
+              "key": "mayfair",
+              "label": "Mayfair",
+              "type": "location"
+            }
+          ],
+          "recommendation": {
+            "is_featured": false,
+            "priority_score": 89,
+            "editor_note": "A very good recommendation for guests who want upscale but less obvious shopping.",
+            "recommended_for": [
+              "luxury travellers",
+              "boutique shopping",
+              "mayfair stays"
+            ],
+            "seasonality": [
+              "year_round"
+            ]
+          },
+          "status": "active",
+          "sort_order": 4
+        },
+        {
+          "id": "shop_london_carnaby_street",
+          "name": "Carnaby Street",
+          "slug": "carnaby-street",
+          "category": "shopping",
+          "subcategory": "lifestyle_shopping_street",
+          "shopping_type": "shopping_street",
+          "content": {
+            "title": "Carnaby Street",
+            "short_description": "A strong central choice for guests wanting something more casual, youthful, and style-led.",
+            "long_description": "Carnaby Street is a useful recommendation for guests who want a central shopping area with more personality and energy than a luxury-only district. It suits shorter stays, younger travellers, and anyone combining shopping with Soho dining or casual city exploring.",
+            "highlights": [
+              "Lively central atmosphere",
+              "Good mix of style-led retail",
+              "Easy to pair with Soho and Liberty"
+            ],
+            "insider_tips": [
+              "Best for relaxed browsing rather than ultra-luxury shopping.",
+              "Works well as part of a West End shopping afternoon."
+            ]
+          },
+          "source": {
+            "type": "hybrid",
+            "google_places": {
+              "place_id": "ChIJ_CARNABY_STREET",
+              "name": "Carnaby Street",
+              "formatted_address": "Carnaby St, London W1F, United Kingdom",
+              "location": {
+                "latitude": 51.5131,
+                "longitude": -0.1398
+              },
+              "maps_url": "https://maps.google.com/?cid=carnaby-street-placeholder",
+              "website": "https://www.carnaby.co.uk",
+              "international_phone_number": "",
+              "rating": 4.5,
+              "user_ratings_total": 22400,
+              "price_level": 2,
+              "business_status": "OPERATIONAL",
+              "opening_hours": {
+                "open_now": true,
+                "weekday_text": [
+                  "Thursday: Open 24 hours"
+                ]
+              },
+              "types": [
+                "shopping_mall",
+                "store",
+                "point_of_interest",
+                "establishment"
+              ]
+            },
+            "external_ids": {
+              "google_place_id": "ChIJ_CARNABY_STREET"
+            },
+            "sync": {
+              "last_synced_at": "2026-04-02T20:00:00Z",
+              "sync_status": "synced",
+              "provider_version": "google-places-v1"
+            }
+          },
+          "guest_attributes": {
+            "family_friendly": true,
+            "couples_friendly": true,
+            "luxury_level": "midrange",
+            "central_location": true,
+            "booking_relevant": false
+          },
+          "tags": [
+            {
+              "key": "central_shopping",
+              "label": "Central Shopping",
+              "type": "location"
+            },
+            {
+              "key": "lifestyle",
+              "label": "Lifestyle",
+              "type": "style"
+            }
+          ],
+          "recommendation": {
+            "is_featured": false,
+            "priority_score": 84,
+            "editor_note": "A good recommendation for guests who want shopping with energy and variety.",
+            "recommended_for": [
+              "younger travellers",
+              "casual shopping",
+              "west end plans"
+            ],
+            "seasonality": [
+              "year_round"
+            ]
+          },
+          "status": "active",
+          "sort_order": 5
+        },
+        {
+          "id": "shop_london_bicester_village",
+          "name": "Bicester Village",
+          "slug": "bicester-village",
+          "category": "shopping",
+          "subcategory": "outlet_shopping",
+          "shopping_type": "outlet",
+          "content": {
+            "title": "Bicester Village",
+            "short_description": "A dedicated outlet shopping option for guests who want brands and value over central convenience.",
+            "long_description": "Bicester Village is a relevant recommendation when shopping is a major priority and the guest wants a luxury outlet experience rather than central city browsing. It is not for everyone, but it can be a strong fit for fashion-focused travellers with enough time to dedicate to it.",
+            "highlights": [
+              "Luxury outlet focus",
+              "Strong brand appeal",
+              "Useful for dedicated shopping days"
+            ],
+            "insider_tips": [
+              "Only recommend when the guest is genuinely shopping-led.",
+              "Travel time from London should be factored in before suggesting it."
+            ]
+          },
+          "source": {
+            "type": "curated",
+            "external_ids": {},
+            "sync": {
+              "last_synced_at": "2026-04-02T20:00:00Z",
+              "sync_status": "synced",
+              "provider_version": "bno-editorial-v1"
+            }
+          },
+          "guest_attributes": {
+            "family_friendly": true,
+            "couples_friendly": true,
+            "luxury_level": "upscale",
+            "central_location": false,
+            "booking_relevant": true
+          },
+          "tags": [
+            {
+              "key": "outlet",
+              "label": "Outlet",
+              "type": "style"
+            },
+            {
+              "key": "fashion",
+              "label": "Fashion",
+              "type": "theme"
+            }
+          ],
+          "recommendation": {
+            "is_featured": true,
+            "priority_score": 85,
+            "editor_note": "A strong specialist pick, but only when the traveller wants a dedicated shopping trip.",
+            "recommended_for": [
+              "fashion shopping",
+              "luxury brands",
+              "day trips"
+            ],
+            "seasonality": [
+              "year_round"
+            ]
+          },
+          "status": "active",
+          "sort_order": 6
+        }
+      ]
+    }
+  },
+  "tags": [
+    {
+      "key": "city_break",
+      "label": "City Break",
+      "type": "theme"
+    },
+    {
+      "key": "luxury_options",
+      "label": "Luxury Options",
+      "type": "budget"
+    },
+    {
+      "key": "first_time_friendly",
+      "label": "First-Time Friendly",
+      "type": "audience"
+    },
+    {
+      "key": "shopping_destination",
+      "label": "Shopping Destination",
+      "type": "theme"
+    },
+    {
+      "key": "food_scene",
+      "label": "Strong Food Scene",
+      "type": "theme"
+    },
+    {
+      "key": "culture_city",
+      "label": "Culture City",
+      "type": "theme"
+    }
+  ],
+  "recommendations": {
+    "featured": [
+      {
+        "place_id": "act_london_tower_of_london",
+        "category": "activities",
+        "reason": "Best single activity recommendation for a short London stay.",
+        "rank": 1
+      },
+      {
+        "place_id": "shop_london_bond_street",
+        "category": "shopping",
+        "reason": "Top central luxury shopping recommendation.",
+        "rank": 2
+      },
+      {
+        "place_id": "rest_london_dishoom_covent_garden",
+        "category": "restaurants",
+        "reason": "Reliable and easy central dining recommendation.",
+        "rank": 3
+      }
+    ],
+    "editors_picks": [
+      {
+        "place_id": "rest_london_scotts_mayfair",
+        "category": "restaurants",
+        "reason": "Strong premium dinner choice for Mayfair and luxury stays.",
+        "rank": 1
+      },
+      {
+        "place_id": "shop_london_liberty",
+        "category": "shopping",
+        "reason": "Iconic London store with strong style and gift appeal.",
+        "rank": 2
+      },
+      {
+        "place_id": "spa_london_espalife_corinthia",
+        "category": "spa_wellness",
+        "reason": "Best premium spa recommendation in central London.",
+        "rank": 3
+      }
+    ],
+    "personalized_slots": [
+      {
+        "slot_key": "luxury_london",
+        "label": "Luxury London",
+        "items": [
+          {
+            "place_id": "shop_london_bond_street",
+            "category": "shopping",
+            "reason": "Best fit for premium brand shopping.",
+            "rank": 1
+          },
+          {
+            "place_id": "rest_london_scotts_mayfair",
+            "category": "restaurants",
+            "reason": "Refined Mayfair dinner recommendation.",
+            "rank": 2
+          },
+          {
+            "place_id": "spa_london_espalife_corinthia",
+            "category": "spa_wellness",
+            "reason": "Luxury wellness pairing for a premium city stay.",
+            "rank": 3
+          }
+        ]
+      },
+      {
+        "slot_key": "short_stay_classic_london",
+        "label": "Short Stay Classic London",
+        "items": [
+          {
+            "place_id": "act_london_tower_of_london",
+            "category": "activities",
+            "reason": "Top landmark choice for limited time.",
+            "rank": 1
+          },
+          {
+            "place_id": "rest_london_dishoom_covent_garden",
+            "category": "restaurants",
+            "reason": "Easy central dinner option.",
+            "rank": 2
+          },
+          {
+            "place_id": "shop_london_liberty",
+            "category": "shopping",
+            "reason": "Memorable central shopping stop with character.",
+            "rank": 3
+          }
+        ]
+      },
+      {
+        "slot_key": "shopping_led_trip",
+        "label": "Shopping-Led London Trip",
+        "items": [
+          {
+            "place_id": "shop_london_bond_street",
+            "category": "shopping",
+            "reason": "Best luxury shopping street.",
+            "rank": 1
+          },
+          {
+            "place_id": "shop_london_harrods",
+            "category": "shopping",
+            "reason": "Iconic department store experience.",
+            "rank": 2
+          },
+          {
+            "place_id": "shop_london_mount_street",
+            "category": "shopping",
+            "reason": "More discreet high-end boutique option.",
+            "rank": 3
+          }
+        ]
+      }
+    ]
+  },
+  "seo": {
+    "meta_title": "London Travel Guide | Restaurants, Shopping, Activities & Wellness | BNO Travel",
+    "meta_description": "Explore London with curated BNO Travel recommendations for restaurants, activities, gyms, spa wellness, and shopping.",
+    "canonical_url": "https://bno.travel/london",
+    "og_title": "London Travel Guide | BNO Travel",
+    "og_description": "Professional London recommendations for dining, shopping, culture, wellness, and short city stays.",
+    "og_image": "https://example.bno.travel/images/london/london-og.jpg",
+    "twitter_title": "London Travel Guide | BNO Travel",
+    "twitter_description": "Curated London recommendations for guests, travellers, and city-break planning.",
+    "twitter_image": "https://example.bno.travel/images/london/london-og.jpg",
+    "schema_type": "TravelDestination",
+    "indexable": true
+  },
+  "metadata": {
+    "status": "published",
+    "created_at": "2026-04-02T20:30:00Z",
+    "updated_at": "2026-04-02T20:55:00Z",
+    "published_at": "2026-04-02T21:00:00Z",
+    "version": 1,
+    "source_priority": [
+      "curated",
+      "google_places",
+      "partner_feed",
+      "user_generated"
+    ]
+  }
+}

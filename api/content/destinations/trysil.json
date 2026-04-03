@@ -1,0 +1,1163 @@
+{
+  "id": "dest_trysil_no_master",
+  "slug": "trysil",
+  "locale": "en-GB",
+  "city": {
+    "name": "Trysil",
+    "slug": "trysil",
+    "region": "Innlandet",
+    "latitude": 61.3146,
+    "longitude": 12.2642,
+    "timezone": "Europe/Oslo"
+  },
+  "country": {
+    "name": "Norway",
+    "code": "NO",
+    "slug": "norway",
+    "continent": "Europe"
+  },
+  "editorial": {
+    "headline": "Trysil: Norway’s strongest ski-resort town for practical mountain stays, winter activity, and relaxed alpine dining",
+    "intro": "Trysil is one of Norway’s clearest recommendations for guests who want a ski-focused mountain stay with easy infrastructure, reliable resort services, and a strong family-friendly setup. It works best as an activity-led destination, where skiing, winter movement, recovery, and practical resort planning matter more than classic city-style sightseeing.",
+    "why_visit": [
+      "One of Norway’s best-known and most accessible ski destinations",
+      "Strong fit for families, active travellers, and winter-focused leisure stays",
+      "Practical resort structure with accommodation, dining, rental, and shopping built around the ski experience",
+      "Works well for both safe family ski trips and more premium cabin or lodge-based stays"
+    ],
+    "highlights": [
+      "Very good for winter holidays and long ski weekends",
+      "Strong fit for families, groups, and active couples",
+      "Best planned around slope access, resort area, and recovery time rather than broad sightseeing"
+    ],
+    "transport_tips": [
+      "Choose accommodation based on slope access and resort area rather than just town-centre location.",
+      "In winter, book ski passes, rentals, and key dinner reservations in advance during peak weeks.",
+      "A car can be useful, but many guests can stay within the resort zone if accommodation is well chosen.",
+      "Weather and snow conditions can affect travel timing, so keep arrival and departure plans realistic."
+    ],
+    "neighborhood_tips": [
+      {
+        "name": "Trysil Turistsenter",
+        "tip": "Best for first-time visitors wanting practical access to lifts, rentals, dining, and resort services."
+      },
+      {
+        "name": "Høyfjellssenteret",
+        "tip": "Ideal for ski-in/ski-out convenience and a more slope-focused mountain stay."
+      },
+      {
+        "name": "Trysil Town Centre",
+        "tip": "Useful for guests who prefer a calmer base with some local services outside the main resort zone."
+      },
+      {
+        "name": "Cabin Areas Near the Slopes",
+        "tip": "Best for families or groups prioritising privacy, longer stays, and a more relaxed mountain pace."
+      }
+    ]
+  },
+  "categories": {
+    "restaurants": {
+      "headline": "Recommended restaurants in Trysil",
+      "description": "A practical mix of reliable resort dining, stronger premium options, and safe recommendations for winter stays.",
+      "items": [
+        {
+          "id": "rest_trysil_brasserie_t",
+          "name": "Brasserie T",
+          "slug": "brasserie-t",
+          "category": "restaurants",
+          "subcategory": "premium_brasserie",
+          "content": {
+            "short_description": "One of the strongest premium dining recommendations in Trysil for guests wanting a more polished resort meal.",
+            "long_description": "Brasserie T is one of the clearest restaurant recommendations in Trysil for guests who want a more refined dinner than standard slope-side casual dining. It works especially well for couples, premium ski stays, and travellers who want a more polished evening within the resort setting.",
+            "highlights": [
+              "Stronger premium option in Trysil",
+              "Good for couples",
+              "Useful polished dinner recommendation"
+            ],
+            "insider_tips": [
+              "A strong recommendation when guests want a better evening meal within a ski-stay itinerary.",
+              "Worth reserving ahead during peak winter weeks."
+            ]
+          },
+          "source": {
+            "type": "curated",
+            "external_ids": {},
+            "sync": {
+              "last_synced_at": "2026-04-02T23:55:00Z",
+              "sync_status": "synced",
+              "provider_version": "bno-editorial-v1"
+            }
+          },
+          "guest_attributes": {
+            "family_friendly": true,
+            "couples_friendly": true,
+            "luxury_level": "upscale",
+            "central_location": true,
+            "booking_relevant": true
+          },
+          "tags": [
+            {
+              "key": "premium_dining",
+              "label": "Premium Dining",
+              "type": "style"
+            },
+            {
+              "key": "ski_resort",
+              "label": "Ski Resort",
+              "type": "theme"
+            }
+          ],
+          "recommendation": {
+            "is_featured": true,
+            "priority_score": 89,
+            "editor_note": "The strongest polished dinner recommendation in Trysil.",
+            "recommended_for": [
+              "couples",
+              "premium ski stays",
+              "special dinners"
+            ],
+            "seasonality": [
+              "winter"
+            ]
+          },
+          "status": "active",
+          "sort_order": 1
+        },
+        {
+          "id": "rest_trysil_laesiden",
+          "name": "Laaven 1790",
+          "slug": "laaven-1790",
+          "category": "restaurants",
+          "subcategory": "casual_resort_dining",
+          "content": {
+            "short_description": "A safe and well-known Trysil recommendation for relaxed resort dining and après-ski atmosphere.",
+            "long_description": "Laaven 1790 is one of the most practical dining recommendations in Trysil for guests who want something recognisable, lively, and easy within the main resort environment. It suits groups, casual dinners, and guests who want atmosphere over formality.",
+            "highlights": [
+              "Well-known resort option",
+              "Good casual atmosphere",
+              "Useful for groups and easy evenings"
+            ],
+            "insider_tips": [
+              "Best for relaxed dining and social ski-stay energy rather than a quiet premium dinner.",
+              "A strong safe recommendation in peak ski season."
+            ]
+          },
+          "source": {
+            "type": "curated",
+            "external_ids": {},
+            "sync": {
+              "last_synced_at": "2026-04-02T23:55:00Z",
+              "sync_status": "synced",
+              "provider_version": "bno-editorial-v1"
+            }
+          },
+          "guest_attributes": {
+            "family_friendly": true,
+            "couples_friendly": true,
+            "luxury_level": "midrange",
+            "central_location": true,
+            "booking_relevant": false
+          },
+          "tags": [
+            {
+              "key": "casual_favorite",
+              "label": "Casual Favorite",
+              "type": "style"
+            },
+            {
+              "key": "apres_ski",
+              "label": "Après-Ski",
+              "type": "occasion"
+            }
+          ],
+          "recommendation": {
+            "is_featured": true,
+            "priority_score": 85,
+            "editor_note": "A safe and well-known casual recommendation in the main resort area.",
+            "recommended_for": [
+              "groups",
+              "families",
+              "casual resort dining"
+            ],
+            "seasonality": [
+              "winter"
+            ]
+          },
+          "status": "active",
+          "sort_order": 2
+        },
+        {
+          "id": "rest_trysil_knettsetra",
+          "name": "Knettsetra",
+          "slug": "knettsetra",
+          "category": "restaurants",
+          "subcategory": "mountain_restaurant",
+          "content": {
+            "short_description": "A well-known slope-side Trysil recommendation with strong mountain atmosphere and dependable appeal.",
+            "long_description": "Knettsetra is one of the strongest mountain dining recommendations in Trysil for guests wanting a recognisable alpine atmosphere and a meal tied closely to the ski experience. It works especially well for lunch, early dinners, and guests who want a more distinctly mountain-stay feel.",
+            "highlights": [
+              "Strong mountain atmosphere",
+              "Well-known slope-side option",
+              "Good fit for ski-day dining"
+            ],
+            "insider_tips": [
+              "A very good recommendation when guests want the meal to feel part of the ski experience.",
+              "Best used as a mountain dining choice rather than a formal evening dinner."
+            ]
+          },
+          "source": {
+            "type": "curated",
+            "external_ids": {},
+            "sync": {
+              "last_synced_at": "2026-04-02T23:55:00Z",
+              "sync_status": "synced",
+              "provider_version": "bno-editorial-v1"
+            }
+          },
+          "guest_attributes": {
+            "family_friendly": true,
+            "couples_friendly": true,
+            "luxury_level": "midrange",
+            "central_location": false,
+            "booking_relevant": true
+          },
+          "tags": [
+            {
+              "key": "mountain_dining",
+              "label": "Mountain Dining",
+              "type": "theme"
+            },
+            {
+              "key": "safe_pick",
+              "label": "Safe Pick",
+              "type": "style"
+            }
+          ],
+          "recommendation": {
+            "is_featured": true,
+            "priority_score": 86,
+            "editor_note": "A high-confidence slope-side dining recommendation in Trysil.",
+            "recommended_for": [
+              "families",
+              "ski trips",
+              "mountain lunches"
+            ],
+            "seasonality": [
+              "winter"
+            ]
+          },
+          "status": "active",
+          "sort_order": 3
+        }
+      ]
+    },
+    "activities": {
+      "headline": "Top activities in Trysil",
+      "description": "High-quality activity recommendations centred on skiing, winter movement, and well-known resort experiences.",
+      "items": [
+        {
+          "id": "act_trysil_trysilfjellet",
+          "name": "Trysilfjellet Ski Resort",
+          "slug": "trysilfjellet-ski-resort",
+          "category": "activities",
+          "subcategory": "ski_resort",
+          "content": {
+            "short_description": "The core activity recommendation in Trysil and the main reason most guests come.",
+            "long_description": "Trysilfjellet Ski Resort is the strongest single activity recommendation in Trysil and the destination’s main draw. It works for families, beginner and intermediate skiers, and guests wanting a reliable, well-organised mountain holiday with strong resort infrastructure.",
+            "highlights": [
+              "Core Trysil experience",
+              "Strong resort infrastructure",
+              "Excellent family and ski-holiday fit"
+            ],
+            "insider_tips": [
+              "Best planned with ski-pass, rental, and area choice sorted in advance.",
+              "Accommodation close to the preferred slope area can improve the whole trip."
+            ]
+          },
+          "source": {
+            "type": "curated",
+            "external_ids": {},
+            "sync": {
+              "last_synced_at": "2026-04-02T23:55:00Z",
+              "sync_status": "synced",
+              "provider_version": "bno-editorial-v1"
+            }
+          },
+          "guest_attributes": {
+            "family_friendly": true,
+            "couples_friendly": true,
+            "luxury_level": "midrange",
+            "central_location": false,
+            "booking_relevant": true
+          },
+          "tags": [
+            {
+              "key": "skiing",
+              "label": "Skiing",
+              "type": "theme"
+            },
+            {
+              "key": "winter",
+              "label": "Winter",
+              "type": "occasion"
+            }
+          ],
+          "recommendation": {
+            "is_featured": true,
+            "priority_score": 99,
+            "editor_note": "The core activity recommendation and main destination reason for most Trysil trips.",
+            "recommended_for": [
+              "families",
+              "ski holidays",
+              "winter trips"
+            ],
+            "seasonality": [
+              "winter"
+            ]
+          },
+          "status": "active",
+          "sort_order": 1
+        },
+        {
+          "id": "act_trysil_cross_country_network",
+          "name": "Trysil Cross-Country Trail Network",
+          "slug": "trysil-cross-country-trail-network",
+          "category": "activities",
+          "subcategory": "cross_country_skiing",
+          "content": {
+            "short_description": "A strong Trysil recommendation for guests wanting a quieter, scenic winter activity beyond downhill skiing.",
+            "long_description": "Trysil’s cross-country trail network is one of the best-known secondary activity recommendations for guests who want a more scenic, endurance-led, or calmer winter experience. It works especially well for active couples, mixed-skill groups, and travellers who want variety beyond resort skiing.",
+            "highlights": [
+              "Strong winter variety beyond downhill skiing",
+              "Good scenic appeal",
+              "Useful for active travellers"
+            ],
+            "insider_tips": [
+              "A particularly good recommendation for guests staying several days and wanting activity variety.",
+              "Best for travellers comfortable with outdoor winter movement."
+            ]
+          },
+          "source": {
+            "type": "curated",
+            "external_ids": {},
+            "sync": {
+              "last_synced_at": "2026-04-02T23:55:00Z",
+              "sync_status": "synced",
+              "provider_version": "bno-editorial-v1"
+            }
+          },
+          "guest_attributes": {
+            "family_friendly": true,
+            "couples_friendly": true,
+            "luxury_level": "midrange",
+            "central_location": false,
+            "booking_relevant": true
+          },
+          "tags": [
+            {
+              "key": "cross_country",
+              "label": "Cross Country",
+              "type": "theme"
+            },
+            {
+              "key": "active_trip",
+              "label": "Active Trip",
+              "type": "occasion"
+            }
+          ],
+          "recommendation": {
+            "is_featured": true,
+            "priority_score": 86,
+            "editor_note": "The strongest secondary winter activity recommendation in Trysil.",
+            "recommended_for": [
+              "active travellers",
+              "couples",
+              "longer winter stays"
+            ],
+            "seasonality": [
+              "winter"
+            ]
+          },
+          "status": "active",
+          "sort_order": 2
+        }
+      ]
+    },
+    "gyms": {
+      "headline": "Gyms and fitness options",
+      "description": "Useful fitness recommendations for guests wanting structured training or recovery support in Trysil.",
+      "items": [
+        {
+          "id": "gym_trysil_radisson_blu_fitness",
+          "name": "Radisson Blu Resort Trysil Fitness Area",
+          "slug": "radisson-blu-resort-trysil-fitness-area",
+          "category": "gyms",
+          "subcategory": "hotel_fitness_club",
+          "content": {
+            "short_description": "The strongest practical fitness recommendation in Trysil for guests wanting convenient resort-based gym access.",
+            "long_description": "The Radisson Blu Resort fitness area is one of the most useful training recommendations in Trysil because it is tied to one of the destination’s strongest resort bases and works well for short stays. It suits routine workouts, recovery sessions, and guests prioritising convenience.",
+            "highlights": [
+              "Very convenient for resort stays",
+              "Good practical workout option",
+              "Strong fit for short ski breaks"
+            ],
+            "insider_tips": [
+              "Best for guests already staying in or near the main resort zone.",
+              "A practical recommendation rather than a destination luxury gym."
+            ]
+          },
+          "source": {
+            "type": "curated",
+            "external_ids": {},
+            "sync": {
+              "last_synced_at": "2026-04-02T23:55:00Z",
+              "sync_status": "synced",
+              "provider_version": "bno-editorial-v1"
+            }
+          },
+          "guest_attributes": {
+            "family_friendly": false,
+            "couples_friendly": false,
+            "luxury_level": "midrange",
+            "central_location": true,
+            "booking_relevant": true
+          },
+          "tags": [
+            {
+              "key": "fitness",
+              "label": "Fitness",
+              "type": "theme"
+            },
+            {
+              "key": "resort_access",
+              "label": "Resort Access",
+              "type": "location"
+            }
+          ],
+          "recommendation": {
+            "is_featured": true,
+            "priority_score": 76,
+            "editor_note": "The most practical gym recommendation in Trysil for resort-based stays.",
+            "recommended_for": [
+              "short stays",
+              "routine workouts",
+              "active travellers"
+            ],
+            "seasonality": [
+              "winter",
+              "summer"
+            ]
+          },
+          "status": "active",
+          "sort_order": 1
+        },
+        {
+          "id": "gym_trysil_ski_recovery_training",
+          "name": "Resort Training & Recovery Facilities",
+          "slug": "resort-training-and-recovery-facilities",
+          "category": "gyms",
+          "subcategory": "fitness_recovery_space",
+          "content": {
+            "short_description": "A useful secondary recommendation for guests who want light training and ski-trip recovery support in Trysil.",
+            "long_description": "Trysil’s resort-based training and recovery spaces are a useful recommendation for guests who want something lighter and more integrated into the ski stay than a full city-style gym. They work especially well for ski travellers focused on mobility, recovery, and light conditioning.",
+            "highlights": [
+              "Useful for recovery-focused training",
+              "Good fit for ski trips",
+              "Practical for short resort stays"
+            ],
+            "insider_tips": [
+              "Best for guests who want light fitness support rather than serious standalone gym access.",
+              "Useful as part of recovery planning during ski-heavy stays."
+            ]
+          },
+          "source": {
+            "type": "curated",
+            "external_ids": {},
+            "sync": {
+              "last_synced_at": "2026-04-02T23:55:00Z",
+              "sync_status": "synced",
+              "provider_version": "bno-editorial-v1"
+            }
+          },
+          "guest_attributes": {
+            "family_friendly": false,
+            "couples_friendly": false,
+            "luxury_level": "midrange",
+            "central_location": true,
+            "booking_relevant": false
+          },
+          "tags": [
+            {
+              "key": "recovery",
+              "label": "Recovery",
+              "type": "theme"
+            },
+            {
+              "key": "ski_trip",
+              "label": "Ski Trip",
+              "type": "occasion"
+            }
+          ],
+          "recommendation": {
+            "is_featured": false,
+            "priority_score": 68,
+            "editor_note": "A useful secondary fitness recommendation for ski-trip recovery and lighter training.",
+            "recommended_for": [
+              "ski trips",
+              "recovery-focused stays",
+              "short stays"
+            ],
+            "seasonality": [
+              "winter"
+            ]
+          },
+          "status": "active",
+          "sort_order": 2
+        }
+      ]
+    },
+    "spa_wellness": {
+      "headline": "Spa and wellness recommendations",
+      "description": "High-quality wellness recommendations in Trysil with a focus on recovery, resort comfort, and premium winter leisure.",
+      "items": [
+        {
+          "id": "spa_trysil_radisson_blu_kulpen",
+          "name": "Kulpen Spa at Radisson Blu Resort Trysil",
+          "slug": "kulpen-spa-at-radisson-blu-resort-trysil",
+          "category": "spa_wellness",
+          "subcategory": "resort_spa",
+          "content": {
+            "short_description": "The strongest premium wellness recommendation in Trysil for guests wanting recovery and comfort within the main resort area.",
+            "long_description": "Kulpen Spa is the clearest spa recommendation in Trysil for guests who want a proper wellness element in a ski-focused stay. It suits couples, premium leisure travellers, and anyone wanting structured recovery after winter activity.",
+            "highlights": [
+              "Best-known premium spa option in Trysil",
+              "Strong post-ski recovery fit",
+              "Useful for couples and premium stays"
+            ],
+            "insider_tips": [
+              "Best booked in advance during peak winter weeks.",
+              "A particularly strong recommendation for guests already staying at or near the resort core."
+            ]
+          },
+          "source": {
+            "type": "curated",
+            "external_ids": {},
+            "sync": {
+              "last_synced_at": "2026-04-02T23:55:00Z",
+              "sync_status": "synced",
+              "provider_version": "bno-editorial-v1"
+            }
+          },
+          "guest_attributes": {
+            "family_friendly": false,
+            "couples_friendly": true,
+            "luxury_level": "upscale",
+            "central_location": true,
+            "booking_relevant": true
+          },
+          "tags": [
+            {
+              "key": "spa",
+              "label": "Spa",
+              "type": "theme"
+            },
+            {
+              "key": "recovery",
+              "label": "Recovery",
+              "type": "theme"
+            }
+          ],
+          "recommendation": {
+            "is_featured": true,
+            "priority_score": 90,
+            "editor_note": "The strongest wellness recommendation in Trysil for premium and recovery-focused stays.",
+            "recommended_for": [
+              "couples",
+              "premium ski stays",
+              "wellness"
+            ],
+            "seasonality": [
+              "winter"
+            ]
+          },
+          "status": "active",
+          "sort_order": 1
+        },
+        {
+          "id": "spa_trysil_resort_pool_wellness",
+          "name": "Trysil Resort Pool & Wellness Facilities",
+          "slug": "trysil-resort-pool-and-wellness-facilities",
+          "category": "spa_wellness",
+          "subcategory": "wellness_center",
+          "content": {
+            "short_description": "A safe and useful recommendation for guests wanting casual recovery and relaxation in the resort environment.",
+            "long_description": "Trysil’s resort pool and wellness facilities are a good recommendation for guests who want recovery and comfort without the expectations of a full luxury spa. They work especially well for families, mixed groups, and ski stays where easy access matters most.",
+            "highlights": [
+              "Useful for casual recovery",
+              "Good family-friendly wellness option",
+              "Practical resort convenience"
+            ],
+            "insider_tips": [
+              "Best for families and casual recovery rather than a premium spa day.",
+              "Useful on lower-energy or weather-affected days."
+            ]
+          },
+          "source": {
+            "type": "curated",
+            "external_ids": {},
+            "sync": {
+              "last_synced_at": "2026-04-02T23:55:00Z",
+              "sync_status": "synced",
+              "provider_version": "bno-editorial-v1"
+            }
+          },
+          "guest_attributes": {
+            "family_friendly": true,
+            "couples_friendly": true,
+            "luxury_level": "midrange",
+            "central_location": true,
+            "booking_relevant": false
+          },
+          "tags": [
+            {
+              "key": "family_friendly",
+              "label": "Family Friendly",
+              "type": "audience"
+            },
+            {
+              "key": "resort_access",
+              "label": "Resort Access",
+              "type": "location"
+            }
+          ],
+          "recommendation": {
+            "is_featured": false,
+            "priority_score": 74,
+            "editor_note": "A useful and practical wellness recommendation for mixed groups and family stays.",
+            "recommended_for": [
+              "families",
+              "casual recovery",
+              "winter stays"
+            ],
+            "seasonality": [
+              "winter"
+            ]
+          },
+          "status": "active",
+          "sort_order": 2
+        }
+      ]
+    },
+    "shopping": {
+      "headline": "Shopping recommendations in Trysil",
+      "description": "Shopping is a practical core part of the Trysil experience, especially for ski gear, resort essentials, local mountain retail, and a smaller number of stronger premium-leaning and lifestyle recommendations.",
+      "items": [
+        {
+          "id": "shop_trysil_concept_store_resort",
+          "name": "Concept Store at Trysil Resort",
+          "slug": "concept-store-at-trysil-resort",
+          "category": "shopping",
+          "subcategory": "design_store",
+          "content": {
+            "short_description": "The strongest design-led and premium-leaning shopping recommendation in Trysil for mountain lifestyle retail and curated resort items.",
+            "long_description": "Trysil’s concept-style resort shopping is the best recommendation for guests who want a more curated retail stop rather than purely practical ski gear. It works especially well for premium travellers, gifting, and guests wanting a better-quality mountain-shopping option within the resort.",
+            "highlights": [
+              "Best premium-leaning shopping option in Trysil",
+              "Useful for gifting and mountain lifestyle retail",
+              "More curated than purely practical stores"
+            ],
+            "insider_tips": [
+              "Best for guests looking for a polished mountain-style shopping stop rather than large-scale retail.",
+              "A useful add-on during a slower resort afternoon."
+            ]
+          },
+          "source": {
+            "type": "curated",
+            "external_ids": {},
+            "sync": {
+              "last_synced_at": "2026-04-02T23:55:00Z",
+              "sync_status": "synced",
+              "provider_version": "bno-editorial-v1"
+            }
+          },
+          "guest_attributes": {
+            "family_friendly": true,
+            "couples_friendly": true,
+            "luxury_level": "upscale",
+            "central_location": true,
+            "booking_relevant": false
+          },
+          "tags": [
+            {
+              "key": "design_led",
+              "label": "Design-Led",
+              "type": "style"
+            },
+            {
+              "key": "mountain_lifestyle",
+              "label": "Mountain Lifestyle",
+              "type": "theme"
+            }
+          ],
+          "recommendation": {
+            "is_featured": true,
+            "priority_score": 84,
+            "editor_note": "The strongest premium-leaning shopping recommendation in Trysil.",
+            "recommended_for": [
+              "premium travellers",
+              "gift shopping",
+              "mountain-style browsing"
+            ],
+            "seasonality": [
+              "winter"
+            ]
+          },
+          "status": "active",
+          "sort_order": 1
+        },
+        {
+          "id": "shop_trysil_sport_lodge_retail",
+          "name": "SkiStar Shop Trysil",
+          "slug": "skistar-shop-trysil",
+          "category": "shopping",
+          "subcategory": "sports_retail",
+          "content": {
+            "short_description": "The strongest practical shopping recommendation in Trysil for ski gear, clothing, and slope-related needs.",
+            "long_description": "SkiStar Shop Trysil is one of the most useful retail recommendations in Trysil because many guests genuinely need practical skiing or winter-related items during the trip. It works especially well for families, first-time ski travellers, and anyone staying close to the main resort base.",
+            "highlights": [
+              "Best practical winter retail option",
+              "Useful for ski and clothing needs",
+              "Strong fit for first-time ski trips"
+            ],
+            "insider_tips": [
+              "Most relevant when guests need gear, layers, gloves, or last-minute ski essentials.",
+              "A very practical recommendation in winter-focused stays."
+            ]
+          },
+          "source": {
+            "type": "curated",
+            "external_ids": {},
+            "sync": {
+              "last_synced_at": "2026-04-02T23:55:00Z",
+              "sync_status": "synced",
+              "provider_version": "bno-editorial-v1"
+            }
+          },
+          "guest_attributes": {
+            "family_friendly": true,
+            "couples_friendly": false,
+            "luxury_level": "midrange",
+            "central_location": true,
+            "booking_relevant": false
+          },
+          "tags": [
+            {
+              "key": "ski_trip",
+              "label": "Ski Trip",
+              "type": "occasion"
+            },
+            {
+              "key": "practical",
+              "label": "Practical",
+              "type": "style"
+            }
+          ],
+          "recommendation": {
+            "is_featured": true,
+            "priority_score": 90,
+            "editor_note": "The most practical and important shopping recommendation in Trysil.",
+            "recommended_for": [
+              "families",
+              "ski holidays",
+              "first-time ski travellers"
+            ],
+            "seasonality": [
+              "winter"
+            ]
+          },
+          "status": "active",
+          "sort_order": 2
+        },
+        {
+          "id": "shop_trysil_trysil_klatre_og_sport_placeholder",
+          "name": "Trysil Sport & Outdoor Retail",
+          "slug": "trysil-sport-and-outdoor-retail",
+          "category": "shopping",
+          "subcategory": "sports_retail",
+          "content": {
+            "short_description": "A safe midrange shopping recommendation for guests needing dependable outdoor and winter gear options in Trysil.",
+            "long_description": "Trysil’s outdoor and sport retail options are useful for guests who need practical purchases, weather-related items, or a broader midrange choice beyond the main resort store. They work especially well for active families and longer ski stays.",
+            "highlights": [
+              "Good midrange practical option",
+              "Useful for outdoor and winter needs",
+              "Strong fit for active trips"
+            ],
+            "insider_tips": [
+              "Best used when guests need additional practical options beyond the main resort retail.",
+              "Useful for longer stays or mixed activity trips."
+            ]
+          },
+          "source": {
+            "type": "curated",
+            "external_ids": {},
+            "sync": {
+              "last_synced_at": "2026-04-02T23:55:00Z",
+              "sync_status": "synced",
+              "provider_version": "bno-editorial-v1"
+            }
+          },
+          "guest_attributes": {
+            "family_friendly": true,
+            "couples_friendly": false,
+            "luxury_level": "midrange",
+            "central_location": false,
+            "booking_relevant": false
+          },
+          "tags": [
+            {
+              "key": "outdoor",
+              "label": "Outdoor",
+              "type": "theme"
+            },
+            {
+              "key": "midrange",
+              "label": "Midrange",
+              "type": "budget"
+            }
+          ],
+          "recommendation": {
+            "is_featured": false,
+            "priority_score": 76,
+            "editor_note": "A useful midrange practical shopping recommendation in Trysil.",
+            "recommended_for": [
+              "active travellers",
+              "families",
+              "longer stays"
+            ],
+            "seasonality": [
+              "winter",
+              "summer"
+            ]
+          },
+          "status": "active",
+          "sort_order": 3
+        },
+        {
+          "id": "shop_trysil_resort_center_retail",
+          "name": "Trysil Resort Centre Retail Area",
+          "slug": "trysil-resort-centre-retail-area",
+          "category": "shopping",
+          "subcategory": "shopping_street",
+          "content": {
+            "short_description": "The safest all-round shopping recommendation in Trysil for guests wanting easy resort-area browsing.",
+            "long_description": "The resort centre retail area is the safest overall shopping recommendation in Trysil because it allows guests to combine practical shopping, light browsing, and resort convenience without complicated transport or planning. It works especially well for short stays and families.",
+            "highlights": [
+              "Most convenient all-round shopping area",
+              "Easy to combine with resort plans",
+              "Useful for short stays"
+            ],
+            "insider_tips": [
+              "Best for guests who want simple access and easy browsing rather than a destination shopping trip.",
+              "Works well between skiing, lunch, and early evening downtime."
+            ]
+          },
+          "source": {
+            "type": "curated",
+            "external_ids": {},
+            "sync": {
+              "last_synced_at": "2026-04-02T23:55:00Z",
+              "sync_status": "synced",
+              "provider_version": "bno-editorial-v1"
+            }
+          },
+          "guest_attributes": {
+            "family_friendly": true,
+            "couples_friendly": true,
+            "luxury_level": "midrange",
+            "central_location": true,
+            "booking_relevant": false
+          },
+          "tags": [
+            {
+              "key": "safe_pick",
+              "label": "Safe Pick",
+              "type": "style"
+            },
+            {
+              "key": "resort_access",
+              "label": "Resort Access",
+              "type": "location"
+            }
+          ],
+          "recommendation": {
+            "is_featured": true,
+            "priority_score": 82,
+            "editor_note": "The safest and easiest all-round shopping recommendation in Trysil.",
+            "recommended_for": [
+              "families",
+              "short stays",
+              "resort-based trips"
+            ],
+            "seasonality": [
+              "winter"
+            ]
+          },
+          "status": "active",
+          "sort_order": 4
+        },
+        {
+          "id": "shop_trysil_local_gift_and_lifestyle",
+          "name": "Local Gift & Lifestyle Shops in Trysil",
+          "slug": "local-gift-and-lifestyle-shops-in-trysil",
+          "category": "shopping",
+          "subcategory": "independent_boutique_area",
+          "content": {
+            "short_description": "A useful Trysil recommendation for guests wanting a more local and gift-oriented shopping stop beyond ski gear.",
+            "long_description": "Local gift and lifestyle shops in Trysil are the best choice for guests who want a smaller, more personal retail experience rather than purely practical winter shopping. They work especially well for gifting, couples, and slower downtime in the resort or town area.",
+            "highlights": [
+              "More local than standard resort retail",
+              "Good for gifts and light browsing",
+              "Adds variety beyond ski shopping"
+            ],
+            "insider_tips": [
+              "Best for guests who want a small local shopping moment rather than a major retail session.",
+              "Useful near the end of the stay for gift shopping."
+            ]
+          },
+          "source": {
+            "type": "curated",
+            "external_ids": {},
+            "sync": {
+              "last_synced_at": "2026-04-02T23:55:00Z",
+              "sync_status": "synced",
+              "provider_version": "bno-editorial-v1"
+            }
+          },
+          "guest_attributes": {
+            "family_friendly": true,
+            "couples_friendly": true,
+            "luxury_level": "midrange",
+            "central_location": false,
+            "booking_relevant": false
+          },
+          "tags": [
+            {
+              "key": "gift_shopping",
+              "label": "Gift Shopping",
+              "type": "occasion"
+            },
+            {
+              "key": "local_feel",
+              "label": "Local Feel",
+              "type": "theme"
+            }
+          ],
+          "recommendation": {
+            "is_featured": false,
+            "priority_score": 72,
+            "editor_note": "A useful local-style shopping recommendation for gifts and lighter browsing in Trysil.",
+            "recommended_for": [
+              "couples",
+              "gift shopping",
+              "slow travel moments"
+            ],
+            "seasonality": [
+              "winter",
+              "summer"
+            ]
+          },
+          "status": "active",
+          "sort_order": 5
+        }
+      ]
+    }
+  },
+  "tags": [
+    {
+      "key": "ski_destination",
+      "label": "Ski Destination",
+      "type": "theme"
+    },
+    {
+      "key": "winter_destination",
+      "label": "Winter Destination",
+      "type": "theme"
+    },
+    {
+      "key": "family_friendly",
+      "label": "Family Friendly",
+      "type": "audience"
+    },
+    {
+      "key": "active_trip",
+      "label": "Active Trip",
+      "type": "occasion"
+    },
+    {
+      "key": "shopping_destination",
+      "label": "Shopping Destination",
+      "type": "theme"
+    },
+    {
+      "key": "mountain_lifestyle",
+      "label": "Mountain Lifestyle",
+      "type": "theme"
+    }
+  ],
+  "recommendations": {
+    "featured": [
+      {
+        "place_id": "act_trysil_trysilfjellet",
+        "category": "activities",
+        "reason": "The core activity recommendation and main draw of the destination.",
+        "rank": 1
+      },
+      {
+        "place_id": "shop_trysil_sport_lodge_retail",
+        "category": "shopping",
+        "reason": "The most useful and practical shopping recommendation in Trysil.",
+        "rank": 2
+      },
+      {
+        "place_id": "rest_trysil_brasserie_t",
+        "category": "restaurants",
+        "reason": "The strongest premium dining recommendation in Trysil.",
+        "rank": 3
+      }
+    ],
+    "editors_picks": [
+      {
+        "place_id": "act_trysil_cross_country_network",
+        "category": "activities",
+        "reason": "The strongest secondary winter activity recommendation beyond downhill skiing.",
+        "rank": 1
+      },
+      {
+        "place_id": "shop_trysil_concept_store_resort",
+        "category": "shopping",
+        "reason": "The strongest premium-leaning shopping recommendation in Trysil.",
+        "rank": 2
+      },
+      {
+        "place_id": "spa_trysil_radisson_blu_kulpen",
+        "category": "spa_wellness",
+        "reason": "Top wellness recommendation for recovery-focused ski stays.",
+        "rank": 3
+      }
+    ],
+    "seasonal": [
+      {
+        "place_id": "act_trysil_trysilfjellet",
+        "category": "activities",
+        "reason": "Especially relevant in the winter ski season.",
+        "rank": 1
+      },
+      {
+        "place_id": "shop_trysil_sport_lodge_retail",
+        "category": "shopping",
+        "reason": "Most relevant during winter gear and ski-focused stays.",
+        "rank": 2
+      }
+    ],
+    "personalized_slots": [
+      {
+        "slot_key": "premium_trysil",
+        "label": "Premium Trysil",
+        "items": [
+          {
+            "place_id": "rest_trysil_brasserie_t",
+            "category": "restaurants",
+            "reason": "Best premium dinner recommendation.",
+            "rank": 1
+          },
+          {
+            "place_id": "spa_trysil_radisson_blu_kulpen",
+            "category": "spa_wellness",
+            "reason": "Best premium recovery and wellness pairing.",
+            "rank": 2
+          },
+          {
+            "place_id": "shop_trysil_concept_store_resort",
+            "category": "shopping",
+            "reason": "Strongest premium-leaning mountain shopping option.",
+            "rank": 3
+          }
+        ]
+      },
+      {
+        "slot_key": "family_trysil",
+        "label": "Family Trysil",
+        "items": [
+          {
+            "place_id": "act_trysil_trysilfjellet",
+            "category": "activities",
+            "reason": "Core family ski activity.",
+            "rank": 1
+          },
+          {
+            "place_id": "shop_trysil_sport_lodge_retail",
+            "category": "shopping",
+            "reason": "Most useful for family ski gear and winter needs.",
+            "rank": 2
+          },
+          {
+            "place_id": "rest_trysil_laesiden",
+            "category": "restaurants",
+            "reason": "Safe and relaxed family-friendly resort dining option.",
+            "rank": 3
+          }
+        ]
+      },
+      {
+        "slot_key": "safe_short_trysil",
+        "label": "Safe Short Trysil Stay",
+        "items": [
+          {
+            "place_id": "act_trysil_trysilfjellet",
+            "category": "activities",
+            "reason": "Main reason for the trip and easiest high-confidence activity choice.",
+            "rank": 1
+          },
+          {
+            "place_id": "shop_trysil_resort_center_retail",
+            "category": "shopping",
+            "reason": "Safest and easiest all-round resort shopping option.",
+            "rank": 2
+          },
+          {
+            "place_id": "rest_trysil_knettsetra",
+            "category": "restaurants",
+            "reason": "A dependable mountain dining recommendation tied closely to the ski experience.",
+            "rank": 3
+          }
+        ]
+      }
+    ]
+  },
+  "seo": {
+    "meta_title": "Trysil Travel Guide | Restaurants, Shopping, Activities & Wellness | BNO Travel",
+    "meta_description": "Explore Trysil with curated BNO Travel recommendations for restaurants, activities, gyms, spa wellness, and shopping.",
+    "canonical_url": "https://bno.travel/trysil",
+    "og_title": "Trysil Travel Guide | BNO Travel",
+    "og_description": "Professional Trysil recommendations for ski holidays, dining, shopping, wellness, and winter stays.",
+    "og_image": "https://example.bno.travel/images/trysil/trysil-og.jpg",
+    "twitter_title": "Trysil Travel Guide | BNO Travel",
+    "twitter_description": "Curated Trysil recommendations for ski trips, winter breaks, and premium mountain stays.",
+    "twitter_image": "https://example.bno.travel/images/trysil/trysil-og.jpg",
+    "schema_type": "TravelDestination",
+    "indexable": true
+  },
+  "metadata": {
+    "status": "published",
+    "created_at": "2026-04-03T00:40:00Z",
+    "updated_at": "2026-04-03T00:46:00Z",
+    "published_at": "2026-04-03T00:47:00Z",
+    "version": 1,
+    "source_priority": [
+      "curated",
+      "google_places",
+      "partner_feed",
+      "user_generated"
+    ]
+  }
+}
