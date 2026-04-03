@@ -4975,11 +4975,73 @@ function inferAirportFromTravelArea(area: string | null): string | null {
 }
 
 function extractTravelAreaForTripPlanning(messageRaw: string, history: any[]): string | null {
-  const current = extractTravelHelperArea(messageRaw);
-  if (current) return current;
+  return (
+    extractTravelDestinationArea(messageRaw, history) ||
+    extractTravelHelperArea(messageRaw) ||
+    extractTravelHelperArea(buildTravelHelperSearchBasis(String(messageRaw || ''), history || []))
+  );
+}
 
-  const combined = buildTravelHelperSearchBasis(String(messageRaw || ''), history || []);
-  return extractTravelHelperArea(combined);
+function extractTravelDestinationArea(messageRaw: string, history: any[] = []): string | null {
+  const currentRaw = String(messageRaw || '');
+  const current = normalizeTravelHelperText(currentRaw);
+  const combinedRaw = buildTravelHelperSearchBasis(currentRaw, history || []);
+  const combined = normalizeTravelHelperText(combinedRaw);
+
+  const parseDestinationFromText = (rawText: string, normalizedText: string): string | null => {
+    const mappings: Array<{ keywords: string[]; area: string }> = [
+      { keywords: ['trysil sentrum'], area: 'trysil-sentrum' },
+      { keywords: ['turistsenter', 'trysil turistsenter'], area: 'trysil-turistsenter' },
+      {
+        keywords: ['hoyfjellssenter', 'trysil hoyfjellssenter', 'fagerasen', 'fageraasen'],
+        area: 'trysil-hoyfjellssenter',
+      },
+      {
+        keywords: ['trysilfjellet', 'trysilfjell hytteomrade', 'trysilfjell'],
+        area: 'trysilfjell-hytteomrade',
+      },
+      { keywords: ['trysil'], area: 'trysil' },
+      { keywords: ['salen', 'saelen', 'sälen'], area: 'salen' },
+      { keywords: ['geiranger'], area: 'stranda' },
+      { keywords: ['stranda'], area: 'stranda' },
+      { keywords: ['sunnmorsalpene', 'sunnmørsalpene'], area: 'sunnmorsalpene' },
+      { keywords: ['london'], area: 'london' },
+      { keywords: ['amsterdam'], area: 'amsterdam' },
+      { keywords: ['kobenhavn', 'københavn', 'copenhagen'], area: 'copenhagen' },
+      { keywords: ['stockholm'], area: 'stockholm' },
+      { keywords: ['los angeles', 'losangeles'], area: 'losangeles' },
+      { keywords: ['miami'], area: 'miami' },
+      { keywords: ['oslo'], area: 'oslo' },
+    ];
+
+    const tilMatch =
+      rawText.match(/\btil\s+([A-Za-zÆØÅæøå\s\-]+?)(?:\s+fra\b|\s+\d{1,2}[.\-]|\s+den\b|,|$)/i) ||
+      rawText.match(/\bto\s+([A-Za-zÆØÅæøå\s\-]+?)(?:\s+from\b|\s+\d{1,2}[.\-]|\s+on\b|,|$)/i);
+
+    const bounded = normalizeTravelHelperText(String(tilMatch?.[1] || '').trim());
+
+    if (bounded) {
+      for (const item of mappings) {
+        if (item.keywords.some((keyword) => bounded.includes(normalizeTravelHelperText(keyword)))) {
+          return item.area;
+        }
+      }
+    }
+
+    for (const item of mappings) {
+      if (item.keywords.some((keyword) => normalizedText.includes(normalizeTravelHelperText(keyword)))) {
+        return item.area;
+      }
+    }
+
+    return null;
+  };
+
+  return (
+    parseDestinationFromText(currentRaw, current) ||
+    parseDestinationFromText(combinedRaw, combined) ||
+    null
+  );
 }
 
 function extractTravelFlightSearchParams(messageRaw: string, history: any[]) {
@@ -5422,8 +5484,9 @@ async function buildTripProposal(opts: {
   const season = detectTravelSeason(message, extractTravelHelperDates(message));
 
   let detectedArea =
-    extractTravelHelperArea(message) ||
-    extractTravelHelperArea(buildTravelHelperSearchBasis(message, opts.history));
+  extractTravelDestinationArea(message, opts.history) ||
+  extractTravelHelperArea(message) ||
+  extractTravelHelperArea(buildTravelHelperSearchBasis(message, opts.history));
 
   if (!detectedArea) {
     if (season === 'winter') detectedArea = 'trysil';
@@ -5907,10 +5970,11 @@ app.post('/api/travel-helper', async (req, res) => {
     if (contentIntent || tripPlanningIntent || hostRentalIntent) {
       try {
         const detectedArea =
-          extractTravelHelperArea(currentMessageText) ||
-          extractTravelHelperArea(conversationText) ||
-          latestSearchParams?.area ||
-          'trysil';
+  extractTravelDestinationArea(currentMessageText, safeHistory) ||
+  extractTravelHelperArea(currentMessageText) ||
+  extractTravelHelperArea(conversationText) ||
+  latestSearchParams?.area ||
+  'trysil';
 
         const season = detectTravelSeason(
           currentMessageText,
