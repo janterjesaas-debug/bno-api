@@ -8,6 +8,7 @@ type PassengerInput = {
   phone_number: string;
   gender: string;
   title: string;
+  locale?: string;
 };
 
 type CreateFlightBookingInput = {
@@ -19,7 +20,7 @@ type CreateFlightBookingInput = {
   serviceFee: number;
   totalAmount: number;
   currency: string;
-  passenger: PassengerInput;
+  passengers: PassengerInput[];
   order: any;
   userId?: string | null;
 };
@@ -59,23 +60,30 @@ export async function createFlightBooking(input: CreateFlightBookingInput) {
   const outbound = getSliceSummary(input.order?.slices?.[0]);
   const ret = getSliceSummary(input.order?.slices?.[1]);
 
+  if (!Array.isArray(input.passengers) || !input.passengers.length) {
+    throw new Error('createFlightBooking krever minst én passasjer');
+  }
+
+  const contactPassenger = input.passengers[0];
+
   console.log('[FLIGHT BOOKINGS] insert payload identity', {
-    email: input.passenger.email,
+    email: contactPassenger.email,
     userId: input.userId || null,
     offerId: input.offerId,
+    passengerCount: input.passengers.length,
   });
 
   const insertPayload = {
     bno_booking_ref: generateBnoBookingRef(),
     status: 'order_created',
 
-    customer_email: input.passenger.email,
-    given_name: input.passenger.given_name,
-    family_name: input.passenger.family_name,
-    born_on: input.passenger.born_on || null,
-    phone_number: input.passenger.phone_number || null,
-    gender: input.passenger.gender || null,
-    title: input.passenger.title || null,
+    customer_email: contactPassenger.email,
+    given_name: contactPassenger.given_name,
+    family_name: contactPassenger.family_name,
+    born_on: contactPassenger.born_on || null,
+    phone_number: contactPassenger.phone_number || null,
+    gender: contactPassenger.gender || null,
+    title: contactPassenger.title || null,
 
     user_id: input.userId || null,
 
@@ -108,6 +116,7 @@ export async function createFlightBooking(input: CreateFlightBookingInput) {
     return_departure_at: ret.departure,
     return_arrival_at: ret.arrival,
 
+    passengers_json: input.passengers,
     duffel_order_json: input.order || null,
   };
 
