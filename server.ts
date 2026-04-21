@@ -4597,56 +4597,200 @@ function extractTravelFlightDirectOnly(messageRaw: string): boolean {
   );
 }
 
-function mapTravelFlightPlaceToCode(
-  messageRaw: string,
-  kind: 'origin' | 'destination'
-): string | null {
-  const bounded = normalizeTravelHelperText(extractBoundedPlace(messageRaw, kind));
-  const allText = normalizeTravelHelperText(messageRaw);
+type TravelAirportLookupItem = {
+  id?: string;
+  code?: string;
+  city?: string;
+  airport?: string;
+  country?: string;
+  cityCode?: string;
+  type?: 'city' | 'airport' | string;
+};
 
-  const mappings: Array<{ keywords: string[]; code: string }> = [
-    { keywords: ['oslo', 'gardermoen', 'osl'], code: 'OSL' },
-    { keywords: ['trondheim', 'vaernes', 'værnes', 'trd'], code: 'TRD' },
-    { keywords: ['bergen', 'flesland', 'bgo'], code: 'BGO' },
-    { keywords: ['alesund', 'ålesund', 'vigra', 'aes'], code: 'AES' },
-    { keywords: ['london', 'lon'], code: 'LON' },
-    { keywords: ['heathrow', 'lhr'], code: 'LHR' },
-    { keywords: ['gatwick', 'lgw'], code: 'LGW' },
-    { keywords: ['luton', 'ltn'], code: 'LTN' },
-    { keywords: ['amsterdam', 'schiphol', 'ams'], code: 'AMS' },
-    { keywords: ['kobenhavn', 'københavn', 'copenhagen', 'cph'], code: 'CPH' },
-    { keywords: ['stockholm', 'arlanda', 'arn'], code: 'ARN' },
-    { keywords: ['paris', 'cdg'], code: 'PAR' },
-    { keywords: ['rome', 'roma', 'fco'], code: 'ROM' },
-    { keywords: ['miami', 'mia'], code: 'MIA' },
-    { keywords: ['los angeles', 'lax'], code: 'LAX' },
-    { keywords: ['salen', 'sälen', 'scr'], code: 'SCR' },
-    { keywords: ['dublin', 'dub'], code: 'DUB' },
-  ];
+type TravelFlightSearchParams = {
+  origin: string | null;
+  destination: string | null;
+  departureDate: string | null;
+  returnDate: string | null;
+  adults: number;
+  cabinClass: 'economy' | 'premium_economy' | 'business' | 'first';
+  directOnly: boolean;
+};
 
-  if (bounded) {
-    for (const item of mappings) {
-      if (
-        item.keywords.some((keyword) =>
-          bounded.includes(normalizeTravelHelperText(keyword))
-        )
-      ) {
-        return item.code;
+const TRAVEL_FLIGHT_FALLBACK_AIRPORTS: Record<string, string> = {
+  osl: 'OSL',
+  oslo: 'OSL',
+  gardermoen: 'OSL',
+  trondheim: 'TRD',
+  vaernes: 'TRD',
+  varnes: 'TRD',
+  bergen: 'BGO',
+  flesland: 'BGO',
+  alesund: 'AES',
+  aalesund: 'AES',
+  vigra: 'AES',
+  london: 'LON',
+  heathrow: 'LHR',
+  gatwick: 'LGW',
+  luton: 'LTN',
+  amsterdam: 'AMS',
+  schiphol: 'AMS',
+  copenhagen: 'CPH',
+  kobenhavn: 'CPH',
+  stockholm: 'ARN',
+  arlanda: 'ARN',
+  paris: 'PAR',
+  rome: 'ROM',
+  roma: 'ROM',
+  dublin: 'DUB',
+  budapest: 'BUD',
+  wien: 'VIE',
+  vienna: 'VIE',
+  praha: 'PRG',
+  prague: 'PRG',
+  warszawa: 'WAW',
+  warsaw: 'WAW',
+  barcelona: 'BCN',
+  madrid: 'MAD',
+  berlin: 'BER',
+};
+
+function normalizeTravelFlightPlaceText(inputRaw: string): string {
+  return normalizeTravelHelperText(String(inputRaw || ''))
+    .replace(/\b(flyplass|airport|flyplassen|airporten)\b/g, ' ')
+    .replace(/[()]/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+function lookupTravelFlightFallbackCode(inputRaw: string): string | null {
+  const normalized = normalizeTravelFlightPlaceText(inputRaw);
+  if (!normalized) return null;
+
+  const compact = normalized.replace(/\s+/g, '');
+  return (
+    TRAVEL_FLIGHT_FALLBACK_AIRPORTS[normalized] ||
+    TRAVEL_FLIGHT_FALLBACK_AIRPORTS[compact] ||
+    null
+  );
+}
+
+function isLikelyIataCode(inputRaw: string): boolean {
+  return /^[A-Za-z]{3}$/.test(String(inputRaw || '').trim());
+}
+
+function scoreTravelAirportSuggestion(
+  rawPlace: string,
+  item: TravelAirportLookupItem
+): number {
+  const normalizedQuery = normalizeTravelFlightPlaceText(rawPlace);
+  const compactQuery = normalizedQuery.replace(/\s+/g, '');
+
+  const code = String(item?.code || '').trim().toUpperCase();
+  const cityCode = String(item?.cityCode || '').trim().toUpperCase();
+  const city = normalizeTravelFlightPlaceText(item?.city || '');
+  const airport = normalizeTravelFlightPlaceText(item?.airport || '');
+  const compactCity = city.replace(/\s+/g, '');
+  const compactAirport = airport.replace(/\s+/g, '');
+
+  let score = 0;
+
+  if (!normalizedQuery) return score;
+
+  if (code && normalizedQuery.toUpperCase() === code) score += 1000;
+  if (cityCode && normalizedQuery.toUpperCase() === cityCode) score += 950;
+
+  if (city && city === normalizedQuery) score += 900;
+  if (airport && airport === normalizedQuery) score += 880;
+
+  if (compactCity && compactCity === compactQuery) score += 840;
+  if (compactAirport && compactAirport === compactQuery) score += 820;
+
+  if (city && city.startsWith(normalizedQuery)) score += 700;
+  if (airport && airport.startsWith(normalizedQuery)) score += 680;
+
+  if (city && city.includes(normalizedQuery)) score += 520;
+  if (airport && airport.includes(normalizedQuery)) score += 500;
+
+  if (code && compactQuery && code.toLowerCase() === compactQuery) score += 450;
+  if (cityCode && compactQuery && cityCode.toLowerCase() === compactQuery) score += 430;
+
+  if (String(item?.type || '') === 'city') score += 25;
+
+  return score;
+}
+
+function pickBestTravelAirportSuggestion(
+  rawPlace: string,
+  suggestions: TravelAirportLookupItem[]
+): TravelAirportLookupItem | null {
+  if (!Array.isArray(suggestions) || suggestions.length === 0) return null;
+
+  const ranked = [...suggestions].sort((a, b) => {
+    const diff =
+      scoreTravelAirportSuggestion(rawPlace, b) -
+      scoreTravelAirportSuggestion(rawPlace, a);
+
+    if (diff !== 0) return diff;
+
+    const aCode = String(a?.code || '');
+    const bCode = String(b?.code || '');
+    return aCode.localeCompare(bCode);
+  });
+
+  const best = ranked[0] || null;
+  return best?.code ? best : null;
+}
+
+async function resolveTravelAirportCodeFromPlace(inputRaw: string): Promise<string | null> {
+  const raw = String(inputRaw || '').trim();
+  if (!raw) return null;
+
+  if (isLikelyIataCode(raw)) {
+    return raw.toUpperCase();
+  }
+
+  const fallbackCode = lookupTravelFlightFallbackCode(raw);
+
+  try {
+    const response = await fetch(
+      `http://127.0.0.1:${PORT}/api/flights/airports?q=${encodeURIComponent(raw)}`
+    );
+
+    const json: any = await response.json();
+
+    if (response.ok && json?.ok && Array.isArray(json?.data) && json.data.length > 0) {
+      const best = pickBestTravelAirportSuggestion(
+        raw,
+        json.data as TravelAirportLookupItem[]
+      );
+
+      if (best?.code) {
+        return String(best.code).trim().toUpperCase();
       }
     }
+  } catch (error) {
+    console.error('travel-helper airport resolve failed', {
+      input: raw,
+      message: error instanceof Error ? error.message : String(error),
+    });
   }
 
-  for (const item of mappings) {
-    if (
-      item.keywords.some((keyword) =>
-        allText.includes(normalizeTravelHelperText(keyword))
-      )
-    ) {
-      return item.code;
-    }
+  return fallbackCode;
+}
+
+async function extractTravelFlightCodeFromMessage(
+  messageRaw: string,
+  kind: 'origin' | 'destination'
+): Promise<string | null> {
+  const bounded = extractBoundedPlace(messageRaw, kind);
+
+  if (bounded) {
+    const boundedResolved = await resolveTravelAirportCodeFromPlace(bounded);
+    if (boundedResolved) return boundedResolved;
   }
 
-  return null;
+  return await resolveTravelAirportCodeFromPlace(messageRaw);
 }
 
 function inferAirportFromTravelArea(area: string | null): string | null {
@@ -4687,7 +4831,10 @@ function inferAirportFromTravelArea(area: string | null): string | null {
   return null;
 }
 
-function extractTravelFlightSearchParams(messageRaw: string, history: any[]) {
+async function extractTravelFlightSearchParams(
+  messageRaw: string,
+  history: any[]
+): Promise<TravelFlightSearchParams> {
   const currentMessage = String(messageRaw || '').trim();
   const previous = getPreviousUserMessage(history);
   const datesFromCurrent = extractTravelHelperDates(currentMessage);
@@ -4701,11 +4848,15 @@ function extractTravelFlightSearchParams(messageRaw: string, history: any[]) {
     extractTravelHelperAdults(previous) ||
     1;
 
-  let origin = mapTravelFlightPlaceToCode(currentMessage, 'origin');
-  let destination = mapTravelFlightPlaceToCode(currentMessage, 'destination');
+  let origin = await extractTravelFlightCodeFromMessage(currentMessage, 'origin');
+  let destination = await extractTravelFlightCodeFromMessage(currentMessage, 'destination');
 
-  if (!origin) origin = mapTravelFlightPlaceToCode(previous, 'origin');
-  if (!destination) destination = mapTravelFlightPlaceToCode(previous, 'destination');
+  if (!origin) {
+    origin = await extractTravelFlightCodeFromMessage(previous, 'origin');
+  }
+  if (!destination) {
+    destination = await extractTravelFlightCodeFromMessage(previous, 'destination');
+  }
 
   const cabinClass = extractTravelFlightCabinClass(`${previous}\n${currentMessage}`);
   const directOnly = extractTravelFlightDirectOnly(`${previous}\n${currentMessage}`);
@@ -4720,7 +4871,6 @@ function extractTravelFlightSearchParams(messageRaw: string, history: any[]) {
     directOnly,
   };
 }
-
 function formatFlightTime(value?: string | null): string {
   if (!value) return '-';
 
@@ -5878,7 +6028,7 @@ app.post('/api/travel-helper', async (req, res) => {
 
     if (responseMode === 'flight_only' || responseMode === 'trip_package') {
       try {
-        const flightParams = extractTravelFlightSearchParams(currentMessageText, safeHistory);
+       const flightParams = await extractTravelFlightSearchParams(currentMessageText, safeHistory);
         const destinationArea = extractTripDestinationArea(currentMessageText, safeHistory);
         const inferredDestinationAirport = inferAirportFromTravelArea(destinationArea);
 
@@ -5921,9 +6071,9 @@ app.post('/api/travel-helper', async (req, res) => {
             flightSearchJson?.ok &&
             Array.isArray(flightSearchJson?.data?.offers)
           ) {
-            latestFlightOffers = Array.isArray(flightSearchJson.data.offers)
-              ? flightSearchJson.data.offers.slice(0, 5)
-              : [];
+           latestFlightOffers = Array.isArray(flightSearchJson.data.offers)
+  ? flightSearchJson.data.offers.slice(0, 20)
+  : [];
 
             latestFlightSearch = {
               origin: resolvedOrigin,
@@ -6214,9 +6364,9 @@ if (
           ? { rows: latestSearchRows, params: latestSearchParams }
           : null,
       flightSearchContext:
-        latestFlightOffers.length > 0 && latestFlightSearch
-          ? { offers: latestFlightOffers.slice(0, 5), search: latestFlightSearch }
-          : null,
+  latestFlightOffers.length > 0 && latestFlightSearch
+    ? { offers: latestFlightOffers.slice(0, 20), search: latestFlightSearch }
+    : null,
       meta: {
         intent,
         responseMode,
