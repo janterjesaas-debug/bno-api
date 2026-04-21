@@ -4130,7 +4130,10 @@ async function getTravelHelperContent(opts: {
       .select('*')
       .eq('is_active', true)
       .eq('language', langToUse)
-      .in('destination_slug', destinationSlug === 'global' ? ['global'] : [destinationSlug, 'global'])
+      .in(
+        'destination_slug',
+        destinationSlug === 'global' ? ['global'] : [destinationSlug, 'global']
+      )
       .order('is_featured', { ascending: false })
       .order('sort_order', { ascending: true })
       .limit(40);
@@ -4155,16 +4158,55 @@ async function getTravelHelperContent(opts: {
     return await query;
   };
 
-  let { data, error } = await runQuery(language);
-  if (error) throw error;
+  const languagesToTry: string[] = [];
+  const pushLanguage = (value: string) => {
+    const normalized = String(value || '').trim().toLowerCase();
+    if (!normalized) return;
+    if (!languagesToTry.includes(normalized)) {
+      languagesToTry.push(normalized);
+    }
+  };
 
-  if ((!data || data.length === 0) && language !== 'nb') {
-    const fallback = await runQuery('nb');
-    if (fallback.error) throw fallback.error;
-    data = fallback.data || [];
+  // Bruk ønsket språk først
+  pushLanguage(language);
+
+  // Viktig fallback for content-tabellen:
+  // norsk <-> engelsk skal alltid prøves begge veier
+  if (language === 'nb') {
+    pushLanguage('en');
+  } else if (language === 'en') {
+    pushLanguage('nb');
+  } else {
+    // Hvis appen bruker f.eks. pl/de/fr osv, prøv engelsk først, så norsk
+    pushLanguage('en');
+    pushLanguage('nb');
   }
 
-  return Array.isArray(data) ? data : [];
+  const merged: any[] = [];
+
+  for (const langToUse of languagesToTry) {
+    const { data, error } = await runQuery(langToUse);
+    if (error) throw error;
+
+    if (Array.isArray(data) && data.length > 0) {
+      merged.push(...data);
+    }
+  }
+
+  if (!Array.isArray(merged) || merged.length === 0) {
+    return [];
+  }
+
+  const seen = new Set<string>();
+  const deduped = merged.filter((item) => {
+    const slug = String(item?.slug || '').trim();
+    if (!slug) return false;
+    if (seen.has(slug)) return false;
+    seen.add(slug);
+    return true;
+  });
+
+  return deduped;
 }
 
 function normalizeTags(tags: any): string[] {
