@@ -8,20 +8,58 @@ const supabase =
     ? createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY)
     : null;
 
+function normalizeLocale(value: string): string {
+  return String(value || '')
+    .trim()
+    .toLowerCase()
+    .replace(/_/g, '-');
+}
+
+function buildLocaleCandidates(lang: string): string[] {
+  const raw = normalizeLocale(lang || 'en');
+  const base = raw.split('-')[0] || '';
+
+  const out: string[] = [];
+
+  function add(v: string) {
+    const s = normalizeLocale(v);
+    if (!s) return;
+    if (!out.includes(s)) out.push(s);
+  }
+
+  add(raw);
+  add(base);
+
+  if (base === 'no') {
+    add('nb');
+    add('nb-no');
+  }
+  if (base === 'nb') {
+    add('no');
+    add('nb-no');
+  }
+
+  add('en');
+  add('en-gb');
+  add('nb');
+  add('nb-no');
+
+  return out;
+}
+
 export async function getSupabaseDescriptionForResourceCategory(
   rcId: string,
   lang: string
 ): Promise<{ title: string; description: string; localeUsed: string } | null> {
   try {
     const id = String(rcId || '').trim().toLowerCase();
-    const requested = String(lang || 'en').trim().toLowerCase();
+    const requested = normalizeLocale(lang || 'en');
 
     if (!id) return null;
     if (!supabase) return null;
 
     const client = supabase;
 
-    // 1) Hent alle rader for denne resource_category_id
     const { data: rows, error } = await client
       .from('resource_category_translations')
       .select('resource_category_id, locale, title, short_description')
@@ -46,17 +84,17 @@ export async function getSupabaseDescriptionForResourceCategory(
 
     const normalizedRows = rows.map((r: any) => ({
       resource_category_id: String(r.resource_category_id || '').trim().toLowerCase(),
-      locale: String(r.locale || '').trim().toLowerCase(),
+      locale: normalizeLocale(r.locale || ''),
       title: r.title == null ? '' : String(r.title),
       short_description: r.short_description == null ? '' : String(r.short_description),
     }));
 
-    // 2) Prøv eksakt språk
+    const candidates = buildLocaleCandidates(requested);
+
     let row =
-      normalizedRows.find((r) => r.locale === requested) ||
-      normalizedRows.find((r) => r.locale === 'en') ||
-      normalizedRows.find((r) => r.locale === 'nb') ||
-      normalizedRows[0];
+      candidates
+        .map((wanted) => normalizedRows.find((r) => r.locale === wanted))
+        .find(Boolean) || normalizedRows[0];
 
     if (!row) return null;
 
