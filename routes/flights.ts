@@ -90,6 +90,82 @@ function buildPassengers(adultsRaw: any) {
   }));
 }
 
+async function runDuffelSearch(params: {
+  origin: string;
+  destination: string;
+  departureDate: string;
+  returnDate?: string | null;
+  passengers: Array<{ type: 'adult' }>;
+  cabinClass: CabinClass;
+  directOnly: boolean;
+  attemptLabel: string;
+}) {
+  const {
+    origin,
+    destination,
+    departureDate,
+    returnDate,
+    passengers,
+    cabinClass,
+    directOnly,
+    attemptLabel,
+  } = params;
+
+  const slices: any[] = [
+    {
+      origin,
+      destination,
+      departure_date: departureDate,
+    },
+  ];
+
+  if (returnDate) {
+    slices.push({
+      origin: destination,
+      destination: origin,
+      departure_date: returnDate,
+    });
+  }
+
+  console.log('[DUFFEL] search attempt', {
+    attemptLabel,
+    origin,
+    destination,
+    departureDate,
+    returnDate: returnDate || null,
+    adults: passengers.length,
+    cabinClass,
+    directOnly,
+  });
+
+  const result = await duffel.offerRequests.create({
+    slices,
+    passengers,
+    cabin_class: cabinClass,
+    max_connections: directOnly ? 0 : undefined,
+    return_offers: true,
+  } as any);
+
+  const offerRequest = result.data;
+  const offers =
+    offerRequest && 'offers' in offerRequest
+      ? (offerRequest.offers || []).map((offer: any) =>
+          buildOfferPayload(offer, offerRequest?.id || null)
+        )
+      : [];
+
+  console.log('[DUFFEL] search attempt success', {
+    attemptLabel,
+    offerRequestId: offerRequest?.id || null,
+    offerCount: offers.length,
+  });
+
+  return {
+    offerRequest,
+    offers,
+  };
+}
+
 /**
  * POST /api/flights/search
  */
@@ -115,64 +191,121 @@ router.post('/search', async (req, res) => {
 
     const normalizedOrigin = String(origin).trim().toUpperCase();
     const normalizedDestination = String(destination).trim().toUpperCase();
+    const normalizedDepartureDate = String(departureDate).slice(0, 10);
+    const normalizedReturnDate = returnDate ? String(returnDate).slice(0, 10) : null;
     const normalizedCabinClass = normalizeCabinClass(cabinClass);
     const normalizedDirectOnly =
-      directOnly === true || directOnly === 'true' || directOnly === 1 || directOnly === '1';
+      directOnly === true ||
+      directOnly === 'true' ||
+      directOnly === 1 ||
+      directOnly === '1';
 
     const passengers = buildPassengers(adults);
-
-    const slices: any[] = [
-      {
-        origin: normalizedOrigin,
-        destination: normalizedDestination,
-        departure_date: String(departureDate).slice(0, 10),
-      },
-    ];
-
-    if (returnDate) {
-      slices.push({
-        origin: normalizedDestination,
-        destination: normalizedOrigin,
-        departure_date: String(returnDate).slice(0, 10),
-      });
-    }
 
     console.log('[DUFFEL] search request', {
       origin: normalizedOrigin,
       destination: normalizedDestination,
-      departureDate: String(departureDate).slice(0, 10),
-      returnDate: returnDate ? String(returnDate).slice(0, 10) : null,
+      departureDate: normalizedDepartureDate,
+      returnDate: normalizedReturnDate,
       adults: passengers.length,
       cabinClass: normalizedCabinClass,
       directOnly: normalizedDirectOnly,
     });
 
-    const result = await duffel.offerRequests.create({
-      slices,
+    let finalOfferRequest: any = null;
+    let finalOffers: any[] = [];
+    let fallbackUsed: 'retry_same_search' | 'retry_without_direct_only' | null = null;
+    let effectiveDirectOnly = normalizedDirectOnly;
+
+    const primaryResult = await runDuffelSearch({
+      origin: normalizedOrigin,
+      destination: normalizedDestination,
+      departureDate: normalizedDepartureDate,
+      returnDate: normalizedReturnDate,
       passengers,
-      cabin_class: normalizedCabinClass,
-      max_connections: normalizedDirectOnly ? 0 : undefined,
-      return_offers: true,
-    } as any);
+      cabinClass: normalizedCabinClass,
+      directOnly: normalizedDirectOnly,
+      attemptLabel: 'primary',
+    });
 
-    const offerRequest = result.data;
-    const offers =
-      'offers' in offerRequest
-        ? (offerRequest.offers || []).map((offer: any) =>
-            buildOfferPayload(offer, offerRequest?.id || null)
-          )
-        : [];
+    finalOfferRequest = primaryResult.offerRequest;
+    finalOffers = primaryResult.offers;
 
-    console.log('[DUFFEL] search success', {
-      offerRequestId: offerRequest?.id || null,
-      offerCount: offers.length,
+    if (finalOffers.length === 0) {
+      try {
+        const retrySameResult = await runDuffelSearch({
+          origin: normalizedOrigin,
+          destination: normalizedDestination,
+          departureDate: normalizedDepartureDate,
+          returnDate: normalizedReturnDate,
+          passengers,
+          cabinClass: normalizedCabinClass,
+          directOnly: normalizedDirectOnly,
+          attemptLabel: 'retry_same_search',
+        });
+
+        if (retrySameResult.offers.length > 0) {
+          finalOfferRequest = retrySameResult.offerRequest;
+          finalOffers = retrySameResult.offers;
+          fallbackUsed = 'retry_same_search';
+        }
+      } catch (retryError: any) {
+        console.warn('[DUFFEL] retry_same_search failed', {
+          message: getDuffelErrorMessage(retryError),
+          errors: retryError?.errors || null,
+        });
+      }
+    }
+
+    if (finalOffers.length === 0 && normalizedDirectOnly) {
+      try {
+        const relaxedResult = await runDuffelSearch({
+          origin: normalizedOrigin,
+          destination: normalizedDestination,
+          departureDate: normalizedDepartureDate,
+          returnDate: normalizedReturnDate,
+          passengers,
+          cabinClass: normalizedCabinClass,
+          directOnly: false,
+          attemptLabel: 'retry_without_direct_only',
+        });
+
+        if (relaxedResult.offers.length > 0) {
+          finalOfferRequest = relaxedResult.offerRequest;
+          finalOffers = relaxedResult.offers;
+          fallbackUsed = 'retry_without_direct_only';
+          effectiveDirectOnly = false;
+        }
+      } catch (relaxedError: any) {
+        console.warn('[DUFFEL] retry_without_direct_only failed', {
+          message: getDuffelErrorMessage(relaxedError),
+          errors: relaxedError?.errors || null,
+        });
+      }
+    }
+
+    console.log('[DUFFEL] final search result', {
+      offerRequestId: finalOfferRequest?.id || null,
+      offerCount: finalOffers.length,
+      fallbackUsed,
+      effectiveDirectOnly,
     });
 
     return res.json({
       ok: true,
       data: {
-        offerRequestId: offerRequest.id,
-        offers,
+        offerRequestId: finalOfferRequest?.id || null,
+        offers: finalOffers,
+        fallbackUsed,
+        searchUsed: {
+          origin: normalizedOrigin,
+          destination: normalizedDestination,
+          departureDate: normalizedDepartureDate,
+          returnDate: normalizedReturnDate,
+          adults: passengers.length,
+          cabinClass: normalizedCabinClass,
+          directOnly: effectiveDirectOnly,
+        },
       },
     });
   } catch (e: any) {
