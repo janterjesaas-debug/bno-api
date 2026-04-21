@@ -4527,21 +4527,42 @@ function detectTravelFlightIntent(messageRaw: string): boolean {
 function isTravelHelperFlightBookingIntent(messageRaw: string): boolean {
   const message = normalizeTravelHelperText(messageRaw);
 
-  const phrases = [
+  const directPhrases = [
     'bestill flyet',
     'book flyet',
     'bestill det flyet',
     'jeg vil bestille flyet',
     'jeg vil booke flyet',
+    'bestill det forste flyet',
     'bestill det første flyet',
+    'book det forste flyet',
     'book det første flyet',
-    'det første',
-    'nummer 1',
     'ja',
     'ja takk',
   ];
 
-  return phrases.some((phrase) => message.includes(phrase) || message === phrase);
+  if (directPhrases.some((phrase) => message === phrase || message.includes(phrase))) {
+    return true;
+  }
+
+  if (
+    /\bnr\.?\s*\d+\b/.test(message) ||
+    /\bnummer\s+\d+\b/.test(message) ||
+    /\balternativ\s+\d+\b/.test(message) ||
+    /\boption\s+\d+\b/.test(message) ||
+    /\b(det\s+forste|det\s+første|det\s+andre|det\s+tredje|det\s+fjerde|det\s+femte)\b/.test(message)
+  ) {
+    return (
+      message.includes('fly') ||
+      message.includes('flight') ||
+      message.includes('bestill') ||
+      message.includes('book') ||
+      message.includes('vil jeg bestille') ||
+      message.includes('vil jeg booke')
+    );
+  }
+
+  return false;
 }
 
 function extractTravelFlightCabinClass(
@@ -5265,11 +5286,12 @@ function buildDeterministicRestaurantReply(
     messageRaw,
     history
   );
+
   const concrete = ranked.filter((item) => !isGuideLikeContentItem(item));
-  const preferred = concrete.length > 0 ? concrete.slice(0, 6) : ranked.slice(0, 6);
+  const preferred = concrete.slice(0, 6);
 
   if (preferred.length === 0) {
-    return 'Jeg fant dessverre ingen verifiserte restaurantforslag akkurat nå. Du kan gjerne prøve med destinasjon eller ønsket type mat.';
+    return 'Jeg fant ingen konkrete, verifiserte restaurantnavn akkurat nå i BNO Travel-innholdet. Jeg kan gjerne hjelpe deg videre hvis du vil ha forslag etter område eller type mat.';
   }
 
   const lines: string[] = ['Her er noen verifiserte restaurantforslag fra BNO Travel:', ''];
@@ -5483,6 +5505,26 @@ function buildDeterministicTripPackageReply(opts: {
 
   return lines.join('\n');
 }
+
+function messageLooksLikeFlightSelection(messageRaw: string): boolean {
+  const message = normalizeTravelHelperText(messageRaw);
+
+  return (
+    /\bnr\.?\s*\d+\b/.test(message) ||
+    /\bnummer\s+\d+\b/.test(message) ||
+    /\balternativ\s+\d+\b/.test(message) ||
+    /\boption\s+\d+\b/.test(message) ||
+    message.includes('det forste') ||
+    message.includes('det første') ||
+    message.includes('det andre') ||
+    message.includes('det tredje') ||
+    message.includes('det fjerde') ||
+    message.includes('det femte') ||
+    message.includes('bestill flyet') ||
+    message.includes('book flyet')
+  );
+}
+
 app.post('/api/travel-helper', async (req, res) => {
   try {
     const {
@@ -6031,88 +6073,97 @@ app.post('/api/travel-helper', async (req, res) => {
     let bookingAction: any = null;
     let flightAction: FlightAction | null = null;
 
-    if (
-      isTravelHelperBookingIntent(currentMessageText) &&
-      latestSearchRows.length > 0 &&
-      latestSearchParams
-    ) {
-      const matchedRoom = findRequestedRoomFromMessage(
-        currentMessageText,
-        latestSearchRows,
-        latestSearchParams?.adults || null
-      );
+const explicitFlightSelection =
+  latestFlightOffers.length > 0 &&
+  latestFlightSearch &&
+  (
+    isTravelHelperFlightBookingIntent(currentMessageText) ||
+    messageLooksLikeFlightSelection(currentMessageText)
+  );
 
-      const resolvedRoom =
-        matchedRoom ||
-        rankTravelHelperAvailabilityRows(
-          latestSearchRows,
-          latestSearchParams?.adults || null,
-          currentMessageText
-        )[0] ||
-        null;
+// 1) Prioriter flyvalg først
+if (explicitFlightSelection && latestFlightOffers.length > 0 && latestFlightSearch) {
+  const resolvedOffer =
+    findRequestedFlightOfferFromMessage(currentMessageText, latestFlightOffers) ||
+    latestFlightOffers[0] ||
+    null;
 
-      if (resolvedRoom) {
-        bookingAction = {
-          type: 'book_accommodation',
-          label: `Fullfør booking av ${resolvedRoom?.Name || resolvedRoom?.name || 'overnatting'}`,
-          room: {
-            ResourceCategoryId: resolvedRoom?.ResourceCategoryId ?? resolvedRoom?.categoryId ?? null,
-            RoomCategoryId:
-              resolvedRoom?.RoomCategoryId ??
-              resolvedRoom?.ResourceCategoryId ??
-              resolvedRoom?.categoryId ??
-              null,
-            BookingUrl: resolvedRoom?.BookingUrl ?? null,
-            Name: resolvedRoom?.Name ?? resolvedRoom?.name ?? null,
-            Description: resolvedRoom?.Description ?? resolvedRoom?.description ?? null,
-            Capacity: resolvedRoom?.Capacity ?? resolvedRoom?.capacity ?? null,
-            Image: resolvedRoom?.Image ?? resolvedRoom?.image ?? null,
-            Images: resolvedRoom?.Images ?? resolvedRoom?.images ?? null,
-            PriceTotal: resolvedRoom?.PriceTotal ?? resolvedRoom?.priceTotal ?? null,
-            PriceCurrency: resolvedRoom?.PriceCurrency ?? resolvedRoom?.priceCurrency ?? null,
-            AvailableUnits: resolvedRoom?.AvailableUnits ?? resolvedRoom?.availableUnits ?? null,
-            ServiceId: resolvedRoom?.ServiceId ?? resolvedRoom?.serviceId ?? null,
-            ServiceName: resolvedRoom?.ServiceName ?? resolvedRoom?.serviceName ?? null,
-          },
-          search: {
-            from: latestSearchParams.from,
-            to: latestSearchParams.to,
-            adults: latestSearchParams.adults,
-            area: latestSearchParams.area,
-            promo: latestSearchParams.promo,
-            lang: latestSearchParams.lang,
-          },
-        };
-      }
-    }
+  if (resolvedOffer) {
+    const outbound = getFlightSliceSummary(resolvedOffer?.slices?.[0]);
 
-    if (latestFlightOffers.length > 0 && latestFlightSearch) {
-      if (isTravelHelperFlightBookingIntent(currentMessageText)) {
-        const resolvedOffer =
-          findRequestedFlightOfferFromMessage(currentMessageText, latestFlightOffers) ||
-          latestFlightOffers[0] ||
-          null;
+    flightAction = {
+      type: 'book_flight',
+      label: `Fullfør flybestilling med ${resolvedOffer?.owner?.name || outbound.airline || 'flyselskap'}`,
+      offer: resolvedOffer,
+      search: {
+        origin: latestFlightSearch.origin,
+        destination: latestFlightSearch.destination,
+        departureDate: latestFlightSearch.departureDate,
+        returnDate: latestFlightSearch.returnDate || null,
+        adults: latestFlightSearch.adults,
+        cabinClass: latestFlightSearch.cabinClass,
+        directOnly: latestFlightSearch.directOnly,
+      },
+    };
+  }
+}
 
-        if (resolvedOffer) {
-          const outbound = getFlightSliceSummary(resolvedOffer?.slices?.[0]);
+// 2) Tillat accommodation-booking bare hvis meldingen IKKE ser ut som et flyvalg
+if (
+  !explicitFlightSelection &&
+  isTravelHelperBookingIntent(currentMessageText) &&
+  latestSearchRows.length > 0 &&
+  latestSearchParams
+) {
+  const matchedRoom = findRequestedRoomFromMessage(
+    currentMessageText,
+    latestSearchRows,
+    latestSearchParams?.adults || null
+  );
 
-          flightAction = {
-            type: 'book_flight',
-            label: `Fullfør flybestilling med ${resolvedOffer?.owner?.name || outbound.airline || 'flyselskap'}`,
-            offer: resolvedOffer,
-            search: {
-              origin: latestFlightSearch.origin,
-              destination: latestFlightSearch.destination,
-              departureDate: latestFlightSearch.departureDate,
-              returnDate: latestFlightSearch.returnDate || null,
-              adults: latestFlightSearch.adults,
-              cabinClass: latestFlightSearch.cabinClass,
-              directOnly: latestFlightSearch.directOnly,
-            },
-          };
-        }
-      }
-    }
+  const resolvedRoom =
+    matchedRoom ||
+    rankTravelHelperAvailabilityRows(
+      latestSearchRows,
+      latestSearchParams?.adults || null,
+      currentMessageText
+    )[0] ||
+    null;
+
+  if (resolvedRoom) {
+    bookingAction = {
+      type: 'book_accommodation',
+      label: `Fullfør booking av ${resolvedRoom?.Name || resolvedRoom?.name || 'overnatting'}`,
+      room: {
+        ResourceCategoryId: resolvedRoom?.ResourceCategoryId ?? resolvedRoom?.categoryId ?? null,
+        RoomCategoryId:
+          resolvedRoom?.RoomCategoryId ??
+          resolvedRoom?.ResourceCategoryId ??
+          resolvedRoom?.categoryId ??
+          null,
+        BookingUrl: resolvedRoom?.BookingUrl ?? null,
+        Name: resolvedRoom?.Name ?? resolvedRoom?.name ?? null,
+        Description: resolvedRoom?.Description ?? resolvedRoom?.description ?? null,
+        Capacity: resolvedRoom?.Capacity ?? resolvedRoom?.capacity ?? null,
+        Image: resolvedRoom?.Image ?? resolvedRoom?.image ?? null,
+        Images: resolvedRoom?.Images ?? resolvedRoom?.images ?? null,
+        PriceTotal: resolvedRoom?.PriceTotal ?? resolvedRoom?.priceTotal ?? null,
+        PriceCurrency: resolvedRoom?.PriceCurrency ?? resolvedRoom?.priceCurrency ?? null,
+        AvailableUnits: resolvedRoom?.AvailableUnits ?? resolvedRoom?.availableUnits ?? null,
+        ServiceId: resolvedRoom?.ServiceId ?? resolvedRoom?.serviceId ?? null,
+        ServiceName: resolvedRoom?.ServiceName ?? resolvedRoom?.serviceName ?? null,
+      },
+      search: {
+        from: latestSearchParams.from,
+        to: latestSearchParams.to,
+        adults: latestSearchParams.adults,
+        area: latestSearchParams.area,
+        promo: latestSearchParams.promo,
+        lang: latestSearchParams.lang,
+      },
+    };
+  }
+}
 
     const shouldForceDeterministicAccommodationReply =
       responseMode === 'accommodation_only' &&
