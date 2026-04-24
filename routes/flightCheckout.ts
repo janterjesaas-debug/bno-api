@@ -74,7 +74,7 @@ type BookingDraft = {
   passengers: PassengerInput[];
   paymentIntentId: string;
   createdAt: number;
-  offerSnapshot?: any;
+  offerSnapshot?: OfferSnapshot | any;
   offerWasLive?: boolean;
 };
 
@@ -97,6 +97,22 @@ function getDuffelErrorMessage(e: any): string {
 
 function getDuffelErrorPayload(e: any) {
   return e?.duffel || e?.errors || e?.response?.data || null;
+}
+
+function getPublicErrorDetail(e: any) {
+  const payload = getDuffelErrorPayload(e);
+  const firstError = Array.isArray(payload?.errors)
+    ? payload.errors[0]
+    : Array.isArray(payload)
+    ? payload[0]
+    : null;
+
+  return (
+    firstError?.message ||
+    firstError?.title ||
+    getDuffelErrorMessage(e) ||
+    'Kunne ikke fullføre booking'
+  );
 }
 
 function isDuffelOfferGoneMessage(message: string): boolean {
@@ -611,6 +627,33 @@ async function createDuffelOrder(input: {
   return data?.data || null;
 }
 
+function getSegmentsFromSource(source: any, sliceIndex: number) {
+  const segments = source?.slices?.[sliceIndex]?.segments;
+  return Array.isArray(segments) ? segments : [];
+}
+
+function getFirstSegment(source: any, sliceIndex: number) {
+  const segments = getSegmentsFromSource(source, sliceIndex);
+  return segments[0] || null;
+}
+
+function getLastSegment(source: any, sliceIndex: number) {
+  const segments = getSegmentsFromSource(source, sliceIndex);
+  return segments.length ? segments[segments.length - 1] : null;
+}
+
+function getAirlineFromOrderOrOffer(order: any, offer: any) {
+  return (
+    getFirstSegment(order, 0)?.marketing_carrier?.name ||
+    getFirstSegment(order, 0)?.operating_carrier?.name ||
+    order?.owner?.name ||
+    getFirstSegment(offer, 0)?.marketing_carrier?.name ||
+    getFirstSegment(offer, 0)?.operating_carrier?.name ||
+    offer?.owner?.name ||
+    null
+  );
+}
+
 router.post('/api/payments/create-intent', async (req, res) => {
   try {
     const stripe = getStripe();
@@ -797,7 +840,7 @@ router.post('/api/payments/create-intent', async (req, res) => {
     return res.status(500).json({
       ok: false,
       error: 'Kunne ikke opprette betaling',
-      detail: message,
+      detail: getPublicErrorDetail(e),
     });
   }
 });
@@ -907,30 +950,41 @@ router.post('/api/bookings/confirm', async (req, res) => {
     });
 
     try {
-     await sendFlightBookingConfirmationEmail({
-  to: contactPassenger.email,
-  locale: contactPassenger.locale || 'nb',
-  givenName: contactPassenger.given_name,
-  bnoBookingRef:
-    confirmedBooking?.bno_booking_ref || String(confirmedBooking?.id || ''),
-  orderId: order?.id || null,
-  airline: order?.slices?.[0]?.segments?.[0]?.marketing_carrier?.name || null,
-  origin: order?.slices?.[0]?.segments?.[0]?.origin?.iata_code || null,
-  destination:
-    order?.slices?.[0]?.segments?.[
-      order?.slices?.[0]?.segments?.length - 1
-    ]?.destination?.iata_code || null,
-  outboundDeparture: order?.slices?.[0]?.segments?.[0]?.departing_at || null,
-  outboundArrival:
-    order?.slices?.[0]?.segments?.[
-      order?.slices?.[0]?.segments?.length - 1
-    ]?.arriving_at || null,
-  returnDeparture: order?.slices?.[1]?.segments?.[0]?.departing_at || null,
-  returnArrival:
-    order?.slices?.[1]?.segments?.[
-      order?.slices?.[1]?.segments?.length - 1
-    ]?.arriving_at || null,
-});
+      const outboundFirst = getFirstSegment(order, 0) || getFirstSegment(draft.offerSnapshot, 0);
+      const outboundLast = getLastSegment(order, 0) || getLastSegment(draft.offerSnapshot, 0);
+      const returnFirst = getFirstSegment(order, 1) || getFirstSegment(draft.offerSnapshot, 1);
+      const returnLast = getLastSegment(order, 1) || getLastSegment(draft.offerSnapshot, 1);
+
+      await sendFlightBookingConfirmationEmail({
+        to: String(contactPassenger.email || '').trim().toLowerCase(),
+        locale: contactPassenger.locale || 'nb',
+        givenName: contactPassenger.given_name,
+        familyName: contactPassenger.family_name,
+        bnoBookingRef:
+          confirmedBooking?.bno_booking_ref ||
+          booking?.bno_booking_ref ||
+          String(confirmedBooking?.id || bookingId || ''),
+        orderId: order?.id || null,
+        order,
+        offer: draft.offerSnapshot,
+        passengers: draft.passengers,
+        airline: getAirlineFromOrderOrOffer(order, draft.offerSnapshot),
+        origin:
+          outboundFirst?.origin?.iata_code ||
+          outboundFirst?.origin?.city_name ||
+          null,
+        destination:
+          outboundLast?.destination?.iata_code ||
+          outboundLast?.destination?.city_name ||
+          null,
+        outboundDeparture: outboundFirst?.departing_at || null,
+        outboundArrival: outboundLast?.arriving_at || null,
+        returnDeparture: returnFirst?.departing_at || null,
+        returnArrival: returnLast?.arriving_at || null,
+        totalAmount: draft.totalAmount,
+        currency: draft.offerCurrency,
+        serviceFee: draft.serviceFee,
+      });
     } catch (emailError: any) {
       console.error('[FLIGHT PAY] confirmation email failed', {
         message: emailError?.message || String(emailError),
@@ -967,6 +1021,7 @@ router.post('/api/bookings/confirm', async (req, res) => {
   } catch (e: any) {
     const message = getDuffelErrorMessage(e);
     const duffelPayload = getDuffelErrorPayload(e);
+    const publicDetail = getPublicErrorDetail(e);
 
     console.error('[FLIGHT PAY] confirm failed', {
       message,
@@ -995,14 +1050,23 @@ router.post('/api/bookings/confirm', async (req, res) => {
       return res.status(409).json({
         ok: false,
         error: 'offer_no_longer_available',
-        detail: message,
+        detail: publicDetail,
+      });
+    }
+
+    if (isDuffelInternalAirlineError(message)) {
+      return res.status(502).json({
+        ok: false,
+        error:
+          'Flyselskapet kunne ikke bekrefte bookingen akkurat nå. Betalingen er ikke belastet. Prøv igjen, eller velg en annen billettype.',
+        detail: publicDetail,
       });
     }
 
     return res.status(500).json({
       ok: false,
       error: message || 'Kunne ikke fullføre booking',
-      detail: duffelPayload?.errors?.[0] || duffelPayload || null,
+      detail: publicDetail,
     });
   }
 });
