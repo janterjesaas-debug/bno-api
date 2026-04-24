@@ -22,6 +22,21 @@ type PassengerInput = {
   locale?: string;
 };
 
+type DuffelAvailableService = {
+  id?: string;
+  type?: string;
+  total_amount?: string | number;
+  total_currency?: string;
+  passenger_ids?: string[];
+  segment_ids?: string[];
+  maximum_quantity?: number;
+  metadata?: any;
+  name?: string;
+  title?: string;
+  description?: string;
+  [key: string]: any;
+};
+
 type OfferSnapshot = {
   id?: string;
   total_amount?: string | number;
@@ -32,19 +47,34 @@ type OfferSnapshot = {
   }>;
   owner?: any;
   slices?: any[];
+  available_services?: any[];
   [key: string]: any;
+};
+
+type SelectedService = {
+  id: string;
+  type: string;
+  title: string;
+  description: string;
+  amount: number;
+  currency: string;
+  raw: DuffelAvailableService;
 };
 
 type BookingDraft = {
   offerId: string;
   offerAmount: number;
+  servicesAmount: number;
+  duffelPaymentAmount: number;
   offerCurrency: string;
   serviceFee: number;
   totalAmount: number;
+  selectedServiceIds: string[];
+  selectedServices: SelectedService[];
   passengers: PassengerInput[];
   paymentIntentId: string;
   createdAt: number;
-  offerSnapshot?: OfferSnapshot | null;
+  offerSnapshot?: any;
 };
 
 const bookingDrafts = new Map<string, BookingDraft>();
@@ -93,6 +123,12 @@ function toMinorUnits(amount: number) {
   return Math.round(Number(amount || 0) * 100);
 }
 
+function toMoneyNumber(value: any) {
+  const parsed = Number(value || 0);
+  if (!Number.isFinite(parsed)) return 0;
+  return Math.round(parsed * 100) / 100;
+}
+
 function getStripe() {
   const stripeSecretKey = String(process.env.STRIPE_SECRET_KEY || '').trim();
 
@@ -133,27 +169,6 @@ function getOfferPassengerIds(offer: any): string[] {
   return ids;
 }
 
-function isUsableOfferSnapshot(offer: any, offerId: string): boolean {
-  if (!offer || typeof offer !== 'object') return false;
-
-  const snapshotId = String(offer?.id || '').trim();
-  const expectedId = String(offerId || '').trim();
-
-  if (!snapshotId || !expectedId || snapshotId !== expectedId) {
-    return false;
-  }
-
-  const totalAmount = Number(offer?.total_amount || 0);
-  const totalCurrency = String(offer?.total_currency || '').trim();
-  const passengerIds = Array.isArray(offer?.passengers)
-    ? offer.passengers
-        .map((p: any) => String(p?.id || p?.passenger_id || '').trim())
-        .filter(Boolean)
-    : [];
-
-  return totalAmount > 0 && !!totalCurrency && passengerIds.length > 0;
-}
-
 function normalizePassengersFromBody(body: any): PassengerInput[] {
   if (Array.isArray(body?.passengers) && body.passengers.length > 0) {
     return body.passengers;
@@ -166,19 +181,150 @@ function normalizePassengersFromBody(body: any): PassengerInput[] {
   return [];
 }
 
-async function resolveOfferForCheckout(input: {
-  offerId: string;
-  offer?: OfferSnapshot | null;
-}) {
-  if (isUsableOfferSnapshot(input.offer, input.offerId)) {
-    console.log('[FLIGHT PAY] using offer snapshot for checkout', {
-      offerId: input.offerId,
-    });
-
-    return input.offer as OfferSnapshot;
+function normalizeSelectedServiceIds(body: any): string[] {
+  if (!Array.isArray(body?.selectedServiceIds)) {
+    return [];
   }
 
-  console.log('[FLIGHT PAY] offer snapshot missing/invalid, fetching live offer', {
+  const ids = body.selectedServiceIds
+    .map((id: any) => String(id || '').trim())
+    .filter(Boolean);
+
+  return Array.from(new Set(ids));
+}
+
+function stringifyForSearch(value: any) {
+  try {
+    return JSON.stringify(value || {}).toLowerCase();
+  } catch {
+    return '';
+  }
+}
+
+function getServiceTitle(service: DuffelAvailableService) {
+  return (
+    service?.metadata?.title ||
+    service?.title ||
+    service?.name ||
+    service?.description ||
+    service?.metadata?.description ||
+    service?.type ||
+    'Extra service'
+  );
+}
+
+function getServiceDescription(service: DuffelAvailableService) {
+  return (
+    service?.metadata?.description ||
+    service?.description ||
+    service?.metadata?.title ||
+    service?.title ||
+    service?.name ||
+    ''
+  );
+}
+
+function isBaggageLikeService(service: DuffelAvailableService) {
+  const text = stringifyForSearch(service);
+
+  return (
+    text.includes('baggage') ||
+    text.includes('bag ') ||
+    text.includes('bag_') ||
+    text.includes('checked') ||
+    text.includes('hold luggage') ||
+    text.includes('luggage') ||
+    text.includes('bagasje')
+  );
+}
+
+function getAvailableServices(offer: any): DuffelAvailableService[] {
+  if (!Array.isArray(offer?.available_services)) {
+    return [];
+  }
+
+  return offer.available_services
+    .filter((service: any) => service && typeof service === 'object' && service.id)
+    .map((service: any) => service as DuffelAvailableService);
+}
+
+function resolveSelectedServices(input: {
+  offer: any;
+  selectedServiceIds: string[];
+  currency: string;
+}) {
+  const selectedServiceIds = input.selectedServiceIds;
+  const offerCurrency = String(input.currency || '').toUpperCase();
+  const availableServices = getAvailableServices(input.offer);
+
+  if (!selectedServiceIds.length) {
+    return {
+      selectedServices: [] as SelectedService[],
+      servicesAmount: 0,
+    };
+  }
+
+  if (!availableServices.length) {
+    throw new Error(
+      'Valgt bagasje/tillegg finnes ikke lenger på offeret. Søk på nytt.'
+    );
+  }
+
+  const servicesById = new Map(
+    availableServices.map((service) => [String(service.id), service])
+  );
+
+  const selectedServices = selectedServiceIds.map((serviceId) => {
+    const service = servicesById.get(serviceId);
+
+    if (!service) {
+      throw new Error(
+        `Valgt bagasje/tillegg er ikke tilgjengelig lenger: ${serviceId}`
+      );
+    }
+
+    const serviceCurrency = String(
+      service.total_currency || offerCurrency || ''
+    ).toUpperCase();
+
+    if (!serviceCurrency || serviceCurrency !== offerCurrency) {
+      throw new Error(
+        `Valgt tillegg har annen valuta (${serviceCurrency}) enn flytilbudet (${offerCurrency})`
+      );
+    }
+
+    if (!isBaggageLikeService(service)) {
+      console.warn('[FLIGHT PAY] selected service is not clearly baggage-like', {
+        serviceId,
+        serviceType: service.type || null,
+        serviceTitle: getServiceTitle(service),
+      });
+    }
+
+    return {
+      id: String(service.id),
+      type: String(service.type || service.metadata?.type || 'service'),
+      title: String(getServiceTitle(service)),
+      description: String(getServiceDescription(service)),
+      amount: toMoneyNumber(service.total_amount || 0),
+      currency: serviceCurrency,
+      raw: service,
+    };
+  });
+
+  const servicesAmount = selectedServices.reduce(
+    (sum, service) => sum + toMoneyNumber(service.amount),
+    0
+  );
+
+  return {
+    selectedServices,
+    servicesAmount: toMoneyNumber(servicesAmount),
+  };
+}
+
+async function resolveLiveOfferForCheckout(input: { offerId: string }) {
+  console.log('[FLIGHT PAY] fetching live offer for checkout', {
     offerId: input.offerId,
   });
 
@@ -188,9 +334,10 @@ async function resolveOfferForCheckout(input: {
 
 async function createDuffelOrder(input: {
   offerId: string;
-  offerAmount: number;
+  duffelPaymentAmount: number;
   offerCurrency: string;
   passengers: PassengerInput[];
+  selectedServices: SelectedService[];
 }) {
   const token = getDuffelToken();
 
@@ -204,14 +351,19 @@ async function createDuffelOrder(input: {
     }
   }
 
-  const orderBody = {
+  const selectedServicesPayload = input.selectedServices.map((service) => ({
+    id: service.id,
+    quantity: 1,
+  }));
+
+  const orderBody: any = {
     data: {
       type: 'instant',
       selected_offers: [input.offerId],
       payments: [
         {
           type: 'balance',
-          amount: String(Number(input.offerAmount).toFixed(2)),
+          amount: String(Number(input.duffelPaymentAmount).toFixed(2)),
           currency: input.offerCurrency,
         },
       ],
@@ -228,10 +380,17 @@ async function createDuffelOrder(input: {
     },
   };
 
+  if (selectedServicesPayload.length) {
+    orderBody.data.services = selectedServicesPayload;
+  }
+
   console.log('[FLIGHT PAY] createDuffelOrder payload', {
     offerId: input.offerId,
     passengerCount: input.passengers.length,
     passengerIds: input.passengers.map((p) => p.id || null),
+    selectedServiceIds: input.selectedServices.map((service) => service.id),
+    duffelPaymentAmount: input.duffelPaymentAmount,
+    currency: input.offerCurrency,
   });
 
   const res = await fetch('https://api.duffel.com/air/orders', {
@@ -272,8 +431,9 @@ router.post('/api/payments/create-intent', async (req, res) => {
   try {
     const stripe = getStripe();
 
-    const { offerId, offer } = req.body || {};
+    const { offerId } = req.body || {};
     const passengers = normalizePassengersFromBody(req.body);
+    const selectedServiceIds = normalizeSelectedServiceIds(req.body);
 
     if (!offerId) {
       return res.status(400).json({
@@ -308,14 +468,13 @@ router.post('/api/payments/create-intent', async (req, res) => {
 
     console.log('[FLIGHT PAY] create-intent start', {
       offerId,
-      hasOfferSnapshot: !!offer,
       passengerCount: passengers.length,
       contactEmail: passengers[0]?.email || null,
+      selectedServiceIds,
     });
 
-    const resolvedOffer = await resolveOfferForCheckout({
+    const resolvedOffer = await resolveLiveOfferForCheckout({
       offerId: String(offerId),
-      offer: offer || null,
     });
 
     if (!resolvedOffer) {
@@ -334,11 +493,19 @@ router.post('/api/payments/create-intent', async (req, res) => {
       });
     }
 
-    const flightAmount = Number(resolvedOffer.total_amount || 0);
+    const flightAmount = toMoneyNumber(resolvedOffer.total_amount || 0);
     const currencyUpper = String(resolvedOffer.total_currency || 'EUR').toUpperCase();
     const currencyLower = currencyUpper.toLowerCase();
-    const serviceFee = getServiceFee(flightAmount, currencyUpper);
-    const totalAmount = flightAmount + serviceFee;
+
+    const { selectedServices, servicesAmount } = resolveSelectedServices({
+      offer: resolvedOffer,
+      selectedServiceIds,
+      currency: currencyUpper,
+    });
+
+    const serviceFee = getServiceFee(flightAmount + servicesAmount, currencyUpper);
+    const duffelPaymentAmount = toMoneyNumber(flightAmount + servicesAmount);
+    const totalAmount = toMoneyNumber(duffelPaymentAmount + serviceFee);
 
     const paymentIntent = await stripe.paymentIntents.create({
       amount: toMinorUnits(totalAmount),
@@ -351,6 +518,10 @@ router.post('/api/payments/create-intent', async (req, res) => {
         offerId: String(resolvedOffer.id || offerId),
         contactEmail: String(passengers[0]?.email || ''),
         passengerCount: String(passengers.length),
+        selectedServiceIds: selectedServiceIds.join(','),
+        servicesAmount: String(servicesAmount),
+        serviceFee: String(serviceFee),
+        totalAmount: String(totalAmount),
       },
     });
 
@@ -361,9 +532,13 @@ router.post('/api/payments/create-intent', async (req, res) => {
     bookingDrafts.set(bookingDraftId, {
       offerId: String(resolvedOffer.id || offerId),
       offerAmount: flightAmount,
+      servicesAmount,
+      duffelPaymentAmount,
       offerCurrency: currencyUpper,
       serviceFee,
       totalAmount,
+      selectedServiceIds,
+      selectedServices,
       passengers: passengers.map((passenger: any, idx: number) => ({
         ...passenger,
         id: offerPassengerIds[idx],
@@ -377,10 +552,15 @@ router.post('/api/payments/create-intent', async (req, res) => {
     console.log('[FLIGHT PAY] create-intent success', {
       offerId: String(resolvedOffer.id || offerId),
       bookingDraftId,
+      flightAmount,
+      servicesAmount,
+      serviceFee,
       totalAmount,
+      duffelPaymentAmount,
       currency: currencyUpper,
       passengerCount: passengers.length,
       offerPassengerIds,
+      selectedServiceIds,
     });
 
     return res.json({
@@ -389,7 +569,17 @@ router.post('/api/payments/create-intent', async (req, res) => {
       paymentIntentClientSecret: paymentIntent.client_secret,
       amount: totalAmount,
       currency: currencyUpper,
+      flightAmount,
+      servicesAmount,
       serviceFee,
+      selectedServices: selectedServices.map((service) => ({
+        id: service.id,
+        type: service.type,
+        title: service.title,
+        description: service.description,
+        amount: service.amount,
+        currency: service.currency,
+      })),
     });
   } catch (e: any) {
     const message = getDuffelErrorMessage(e);
@@ -409,7 +599,7 @@ router.post('/api/payments/create-intent', async (req, res) => {
 
     return res.status(500).json({
       ok: false,
-      error: 'Kunbe ikke opprette betaling',
+      error: 'Kunne ikke opprette betaling',
       detail: message,
     });
   }
@@ -461,13 +651,17 @@ router.post('/api/bookings/confirm', async (req, res) => {
       paymentIntentStatus: paymentIntent.status,
       passengerCount: draft.passengers.length,
       userId: userId || null,
+      selectedServiceIds: draft.selectedServiceIds,
+      duffelPaymentAmount: draft.duffelPaymentAmount,
+      totalAmount: draft.totalAmount,
     });
 
     const order = await createDuffelOrder({
       offerId: draft.offerId,
-      offerAmount: draft.offerAmount,
+      duffelPaymentAmount: draft.duffelPaymentAmount,
       offerCurrency: draft.offerCurrency,
       passengers: draft.passengers,
+      selectedServices: draft.selectedServices,
     });
 
     const contactPassenger = draft.passengers[0];
@@ -502,7 +696,9 @@ router.post('/api/bookings/confirm', async (req, res) => {
         });
 
         throw new Error(
-          `Duffel order opprettet, men Stripe capture feilet: ${captureError?.message || 'ukjent feil'}`
+          `Duffel order opprettet, men Stripe capture feilet: ${
+            captureError?.message || 'ukjent feil'
+          }`
         );
       }
     }
@@ -552,6 +748,7 @@ router.post('/api/bookings/confirm', async (req, res) => {
       bnoBookingRef: confirmedBooking?.bno_booking_ref || null,
       userId: userId || null,
       passengerCount: draft.passengers.length,
+      selectedServiceIds: draft.selectedServiceIds,
     });
 
     return res.json({
@@ -560,6 +757,14 @@ router.post('/api/bookings/confirm', async (req, res) => {
       order,
       bookingId: confirmedBooking?.id || null,
       bnoBookingRef: confirmedBooking?.bno_booking_ref || null,
+      selectedServices: draft.selectedServices.map((service) => ({
+        id: service.id,
+        type: service.type,
+        title: service.title,
+        description: service.description,
+        amount: service.amount,
+        currency: service.currency,
+      })),
     });
   } catch (e: any) {
     const message = e?.message || String(e);
