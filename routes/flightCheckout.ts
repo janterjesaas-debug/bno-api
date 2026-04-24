@@ -75,6 +75,7 @@ type BookingDraft = {
   paymentIntentId: string;
   createdAt: number;
   offerSnapshot?: any;
+  offerWasLive?: boolean;
 };
 
 const bookingDrafts = new Map<string, BookingDraft>();
@@ -108,6 +109,18 @@ function isDuffelOfferGoneMessage(message: string): boolean {
     m.includes('expired') ||
     m.includes('not found') ||
     m.includes('invalid offer')
+  );
+}
+
+function isDuffelInternalAirlineError(message: string): boolean {
+  const m = String(message || '').toLowerCase();
+
+  return (
+    m.includes('internal_error') ||
+    m.includes('internal error') ||
+    m.includes('airline responded') ||
+    m.includes('airline has responded') ||
+    m.includes('please try again')
   );
 }
 
@@ -222,7 +235,13 @@ function normalizePassengerNameForAirline(value: any) {
 function normalizeTitleForDuffel(value: any) {
   const raw = String(value || '').toLowerCase().trim();
 
-  if (raw === 'mr' || raw === 'mrs' || raw === 'ms' || raw === 'miss' || raw === 'mx') {
+  if (
+    raw === 'mr' ||
+    raw === 'mrs' ||
+    raw === 'ms' ||
+    raw === 'miss' ||
+    raw === 'mx'
+  ) {
     return raw;
   }
 
@@ -400,13 +419,87 @@ function resolveSelectedServices(input: {
   };
 }
 
-async function resolveLiveOfferForCheckout(input: { offerId: string }) {
+function isUsableClientOfferSnapshot(input: {
+  offerId: string;
+  offer: any;
+  passengerCount: number;
+}) {
+  const offer = input.offer;
+  if (!offer || typeof offer !== 'object') return false;
+
+  const id = String(offer?.id || '').trim();
+  if (!id || id !== String(input.offerId || '').trim()) return false;
+
+  const amount = toMoneyNumber(offer?.total_amount || 0);
+  const currency = String(offer?.total_currency || '').trim();
+
+  if (!amount || amount <= 0) return false;
+  if (!currency) return false;
+
+  const passengerIds = Array.isArray(offer?.passengers)
+    ? offer.passengers
+        .map((p: any) => String(p?.id || p?.passenger_id || '').trim())
+        .filter(Boolean)
+    : [];
+
+  if (passengerIds.length !== input.passengerCount) return false;
+
+  return true;
+}
+
+async function resolveLiveOfferForCheckout(input: {
+  offerId: string;
+  clientOfferSnapshot?: any;
+  passengerCount: number;
+}) {
   console.log('[FLIGHT PAY] fetching live offer for checkout', {
     offerId: input.offerId,
   });
 
-  const offerResult = await duffel.offers.get(String(input.offerId));
-  return offerResult?.data || null;
+  try {
+    const offerResult = await duffel.offers.get(String(input.offerId));
+
+    if (offerResult?.data?.id) {
+      return {
+        offer: offerResult.data,
+        wasLive: true,
+        usedClientSnapshot: false,
+      };
+    }
+
+    throw new Error('Duffel returned missing offer data');
+  } catch (e: any) {
+    const message = getDuffelErrorMessage(e);
+    const payload = getDuffelErrorPayload(e);
+
+    console.error('[FLIGHT PAY] live offer refresh failed', {
+      offerId: input.offerId,
+      message,
+      duffel: payload,
+    });
+
+    const canUseClientSnapshot = isUsableClientOfferSnapshot({
+      offerId: input.offerId,
+      offer: input.clientOfferSnapshot,
+      passengerCount: input.passengerCount,
+    });
+
+    if (canUseClientSnapshot && !isDuffelOfferGoneMessage(message)) {
+      console.warn('[FLIGHT PAY] using client offer snapshot as checkout fallback', {
+        offerId: input.offerId,
+        reason: message,
+        isInternalAirlineError: isDuffelInternalAirlineError(message),
+      });
+
+      return {
+        offer: input.clientOfferSnapshot,
+        wasLive: false,
+        usedClientSnapshot: true,
+      };
+    }
+
+    throw e;
+  }
 }
 
 async function createDuffelOrder(input: {
@@ -523,6 +616,7 @@ router.post('/api/payments/create-intent', async (req, res) => {
     const stripe = getStripe();
 
     const { offerId } = req.body || {};
+    const clientOfferSnapshot = req.body?.offer || null;
     const passengers = normalizePassengersFromBody(req.body);
     const selectedServiceIds = normalizeSelectedServiceIds(req.body);
 
@@ -562,11 +656,16 @@ router.post('/api/payments/create-intent', async (req, res) => {
       passengerCount: passengers.length,
       contactEmail: passengers[0]?.email || null,
       selectedServiceIds,
+      hasClientOfferSnapshot: !!clientOfferSnapshot,
     });
 
-    const resolvedOffer = await resolveLiveOfferForCheckout({
+    const resolvedOfferResult = await resolveLiveOfferForCheckout({
       offerId: String(offerId),
+      clientOfferSnapshot,
+      passengerCount: passengers.length,
     });
+
+    const resolvedOffer = resolvedOfferResult.offer;
 
     if (!resolvedOffer) {
       return res.status(404).json({
@@ -613,6 +712,8 @@ router.post('/api/payments/create-intent', async (req, res) => {
         servicesAmount: String(servicesAmount),
         serviceFee: String(serviceFee),
         totalAmount: String(totalAmount),
+        offerWasLive: String(resolvedOfferResult.wasLive),
+        usedClientSnapshot: String(resolvedOfferResult.usedClientSnapshot),
       },
     });
 
@@ -638,6 +739,7 @@ router.post('/api/payments/create-intent', async (req, res) => {
       paymentIntentId: paymentIntent.id,
       createdAt: Date.now(),
       offerSnapshot: resolvedOffer,
+      offerWasLive: resolvedOfferResult.wasLive,
     });
 
     console.log('[FLIGHT PAY] create-intent success', {
@@ -652,6 +754,8 @@ router.post('/api/payments/create-intent', async (req, res) => {
       passengerCount: passengers.length,
       offerPassengerIds,
       selectedServiceIds,
+      offerWasLive: resolvedOfferResult.wasLive,
+      usedClientSnapshot: resolvedOfferResult.usedClientSnapshot,
     });
 
     return res.json({
@@ -663,6 +767,8 @@ router.post('/api/payments/create-intent', async (req, res) => {
       flightAmount,
       servicesAmount,
       serviceFee,
+      offerWasLive: resolvedOfferResult.wasLive,
+      usedClientSnapshot: resolvedOfferResult.usedClientSnapshot,
       selectedServices: selectedServices.map((service) => ({
         id: service.id,
         type: service.type,
@@ -745,6 +851,7 @@ router.post('/api/bookings/confirm', async (req, res) => {
       selectedServiceIds: draft.selectedServiceIds,
       duffelPaymentAmount: draft.duffelPaymentAmount,
       totalAmount: draft.totalAmount,
+      offerWasLive: draft.offerWasLive,
     });
 
     const order = await createDuffelOrder({
@@ -800,30 +907,30 @@ router.post('/api/bookings/confirm', async (req, res) => {
     });
 
     try {
-      await sendFlightBookingConfirmationEmail({
-        to: contactPassenger.email,
-        locale: contactPassenger.locale || 'nb',
-        givenName: contactPassenger.given_name,
-        bnoBookingRef:
-          confirmedBooking?.bno_booking_ref || String(confirmedBooking?.id || ''),
-        orderId: order?.id || null,
-        airline: order?.slices?.[0]?.segments?.[0]?.marketing_carrier?.name || null,
-        origin: order?.slices?.[0]?.segments?.[0]?.origin?.iata_code || null,
-        destination:
-          order?.slices?.[0]?.segments?.[
-            order?.slices?.[0]?.segments?.length - 1
-          ]?.destination?.iata_code || null,
-        outboundDeparture: order?.slices?.[0]?.segments?.[0]?.departing_at || null,
-        outboundArrival:
-          order?.slices?.[0]?.segments?.[
-            order?.slices?.[0]?.segments?.length - 1
-          ]?.arriving_at || null,
-        returnDeparture: order?.slices?.[1]?.segments?.[0]?.departing_at || null,
-        returnArrival:
-          order?.slices?.[1]?.segments?.[
-            order?.slices?.[1]?.segments?.length - 1
-          ]?.arriving_at || null,
-      });
+     await sendFlightBookingConfirmationEmail({
+  to: contactPassenger.email,
+  locale: contactPassenger.locale || 'nb',
+  givenName: contactPassenger.given_name,
+  bnoBookingRef:
+    confirmedBooking?.bno_booking_ref || String(confirmedBooking?.id || ''),
+  orderId: order?.id || null,
+  airline: order?.slices?.[0]?.segments?.[0]?.marketing_carrier?.name || null,
+  origin: order?.slices?.[0]?.segments?.[0]?.origin?.iata_code || null,
+  destination:
+    order?.slices?.[0]?.segments?.[
+      order?.slices?.[0]?.segments?.length - 1
+    ]?.destination?.iata_code || null,
+  outboundDeparture: order?.slices?.[0]?.segments?.[0]?.departing_at || null,
+  outboundArrival:
+    order?.slices?.[0]?.segments?.[
+      order?.slices?.[0]?.segments?.length - 1
+    ]?.arriving_at || null,
+  returnDeparture: order?.slices?.[1]?.segments?.[0]?.departing_at || null,
+  returnArrival:
+    order?.slices?.[1]?.segments?.[
+      order?.slices?.[1]?.segments?.length - 1
+    ]?.arriving_at || null,
+});
     } catch (emailError: any) {
       console.error('[FLIGHT PAY] confirmation email failed', {
         message: emailError?.message || String(emailError),
