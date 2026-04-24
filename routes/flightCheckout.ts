@@ -80,12 +80,22 @@ type BookingDraft = {
 const bookingDrafts = new Map<string, BookingDraft>();
 
 function getDuffelErrorMessage(e: any): string {
+  const firstError =
+    e?.errors?.[0] ||
+    e?.duffel?.errors?.[0] ||
+    e?.response?.data?.errors?.[0] ||
+    null;
+
   return (
-    e?.errors?.[0]?.message ||
-    e?.errors?.[0]?.title ||
+    firstError?.message ||
+    firstError?.title ||
     e?.message ||
     'Duffel request failed'
   );
+}
+
+function getDuffelErrorPayload(e: any) {
+  return e?.duffel || e?.errors || e?.response?.data || null;
 }
 
 function isDuffelOfferGoneMessage(message: string): boolean {
@@ -191,6 +201,73 @@ function normalizeSelectedServiceIds(body: any): string[] {
     .filter(Boolean);
 
   return Array.from(new Set(ids));
+}
+
+function normalizePassengerNameForAirline(value: any) {
+  return String(value || '')
+    .trim()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/Æ/g, 'AE')
+    .replace(/æ/g, 'ae')
+    .replace(/Ø/g, 'O')
+    .replace(/ø/g, 'o')
+    .replace(/Å/g, 'A')
+    .replace(/å/g, 'a')
+    .replace(/[^A-Za-z '\-]/g, '')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+function normalizeTitleForDuffel(value: any) {
+  const raw = String(value || '').toLowerCase().trim();
+
+  if (raw === 'mr' || raw === 'mrs' || raw === 'ms' || raw === 'miss' || raw === 'mx') {
+    return raw;
+  }
+
+  return raw === 'm' ? 'mr' : 'ms';
+}
+
+function normalizeGenderForDuffel(value: any) {
+  const raw = String(value || '').toLowerCase().trim();
+
+  if (raw === 'm' || raw === 'male') return 'm';
+  if (raw === 'f' || raw === 'female') return 'f';
+
+  return raw;
+}
+
+function normalizePhoneForDuffel(value: any) {
+  const raw = String(value || '').trim();
+
+  if (!raw) return raw;
+
+  return raw.startsWith('+')
+    ? `+${raw.slice(1).replace(/[^\d]/g, '')}`
+    : raw.replace(/[^\d]/g, '');
+}
+
+function normalizePassengerForDuffel(passenger: PassengerInput) {
+  const givenName = normalizePassengerNameForAirline(passenger.given_name);
+  const familyName = normalizePassengerNameForAirline(passenger.family_name);
+
+  if (!givenName || !familyName) {
+    throw new Error(
+      'Passasjernavn inneholder tegn som ikke kan sendes til flyselskapet. Bruk vanlige latinske bokstaver.'
+    );
+  }
+
+  return {
+    id: passenger.id,
+    title: normalizeTitleForDuffel(passenger.title),
+    gender: normalizeGenderForDuffel(passenger.gender),
+    given_name: givenName,
+    family_name: familyName,
+    born_on: passenger.born_on,
+    email: String(passenger.email || '').trim().toLowerCase(),
+    phone_number: normalizePhoneForDuffel(passenger.phone_number),
+  };
 }
 
 function stringifyForSearch(value: any) {
@@ -351,6 +428,8 @@ async function createDuffelOrder(input: {
     }
   }
 
+  const normalizedPassengers = input.passengers.map(normalizePassengerForDuffel);
+
   const selectedServicesPayload = input.selectedServices.map((service) => ({
     id: service.id,
     quantity: 1,
@@ -367,16 +446,7 @@ async function createDuffelOrder(input: {
           currency: input.offerCurrency,
         },
       ],
-      passengers: input.passengers.map((passenger) => ({
-        id: passenger.id,
-        title: passenger.title,
-        gender: passenger.gender,
-        given_name: passenger.given_name,
-        family_name: passenger.family_name,
-        born_on: passenger.born_on,
-        email: passenger.email,
-        phone_number: passenger.phone_number,
-      })),
+      passengers: normalizedPassengers,
     },
   };
 
@@ -386,8 +456,14 @@ async function createDuffelOrder(input: {
 
   console.log('[FLIGHT PAY] createDuffelOrder payload', {
     offerId: input.offerId,
-    passengerCount: input.passengers.length,
-    passengerIds: input.passengers.map((p) => p.id || null),
+    passengerCount: normalizedPassengers.length,
+    passengerIds: normalizedPassengers.map((p) => p.id || null),
+    passengerNames: normalizedPassengers.map((p) => ({
+      given_name: p.given_name,
+      family_name: p.family_name,
+      title: p.title,
+      gender: p.gender,
+    })),
     selectedServiceIds: input.selectedServices.map((service) => service.id),
     duffelPaymentAmount: input.duffelPaymentAmount,
     currency: input.offerCurrency,
@@ -413,9 +489,24 @@ async function createDuffelOrder(input: {
   }
 
   if (!res.ok) {
+    const firstError = Array.isArray(data?.errors) ? data.errors[0] : null;
+
+    console.error('[FLIGHT PAY] Duffel order failed raw response', {
+      status: res.status,
+      statusText: res.statusText,
+      request: {
+        offerId: input.offerId,
+        amount: String(Number(input.duffelPaymentAmount).toFixed(2)),
+        currency: input.offerCurrency,
+        passengerCount: normalizedPassengers.length,
+        selectedServiceIds: input.selectedServices.map((service) => service.id),
+      },
+      duffel: data,
+    });
+
     const message =
-      data?.errors?.[0]?.message ||
-      data?.errors?.[0]?.title ||
+      firstError?.message ||
+      firstError?.title ||
       data?.error ||
       'Duffel order creation failed';
 
@@ -586,7 +677,7 @@ router.post('/api/payments/create-intent', async (req, res) => {
 
     console.error('[FLIGHT PAY] create-intent failed', {
       message,
-      errors: e?.errors || e?.duffel || null,
+      errors: getDuffelErrorPayload(e),
     });
 
     if (isDuffelOfferGoneMessage(message)) {
@@ -767,11 +858,12 @@ router.post('/api/bookings/confirm', async (req, res) => {
       })),
     });
   } catch (e: any) {
-    const message = e?.message || String(e);
+    const message = getDuffelErrorMessage(e);
+    const duffelPayload = getDuffelErrorPayload(e);
 
     console.error('[FLIGHT PAY] confirm failed', {
       message,
-      duffel: e?.duffel || null,
+      duffel: duffelPayload,
       bookingId,
     });
 
@@ -803,6 +895,7 @@ router.post('/api/bookings/confirm', async (req, res) => {
     return res.status(500).json({
       ok: false,
       error: message || 'Kunne ikke fullføre booking',
+      detail: duffelPayload?.errors?.[0] || duffelPayload || null,
     });
   }
 });
