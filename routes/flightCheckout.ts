@@ -44,13 +44,10 @@ type OfferSnapshot = {
   passengers?: Array<{
     id?: string;
     passenger_id?: string;
-    type?: string;
   }>;
   owner?: any;
   slices?: any[];
   available_services?: any[];
-  offer_request_id?: string;
-  conditions?: any;
   [key: string]: any;
 };
 
@@ -66,6 +63,7 @@ type SelectedService = {
 
 type BookingDraft = {
   offerId: string;
+  originalOfferId?: string | null;
   offerAmount: number;
   servicesAmount: number;
   duffelPaymentAmount: number;
@@ -80,15 +78,6 @@ type BookingDraft = {
   offerSnapshot?: OfferSnapshot | any;
   offerWasLive?: boolean;
   usedReplacementOffer?: boolean;
-  originalOfferId?: string | null;
-};
-
-type OrderAttemptInput = {
-  offerId: string;
-  duffelPaymentAmount: number;
-  offerCurrency: string;
-  passengers: PassengerInput[];
-  selectedServices: SelectedService[];
 };
 
 const bookingDrafts = new Map<string, BookingDraft>();
@@ -120,20 +109,12 @@ function getPublicErrorDetail(e: any) {
     ? payload[0]
     : null;
 
-  return String(
+  return (
     firstError?.message ||
-      firstError?.title ||
-      getDuffelErrorMessage(e) ||
-      'Kunne ikke fullføre booking'
+    firstError?.title ||
+    getDuffelErrorMessage(e) ||
+    'Kunne ikke fullføre booking'
   );
-}
-
-function stringifyForSearch(value: any) {
-  try {
-    return JSON.stringify(value || {}).toLowerCase();
-  } catch {
-    return '';
-  }
 }
 
 function isDuffelOfferGoneMessage(message: string): boolean {
@@ -165,6 +146,14 @@ function isDuffelInternalAirlineError(message: string): boolean {
   );
 }
 
+function stringifyForSearch(value: any) {
+  try {
+    return JSON.stringify(value || {}).toLowerCase();
+  } catch {
+    return '';
+  }
+}
+
 function isNorwegianLikeOffer(offer: any) {
   const text = stringifyForSearch(offer);
 
@@ -173,9 +162,44 @@ function isNorwegianLikeOffer(offer: any) {
     text.includes('norwegian air sweden') ||
     text.includes('norwegian air') ||
     text.includes('"dy"') ||
-    text.includes('"d8"') ||
-    text.includes('norwegian')
+    text.includes('"d8"')
   );
+}
+
+function getFareBrandText(offer: any) {
+  const raw =
+    offer?.fare_brand_name ||
+    offer?.brand_name ||
+    offer?.fare_name ||
+    offer?.fare_brand ||
+    offer?.conditions?.fare_brand_name ||
+    offer?.conditions?.fare_brand ||
+    offer?.slices?.[0]?.fare_brand_name ||
+    offer?.slices?.[0]?.fare_brand ||
+    '';
+
+  const direct = String(raw || '').trim();
+  if (direct) return direct;
+
+  const text = stringifyForSearch(offer);
+
+  if (text.includes('lowfare plus') || text.includes('lowfare+')) {
+    return 'LowFare+';
+  }
+
+  if (text.includes('lowfare')) return 'LowFare';
+  if (text.includes('flex')) return 'Flex';
+  if (text.includes('plus')) return 'Plus';
+
+  return '';
+}
+
+function normalizeFareBrand(value: any) {
+  return String(value || '')
+    .toLowerCase()
+    .replace(/\s+/g, '')
+    .replace(/-/g, '')
+    .trim();
 }
 
 function getServiceFee(amount: number, currency: string) {
@@ -204,10 +228,6 @@ function toMoneyNumber(value: any) {
   const parsed = Number(value || 0);
   if (!Number.isFinite(parsed)) return 0;
   return Math.round(parsed * 100) / 100;
-}
-
-function amountsMatch(a: number, b: number) {
-  return Math.abs(toMoneyNumber(a) - toMoneyNumber(b)) <= 0.01;
 }
 
 function getStripe() {
@@ -496,245 +516,81 @@ function getAirlineFromOrderOrOffer(order: any, offer: any) {
   );
 }
 
-function getAirportCodeFromEndpoint(endpoint: any) {
-  return String(endpoint?.iata_code || endpoint?.iata || '').trim();
-}
+function getCarrierCodesFromOffer(offer: any) {
+  const codes: string[] = [];
 
-function getSliceOriginCode(slice: any) {
-  const first = Array.isArray(slice?.segments) ? slice.segments[0] : null;
-  return getAirportCodeFromEndpoint(first?.origin);
-}
+  for (const slice of Array.isArray(offer?.slices) ? offer.slices : []) {
+    for (const segment of Array.isArray(slice?.segments) ? slice.segments : []) {
+      const marketing =
+        segment?.marketing_carrier?.iata_code ||
+        segment?.marketing_carrier?.id ||
+        '';
+      const operating =
+        segment?.operating_carrier?.iata_code ||
+        segment?.operating_carrier?.id ||
+        '';
 
-function getSliceDestinationCode(slice: any) {
-  const segments = Array.isArray(slice?.segments) ? slice.segments : [];
-  const last = segments.length ? segments[segments.length - 1] : null;
-  return getAirportCodeFromEndpoint(last?.destination);
-}
-
-function getSliceDepartureDate(slice: any) {
-  const first = Array.isArray(slice?.segments) ? slice.segments[0] : null;
-  const departingAt = String(first?.departing_at || '').trim();
-  return departingAt.length >= 10 ? departingAt.slice(0, 10) : '';
-}
-
-function getSegmentFlightNumber(segment: any) {
-  const marketingCarrierCode =
-    segment?.marketing_carrier?.iata_code ||
-    segment?.marketing_carrier?.iata ||
-    segment?.marketing_carrier?.code ||
-    '';
-
-  const flightNumber =
-    segment?.marketing_carrier_flight_number ||
-    segment?.flight_number ||
-    segment?.marketing_flight_number ||
-    '';
-
-  return `${String(marketingCarrierCode).trim()}${String(flightNumber).trim()}`;
-}
-
-function getOfferFlightSignature(offer: any) {
-  const slices = Array.isArray(offer?.slices) ? offer.slices : [];
-
-  return slices
-    .map((slice: any) => {
-      const segments = Array.isArray(slice?.segments) ? slice.segments : [];
-
-      return segments
-        .map((segment: any) => {
-          const origin = getAirportCodeFromEndpoint(segment?.origin);
-          const destination = getAirportCodeFromEndpoint(segment?.destination);
-          const departingAt = String(segment?.departing_at || '').slice(0, 16);
-          const arrivingAt = String(segment?.arriving_at || '').slice(0, 16);
-          const flightNumber = getSegmentFlightNumber(segment);
-
-          return [origin, destination, departingAt, arrivingAt, flightNumber]
-            .filter(Boolean)
-            .join('-');
-        })
-        .join('|');
-    })
-    .join('||');
-}
-
-function getFareBrandText(offer: any) {
-  const direct =
-    offer?.fare_brand_name ||
-    offer?.brand_name ||
-    offer?.fare_name ||
-    offer?.fare_brand ||
-    offer?.conditions?.fare_brand_name ||
-    offer?.conditions?.fare_brand ||
-    offer?.slices?.[0]?.fare_brand_name ||
-    offer?.slices?.[0]?.fare_brand ||
-    '';
-
-  if (String(direct || '').trim()) {
-    return String(direct).toLowerCase().trim();
-  }
-
-  const text = stringifyForSearch(offer);
-
-  if (text.includes('lowfare plus') || text.includes('lowfare+')) {
-    return 'lowfare plus';
-  }
-
-  if (text.includes('low fare plus')) return 'lowfare plus';
-  if (text.includes('lowfare')) return 'lowfare';
-  if (text.includes('low fare')) return 'lowfare';
-  if (text.includes('flex')) return 'flex';
-  if (text.includes('plus')) return 'plus';
-  if (text.includes('standard')) return 'standard';
-  if (text.includes('basic')) return 'basic';
-
-  return '';
-}
-
-function fareBrandLooksSame(a: any, b: any) {
-  const fa = getFareBrandText(a);
-  const fb = getFareBrandText(b);
-
-  if (!fa || !fb) return true;
-  if (fa === fb) return true;
-
-  if (fa.includes('lowfare') && fb.includes('lowfare')) {
-    const aPlus = fa.includes('plus') || fa.includes('+');
-    const bPlus = fb.includes('plus') || fb.includes('+');
-    return aPlus === bPlus;
-  }
-
-  if (fa.includes('flex') && fb.includes('flex')) return true;
-  if (fa.includes('standard') && fb.includes('standard')) return true;
-
-  return false;
-}
-
-function carrierLooksSame(a: any, b: any) {
-  const aText = stringifyForSearch(a);
-  const bText = stringifyForSearch(b);
-
-  if (isNorwegianLikeOffer(a) && isNorwegianLikeOffer(b)) return true;
-
-  const aOwner = String(a?.owner?.name || '').toLowerCase().trim();
-  const bOwner = String(b?.owner?.name || '').toLowerCase().trim();
-
-  if (aOwner && bOwner && aOwner === bOwner) return true;
-
-  const aCarrier = String(
-    getFirstSegment(a, 0)?.marketing_carrier?.name ||
-      getFirstSegment(a, 0)?.operating_carrier?.name ||
-      ''
-  )
-    .toLowerCase()
-    .trim();
-
-  const bCarrier = String(
-    getFirstSegment(b, 0)?.marketing_carrier?.name ||
-      getFirstSegment(b, 0)?.operating_carrier?.name ||
-      ''
-  )
-    .toLowerCase()
-    .trim();
-
-  if (aCarrier && bCarrier && aCarrier === bCarrier) return true;
-
-  return !!aText && !!bText && !!aCarrier && !!bCarrier
-    ? aText.includes(bCarrier) || bText.includes(aCarrier)
-    : false;
-}
-
-function offerTimesLookSame(a: any, b: any) {
-  const aSignature = getOfferFlightSignature(a);
-  const bSignature = getOfferFlightSignature(b);
-
-  if (aSignature && bSignature && aSignature === bSignature) return true;
-
-  const aSlices = Array.isArray(a?.slices) ? a.slices : [];
-  const bSlices = Array.isArray(b?.slices) ? b.slices : [];
-
-  if (!aSlices.length || aSlices.length !== bSlices.length) return false;
-
-  for (let i = 0; i < aSlices.length; i += 1) {
-    const aFirst = getFirstSegment(a, i);
-    const aLast = getLastSegment(a, i);
-    const bFirst = getFirstSegment(b, i);
-    const bLast = getLastSegment(b, i);
-
-    const aOrigin = getAirportCodeFromEndpoint(aFirst?.origin);
-    const bOrigin = getAirportCodeFromEndpoint(bFirst?.origin);
-    const aDestination = getAirportCodeFromEndpoint(aLast?.destination);
-    const bDestination = getAirportCodeFromEndpoint(bLast?.destination);
-
-    const aDeparture = String(aFirst?.departing_at || '').slice(0, 16);
-    const bDeparture = String(bFirst?.departing_at || '').slice(0, 16);
-    const aArrival = String(aLast?.arriving_at || '').slice(0, 16);
-    const bArrival = String(bLast?.arriving_at || '').slice(0, 16);
-
-    if (
-      aOrigin !== bOrigin ||
-      aDestination !== bDestination ||
-      aDeparture !== bDeparture ||
-      aArrival !== bArrival
-    ) {
-      return false;
+      if (marketing) codes.push(String(marketing).toUpperCase());
+      if (operating) codes.push(String(operating).toUpperCase());
     }
   }
 
-  return true;
+  return Array.from(new Set(codes.filter(Boolean)));
 }
 
-function inferCabinClass(offer: any) {
+function getCabinClassFromOffer(offer: any) {
   const text = stringifyForSearch(offer);
 
-  if (text.includes('first')) return 'first';
-  if (text.includes('business')) return 'business';
   if (text.includes('premium_economy')) return 'premium_economy';
-  if (text.includes('premium economy')) return 'premium_economy';
+  if (text.includes('business')) return 'business';
+  if (text.includes('first')) return 'first';
 
   return 'economy';
 }
 
-function getPassengerTypesFromOfferOrFallback(offer: any, count: number) {
-  const passengers = Array.isArray(offer?.passengers) ? offer.passengers : [];
+function getPassengerTypesForOffer(offer: any, passengerCount: number) {
+  const offerPassengers = Array.isArray(offer?.passengers)
+    ? offer.passengers
+    : [];
 
-  if (passengers.length) {
-    return passengers.map((p: any) => ({
-      type: String(p?.type || 'adult').toLowerCase(),
-    }));
-  }
-
-  return Array.from({ length: Math.max(1, count) }, () => ({ type: 'adult' }));
-}
-
-function buildOfferRequestBodyFromOffer(offer: any, passengerCount: number) {
-  const slices = Array.isArray(offer?.slices) ? offer.slices : [];
-
-  const requestSlices = slices
-    .map((slice: any) => {
-      const origin = getSliceOriginCode(slice);
-      const destination = getSliceDestinationCode(slice);
-      const departureDate = getSliceDepartureDate(slice);
-
-      if (!origin || !destination || !departureDate) return null;
-
-      return {
-        origin,
-        destination,
-        departure_date: departureDate,
-      };
-    })
+  const types = offerPassengers
+    .map((p: any) => String(p?.type || '').toLowerCase().trim())
     .filter(Boolean);
 
-  if (!requestSlices.length) {
-    throw new Error('Kunne ikke lage nytt offer request fra valgt flytilbud');
+  if (types.length === passengerCount) {
+    return types;
   }
 
+  return Array.from({ length: passengerCount }, () => 'adult');
+}
+
+function getSliceRequestFromOffer(offer: any, sliceIndex: number) {
+  const first = getFirstSegment(offer, sliceIndex);
+  const last = getLastSegment(offer, sliceIndex);
+
+  if (!first || !last) return null;
+
+  const origin =
+    first?.origin?.iata_code ||
+    first?.origin?.id ||
+    first?.origin?.city_name ||
+    '';
+
+  const destination =
+    last?.destination?.iata_code ||
+    last?.destination?.id ||
+    last?.destination?.city_name ||
+    '';
+
+  const departingAt = String(first?.departing_at || '');
+  const departureDate = departingAt.slice(0, 10);
+
+  if (!origin || !destination || !departureDate) return null;
+
   return {
-    data: {
-      slices: requestSlices,
-      passengers: getPassengerTypesFromOfferOrFallback(offer, passengerCount),
-      cabin_class: inferCabinClass(offer),
-    },
+    origin,
+    destination,
+    departure_date: departureDate,
   };
 }
 
@@ -748,24 +604,51 @@ async function fetchLiveOfferOrThrow(offerId: string) {
   return offerResult.data;
 }
 
-async function createFreshOfferRequestFromSnapshot(input: {
-  offerSnapshot: any;
+async function createFreshOfferRequestFromOffer(input: {
+  originalOffer: any;
   passengerCount: number;
 }) {
   const token = getDuffelToken();
-  const body = buildOfferRequestBodyFromOffer(
-    input.offerSnapshot,
+
+  const outboundSlice = getSliceRequestFromOffer(input.originalOffer, 0);
+  const returnSlice = getSliceRequestFromOffer(input.originalOffer, 1);
+
+  if (!outboundSlice) {
+    throw new Error('Kunne ikke lage nytt offer request fra valgt flytilbud');
+  }
+
+  const slices = returnSlice ? [outboundSlice, returnSlice] : [outboundSlice];
+
+  const passengerTypes = getPassengerTypesForOffer(
+    input.originalOffer,
     input.passengerCount
   );
 
-  console.log('[FLIGHT PAY] creating replacement offer request', {
-    slices: body.data.slices,
-    passengerCount: input.passengerCount,
-    cabinClass: body.data.cabin_class,
-    isNorwegianLike: isNorwegianLikeOffer(input.offerSnapshot),
-    originalFareBrand: getFareBrandText(input.offerSnapshot),
-    originalAmount: input.offerSnapshot?.total_amount || null,
-    originalCurrency: input.offerSnapshot?.total_currency || null,
+  const passengers = passengerTypes.map((type: string) => ({ type }));
+
+  const cabinClass = getCabinClassFromOffer(input.originalOffer);
+
+  const body: any = {
+    data: {
+      slices,
+      passengers,
+      cabin_class: cabinClass,
+    },
+  };
+
+  const carrierCodes = getCarrierCodesFromOffer(input.originalOffer);
+
+  if (carrierCodes.length) {
+    body.data.allowed_carrier_codes = carrierCodes;
+  }
+
+  console.log('[FLIGHT PAY] creating fresh Duffel offer request', {
+    slices,
+    passengers,
+    cabinClass,
+    allowedCarrierCodes: carrierCodes,
+    originalOfferId: input.originalOffer?.id || null,
+    fareBrand: getFareBrandText(input.originalOffer),
   });
 
   const res = await fetch('https://api.duffel.com/air/offer_requests', {
@@ -803,115 +686,119 @@ async function createFreshOfferRequestFromSnapshot(input: {
   return data?.data || null;
 }
 
-function getOffersFromOfferRequest(offerRequest: any) {
-  const offers =
-    offerRequest?.offers ||
-    offerRequest?.data?.offers ||
-    offerRequest?.available_offers ||
-    [];
-
-  return Array.isArray(offers) ? offers : [];
-}
-
 function scoreReplacementOffer(input: {
-  originalOffer: any;
   candidate: any;
-  expectedAmount?: number;
-  expectedCurrency?: string;
+  originalOffer: any;
+  expectedAmount: number;
+  expectedCurrency: string;
 }) {
-  const candidateAmount = toMoneyNumber(input.candidate?.total_amount || 0);
-  const candidateCurrency = String(input.candidate?.total_currency || '').toUpperCase();
-  const expectedCurrency = String(input.expectedCurrency || '').toUpperCase();
+  const candidate = input.candidate;
 
-  if (expectedCurrency && candidateCurrency !== expectedCurrency) return -100000;
+  const candidateAmount = toMoneyNumber(candidate?.total_amount || 0);
+  const candidateCurrency = String(candidate?.total_currency || '').toUpperCase();
 
-  let score = 0;
+  if (!candidate?.id) return Number.POSITIVE_INFINITY;
+  if (!candidateAmount || candidateAmount <= 0) return Number.POSITIVE_INFINITY;
+  if (candidateCurrency !== input.expectedCurrency) return Number.POSITIVE_INFINITY;
 
-  if (offerTimesLookSame(input.originalOffer, input.candidate)) score += 1000;
-  if (carrierLooksSame(input.originalOffer, input.candidate)) score += 300;
-  if (fareBrandLooksSame(input.originalOffer, input.candidate)) score += 250;
+  const originalFare = normalizeFareBrand(getFareBrandText(input.originalOffer));
+  const candidateFare = normalizeFareBrand(getFareBrandText(candidate));
 
-  if (isNorwegianLikeOffer(input.originalOffer) && isNorwegianLikeOffer(input.candidate)) {
-    score += 250;
+  let score = Math.abs(candidateAmount - input.expectedAmount);
+
+  if (originalFare && candidateFare && originalFare === candidateFare) {
+    score -= 1000;
   }
 
-  const originalSignature = getOfferFlightSignature(input.originalOffer);
-  const candidateSignature = getOfferFlightSignature(input.candidate);
+  const originalAirline = String(
+    getAirlineFromOrderOrOffer(null, input.originalOffer) || ''
+  )
+    .toLowerCase()
+    .trim();
 
-  if (originalSignature && candidateSignature && originalSignature === candidateSignature) {
-    score += 400;
+  const candidateAirline = String(
+    getAirlineFromOrderOrOffer(null, candidate) || ''
+  )
+    .toLowerCase()
+    .trim();
+
+  if (originalAirline && candidateAirline && originalAirline === candidateAirline) {
+    score -= 250;
   }
 
-  if (typeof input.expectedAmount === 'number' && input.expectedAmount > 0) {
-    if (amountsMatch(candidateAmount, input.expectedAmount)) {
-      score += 150;
-    } else {
-      const diff = Math.abs(candidateAmount - input.expectedAmount);
-      score -= Math.min(120, diff);
-    }
+  const originalOutbound = getFirstSegment(input.originalOffer, 0);
+  const candidateOutbound = getFirstSegment(candidate, 0);
+  const originalReturn = getFirstSegment(input.originalOffer, 1);
+  const candidateReturn = getFirstSegment(candidate, 1);
+
+  if (
+    originalOutbound?.departing_at &&
+    candidateOutbound?.departing_at &&
+    originalOutbound.departing_at === candidateOutbound.departing_at
+  ) {
+    score -= 100;
+  }
+
+  if (
+    originalReturn?.departing_at &&
+    candidateReturn?.departing_at &&
+    originalReturn.departing_at === candidateReturn.departing_at
+  ) {
+    score -= 100;
   }
 
   return score;
 }
 
-function findReplacementOffer(input: {
-  offerRequest: any;
+async function findFreshReplacementOffer(input: {
   originalOffer: any;
-  expectedAmount?: number;
-  expectedCurrency?: string;
+  passengerCount: number;
+  expectedAmount: number;
+  expectedCurrency: string;
 }) {
-  const offers = getOffersFromOfferRequest(input.offerRequest);
+  const offerRequest = await createFreshOfferRequestFromOffer({
+    originalOffer: input.originalOffer,
+    passengerCount: input.passengerCount,
+  });
+
+  const offers = Array.isArray(offerRequest?.offers) ? offerRequest.offers : [];
 
   if (!offers.length) {
+    console.warn('[FLIGHT PAY] fresh offer request returned no offers', {
+      offerRequestId: offerRequest?.id || null,
+    });
     return null;
   }
 
-  const ranked = offers
+  const scored = offers
     .map((candidate: any) => ({
       candidate,
       score: scoreReplacementOffer({
-        originalOffer: input.originalOffer,
         candidate,
+        originalOffer: input.originalOffer,
         expectedAmount: input.expectedAmount,
         expectedCurrency: input.expectedCurrency,
       }),
     }))
-    .filter((entry: any) => entry.score > 0)
-    .sort((a: any, b: any) => b.score - a.score);
+    .filter((item: any) => Number.isFinite(item.score))
+    .sort((a: any, b: any) => a.score - b.score);
 
-  console.log('[FLIGHT PAY] replacement offer candidates', {
-    candidateCount: offers.length,
-    matchedCount: ranked.length,
-    bestScore: ranked[0]?.score || null,
+  const best = scored[0]?.candidate || null;
+
+  console.log('[FLIGHT PAY] fresh replacement offer candidates', {
+    offerRequestId: offerRequest?.id || null,
+    count: offers.length,
+    selectedOfferId: best?.id || null,
+    selectedAmount: best?.total_amount || null,
+    selectedCurrency: best?.total_currency || null,
+    selectedFareBrand: getFareBrandText(best),
+    originalOfferId: input.originalOffer?.id || null,
+    originalAmount: input.expectedAmount,
+    originalCurrency: input.expectedCurrency,
     originalFareBrand: getFareBrandText(input.originalOffer),
-    expectedAmount: input.expectedAmount || null,
-    expectedCurrency: input.expectedCurrency || null,
   });
 
-  return ranked[0]?.candidate || null;
-}
-
-async function findFreshReplacementOffer(input: {
-  originalOffer: any;
-  passengerCount: number;
-  expectedAmount?: number;
-  expectedCurrency?: string;
-}) {
-  if (!input.originalOffer?.id) {
-    return null;
-  }
-
-  const offerRequest = await createFreshOfferRequestFromSnapshot({
-    offerSnapshot: input.originalOffer,
-    passengerCount: input.passengerCount,
-  });
-
-  return findReplacementOffer({
-    offerRequest,
-    originalOffer: input.originalOffer,
-    expectedAmount: input.expectedAmount,
-    expectedCurrency: input.expectedCurrency,
-  });
+  return best;
 }
 
 async function resolveLiveOfferForCheckout(input: {
@@ -923,6 +810,73 @@ async function resolveLiveOfferForCheckout(input: {
     offerId: input.offerId,
   });
 
+  const clientSnapshotIsNorwegian = isNorwegianLikeOffer(input.clientOfferSnapshot);
+
+  async function tryFreshReplacement(reason: string) {
+    if (!input.clientOfferSnapshot?.id) return null;
+
+    try {
+      const expectedAmount = toMoneyNumber(input.clientOfferSnapshot?.total_amount || 0);
+      const expectedCurrency = String(
+        input.clientOfferSnapshot?.total_currency || ''
+      ).toUpperCase();
+
+      if (!expectedAmount || !expectedCurrency) return null;
+
+      console.warn('[FLIGHT PAY] trying fresh replacement offer before payment', {
+        originalOfferId: input.offerId,
+        reason,
+        expectedAmount,
+        expectedCurrency,
+        clientSnapshotIsNorwegian,
+        clientFareBrand: getFareBrandText(input.clientOfferSnapshot),
+      });
+
+      const replacementOffer = await findFreshReplacementOffer({
+        originalOffer: input.clientOfferSnapshot,
+        passengerCount: input.passengerCount,
+        expectedAmount,
+        expectedCurrency,
+      });
+
+      if (!replacementOffer?.id) return null;
+
+      const passengerIds = getOfferPassengerIds(replacementOffer);
+
+      if (passengerIds.length !== input.passengerCount) {
+        console.warn('[FLIGHT PAY] replacement offer passenger count mismatch', {
+          originalOfferId: input.offerId,
+          replacementOfferId: replacementOffer.id,
+          expectedPassengerCount: input.passengerCount,
+          actualPassengerCount: passengerIds.length,
+        });
+        return null;
+      }
+
+      return {
+        offer: replacementOffer,
+        wasLive: true,
+        usedClientSnapshot: false,
+        usedReplacementOffer: true,
+        originalOfferId: input.offerId,
+      };
+    } catch (replacementError: any) {
+      console.error('[FLIGHT PAY] fresh replacement offer failed before payment', {
+        originalOfferId: input.offerId,
+        reason,
+        message: getDuffelErrorMessage(replacementError),
+        duffel: getDuffelErrorPayload(replacementError),
+      });
+
+      return null;
+    }
+  }
+
+  if (clientSnapshotIsNorwegian) {
+    const replacement = await tryFreshReplacement('norwegian_pre_stripe_refresh');
+    if (replacement?.offer?.id) return replacement;
+  }
+
   try {
     const offer = await fetchLiveOfferOrThrow(input.offerId);
     const passengerIds = getOfferPassengerIds(offer);
@@ -931,6 +885,14 @@ async function resolveLiveOfferForCheckout(input: {
       throw new Error(
         `Offeret forventer ${passengerIds.length} passasjer(er), men fikk ${input.passengerCount}`
       );
+    }
+
+    if (isNorwegianLikeOffer(offer) && input.clientOfferSnapshot?.id) {
+      const replacement = await tryFreshReplacement(
+        'live_offer_is_norwegian_pre_stripe_refresh'
+      );
+
+      if (replacement?.offer?.id) return replacement;
     }
 
     return {
@@ -949,63 +911,19 @@ async function resolveLiveOfferForCheckout(input: {
       message,
       duffel: payload,
       hasClientOfferSnapshot: !!input.clientOfferSnapshot,
-      isNorwegianLike: isNorwegianLikeOffer(input.clientOfferSnapshot),
+      isNorwegianLike: clientSnapshotIsNorwegian,
+      fareBrand: getFareBrandText(input.clientOfferSnapshot),
     });
 
     const shouldTryReplacement =
       !!input.clientOfferSnapshot &&
       (isDuffelOfferGoneMessage(message) ||
         isDuffelInternalAirlineError(message) ||
-        isNorwegianLikeOffer(input.clientOfferSnapshot));
+        clientSnapshotIsNorwegian);
 
     if (shouldTryReplacement) {
-      try {
-        const expectedAmount = toMoneyNumber(
-          input.clientOfferSnapshot?.total_amount || 0
-        );
-        const expectedCurrency = String(
-          input.clientOfferSnapshot?.total_currency || ''
-        ).toUpperCase();
-
-        const replacementOffer = await findFreshReplacementOffer({
-          originalOffer: input.clientOfferSnapshot,
-          passengerCount: input.passengerCount,
-          expectedAmount,
-          expectedCurrency,
-        });
-
-        if (replacementOffer?.id) {
-          const passengerIds = getOfferPassengerIds(replacementOffer);
-
-          if (passengerIds.length !== input.passengerCount) {
-            throw new Error(
-              `Nytt offer forventer ${passengerIds.length} passasjer(er), men fikk ${input.passengerCount}`
-            );
-          }
-
-          console.warn('[FLIGHT PAY] using replacement live offer for checkout', {
-            originalOfferId: input.offerId,
-            replacementOfferId: replacementOffer.id,
-            replacementAmount: replacementOffer.total_amount || null,
-            replacementCurrency: replacementOffer.total_currency || null,
-            replacementFareBrand: getFareBrandText(replacementOffer),
-          });
-
-          return {
-            offer: replacementOffer,
-            wasLive: true,
-            usedClientSnapshot: false,
-            usedReplacementOffer: true,
-            originalOfferId: input.offerId,
-          };
-        }
-      } catch (replacementError: any) {
-        console.error('[FLIGHT PAY] replacement offer lookup failed in create-intent', {
-          originalOfferId: input.offerId,
-          message: getDuffelErrorMessage(replacementError),
-          duffel: getDuffelErrorPayload(replacementError),
-        });
-      }
+      const replacement = await tryFreshReplacement('live_offer_get_failed');
+      if (replacement?.offer?.id) return replacement;
     }
 
     const publicMessage = isDuffelOfferGoneMessage(message)
@@ -1019,7 +937,13 @@ async function resolveLiveOfferForCheckout(input: {
   }
 }
 
-async function createDuffelOrderRaw(input: OrderAttemptInput) {
+async function createDuffelOrderRaw(input: {
+  offerId: string;
+  duffelPaymentAmount: number;
+  offerCurrency: string;
+  passengers: PassengerInput[];
+  selectedServices: SelectedService[];
+}) {
   const token = getDuffelToken();
 
   if (!Array.isArray(input.passengers) || !input.passengers.length) {
@@ -1122,7 +1046,7 @@ async function createDuffelOrderRaw(input: OrderAttemptInput) {
   return data?.data || null;
 }
 
-async function createDuffelOrderWithNorwegianRecovery(input: {
+async function createDuffelOrderWithRetry(input: {
   offerId: string;
   duffelPaymentAmount: number;
   offerCurrency: string;
@@ -1131,122 +1055,72 @@ async function createDuffelOrderWithNorwegianRecovery(input: {
   offerSnapshot?: any;
 }) {
   try {
-    return await createDuffelOrderRaw({
-      offerId: input.offerId,
-      duffelPaymentAmount: input.duffelPaymentAmount,
-      offerCurrency: input.offerCurrency,
-      passengers: input.passengers,
-      selectedServices: input.selectedServices,
-    });
+    return await createDuffelOrderRaw(input);
   } catch (firstError: any) {
-    const firstMessage = getDuffelErrorMessage(firstError);
-    const firstDetail = getPublicErrorDetail(firstError);
-    const shouldRecover =
-      isDuffelInternalAirlineError(firstMessage) ||
-      isDuffelInternalAirlineError(firstDetail) ||
-      isDuffelOfferGoneMessage(firstMessage) ||
-      isDuffelOfferGoneMessage(firstDetail) ||
+    const message = getDuffelErrorMessage(firstError);
+    const shouldRetry =
+      isDuffelInternalAirlineError(message) ||
+      isDuffelOfferGoneMessage(message) ||
       isNorwegianLikeOffer(input.offerSnapshot);
 
-    if (!shouldRecover) {
+    if (!shouldRetry || !input.offerSnapshot?.id) {
       throw firstError;
     }
 
-    if (input.selectedServices.length) {
-      console.warn('[FLIGHT PAY] skipping replacement offer recovery because services were selected', {
-        offerId: input.offerId,
-        selectedServiceIds: input.selectedServices.map((s) => s.id),
-      });
-      throw firstError;
-    }
-
-    console.warn('[FLIGHT PAY] Duffel order failed, attempting replacement offer recovery', {
+    console.warn('[FLIGHT PAY] Duffel order failed, retrying once with fresh replacement offer', {
       offerId: input.offerId,
-      message: firstMessage,
-      detail: firstDetail,
+      message,
       isNorwegianLike: isNorwegianLikeOffer(input.offerSnapshot),
-      amount: input.duffelPaymentAmount,
-      currency: input.offerCurrency,
     });
 
-    try {
-      await new Promise((resolve) => setTimeout(resolve, 800));
+    await new Promise((resolve) => setTimeout(resolve, 1200));
 
-      const replacementOffer = await findFreshReplacementOffer({
-        originalOffer: input.offerSnapshot,
-        passengerCount: input.passengers.length,
-        expectedAmount: input.duffelPaymentAmount,
-        expectedCurrency: input.offerCurrency,
-      });
+    const replacementOffer = await findFreshReplacementOffer({
+      originalOffer: input.offerSnapshot,
+      passengerCount: input.passengers.length,
+      expectedAmount: input.duffelPaymentAmount,
+      expectedCurrency: input.offerCurrency,
+    });
 
-      if (!replacementOffer?.id) {
-        console.warn('[FLIGHT PAY] no safe replacement offer found');
-        throw firstError;
-      }
+    if (!replacementOffer?.id) {
+      throw firstError;
+    }
 
-      const replacementPassengerIds = getOfferPassengerIds(replacementOffer);
-      const replacementAmount = toMoneyNumber(replacementOffer.total_amount || 0);
-      const replacementCurrency = String(
-        replacementOffer.total_currency || ''
-      ).toUpperCase();
+    const replacementAmount = toMoneyNumber(replacementOffer.total_amount || 0);
+    const replacementCurrency = String(replacementOffer.total_currency || '').toUpperCase();
 
-      if (replacementPassengerIds.length !== input.passengers.length) {
-        console.warn('[FLIGHT PAY] replacement offer passenger count mismatch', {
-          expected: input.passengers.length,
-          actual: replacementPassengerIds.length,
-        });
-        throw firstError;
-      }
+    if (replacementCurrency !== input.offerCurrency) {
+      throw firstError;
+    }
 
-      if (replacementCurrency !== input.offerCurrency) {
-        console.warn('[FLIGHT PAY] replacement offer currency mismatch', {
-          expected: input.offerCurrency,
-          actual: replacementCurrency,
-        });
-        throw firstError;
-      }
-
-      if (!amountsMatch(replacementAmount, input.duffelPaymentAmount)) {
-        console.warn('[FLIGHT PAY] replacement offer amount mismatch', {
-          expected: input.duffelPaymentAmount,
-          actual: replacementAmount,
-          currency: replacementCurrency,
-        });
-
-        throw firstError;
-      }
-
-      const passengersWithReplacementIds = input.passengers.map(
-        (passenger, index) => ({
-          ...passenger,
-          id: replacementPassengerIds[index],
-        })
-      );
-
-      console.warn('[FLIGHT PAY] retrying order with replacement offer', {
-        originalOfferId: input.offerId,
-        replacementOfferId: replacementOffer.id,
-        amount: replacementAmount,
+    if (Math.abs(replacementAmount - input.duffelPaymentAmount) > 0.01) {
+      console.warn('[FLIGHT PAY] replacement offer price differs, refusing retry', {
+        originalAmount: input.duffelPaymentAmount,
+        replacementAmount,
         currency: replacementCurrency,
-        replacementFareBrand: getFareBrandText(replacementOffer),
-      });
-
-      return await createDuffelOrderRaw({
-        offerId: String(replacementOffer.id),
-        duffelPaymentAmount: replacementAmount,
-        offerCurrency: replacementCurrency,
-        passengers: passengersWithReplacementIds,
-        selectedServices: [],
-      });
-    } catch (recoveryError: any) {
-      console.error('[FLIGHT PAY] replacement offer recovery failed', {
-        originalMessage: firstMessage,
-        recoveryMessage: getDuffelErrorMessage(recoveryError),
-        recoveryPayload: getDuffelErrorPayload(recoveryError),
       });
 
       throw firstError;
     }
+
+    const replacementPassengerIds = getOfferPassengerIds(replacementOffer);
+
+    if (replacementPassengerIds.length !== input.passengers.length) {
+      throw firstError;
+    }
+
+    const passengersWithFreshIds = input.passengers.map((passenger, index) => ({
+      ...passenger,
+      id: replacementPassengerIds[index],
+    }));
+
+    return await createDuffelOrderRaw({
+      offerId: String(replacementOffer.id),
+      duffelPaymentAmount: replacementAmount,
+      offerCurrency: replacementCurrency,
+      passengers: passengersWithFreshIds,
+      selectedServices: input.selectedServices,
+    });
   }
 }
 
@@ -1359,7 +1233,6 @@ router.post('/api/payments/create-intent', async (req, res) => {
         offerWasLive: String(resolvedOfferResult.wasLive),
         usedClientSnapshot: String(resolvedOfferResult.usedClientSnapshot),
         usedReplacementOffer: String(resolvedOfferResult.usedReplacementOffer),
-        fareBrand: getFareBrandText(resolvedOffer),
       },
     });
 
@@ -1369,6 +1242,7 @@ router.post('/api/payments/create-intent', async (req, res) => {
 
     bookingDrafts.set(bookingDraftId, {
       offerId: String(resolvedOffer.id || offerId),
+      originalOfferId: String(resolvedOfferResult.originalOfferId || offerId),
       offerAmount: flightAmount,
       servicesAmount,
       duffelPaymentAmount,
@@ -1387,12 +1261,11 @@ router.post('/api/payments/create-intent', async (req, res) => {
       offerSnapshot: resolvedOffer,
       offerWasLive: resolvedOfferResult.wasLive,
       usedReplacementOffer: resolvedOfferResult.usedReplacementOffer,
-      originalOfferId: resolvedOfferResult.originalOfferId,
     });
 
     console.log('[FLIGHT PAY] create-intent success', {
       offerId: String(resolvedOffer.id || offerId),
-      originalOfferId: resolvedOfferResult.originalOfferId || null,
+      originalOfferId: String(resolvedOfferResult.originalOfferId || offerId),
       bookingDraftId,
       flightAmount,
       servicesAmount,
@@ -1404,7 +1277,6 @@ router.post('/api/payments/create-intent', async (req, res) => {
       offerPassengerIds,
       selectedServiceIds,
       offerWasLive: resolvedOfferResult.wasLive,
-      usedClientSnapshot: resolvedOfferResult.usedClientSnapshot,
       usedReplacementOffer: resolvedOfferResult.usedReplacementOffer,
       isNorwegianLike: isNorwegianLikeOffer(resolvedOffer),
       fareBrand: getFareBrandText(resolvedOffer),
@@ -1514,7 +1386,7 @@ router.post('/api/bookings/confirm', async (req, res) => {
       fareBrand: getFareBrandText(draft.offerSnapshot),
     });
 
-    const order = await createDuffelOrderWithNorwegianRecovery({
+    const order = await createDuffelOrderWithRetry({
       offerId: draft.offerId,
       duffelPaymentAmount: draft.duffelPaymentAmount,
       offerCurrency: draft.offerCurrency,
@@ -1661,7 +1533,6 @@ router.post('/api/bookings/confirm', async (req, res) => {
 
         if (pi.status === 'requires_capture') {
           await stripe.paymentIntents.cancel(pi.id);
-
           console.log('[FLIGHT PAY] cancelled uncaptured payment intent after booking failure', {
             paymentIntentId: pi.id,
             bookingDraftId,
@@ -1683,14 +1554,11 @@ router.post('/api/bookings/confirm', async (req, res) => {
       });
     }
 
-    if (
-      isDuffelInternalAirlineError(message) ||
-      isDuffelInternalAirlineError(publicDetail)
-    ) {
+    if (isDuffelInternalAirlineError(message) || isDuffelInternalAirlineError(publicDetail)) {
       return res.status(502).json({
         ok: false,
         error:
-          'Flyselskapet kunne ikke bekrefte denne billettypen akkurat nå. Betalingen er ikke belastet. Prøv å søke på nytt, eller velg en annen billettype/avgang.',
+          'Flyselskapet kunne ikke bekrefte denne billettypen akkurat nå. Betalingen er ikke belastet. Prøv å søke på nytt, velg LowFare, eller velg en annen avgang.',
         detail: publicDetail,
       });
     }
