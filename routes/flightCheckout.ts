@@ -144,6 +144,14 @@ function isDuffelInternalAirlineError(message: string): boolean {
   );
 }
 
+function stringifyForSearch(value: any) {
+  try {
+    return JSON.stringify(value || {}).toLowerCase();
+  } catch {
+    return '';
+  }
+}
+
 function isNorwegianLikeOffer(offer: any) {
   const text = stringifyForSearch(offer);
 
@@ -321,14 +329,6 @@ function normalizePassengerForDuffel(passenger: PassengerInput) {
   };
 }
 
-function stringifyForSearch(value: any) {
-  try {
-    return JSON.stringify(value || {}).toLowerCase();
-  } catch {
-    return '';
-  }
-}
-
 function getServiceTitle(service: DuffelAvailableService) {
   return (
     service?.metadata?.title ||
@@ -451,6 +451,16 @@ function resolveSelectedServices(input: {
   };
 }
 
+async function fetchLiveOfferOrThrow(offerId: string) {
+  const offerResult = await duffel.offers.get(String(offerId));
+
+  if (!offerResult?.data?.id) {
+    throw new Error('Duffel returned missing offer data');
+  }
+
+  return offerResult.data;
+}
+
 async function resolveLiveOfferForCheckout(input: {
   offerId: string;
   clientOfferSnapshot?: any;
@@ -461,13 +471,8 @@ async function resolveLiveOfferForCheckout(input: {
   });
 
   try {
-    const offerResult = await duffel.offers.get(String(input.offerId));
-
-    if (!offerResult?.data?.id) {
-      throw new Error('Duffel returned missing offer data');
-    }
-
-    const passengerIds = getOfferPassengerIds(offerResult.data);
+    const offer = await fetchLiveOfferOrThrow(input.offerId);
+    const passengerIds = getOfferPassengerIds(offer);
 
     if (passengerIds.length !== input.passengerCount) {
       throw new Error(
@@ -476,7 +481,7 @@ async function resolveLiveOfferForCheckout(input: {
     }
 
     return {
-      offer: offerResult.data,
+      offer,
       wasLive: true,
       usedClientSnapshot: false,
     };
@@ -503,7 +508,7 @@ async function resolveLiveOfferForCheckout(input: {
   }
 }
 
-async function createDuffelOrder(input: {
+async function createDuffelOrderRaw(input: {
   offerId: string;
   duffelPaymentAmount: number;
   offerCurrency: string;
@@ -610,6 +615,71 @@ async function createDuffelOrder(input: {
   }
 
   return data?.data || null;
+}
+
+async function createDuffelOrderWithRetry(input: {
+  offerId: string;
+  duffelPaymentAmount: number;
+  offerCurrency: string;
+  passengers: PassengerInput[];
+  selectedServices: SelectedService[];
+  offerSnapshot?: any;
+}) {
+  try {
+    return await createDuffelOrderRaw(input);
+  } catch (firstError: any) {
+    const message = getDuffelErrorMessage(firstError);
+    const shouldRetry =
+      isDuffelInternalAirlineError(message) || isNorwegianLikeOffer(input.offerSnapshot);
+
+    if (!shouldRetry) {
+      throw firstError;
+    }
+
+    console.warn('[FLIGHT PAY] Duffel order failed, retrying once with refetched live offer', {
+      offerId: input.offerId,
+      message,
+      isNorwegianLike: isNorwegianLikeOffer(input.offerSnapshot),
+    });
+
+    await new Promise((resolve) => setTimeout(resolve, 1200));
+
+    const refreshedOffer = await fetchLiveOfferOrThrow(input.offerId);
+    const refreshedPassengerIds = getOfferPassengerIds(refreshedOffer);
+    const refreshedAmount = toMoneyNumber(refreshedOffer.total_amount || 0);
+    const refreshedCurrency = String(refreshedOffer.total_currency || '').toUpperCase();
+
+    if (refreshedPassengerIds.length !== input.passengers.length) {
+      throw firstError;
+    }
+
+    if (refreshedCurrency !== input.offerCurrency) {
+      throw firstError;
+    }
+
+    if (Math.abs(refreshedAmount - input.duffelPaymentAmount) > 0.01) {
+      console.warn('[FLIGHT PAY] refreshed offer price differs, refusing retry', {
+        originalAmount: input.duffelPaymentAmount,
+        refreshedAmount,
+        currency: refreshedCurrency,
+      });
+
+      throw firstError;
+    }
+
+    const passengersWithFreshIds = input.passengers.map((passenger, index) => ({
+      ...passenger,
+      id: refreshedPassengerIds[index],
+    }));
+
+    return await createDuffelOrderRaw({
+      ...input,
+      passengers: passengersWithFreshIds,
+      offerId: String(refreshedOffer.id || input.offerId),
+      duffelPaymentAmount: refreshedAmount,
+      offerCurrency: refreshedCurrency,
+    });
+  }
 }
 
 function getSegmentsFromSource(source: any, sliceIndex: number) {
@@ -890,12 +960,13 @@ router.post('/api/bookings/confirm', async (req, res) => {
       isNorwegianLike: isNorwegianLikeOffer(draft.offerSnapshot),
     });
 
-    const order = await createDuffelOrder({
+    const order = await createDuffelOrderWithRetry({
       offerId: draft.offerId,
       duffelPaymentAmount: draft.duffelPaymentAmount,
       offerCurrency: draft.offerCurrency,
       passengers: draft.passengers,
       selectedServices: draft.selectedServices,
+      offerSnapshot: draft.offerSnapshot,
     });
 
     const contactPassenger = draft.passengers[0];
@@ -1051,9 +1122,9 @@ router.post('/api/bookings/confirm', async (req, res) => {
     if (isDuffelOfferGoneMessage(message) || isDuffelOfferGoneMessage(publicDetail)) {
       return res.status(409).json({
         ok: false,
-        error: 'offer_no_longer_available',
-        detail:
+        error:
           'Dette flytilbudet er ikke lenger tilgjengelig. Betalingen er ikke belastet. Søk på nytt for oppdaterte priser og billettyper.',
+        detail: publicDetail,
       });
     }
 
@@ -1061,7 +1132,7 @@ router.post('/api/bookings/confirm', async (req, res) => {
       return res.status(502).json({
         ok: false,
         error:
-          'Flyselskapet kunne ikke bekrefte bookingen akkurat nå. Betalingen er ikke belastet. Prøv igjen, eller velg en annen billettype.',
+          'Norwegian kunne ikke bekrefte denne billettypen akkurat nå. Betalingen er ikke belastet. Prøv LowFare, søk på nytt, eller velg en annen avgang.',
         detail: publicDetail,
       });
     }
