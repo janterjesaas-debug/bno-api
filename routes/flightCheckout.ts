@@ -124,7 +124,11 @@ function isDuffelOfferGoneMessage(message: string): boolean {
     m.includes('offer has expired') ||
     m.includes('expired') ||
     m.includes('not found') ||
-    m.includes('invalid offer')
+    m.includes('invalid offer') ||
+    m.includes('please select another offer') ||
+    m.includes('select another offer') ||
+    m.includes('create a new offer request') ||
+    m.includes('latest availability')
   );
 }
 
@@ -137,6 +141,18 @@ function isDuffelInternalAirlineError(message: string): boolean {
     m.includes('airline responded') ||
     m.includes('airline has responded') ||
     m.includes('please try again')
+  );
+}
+
+function isNorwegianLikeOffer(offer: any) {
+  const text = stringifyForSearch(offer);
+
+  return (
+    text.includes('norwegian air shuttle') ||
+    text.includes('norwegian air sweden') ||
+    text.includes('norwegian air') ||
+    text.includes('"dy"') ||
+    text.includes('"d8"')
   );
 }
 
@@ -435,96 +451,55 @@ function resolveSelectedServices(input: {
   };
 }
 
-function isUsableClientOfferSnapshot(input: {
-  offerId: string;
-  offer: any;
-  passengerCount: number;
-}) {
-  const offer = input.offer;
-  if (!offer || typeof offer !== 'object') return false;
-
-  const id = String(offer?.id || '').trim();
-  if (!id || id !== String(input.offerId || '').trim()) return false;
-
-  const amount = toMoneyNumber(offer?.total_amount || 0);
-  const currency = String(offer?.total_currency || '').trim();
-
-  if (!amount || amount <= 0) return false;
-  if (!currency) return false;
-
-  const passengerIds = Array.isArray(offer?.passengers)
-    ? offer.passengers
-        .map((p: any) => String(p?.id || p?.passenger_id || '').trim())
-        .filter(Boolean)
-    : [];
-
-  if (passengerIds.length !== input.passengerCount) return false;
-
-  return true;
-}
-
-function isNorwegianOffer(offer: any) {
-  const text = stringifyForSearch(offer);
-  return text.includes('norwegian');
-}
-
 async function resolveLiveOfferForCheckout(input: {
   offerId: string;
   clientOfferSnapshot?: any;
   passengerCount: number;
 }) {
-  const clientSnapshotLooksNorwegian = isNorwegianOffer(input.clientOfferSnapshot);
-
   console.log('[FLIGHT PAY] fetching live offer for checkout', {
     offerId: input.offerId,
-    clientSnapshotLooksNorwegian,
   });
 
   try {
     const offerResult = await duffel.offers.get(String(input.offerId));
 
-    if (offerResult?.data?.id) {
-      return {
-        offer: offerResult.data,
-        wasLive: true,
-        usedClientSnapshot: false,
-      };
+    if (!offerResult?.data?.id) {
+      throw new Error('Duffel returned missing offer data');
     }
 
-    throw new Error('Duffel returned missing offer data');
+    const passengerIds = getOfferPassengerIds(offerResult.data);
+
+    if (passengerIds.length !== input.passengerCount) {
+      throw new Error(
+        `Offeret forventer ${passengerIds.length} passasjer(er), men fikk ${input.passengerCount}`
+      );
+    }
+
+    return {
+      offer: offerResult.data,
+      wasLive: true,
+      usedClientSnapshot: false,
+    };
   } catch (e: any) {
     const message = getDuffelErrorMessage(e);
     const payload = getDuffelErrorPayload(e);
 
-    console.error('[FLIGHT PAY] live offer refresh failed', {
+    console.error('[FLIGHT PAY] live offer refresh failed - refusing cached fallback', {
       offerId: input.offerId,
       message,
       duffel: payload,
-      clientSnapshotLooksNorwegian,
+      hasClientOfferSnapshot: !!input.clientOfferSnapshot,
+      isNorwegianLike: isNorwegianLikeOffer(input.clientOfferSnapshot),
     });
 
-    const canUseClientSnapshot = isUsableClientOfferSnapshot({
-      offerId: input.offerId,
-      offer: input.clientOfferSnapshot,
-      passengerCount: input.passengerCount,
-    });
+    const publicMessage = isDuffelOfferGoneMessage(message)
+      ? 'Dette flytilbudet er ikke lenger tilgjengelig. Søk på nytt for oppdaterte priser og billettyper.'
+      : 'Kunne ikke verifisere flytilbudet hos flyleverandøren. Søk på nytt eller velg et annet tilbud.';
 
-    if (canUseClientSnapshot && !isDuffelOfferGoneMessage(message)) {
-      console.warn('[FLIGHT PAY] using client offer snapshot as checkout fallback', {
-        offerId: input.offerId,
-        reason: message,
-        isInternalAirlineError: isDuffelInternalAirlineError(message),
-        isNorwegian: clientSnapshotLooksNorwegian,
-      });
-
-      return {
-        offer: input.clientOfferSnapshot,
-        wasLive: false,
-        usedClientSnapshot: true,
-      };
-    }
-
-    throw e;
+    const err: any = new Error(publicMessage);
+    err.duffel = payload;
+    err.originalMessage = message;
+    throw err;
   }
 }
 
@@ -710,6 +685,7 @@ router.post('/api/payments/create-intent', async (req, res) => {
       contactEmail: passengers[0]?.email || null,
       selectedServiceIds,
       hasClientOfferSnapshot: !!clientOfferSnapshot,
+      isNorwegianLike: isNorwegianLikeOffer(clientOfferSnapshot),
     });
 
     const resolvedOfferResult = await resolveLiveOfferForCheckout({
@@ -724,6 +700,8 @@ router.post('/api/payments/create-intent', async (req, res) => {
       return res.status(404).json({
         ok: false,
         error: 'offer_no_longer_available',
+        detail:
+          'Dette flytilbudet er ikke lenger tilgjengelig. Søk på nytt for oppdaterte priser og billettyper.',
       });
     }
 
@@ -809,6 +787,7 @@ router.post('/api/payments/create-intent', async (req, res) => {
       selectedServiceIds,
       offerWasLive: resolvedOfferResult.wasLive,
       usedClientSnapshot: resolvedOfferResult.usedClientSnapshot,
+      isNorwegianLike: isNorwegianLikeOffer(resolvedOffer),
     });
 
     return res.json({
@@ -833,24 +812,27 @@ router.post('/api/payments/create-intent', async (req, res) => {
     });
   } catch (e: any) {
     const message = getDuffelErrorMessage(e);
+    const detail = getPublicErrorDetail(e);
 
     console.error('[FLIGHT PAY] create-intent failed', {
       message,
+      detail,
       errors: getDuffelErrorPayload(e),
     });
 
-    if (isDuffelOfferGoneMessage(message)) {
-      return res.status(404).json({
+    if (isDuffelOfferGoneMessage(message) || isDuffelOfferGoneMessage(detail)) {
+      return res.status(409).json({
         ok: false,
         error: 'offer_no_longer_available',
-        detail: message,
+        detail:
+          'Dette flytilbudet er ikke lenger tilgjengelig. Søk på nytt for oppdaterte priser og billettyper.',
       });
     }
 
     return res.status(500).json({
       ok: false,
       error: 'Kunne ikke opprette betaling',
-      detail: getPublicErrorDetail(e),
+      detail,
     });
   }
 });
@@ -905,6 +887,7 @@ router.post('/api/bookings/confirm', async (req, res) => {
       duffelPaymentAmount: draft.duffelPaymentAmount,
       totalAmount: draft.totalAmount,
       offerWasLive: draft.offerWasLive,
+      isNorwegianLike: isNorwegianLikeOffer(draft.offerSnapshot),
     });
 
     const order = await createDuffelOrder({
@@ -973,7 +956,6 @@ router.post('/api/bookings/confirm', async (req, res) => {
         to: String(contactPassenger.email || '').trim().toLowerCase(),
         locale: contactPassenger.locale || 'nb',
         givenName: contactPassenger.given_name,
-        familyName: contactPassenger.family_name,
         bnoBookingRef:
           confirmedBooking?.bno_booking_ref ||
           booking?.bno_booking_ref ||
@@ -998,7 +980,7 @@ router.post('/api/bookings/confirm', async (req, res) => {
         totalAmount: draft.totalAmount,
         currency: draft.offerCurrency,
         serviceFee: draft.serviceFee,
-      });
+      } as any);
     } catch (emailError: any) {
       console.error('[FLIGHT PAY] confirmation email failed', {
         message: emailError?.message || String(emailError),
@@ -1039,6 +1021,7 @@ router.post('/api/bookings/confirm', async (req, res) => {
 
     console.error('[FLIGHT PAY] confirm failed', {
       message,
+      publicDetail,
       duffel: duffelPayload,
       bookingId,
     });
@@ -1050,8 +1033,13 @@ router.post('/api/bookings/confirm', async (req, res) => {
 
       if (draft?.paymentIntentId) {
         const pi = await stripe.paymentIntents.retrieve(draft.paymentIntentId);
+
         if (pi.status === 'requires_capture') {
           await stripe.paymentIntents.cancel(pi.id);
+          console.log('[FLIGHT PAY] cancelled uncaptured payment intent after booking failure', {
+            paymentIntentId: pi.id,
+            bookingDraftId,
+          });
         }
       }
     } catch (cancelError: any) {
@@ -1060,15 +1048,16 @@ router.post('/api/bookings/confirm', async (req, res) => {
       });
     }
 
-    if (isDuffelOfferGoneMessage(message)) {
+    if (isDuffelOfferGoneMessage(message) || isDuffelOfferGoneMessage(publicDetail)) {
       return res.status(409).json({
         ok: false,
         error: 'offer_no_longer_available',
-        detail: publicDetail,
+        detail:
+          'Dette flytilbudet er ikke lenger tilgjengelig. Betalingen er ikke belastet. Søk på nytt for oppdaterte priser og billettyper.',
       });
     }
 
-    if (isDuffelInternalAirlineError(message)) {
+    if (isDuffelInternalAirlineError(message) || isDuffelInternalAirlineError(publicDetail)) {
       return res.status(502).json({
         ok: false,
         error:
