@@ -77,7 +77,7 @@ import flightsRouter from './routes/flights';
 import flightAirportsRouter from './routes/flightAirports';
 import flightCheckoutRouter from './routes/flightCheckout';
 import flightBookingsRouter from './routes/flightBookings';
-
+import travelHelperContentRouter from './routes/travelHelperContent';
 import { getImagesForResourceCategory } from './lib/imageMap';
 import { pickLocalizedText } from './lib/mewsLocalization';
 import { getSupabaseDescriptionForResourceCategory } from './lib/supabaseContent';
@@ -1376,6 +1376,7 @@ app.use('/api/flights', flightsRouter);
 app.use('/api/flights', flightAirportsRouter);
 app.use(flightCheckoutRouter);
 app.use(flightBookingsRouter);
+app.use('/api/travel-helper', travelHelperContentRouter);
 
 // =============================================================
 // ✅ APP-KOMPAT ROUTES
