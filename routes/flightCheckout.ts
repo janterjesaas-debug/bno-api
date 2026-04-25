@@ -140,6 +140,66 @@ function isDuffelInternalAirlineError(message: string): boolean {
   );
 }
 
+function normalizeCarrierText(value: any) {
+  return String(value || '').toLowerCase().trim();
+}
+
+function isNorwegianCarrierName(value: any) {
+  const text = normalizeCarrierText(value);
+
+  return (
+    text.includes('norwegian') ||
+    text.includes('norwegian air') ||
+    text.includes('norwegian air shuttle') ||
+    text.includes('norwegian air sweden') ||
+    text.includes('norwegian air norway') ||
+    text === 'dy' ||
+    text === 'd8' ||
+    text === 'di'
+  );
+}
+
+function getOfferCarrierNames(offer: any): string[] {
+  const names: string[] = [];
+
+  if (offer?.owner?.name) names.push(String(offer.owner.name));
+  if (offer?.owner?.iata_code) names.push(String(offer.owner.iata_code));
+
+  const slices = Array.isArray(offer?.slices) ? offer.slices : [];
+
+  for (const slice of slices) {
+    const segments = Array.isArray(slice?.segments) ? slice.segments : [];
+
+    for (const segment of segments) {
+      if (segment?.marketing_carrier?.name) {
+        names.push(String(segment.marketing_carrier.name));
+      }
+
+      if (segment?.marketing_carrier?.iata_code) {
+        names.push(String(segment.marketing_carrier.iata_code));
+      }
+
+      if (segment?.operating_carrier?.name) {
+        names.push(String(segment.operating_carrier.name));
+      }
+
+      if (segment?.operating_carrier?.iata_code) {
+        names.push(String(segment.operating_carrier.iata_code));
+      }
+    }
+  }
+
+  return Array.from(new Set(names.map((x) => x.trim()).filter(Boolean)));
+}
+
+function isNorwegianOffer(offer: any) {
+  return getOfferCarrierNames(offer).some(isNorwegianCarrierName);
+}
+
+function getNorwegianLiveOfferRequiredMessage() {
+  return 'Norwegian krever et helt ferskt og verifisert flytilbud før betaling. Søk på nytt og velg Norwegian-tilbudet igjen.';
+}
+
 function getServiceFee(amount: number, currency: string) {
   if (currency === 'EUR') {
     if (amount >= 400) return 25;
@@ -468,8 +528,11 @@ async function resolveLiveOfferForCheckout(input: {
   clientOfferSnapshot?: any;
   passengerCount: number;
 }) {
+  const clientSnapshotLooksNorwegian = isNorwegianOffer(input.clientOfferSnapshot);
+
   console.log('[FLIGHT PAY] fetching live offer for checkout', {
     offerId: input.offerId,
+    clientSnapshotLooksNorwegian,
   });
 
   try {
@@ -492,7 +555,15 @@ async function resolveLiveOfferForCheckout(input: {
       offerId: input.offerId,
       message,
       duffel: payload,
+      clientSnapshotLooksNorwegian,
     });
+
+    if (clientSnapshotLooksNorwegian) {
+      const err: any = new Error(getNorwegianLiveOfferRequiredMessage());
+      err.duffel = payload;
+      err.isNorwegianLiveOfferRequired = true;
+      throw err;
+    }
 
     const canUseClientSnapshot = isUsableClientOfferSnapshot({
       offerId: input.offerId,
@@ -700,6 +771,7 @@ router.post('/api/payments/create-intent', async (req, res) => {
       contactEmail: passengers[0]?.email || null,
       selectedServiceIds,
       hasClientOfferSnapshot: !!clientOfferSnapshot,
+      clientSnapshotLooksNorwegian: isNorwegianOffer(clientOfferSnapshot),
     });
 
     const resolvedOfferResult = await resolveLiveOfferForCheckout({
@@ -757,6 +829,7 @@ router.post('/api/payments/create-intent', async (req, res) => {
         totalAmount: String(totalAmount),
         offerWasLive: String(resolvedOfferResult.wasLive),
         usedClientSnapshot: String(resolvedOfferResult.usedClientSnapshot),
+        isNorwegian: String(isNorwegianOffer(resolvedOffer)),
       },
     });
 
@@ -799,6 +872,7 @@ router.post('/api/payments/create-intent', async (req, res) => {
       selectedServiceIds,
       offerWasLive: resolvedOfferResult.wasLive,
       usedClientSnapshot: resolvedOfferResult.usedClientSnapshot,
+      isNorwegian: isNorwegianOffer(resolvedOffer),
     });
 
     return res.json({
@@ -827,7 +901,16 @@ router.post('/api/payments/create-intent', async (req, res) => {
     console.error('[FLIGHT PAY] create-intent failed', {
       message,
       errors: getDuffelErrorPayload(e),
+      isNorwegianLiveOfferRequired: !!e?.isNorwegianLiveOfferRequired,
     });
+
+    if (e?.isNorwegianLiveOfferRequired) {
+      return res.status(409).json({
+        ok: false,
+        error: 'norwegian_offer_must_be_refreshed',
+        detail: getNorwegianLiveOfferRequiredMessage(),
+      });
+    }
 
     if (isDuffelOfferGoneMessage(message)) {
       return res.status(404).json({
@@ -895,6 +978,7 @@ router.post('/api/bookings/confirm', async (req, res) => {
       duffelPaymentAmount: draft.duffelPaymentAmount,
       totalAmount: draft.totalAmount,
       offerWasLive: draft.offerWasLive,
+      isNorwegian: isNorwegianOffer(draft.offerSnapshot),
     });
 
     const order = await createDuffelOrder({
@@ -950,16 +1034,19 @@ router.post('/api/bookings/confirm', async (req, res) => {
     });
 
     try {
-      const outboundFirst = getFirstSegment(order, 0) || getFirstSegment(draft.offerSnapshot, 0);
-      const outboundLast = getLastSegment(order, 0) || getLastSegment(draft.offerSnapshot, 0);
-      const returnFirst = getFirstSegment(order, 1) || getFirstSegment(draft.offerSnapshot, 1);
-      const returnLast = getLastSegment(order, 1) || getLastSegment(draft.offerSnapshot, 1);
+      const outboundFirst =
+        getFirstSegment(order, 0) || getFirstSegment(draft.offerSnapshot, 0);
+      const outboundLast =
+        getLastSegment(order, 0) || getLastSegment(draft.offerSnapshot, 0);
+      const returnFirst =
+        getFirstSegment(order, 1) || getFirstSegment(draft.offerSnapshot, 1);
+      const returnLast =
+        getLastSegment(order, 1) || getLastSegment(draft.offerSnapshot, 1);
 
       await sendFlightBookingConfirmationEmail({
         to: String(contactPassenger.email || '').trim().toLowerCase(),
         locale: contactPassenger.locale || 'nb',
         givenName: contactPassenger.given_name,
-        familyName: contactPassenger.family_name,
         bnoBookingRef:
           confirmedBooking?.bno_booking_ref ||
           booking?.bno_booking_ref ||
@@ -1058,8 +1145,11 @@ router.post('/api/bookings/confirm', async (req, res) => {
       return res.status(502).json({
         ok: false,
         error:
-          'Flyselskapet kunne ikke bekrefte bookingen akkurat nå. Betalingen er ikke belastet. Prøv igjen, eller velg en annen billettype.',
-        detail: publicDetail,
+          'Flyselskapet kunne ikke bekrefte bookingen akkurat nå. Betalingen er ikke belastet. Søk på nytt, eller velg en annen billettype.',
+        detail:
+          typeof publicDetail === 'string'
+            ? publicDetail
+            : 'Flyselskapet returnerte en midlertidig feil ved bekreftelse av bookingen.',
       });
     }
 
