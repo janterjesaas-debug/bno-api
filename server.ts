@@ -5479,7 +5479,13 @@ function buildDeterministicShoppingReply(
   );
 
   const concrete = ranked.filter((item) => !isGuideLikeContentItem(item));
-  const preferred = concrete.length > 0 ? concrete.slice(0, 6) : ranked.slice(0, 6);
+
+  const preferred =
+    groceryOnly
+      ? ranked.slice(0, 8)
+      : concrete.length > 0
+        ? concrete.slice(0, 6)
+        : ranked.slice(0, 6);
 
   if (preferred.length === 0) {
     return groceryOnly
@@ -5489,7 +5495,7 @@ function buildDeterministicShoppingReply(
 
   const lines: string[] = [
     groceryOnly
-      ? 'Her er dagligvareinformasjonen jeg finner for denne destinasjonen:'
+      ? 'Her er det jeg finner om dagligvarer for denne destinasjonen:'
       : 'Her er noen verifiserte shoppingforslag fra BNO Travel:',
     '',
   ];
@@ -5502,11 +5508,13 @@ function buildDeterministicShoppingReply(
     }
 
     if (groceryOnly && item?.body) {
-      lines.push(`- ${item.body}`);
+      lines.push('');
+      lines.push(String(item.body).trim());
     }
 
     const suffix = formatContentLinkSuffix(item);
     if (suffix) lines.push(`- ${suffix}`);
+
     lines.push('');
   });
 
@@ -6312,18 +6320,43 @@ app.post('/api/travel-helper', async (req, res) => {
             continue;
           }
 
-          const smartItems = await searchTravelHelperContent({
-            language: safeReplyLanguage === 'en' ? 'en' : 'nb',
-            destination: destinationSlug,
-            category,
-            query: destinationSlug,
-            limit: 12,
-          });
+          const smartQuery = [
+  currentMessageText,
+  inferredSmartDestination,
+  destinationSlug,
+  inferredSmartCategory,
+]
+  .filter(Boolean)
+  .join(' ');
 
-          if (smartItems.length > 0) {
-            contentItems.push(...smartItems);
-            continue;
-          }
+const smartItems = await searchTravelHelperContent({
+  language: safeReplyLanguage === 'en' ? 'en' : 'nb',
+  destination: destinationSlug,
+  category,
+  query: smartQuery,
+  limit: 20,
+});
+
+if (smartItems.length > 0) {
+  contentItems.push(...smartItems);
+}
+if (inferredSmartCategory === 'grocery') {
+  const broadGroceryItems = await searchTravelHelperContent({
+    language: safeReplyLanguage === 'en' ? 'en' : 'nb',
+    destination: destinationSlug,
+    category: null,
+    query: [
+      currentMessageText,
+      destinationSlug,
+      'dagligvarer matbutikk matbutikker supermarked grocery groceries rema kiwi coop extra spar joker meny bunnpris',
+    ]
+      .filter(Boolean)
+      .join(' '),
+    limit: 30,
+  });
+
+  contentItems.push(...broadGroceryItems);
+}
 
           const fallbackItems = await getTravelHelperContent({
             destinationSlug,
