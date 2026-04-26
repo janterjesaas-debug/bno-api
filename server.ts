@@ -3336,6 +3336,18 @@ function detectTravelHelperResponseMode(
     'cafe',
     'kafe',
     'mat',
+    'spise',
+'spiser',
+'spise ute',
+'hvor kan jeg spise',
+'sted å spise',
+'sted a spise',
+'matsted',
+'matsteder',
+'takeaway',
+'bar',
+'pub',
+'afterski',
   ];
 
   const activityWords = [
@@ -3374,6 +3386,23 @@ function detectTravelHelperResponseMode(
     'dagligvarer',
     'skiutstyr',
     'sportsutstyr',
+    'handle',
+'handling',
+'matbutikk',
+'matbutikker',
+'supermarked',
+'grocery',
+'groceries',
+'rema',
+'kiwi',
+'coop',
+'extra',
+'meny',
+'spar',
+'joker',
+'bunnpris',
+'nærbutikk',
+'naerbutikk',
   ];
 
   const packageHints = [
@@ -3611,48 +3640,73 @@ function extractTravelHelperPackageDestinations(
 ): TravelHelperPackageDestinations {
   const raw = String(messageRaw || '');
   const previous = getPreviousUserMessage(history);
-  const combined = `${previous}\n${raw}`;
 
-  const flightOriginText = extractBoundedPlace(raw, 'origin') || extractBoundedPlace(previous, 'origin');
+  // Siste melding først. Historikk kun fallback.
+  const currentOnly = raw;
+  const fallbackCombined = `${raw}\n${previous}`;
+
+  const flightOriginText =
+    extractBoundedPlace(raw, 'origin') ||
+    extractBoundedPlace(previous, 'origin');
+
   const flightDestinationText =
-    extractBoundedPlace(raw, 'destination') || extractBoundedPlace(previous, 'destination');
+    extractBoundedPlace(raw, 'destination') ||
+    extractBoundedPlace(previous, 'destination');
 
   const flightOriginArea = extractAreaFromPhrase(flightOriginText);
   const flightDestinationArea = extractAreaFromPhrase(flightDestinationText);
 
+  const accommodationTopics = [
+    'overnatting',
+    'opphold',
+    'hytte',
+    'hytter',
+    'leilighet',
+    'leiligheter',
+    'hotell',
+    'rom',
+    'bo',
+  ];
+
+  const contentTopics = [
+    'aktivitet',
+    'aktiviteter',
+    'restaurant',
+    'restauranter',
+    'restauranttips',
+    'spise',
+    'spisested',
+    'spisesteder',
+    'matsted',
+    'matsteder',
+    'middag',
+    'lunsj',
+    'takeaway',
+    'shopping',
+    'butikk',
+    'butikker',
+    'handle',
+    'dagligvarer',
+    'matbutikk',
+    'matbutikker',
+    'supermarked',
+    'tips',
+  ];
+
   const accommodationArea =
-    extractAreaAfterTopic(combined, [
-      'overnatting',
-      'opphold',
-      'hytte',
-      'hytter',
-      'leilighet',
-      'leiligheter',
-      'hotell',
-      'rom',
-      'bo',
-    ]) || null;
+    extractAreaAfterTopic(currentOnly, accommodationTopics) ||
+    extractAreaAfterTopic(fallbackCombined, accommodationTopics) ||
+    null;
 
   const contentArea =
-    extractAreaAfterTopic(combined, [
-      'aktivitet',
-      'aktiviteter',
-      'restaurant',
-      'restauranter',
-      'restauranttips',
-      'spise',
-      'shopping',
-      'butikk',
-      'butikker',
-      'dagligvarer',
-      'matbutikk',
-      'matbutikker',
-      'tips',
-    ]) ||
+    extractAreaAfterTopic(currentOnly, contentTopics) ||
+    extractAreaAfterTopic(fallbackCombined, contentTopics) ||
     accommodationArea ||
     null;
 
-  const fallbackArea = extractTripDestinationArea(raw, history);
+  const fallbackArea =
+    extractTripDestinationArea(raw, []) ||
+    extractTripDestinationArea(raw, history);
 
   return {
     flightOriginArea,
@@ -4161,6 +4215,23 @@ function detectTravelContentIntent(messageRaw: string): boolean {
     'vert',
     'formidling',
     'provisjon',
+    'spise',
+'spise ute',
+'spisested',
+'spisesteder',
+'matsted',
+'matsteder',
+'takeaway',
+'bar',
+'pub',
+'afterski',
+'matbutikk',
+'matbutikker',
+'supermarked',
+'grocery',
+'groceries',
+'destination',
+'destinasjon',
   ];
 
   return keywords.some((word) => message.includes(word));
@@ -4201,30 +4272,52 @@ function extractTravelContentCategory(
     return 'travel_terms';
   }
 
-  if (
-    message.includes('restaurant') ||
-    message.includes('restauranter') ||
-    message.includes('middag') ||
-    message.includes('lunsj') ||
-    message.includes('italiensk') ||
-    message.includes('pizza')
-  ) {
-    return 'restaurant';
-  }
+ if (
+  message.includes('restaurant') ||
+  message.includes('restauranter') ||
+  message.includes('middag') ||
+  message.includes('lunsj') ||
+  message.includes('frokost') ||
+  message.includes('spise') ||
+  message.includes('spisested') ||
+  message.includes('spisesteder') ||
+  message.includes('matsted') ||
+  message.includes('matsteder') ||
+  message.includes('takeaway') ||
+  message.includes('bar') ||
+  message.includes('pub') ||
+  message.includes('afterski') ||
+  message.includes('italiensk') ||
+  message.includes('pizza') ||
+  message.includes('thai') ||
+  message.includes('sushi')
+) {
+  return 'restaurant';
+}
 
   if (
-    message.includes('shopping') ||
-    message.includes('butikk') ||
-    message.includes('butikker') ||
-    message.includes('sportsklaer') ||
-    message.includes('sportsklær') ||
-    message.includes('klaer') ||
-    message.includes('klær') ||
-    message.includes('mote') ||
-    message.includes('souvenir')
-  ) {
-    return 'shopping';
-  }
+  message.includes('shopping') ||
+  message.includes('butikk') ||
+  message.includes('butikker') ||
+  message.includes('handle') ||
+  message.includes('handling') ||
+  message.includes('dagligvarer') ||
+  message.includes('dagligvarebutikk') ||
+  message.includes('dagligvarebutikker') ||
+  message.includes('matbutikk') ||
+  message.includes('matbutikker') ||
+  message.includes('supermarked') ||
+  message.includes('grocery') ||
+  message.includes('groceries') ||
+  message.includes('sportsklaer') ||
+  message.includes('sportsklær') ||
+  message.includes('klaer') ||
+  message.includes('klær') ||
+  message.includes('mote') ||
+  message.includes('souvenir')
+) {
+  return 'shopping';
+}
 
   if (
     message.includes('aktivitet') ||
@@ -7057,7 +7150,11 @@ if (responseMode === 'host_only' || contentCategory === 'travel_terms') {
   (
     responseMode === 'restaurant_only' ||
     responseMode === 'shopping_only' ||
-    responseMode === 'activity_only'
+    responseMode === 'activity_only' ||
+    inferredSmartCategory === 'restaurant' ||
+    inferredSmartCategory === 'shopping' ||
+    inferredSmartCategory === 'grocery' ||
+    inferredSmartCategory === 'activity'
   ) &&
   contentItemsForReply.length === 0;
 
