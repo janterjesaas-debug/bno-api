@@ -5799,14 +5799,116 @@ function buildTravelContentPrompt(rows: any[]): string {
     })
     .join('\n\n');
 }
+
+function normalizeSmartDestinationSlug(valueRaw: unknown): string | null {
+  const cleaned = String(valueRaw || '')
+    .trim()
+    .toLowerCase()
+    .replace(/[?!.:,;]/g, ' ')
+    .replace(/\b(norge|sverige|norway|sweden)\b/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+
+  if (!cleaned) return null;
+
+  const normalized = cleaned
+    .replace(/å/g, 'a')
+    .replace(/æ/g, 'ae')
+    .replace(/ø/g, 'o')
+    .replace(/ä/g, 'a')
+    .replace(/ö/g, 'o')
+    .replace(/ü/g, 'u')
+    .replace(/\s+/g, '-')
+    .replace(/[^a-z0-9-]/g, '')
+    .replace(/-+/g, '-')
+    .replace(/^-|-$/g, '');
+
+  return normalized || null;
+}
+
+function inferSmartTravelDestination(
+  messageRaw: string,
+  detectedDestinationRaw?: unknown,
+  historyRows: any[] = []
+): string | null {
+  const messageText = String(messageRaw || '');
+
+  // 1) Prioriter ALLTID siste melding.
+  // Dette hindrer at Sogndal, Trysil osv. henger igjen fra forrige spørsmål.
+  const currentPatterns = [
+    /\b(?:i|til|på|pa|for|fra)\s+([a-z0-9æøåÆØÅäöüÄÖÜéèáàóòíìñç\-\s]{3,60})\??$/i,
+    /\b(?:i|til|på|pa|for|fra)\s+([a-z0-9æøåÆØÅäöüÄÖÜéèáàóòíìñç\-]{3,40})\b/i,
+  ];
+
+  for (const pattern of currentPatterns) {
+    const match = messageText.match(pattern);
+
+    if (match?.[1]) {
+      const destination = normalizeSmartDestinationSlug(match[1]);
+
+      if (destination) {
+        return destination;
+      }
+    }
+  }
+
+  // 2) Typiske formuleringer uten tydelig preposisjon.
+  // Eksempel: "restauranttips Sogndal" / "dagligvarer Røros".
+  const fallbackMatch = messageText.match(
+    /\b(?:restauranttips|restauranter|restaurant|dagligvarer|matbutikk|matbutikker|shopping|aktiviteter|spise|handle)\s+(?:i|til|på|pa|for)?\s*([a-z0-9æøåÆØÅäöüÄÖÜéèáàóòíìñç\-\s]{3,60})\??$/i
+  );
+
+  if (fallbackMatch?.[1]) {
+    const destination = normalizeSmartDestinationSlug(fallbackMatch[1]);
+
+    if (destination) {
+      return destination;
+    }
+  }
+
+  // 3) Bruk detectedDestination fra appen bare hvis siste melding ikke ga destinasjon.
+  const fromClient = normalizeSmartDestinationSlug(detectedDestinationRaw);
+
+  if (fromClient) {
+    return fromClient;
+  }
+
+  // 4) Bruk historikk bare som siste fallback.
+  const searchBasis = buildTravelHelperSearchBasis(messageText, historyRows || []);
+  const historyMatch = searchBasis.match(
+    /\b(?:i|til|på|pa|for|fra)\s+([a-z0-9æøåÆØÅäöüÄÖÜéèáàóòíìñç\-]{3,40})\b/i
+  );
+
+  if (historyMatch?.[1]) {
+    return normalizeSmartDestinationSlug(historyMatch[1]);
+  }
+
+  return null;
+}
+
 function inferSmartTravelCategory(
   intentRaw: unknown,
   messageRaw: string,
-  responseModeRaw?: unknown
+  responseModeRaw?: unknown,
+  fallbackCategoryRaw?: unknown
 ): string | null {
   const intent = String(intentRaw || '').trim().toLowerCase();
   const responseMode = String(responseModeRaw || '').trim().toLowerCase();
+  const fallbackCategory = String(fallbackCategoryRaw || '').trim().toLowerCase();
   const text = normalizeTravelHelperText(messageRaw);
+
+  // Dagligvarer må komme før shopping, ellers blir "handle dagligvarer" tolket for bredt.
+  if (
+    /dagligvarer|matbutikk|matbutikker|supermarked|grocery|groceries|rema|kiwi|coop|meny|spar|joker|extra|bunnpris/.test(
+      text
+    )
+  ) {
+    return 'grocery';
+  }
+
+  if (fallbackCategory) {
+    return fallbackCategory;
+  }
 
   if (responseMode === 'restaurant_only') return 'restaurant';
   if (responseMode === 'activity_only') return 'activity';
@@ -5835,7 +5937,7 @@ function inferSmartTravelCategory(
   }
 
   if (
-    /shopping|butikk|butikker|shoppe|sportsklaer|sportsklær|klaer|klær|mote|design|gaver|souvenir|souvenirer|dagligvarer|skiutstyr|sportsutstyr/.test(
+    /shopping|butikk|butikker|shoppe|sportsklaer|sportsklær|klaer|klær|mote|design|gaver|souvenir|souvenirer|skiutstyr|sportsutstyr/.test(
       text
     )
   ) {
@@ -5853,114 +5955,44 @@ function inferSmartTravelCategory(
   return null;
 }
 
-function normalizeSmartDestinationSlug(valueRaw: unknown): string | null {
-  const value = normalizeTravelHelperText(String(valueRaw || '').trim())
-    .replace(/\s+/g, '-')
-    .replace(/[^a-z0-9-]/g, '')
-    .replace(/-+/g, '-')
-    .replace(/^-|-$/g, '');
-
-  if (!value) return null;
-
-  if (value === 'tromsø') return 'tromso';
-  if (value === 'gøteborg') return 'goteborg';
-  if (value === 'goteborg') return 'goteborg';
-  if (value === 'kobenhavn' || value === 'københavn') return 'copenhagen';
-  if (value === 'sälen') return 'salen';
-
-  return value;
-}
-
-function inferSmartTravelDestination(
-  messageRaw: string,
-  detectedDestinationRaw?: unknown,
-  history: any[] = []
-): string | null {
-  const fromClient = normalizeSmartDestinationSlug(detectedDestinationRaw);
-  if (fromClient) return fromClient;
-
-  const searchBasis = normalizeTravelHelperText(
-    buildTravelHelperSearchBasis(String(messageRaw || ''), history || [])
-  );
-
-  const knownDestinationMatch = searchBasis.match(
-    /\b(oslo|bergen|trondheim|tromso|tromsø|stavanger|sogndal|trysil|salen|sälen|stockholm|goteborg|gøteborg|malmo|malmö|copenhagen|kobenhavn|københavn|amsterdam|london|paris|rome|miami)\b/
-  );
-
-  if (knownDestinationMatch?.[1]) {
-    return normalizeSmartDestinationSlug(knownDestinationMatch[1]);
-  }
-
-  const prepositionMatch = searchBasis.match(
-    /\b(?:i|til|pa|på|fra|for)\s+([a-z0-9æøåÆØÅ-]{3,})\b/
-  );
-
-  if (!prepositionMatch?.[1]) return null;
-
-  return normalizeSmartDestinationSlug(prepositionMatch[1]);
-}
-
-function buildSmartTravelContentPrompt(rows: any[]): string {
+function buildSmartTravelContentContext(rows: any[]): string {
   if (!Array.isArray(rows) || rows.length === 0) {
     return '';
   }
 
-  return rows
-    .slice(0, 12)
-    .map((row, index) => {
+  return [
+    'BNO_CONTENT_CONTEXT',
+    'Verifisert BNO Travel-innhold relevant for brukerens spørsmål:',
+    '',
+    ...rows.slice(0, 12).map((row, index) => {
       return [
-        `${index + 1}. ${row.title}`,
-        row.destination_slug ? `Destinasjon: ${row.destination_slug}` : '',
-        row.category ? `Kategori: ${row.category}` : '',
-        row.summary ? `Kort: ${row.summary}` : '',
-        row.body ? `Detaljer: ${row.body}` : '',
-        Array.isArray(row.tags) && row.tags.length
+        `${index + 1}. ${row?.title || '-'}`,
+        row?.destination_slug ? `Destinasjon: ${row.destination_slug}` : '',
+        row?.category ? `Kategori: ${row.category}` : '',
+        row?.summary ? `Kort: ${row.summary}` : '',
+        row?.body ? `Detaljer: ${row.body}` : '',
+        Array.isArray(row?.tags) && row.tags.length
           ? `Tags: ${row.tags.join(', ')}`
           : '',
       ]
         .filter(Boolean)
         .join('\n');
-    })
-    .join('\n\n');
+    }),
+    '',
+    'BRUK AV BNO_CONTENT_CONTEXT:',
+    '- Bruk innholdet som verifisert kunnskap.',
+    '- Hvis det finnes konkrete steder i konteksten, anbefal dem direkte.',
+    '- Ikke skriv "nevnt i materialet", "kildematerialet", "BNO Travel sitt innhold" eller lignende til brukeren.',
+    '- Svar som en varm, konkret og hjelpsom reiserådgiver.',
+    '- Grupper gjerne svaret etter behov, for eksempel middag, takeaway, bar, aktiviteter eller shopping.',
+    '- Bruk gjerne én emoji når det passer.',
+    '- Ikke dikt opp anmeldelser, popularitet, åpningstider eller gjestetilfredshet hvis det ikke står i innholdet.',
+    '- Hvis brukeren spør om restaurant, ikke bytt tema til overnatting eller fly.',
+    '- Hvis brukeren spør om aktiviteter, ikke bytt tema til overnatting eller fly.',
+    '- Hvis brukeren spør om shopping eller dagligvarer, ikke bytt tema til overnatting eller fly.',
+  ].join('\n');
 }
 
-function buildSmartTravelContentSystemBlock(opts: {
-  contentContext: string;
-  rowCount: number;
-  inferredDestination: string | null;
-  inferredCategory: string | null;
-}): string {
-  if (!opts.contentContext) {
-    return `
-BNO_CONTENT_CONTEXT:
-Ingen relevante BNO Travel-rader ble funnet for dette spørsmålet.
-
-Hvis du svarer generelt, vær tydelig på at du ikke har konkrete kuraterte BNO-forslag for akkurat dette.
-`;
-  }
-
-  return `
-BNO_CONTENT_CONTEXT:
-${opts.contentContext}
-
-BRUK AV BNO_CONTENT_CONTEXT:
-- Bruk dette som verifisert BNO Travel-innhold.
-- Hvis det finnes konkrete steder i BNO_CONTENT_CONTEXT, anbefal dem direkte.
-- Ikke skriv "nevnt i materialet", "kildematerialet", "BNO Travel sitt innhold" eller lignende til brukeren.
-- Svar som en varm, konkret og hjelpsom reiserådgiver.
-- Grupper gjerne svaret etter behov, for eksempel middag, takeaway, bar, aktiviteter eller shopping.
-- Bruk gjerne én emoji når det passer.
-- Ikke dikt opp anmeldelser, popularitet, åpningstider eller gjestetilfredshet hvis det ikke står i innholdet.
-- Hvis brukeren spør om restaurant, ikke bytt tema til overnatting eller fly.
-- Hvis brukeren spør om aktiviteter, ikke bytt tema til overnatting eller fly.
-- Hvis brukeren spør om shopping, ikke bytt tema til overnatting eller fly.
-
-Søkeinfo:
-- destination=${opts.inferredDestination || 'ukjent'}
-- category=${opts.inferredCategory || 'ukjent'}
-- rows=${opts.rowCount}
-`;
-}
 app.post('/api/travel-helper', async (req, res) => {
   try {
     const {
@@ -6000,149 +6032,6 @@ app.post('/api/travel-helper', async (req, res) => {
     const openAiKey = String(process.env.OPENAI_API_KEY || '').trim();
     if (!openAiKey) {
       return res.status(500).json({ ok: false, error: 'OPENAI_API_KEY_mangler' });
-    }
-
-    function normalizeSmartDestinationSlug(valueRaw: unknown): string | null {
-      const normalized = normalizeTravelHelperText(String(valueRaw || '').trim())
-        .replace(/\s+/g, '-')
-        .replace(/[^a-z0-9-]/g, '')
-        .replace(/-+/g, '-')
-        .replace(/^-|-$/g, '');
-
-      if (!normalized) return null;
-
-      if (normalized === 'tromsø') return 'tromso';
-      if (normalized === 'gøteborg') return 'goteborg';
-      if (normalized === 'goteborg') return 'goteborg';
-      if (normalized === 'københavn' || normalized === 'kobenhavn') return 'copenhagen';
-      if (normalized === 'sälen') return 'salen';
-
-      return normalized;
-    }
-
-    function inferSmartTravelDestination(
-      messageRaw: string,
-      detectedDestinationRaw?: unknown,
-      historyRows: any[] = []
-    ): string | null {
-      const fromClient = normalizeSmartDestinationSlug(detectedDestinationRaw);
-      if (fromClient) return fromClient;
-
-      const searchBasis = normalizeTravelHelperText(
-        buildTravelHelperSearchBasis(String(messageRaw || ''), historyRows || [])
-      );
-
-      const knownDestinationMatch = searchBasis.match(
-        /\b(oslo|bergen|trondheim|tromso|tromsø|stavanger|sogndal|trysil|salen|sälen|stockholm|goteborg|gøteborg|malmo|malmö|copenhagen|kobenhavn|københavn|amsterdam|london|paris|rome|miami)\b/
-      );
-
-      if (knownDestinationMatch?.[1]) {
-        return normalizeSmartDestinationSlug(knownDestinationMatch[1]);
-      }
-
-      const prepositionMatch = searchBasis.match(
-        /\b(?:i|til|pa|på|fra|for)\s+([a-z0-9æøåÆØÅ-]{3,})\b/
-      );
-
-      if (!prepositionMatch?.[1]) return null;
-
-      return normalizeSmartDestinationSlug(prepositionMatch[1]);
-    }
-
-    function inferSmartTravelCategory(
-      intentRaw: unknown,
-      messageRaw: string,
-      responseModeRaw?: unknown,
-      fallbackCategoryRaw?: unknown
-    ): string | null {
-      const intent = String(intentRaw || '').trim().toLowerCase();
-      const responseMode = String(responseModeRaw || '').trim().toLowerCase();
-      const fallbackCategory = String(fallbackCategoryRaw || '').trim().toLowerCase();
-      const text = normalizeTravelHelperText(messageRaw);
-
-      if (fallbackCategory) return fallbackCategory;
-
-      if (responseMode === 'restaurant_only') return 'restaurant';
-      if (responseMode === 'activity_only') return 'activity';
-      if (responseMode === 'shopping_only') return 'shopping';
-
-      if (intent === 'restaurants' || intent === 'restaurant') return 'restaurant';
-      if (intent === 'activities' || intent === 'activity') return 'activity';
-      if (intent === 'shopping') return 'shopping';
-      if (intent === 'spa_wellness' || intent === 'spa') return 'spa';
-      if (intent === 'gyms' || intent === 'fitness') return 'fitness';
-
-      if (
-        /restaurant|restauranter|spise|middag|lunsj|frokost|spisested|spisesteder|mat|kafe|cafe|takeaway|pizza|burger|thai|italiensk|sushi|bar|pub|afterski/.test(
-          text
-        )
-      ) {
-        return 'restaurant';
-      }
-
-      if (
-        /aktivitet|aktiviteter|opplevelse|opplevelser|ting a gjore|ting å gjøre|tur|vandring|ski|alpint|langrenn|sykkel|kajakk|museum|severdigheter|guide/.test(
-          text
-        )
-      ) {
-        return 'activity';
-      }
-
-      if (
-        /shopping|butikk|butikker|shoppe|sportsklaer|sportsklær|klaer|klær|mote|design|gaver|souvenir|souvenirer|dagligvarer|skiutstyr|sportsutstyr/.test(
-          text
-        )
-      ) {
-        return 'shopping';
-      }
-
-      if (/spa|bad|velvaere|velvære|massage|massasje|sauna|badstue/.test(text)) {
-        return 'spa';
-      }
-
-      if (/trening|gym|fitness|yoga|pilates|styrketrening/.test(text)) {
-        return 'fitness';
-      }
-
-      return null;
-    }
-
-    function buildSmartTravelContentContext(rows: any[]): string {
-      if (!Array.isArray(rows) || rows.length === 0) {
-        return '';
-      }
-
-      return [
-        'BNO_CONTENT_CONTEXT',
-        'Verifisert BNO Travel-innhold relevant for brukerens spørsmål:',
-        '',
-        ...rows.slice(0, 12).map((row, index) => {
-          return [
-            `${index + 1}. ${row?.title || '-'}`,
-            row?.destination_slug ? `Destinasjon: ${row.destination_slug}` : '',
-            row?.category ? `Kategori: ${row.category}` : '',
-            row?.summary ? `Kort: ${row.summary}` : '',
-            row?.body ? `Detaljer: ${row.body}` : '',
-            Array.isArray(row?.tags) && row.tags.length
-              ? `Tags: ${row.tags.join(', ')}`
-              : '',
-          ]
-            .filter(Boolean)
-            .join('\n');
-        }),
-        '',
-        'BRUK AV BNO_CONTENT_CONTEXT:',
-        '- Bruk innholdet som verifisert kunnskap.',
-        '- Hvis det finnes konkrete steder i konteksten, anbefal dem direkte.',
-        '- Ikke skriv "nevnt i materialet", "kildematerialet", "BNO Travel sitt innhold" eller lignende til brukeren.',
-        '- Svar som en varm, konkret og hjelpsom reiserådgiver.',
-        '- Grupper gjerne svaret etter behov, for eksempel middag, takeaway, bar, aktiviteter eller shopping.',
-        '- Bruk gjerne én emoji når det passer.',
-        '- Ikke dikt opp anmeldelser, popularitet, åpningstider eller gjestetilfredshet hvis det ikke står i innholdet.',
-        '- Hvis brukeren spør om restaurant, ikke bytt tema til overnatting eller fly.',
-        '- Hvis brukeren spør om aktiviteter, ikke bytt tema til overnatting eller fly.',
-        '- Hvis brukeren spør om shopping, ikke bytt tema til overnatting eller fly.',
-      ].join('\n');
     }
 
     const safeHistory = Array.isArray(history) ? history.slice(-14) : [];
@@ -6453,7 +6342,10 @@ app.post('/api/travel-helper', async (req, res) => {
         } else if (responseMode === 'restaurant_only') {
           categoriesToFetch = ['restaurant'];
         } else if (responseMode === 'shopping_only') {
-          categoriesToFetch = ['shopping'];
+  categoriesToFetch =
+    inferredSmartCategory === 'grocery'
+      ? ['grocery', 'shopping']
+      : ['shopping', 'grocery'];
         } else if (responseMode === 'activity_only') {
           categoriesToFetch = ['activity'];
         } else if (responseMode === 'trip_package') {
