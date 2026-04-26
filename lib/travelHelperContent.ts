@@ -15,6 +15,7 @@ export type TravelHelperContentItem = {
   is_featured: boolean;
   is_active: boolean;
   sort_order: number;
+  rank_score?: number | null;
   created_at?: string | null;
   updated_at?: string | null;
 };
@@ -27,6 +28,14 @@ export type ListTravelHelperContentOptions = {
   featuredOnly?: boolean;
   activeOnly?: boolean;
   search?: string;
+  limit?: number;
+};
+
+export type SearchTravelHelperContentOptions = {
+  language?: string;
+  destination?: string | null;
+  category?: string | null;
+  query?: string | null;
   limit?: number;
 };
 
@@ -93,7 +102,7 @@ function clampLimit(value: unknown, fallback = 200, max = 1000): number {
 
 function sanitizeSearch(value: unknown): string {
   return normalizeText(value)
-    .replace(/[%(),]/g, ' ')
+    .replace(/[%(),*'"`]/g, ' ')
     .replace(/\s+/g, ' ')
     .trim();
 }
@@ -116,6 +125,10 @@ function mapRow(row: any): TravelHelperContentItem {
     is_featured: Boolean(row?.is_featured),
     is_active: Boolean(row?.is_active),
     sort_order: Number(row?.sort_order || 0),
+    rank_score:
+      row?.rank_score == null || !Number.isFinite(Number(row.rank_score))
+        ? null
+        : Number(row.rank_score),
     created_at: row?.created_at == null ? null : String(row.created_at),
     updated_at: row?.updated_at == null ? null : String(row.updated_at),
   };
@@ -161,7 +174,7 @@ export async function listTravelHelperContent(
 
   if (search) {
     query = query.or(
-      `title.ilike.%${search}%,summary.ilike.%${search}%,body.ilike.%${search}%`
+      `title.ilike.%${search}%,summary.ilike.%${search}%,body.ilike.%${search}%,slug.ilike.%${search}%`
     );
   }
 
@@ -174,6 +187,35 @@ export async function listTravelHelperContent(
     });
 
     throw new Error(error.message || 'Kunne ikke hente Travel Helper-innhold');
+  }
+
+  return Array.isArray(data) ? data.map(mapRow) : [];
+}
+
+export async function searchTravelHelperContent(
+  opts: SearchTravelHelperContentOptions = {}
+): Promise<TravelHelperContentItem[]> {
+  const language = normalizeLanguage(opts.language || 'nb');
+  const destination = normalizeKey(opts.destination);
+  const category = normalizeKey(opts.category);
+  const query = sanitizeSearch(opts.query || destination);
+  const limit = clampLimit(opts.limit, 12, 50);
+
+  const { data, error } = await supabase.rpc('search_travel_helper_content', {
+    p_language: language,
+    p_destination: destination || null,
+    p_category: category || null,
+    p_query: query || null,
+    p_limit: limit,
+  });
+
+  if (error) {
+    console.error('[TRAVEL HELPER CONTENT] smart search failed', {
+      error,
+      opts,
+    });
+
+    throw new Error(error.message || 'Kunne ikke søke i Travel Helper-innhold');
   }
 
   return Array.isArray(data) ? data.map(mapRow) : [];
