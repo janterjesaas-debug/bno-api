@@ -5677,128 +5677,6 @@ function messageLooksLikeFlightSelection(messageRaw: string): boolean {
     message.includes('book flyet')
   );
 }
-function normalizeTravelLookupText(value: unknown): string {
-  return String(value || '')
-    .toLowerCase()
-    .normalize('NFD')
-    .replace(/[\u0300-\u036f]/g, '')
-    .replace(/å/g, 'a')
-    .replace(/æ/g, 'ae')
-    .replace(/ø/g, 'o')
-    .replace(/\s+/g, ' ')
-    .trim();
-}
-
-function inferTravelCategory(intentRaw: unknown, messageRaw: string): string | null {
-  const intent = String(intentRaw || '').trim().toLowerCase();
-  const text = normalizeTravelLookupText(messageRaw);
-
-  if (intent === 'restaurants' || intent === 'restaurant') return 'restaurant';
-  if (intent === 'activities' || intent === 'activity') return 'activity';
-  if (intent === 'shopping') return 'shopping';
-  if (intent === 'spa_wellness' || intent === 'spa') return 'spa';
-  if (intent === 'gyms' || intent === 'fitness') return 'fitness';
-
-  if (
-    /restaurant|spise|middag|lunsj|frokost|mat|kafe|cafe|takeaway|pizza|burger|thai|italiensk|sushi|bar|pub|afterski/.test(
-      text
-    )
-  ) {
-    return 'restaurant';
-  }
-
-  if (
-    /aktivitet|aktiviteter|opplevelse|opplevelser|tur|vandring|ski|alpint|langrenn|sykkel|kajakk|museum|severdigheter/.test(
-      text
-    )
-  ) {
-    return 'activity';
-  }
-
-  if (/shopping|butikk|butikker|kjopesenter|kjøpesenter/.test(text)) {
-    return 'shopping';
-  }
-
-  if (/spa|bad|velvaere|velvære|massage|massasje|sauna|badstue/.test(text)) {
-    return 'spa';
-  }
-
-  if (/trening|gym|fitness|yoga|pilates|styrketrening/.test(text)) {
-    return 'fitness';
-  }
-
-  return null;
-}
-
-function inferTravelDestination(
-  messageRaw: string,
-  detectedDestinationRaw?: unknown
-): string | null {
-  const fromClient = normalizeTravelLookupText(detectedDestinationRaw);
-
-  if (fromClient) {
-    if (fromClient === 'tromsø') return 'tromso';
-    if (fromClient === 'gøteborg') return 'goteborg';
-    if (fromClient === 'københavn' || fromClient === 'kobenhavn') return 'copenhagen';
-    return fromClient;
-  }
-
-  const text = normalizeTravelLookupText(messageRaw);
-
-  const knownDestinationMatch = text.match(
-    /\b(oslo|bergen|trondheim|tromso|tromsø|stavanger|sogndal|trysil|salen|sälen|stockholm|goteborg|gøteborg|malmo|malmö|copenhagen|kobenhavn|københavn|amsterdam|london|paris|rome|miami)\b/
-  );
-
-  if (knownDestinationMatch?.[1]) {
-    const value = normalizeTravelLookupText(knownDestinationMatch[1]);
-
-    if (value === 'tromsø') return 'tromso';
-    if (value === 'gøteborg') return 'goteborg';
-    if (value === 'københavn' || value === 'kobenhavn') return 'copenhagen';
-    if (value === 'sälen') return 'salen';
-
-    return value;
-  }
-
-  const prepositionMatch = text.match(
-    /\b(?:i|til|pa|på|fra|for)\s+([a-z0-9-]{3,})\b/
-  );
-
-  if (!prepositionMatch?.[1]) {
-    return null;
-  }
-
-  const value = normalizeTravelLookupText(prepositionMatch[1]);
-
-  if (value === 'tromsø') return 'tromso';
-  if (value === 'gøteborg') return 'goteborg';
-  if (value === 'københavn' || value === 'kobenhavn') return 'copenhagen';
-  if (value === 'sälen') return 'salen';
-
-  return value;
-}
-
-function buildTravelContentPrompt(rows: any[]): string {
-  if (!Array.isArray(rows) || rows.length === 0) {
-    return '';
-  }
-
-  return rows
-    .slice(0, 12)
-    .map((row, index) => {
-      const parts = [
-        `${index + 1}. ${row.title}`,
-        row.summary ? `Kort: ${row.summary}` : '',
-        row.body ? `Detaljer: ${row.body}` : '',
-        Array.isArray(row.tags) && row.tags.length
-          ? `Tags: ${row.tags.join(', ')}`
-          : '',
-      ];
-
-      return parts.filter(Boolean).join('\n');
-    })
-    .join('\n\n');
-}
 
 function normalizeSmartDestinationSlug(valueRaw: unknown): string | null {
   const cleaned = String(valueRaw || '')
@@ -5992,7 +5870,41 @@ function buildSmartTravelContentContext(rows: any[]): string {
     '- Hvis brukeren spør om shopping eller dagligvarer, ikke bytt tema til overnatting eller fly.',
   ].join('\n');
 }
+function isGroceryQuestion(messageRaw: string, categoryRaw?: string | null): boolean {
+  const text = normalizeTravelHelperText(messageRaw);
+  const category = String(categoryRaw || '').trim().toLowerCase();
 
+  return (
+    category === 'grocery' ||
+    /dagligvarer|dagligvarebutikk|dagligvarebutikker|matbutikk|matbutikker|supermarked|grocery|groceries|rema|kiwi|coop|meny|spar|joker|extra|bunnpris|naerbutikk|nærbutikk/.test(
+      text
+    )
+  );
+}
+
+function travelContentItemLooksLikeGrocery(item: any): boolean {
+  const category = String(item?.category || '').trim().toLowerCase();
+
+  if (category === 'grocery') {
+    return true;
+  }
+
+  const text = normalizeTravelHelperText(
+    [
+      item?.slug,
+      item?.title,
+      item?.summary,
+      item?.body,
+      Array.isArray(item?.tags) ? item.tags.join(' ') : '',
+    ]
+      .filter(Boolean)
+      .join(' ')
+  );
+
+  return /dagligvarer|dagligvarebutikk|dagligvarebutikker|matbutikk|matbutikker|supermarked|grocery|groceries|rema|kiwi|coop|meny|spar|joker|extra|bunnpris|naerbutikk|nærbutikk/.test(
+    text
+  );
+}
 app.post('/api/travel-helper', async (req, res) => {
   try {
     const {
@@ -6407,21 +6319,27 @@ app.post('/api/travel-helper', async (req, res) => {
         }
 
         const deduped = contentItems.filter(
-          (item, index, arr) => arr.findIndex((x) => x?.slug === item?.slug) === index
-        );
+  (item, index, arr) => arr.findIndex((x) => x?.slug === item?.slug) === index
+);
 
-        let prioritizedItems: any[] = [];
+const groceryOnly = isGroceryQuestion(currentMessageText, inferredSmartCategory);
 
-        if (responseMode === 'host_only' || contentCategory === 'travel_terms') {
-          prioritizedItems = prioritizeTravelTermItems(deduped, currentMessageText);
-        } else {
-          prioritizedItems = filterAndRankTravelContentForSeason(
-            deduped,
-            season,
-            currentMessageText,
-            safeHistory
-          );
-        }
+const categoryFilteredItems = groceryOnly
+  ? deduped.filter((item) => travelContentItemLooksLikeGrocery(item))
+  : deduped;
+
+let prioritizedItems: any[] = [];
+
+if (responseMode === 'host_only' || contentCategory === 'travel_terms') {
+  prioritizedItems = prioritizeTravelTermItems(categoryFilteredItems, currentMessageText);
+} else {
+  prioritizedItems = filterAndRankTravelContentForSeason(
+    categoryFilteredItems,
+    season,
+    currentMessageText,
+    safeHistory
+  );
+}
 
         contentItemsForReply = prioritizedItems;
         contentItemsCount = prioritizedItems.length;
