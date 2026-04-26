@@ -3562,7 +3562,110 @@ function extractTripDestinationArea(
 
   return null;
 }
+type TravelHelperPackageDestinations = {
+  flightOriginArea: string | null;
+  flightDestinationArea: string | null;
+  accommodationArea: string | null;
+  contentArea: string | null;
+  primaryStayArea: string | null;
+};
 
+function extractAreaFromPhrase(valueRaw: string | null | undefined): string | null {
+  const raw = String(valueRaw || '').trim();
+  if (!raw) return null;
+
+  const direct = extractTravelHelperArea(raw);
+  if (direct) return direct;
+
+  const cleaned = raw
+    .replace(/[?!.:,;]/g, ' ')
+    .replace(/\b(samme|samme datoer|datoer|fra|til|for|personer|voksne|videre|og)\b.*$/i, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+
+  return extractTravelHelperArea(cleaned);
+}
+
+function extractAreaAfterTopic(messageRaw: string, topics: string[]): string | null {
+  const raw = String(messageRaw || '');
+
+  for (const topic of topics) {
+    const pattern = new RegExp(
+      `\\b${topic}\\b[^.?!,;\\n]*?\\b(?:i|på|pa|til)\\s+([a-zA-ZæøåÆØÅäöüÄÖÜéèáàóòíìñç\\-\\s]{3,60})`,
+      'i'
+    );
+
+    const match = raw.match(pattern);
+    if (match?.[1]) {
+      const area = extractAreaFromPhrase(match[1]);
+      if (area) return area;
+    }
+  }
+
+  return null;
+}
+
+function extractTravelHelperPackageDestinations(
+  messageRaw: string,
+  history: any[] = []
+): TravelHelperPackageDestinations {
+  const raw = String(messageRaw || '');
+  const previous = getPreviousUserMessage(history);
+  const combined = `${previous}\n${raw}`;
+
+  const flightOriginText = extractBoundedPlace(raw, 'origin') || extractBoundedPlace(previous, 'origin');
+  const flightDestinationText =
+    extractBoundedPlace(raw, 'destination') || extractBoundedPlace(previous, 'destination');
+
+  const flightOriginArea = extractAreaFromPhrase(flightOriginText);
+  const flightDestinationArea = extractAreaFromPhrase(flightDestinationText);
+
+  const accommodationArea =
+    extractAreaAfterTopic(combined, [
+      'overnatting',
+      'opphold',
+      'hytte',
+      'hytter',
+      'leilighet',
+      'leiligheter',
+      'hotell',
+      'rom',
+      'bo',
+    ]) || null;
+
+  const contentArea =
+    extractAreaAfterTopic(combined, [
+      'aktivitet',
+      'aktiviteter',
+      'restaurant',
+      'restauranter',
+      'restauranttips',
+      'spise',
+      'shopping',
+      'butikk',
+      'butikker',
+      'dagligvarer',
+      'matbutikk',
+      'matbutikker',
+      'tips',
+    ]) ||
+    accommodationArea ||
+    null;
+
+  const fallbackArea = extractTripDestinationArea(raw, history);
+
+  return {
+    flightOriginArea,
+    flightDestinationArea,
+    accommodationArea,
+    contentArea,
+    primaryStayArea:
+      accommodationArea ||
+      contentArea ||
+      fallbackArea ||
+      null,
+  };
+}
 function mapTravelHelperAreaToContentDestinationSlug(area: string | null): string {
   const normalized = String(area || '').trim().toLowerCase();
 
@@ -5260,9 +5363,20 @@ async function buildTripProposal(opts: {
   flightOffers: any[];
   flightSearch: any | null;
 }): Promise<TripProposal | null> {
-  const message = String(opts.message || '');
-  const destinationArea = extractTripDestinationArea(message, opts.history);
-  const destinationSlug = mapTravelHelperAreaToContentDestinationSlug(destinationArea);
+ const message = String(opts.message || '');
+
+const packageDestinations = extractTravelHelperPackageDestinations(
+  message,
+  opts.history
+);
+
+const destinationArea =
+  packageDestinations.contentArea ||
+  packageDestinations.accommodationArea ||
+  packageDestinations.primaryStayArea ||
+  extractTripDestinationArea(message, opts.history);
+
+const destinationSlug = mapTravelHelperAreaToContentDestinationSlug(destinationArea);
   const destinationLabel = inferDestinationLabel(destinationSlug);
   const season = detectTravelSeason(message, extractTravelHelperDates(message));
 
@@ -5458,7 +5572,7 @@ function getFriendlyDestinationLabelFromItems(items: any[], fallback?: string | 
 }
 
 function getFriendlyTravelIntro(topic: string, destinationLabel: string): string {
-  return `Hei! 😊\nKlart det – her er noen gode ${topic} i ${destinationLabel}:`;
+  return `Her er noen gode ${topic} i ${destinationLabel}:`;
 }
 
 function cleanTravelSummary(textRaw: unknown): string {
@@ -5473,6 +5587,36 @@ function cleanTravelSummary(textRaw: unknown): string {
     .replace(/\bverifiserte\b/gi, '')
     .replace(/\s+/g, ' ')
     .trim();
+}
+function buildMissingSpecificContentReply(
+  responseMode: TravelHelperResponseMode,
+  destinationRaw: string | null
+): string {
+  const destinationLabel = destinationRaw
+    ? inferDestinationLabel(mapTravelHelperAreaToContentDestinationSlug(destinationRaw))
+    : 'denne destinasjonen';
+
+  if (responseMode === 'restaurant_only') {
+    return (
+      `Jeg finner dessverre ikke konkrete restaurantforslag for ${destinationLabel} akkurat nå.\n\n` +
+      `Prøv gjerne å spørre om en annen destinasjon, eller legg inn restaurantene i Travel Helper-innholdet først.`
+    );
+  }
+
+  if (responseMode === 'activity_only') {
+    return (
+      `Jeg finner dessverre ikke konkrete aktivitetstips for ${destinationLabel} akkurat nå.\n\n` +
+      `Prøv gjerne å spørre om en annen destinasjon, eller legg inn aktivitetene i Travel Helper-innholdet først.`
+    );
+  }
+
+  if (responseMode === 'shopping_only') {
+    return (
+      `Jeg finner dessverre ikke konkrete butikk- eller dagligvaretips for ${destinationLabel} akkurat nå.`
+    );
+  }
+
+  return `Jeg finner dessverre ikke konkrete tips for ${destinationLabel} akkurat nå.`;
 }
 function buildDeterministicRestaurantReply(
   items: any[],
@@ -5581,7 +5725,7 @@ function buildDeterministicShoppingReply(
 
   const lines: string[] = [
     groceryOnly
-      ? `Hei! 😊\nKlart det – her er dagligvarebutikkene jeg finner for ${destinationLabel}:`
+      ? `Her er dagligvarebutikkene jeg finner i ${destinationLabel}:`
       : getFriendlyTravelIntro('shoppingtips', destinationLabel),
     '',
   ];
@@ -6196,13 +6340,17 @@ app.post('/api/travel-helper', async (req, res) => {
       safeHistory
     );
 
-    const inferredSmartCategory = inferSmartTravelCategory(
-      safeDetectedIntent,
-      currentMessageText,
-      responseMode,
-      contentCategory
-    );
+   const inferredSmartCategory = inferSmartTravelCategory(
+  safeDetectedIntent,
+  currentMessageText,
+  responseMode,
+  contentCategory
+);
 
+const packageDestinations = extractTravelHelperPackageDestinations(
+  currentMessageText,
+  safeHistory
+);
     let dynamicContext = '';
     let contentContext = '';
     let flightContext = '';
@@ -6287,9 +6435,10 @@ app.post('/api/travel-helper', async (req, res) => {
 
     if (shouldRunAvailabilitySearch) {
       const destinationArea =
-        extractTripDestinationArea(currentMessageText, safeHistory) ||
-        latestSearchParams?.area ||
-        null;
+  packageDestinations.accommodationArea ||
+  packageDestinations.primaryStayArea ||
+  latestSearchParams?.area ||
+  null;
 
       const adults =
         extractTravelHelperAdults(currentMessageText) ||
@@ -6364,14 +6513,17 @@ app.post('/api/travel-helper', async (req, res) => {
     if (contentIntent || tripPlanningIntent || hostRentalIntent) {
       try {
         const destinationArea =
-          extractTripDestinationArea(currentMessageText, safeHistory) ||
-          latestSearchParams?.area ||
-          inferredSmartDestination ||
-          'trysil';
+  packageDestinations.contentArea ||
+  packageDestinations.accommodationArea ||
+  packageDestinations.primaryStayArea ||
+  inferredSmartDestination ||
+  latestSearchParams?.area ||
+  'trysil';
 
-        const destinationSlug =
-          inferredSmartDestination ||
-          mapTravelHelperAreaToContentDestinationSlug(destinationArea);
+const destinationSlug =
+  destinationArea
+    ? mapTravelHelperAreaToContentDestinationSlug(destinationArea)
+    : inferredSmartDestination || 'trysil';
 
         const season = detectTravelSeason(
           currentMessageText,
@@ -6822,21 +6974,31 @@ if (responseMode === 'host_only' || contentCategory === 'travel_terms') {
       responseMode === 'trip_package' &&
       !!tripProposal;
 
+      const shouldForceMissingSpecificContentReply =
+  (
+    responseMode === 'restaurant_only' ||
+    responseMode === 'shopping_only' ||
+    responseMode === 'activity_only'
+  ) &&
+  contentItemsForReply.length === 0;
+
     const safeReply =
-      shouldForceDeterministicAccommodationReply
-        ? buildDeterministicAccommodationReply(latestSearchRows, latestSearchParams)
-        : shouldForceDeterministicRestaurantReply
-          ? buildDeterministicRestaurantReply(contentItemsForReply, currentMessageText, safeHistory)
-          : shouldForceDeterministicShoppingReply
-            ? buildDeterministicShoppingReply(contentItemsForReply, currentMessageText, safeHistory)
-            : shouldForceDeterministicActivityReply
-              ? buildDeterministicActivityReply(contentItemsForReply, currentMessageText, safeHistory)
-              : shouldForceDeterministicTripReply
-                ? buildDeterministicTripPackageReply({
-                    tripProposal,
-                    includeAccommodation: includeAccommodationInTrip,
-                  })
-                : (reply || 'Beklager, jeg fikk ikke laget et svar akkurat nå.');
+  shouldForceDeterministicAccommodationReply
+    ? buildDeterministicAccommodationReply(latestSearchRows, latestSearchParams)
+    : shouldForceDeterministicRestaurantReply
+      ? buildDeterministicRestaurantReply(contentItemsForReply, currentMessageText, safeHistory)
+      : shouldForceDeterministicShoppingReply
+        ? buildDeterministicShoppingReply(contentItemsForReply, currentMessageText, safeHistory)
+        : shouldForceDeterministicActivityReply
+          ? buildDeterministicActivityReply(contentItemsForReply, currentMessageText, safeHistory)
+          : shouldForceDeterministicTripReply
+            ? buildDeterministicTripPackageReply({
+                tripProposal,
+                includeAccommodation: includeAccommodationInTrip,
+              })
+            : shouldForceMissingSpecificContentReply
+              ? buildMissingSpecificContentReply(responseMode, packageDestinations.contentArea || packageDestinations.primaryStayArea)
+              : (reply || 'Beklager, jeg fikk ikke laget et svar akkurat nå.');
 
     return res.json({
       ok: true,
