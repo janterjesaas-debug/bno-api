@@ -3094,6 +3094,13 @@ VIKTIGE REGLER:
 30. Hvis brukeren ikke har bedt om overnatting, skal du ikke legge inn overnatting i et samlet forslag.
 31. Hvis du har konkrete verifiserte steder i restaurant eller shopping, skal du anbefale disse direkte i stedet for å svare generelt.
 32. Ikke si at informasjon mangler hvis BNO_CONTENT_CONTEXT faktisk inneholder konkrete forslag.
+33. Svar med varm, naturlig og profesjonell tone.
+34. Bruk gjerne én passende emoji i starten eller slutten, men ikke overdriv.
+35. Ikke skriv mekaniske formuleringer som "verifisert innhold", "kildematerialet", "materialet viser" eller "BNO Travel sitt innhold" til brukeren.
+36. Bruk heller naturlige formuleringer som "her er noen gode tips", "jeg ville startet med", "dette er praktiske alternativer" eller "dette kan passe fint".
+37. Når du har konkrete navn, presenter dem direkte med korte, nyttige beskrivelser.
+38. Still gjerne ett hyggelig oppfølgingsspørsmål til slutt når det hjelper å spisse anbefalingen.
+39. Ikke påstå at noe er populært, best, gjestefavoritt eller veldig bra med mindre det faktisk står i innholdet.
 
 Hvis brukeren spør om overnatting:
 - bruk BNO Travel sitt eget innhold først
@@ -5427,7 +5434,46 @@ function formatContentLinkSuffix(item: any): string {
   if (item?.external_url) bits.push(`Lenke: ${item.external_url}`);
   return bits.length ? ` (${bits.join(' · ')})` : '';
 }
+function getFriendlyDestinationLabelFromItems(items: any[], fallback?: string | null): string {
+  const firstDestination = String(items?.[0]?.destination_slug || fallback || '').trim();
 
+  if (!firstDestination) return 'destinasjonen';
+
+  const known: Record<string, string> = {
+    trysil: 'Trysil',
+    roros: 'Røros',
+    elverum: 'Elverum',
+    sogndal: 'Sogndal',
+    oslo: 'Oslo',
+    bergen: 'Bergen',
+    trondheim: 'Trondheim',
+    stavanger: 'Stavanger',
+    stockholm: 'Stockholm',
+    copenhagen: 'København',
+    goteborg: 'Göteborg',
+    salen: 'Sälen',
+  };
+
+  return known[firstDestination] || firstDestination.replace(/-/g, ' ');
+}
+
+function getFriendlyTravelIntro(topic: string, destinationLabel: string): string {
+  return `Hei! 😊\nKlart det – her er noen gode ${topic} i ${destinationLabel}:`;
+}
+
+function cleanTravelSummary(textRaw: unknown): string {
+  const text = String(textRaw || '').trim();
+  if (!text) return '';
+
+  return text
+    .replace(/\bBNO Travel sitt innhold\b/gi, 'anbefalingene våre')
+    .replace(/\bBNO Travel-innholdet\b/gi, 'anbefalingene våre')
+    .replace(/\bkildematerialet\b/gi, 'anbefalingene')
+    .replace(/\bmaterialet\b/gi, 'anbefalingene')
+    .replace(/\bverifiserte\b/gi, '')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
 function buildDeterministicRestaurantReply(
   items: any[],
   messageRaw: string,
@@ -5441,21 +5487,59 @@ function buildDeterministicRestaurantReply(
   );
 
   const concrete = ranked.filter((item) => !isGuideLikeContentItem(item));
-  const preferred = concrete.slice(0, 6);
+  const preferred = concrete.length > 0 ? concrete.slice(0, 8) : ranked.slice(0, 8);
+
+  const destinationLabel = getFriendlyDestinationLabelFromItems(preferred);
 
   if (preferred.length === 0) {
-    return 'Jeg fant ingen konkrete, verifiserte restaurantnavn akkurat nå i BNO Travel-innholdet. Jeg kan gjerne hjelpe deg videre hvis du vil ha forslag etter område eller type mat.';
+    return (
+      `Hei! 😊\n` +
+      `Jeg fant dessverre ikke konkrete restaurantforslag for ${destinationLabel} akkurat nå.\n\n` +
+      `Prøv gjerne å spørre etter en annen type sted, for eksempel italiensk, familievennlig, lunsj, middag eller takeaway.`
+    );
   }
 
-  const lines: string[] = ['Her er noen verifiserte restaurantforslag fra BNO Travel:', ''];
+  const lines: string[] = [
+    getFriendlyTravelIntro('restauranttips', destinationLabel),
+    '',
+  ];
 
-  preferred.forEach((item: any, index: number) => {
-    lines.push(`${index + 1}. ${item?.title || 'Ukjent restaurant'}`);
-    if (item?.summary) lines.push(`- ${item.summary}`);
-    const suffix = formatContentLinkSuffix(item);
-    if (suffix) lines.push(`- ${suffix}`);
+  const guideItems = preferred.filter((item) => isGuideLikeContentItem(item));
+  const placeItems = preferred.filter((item) => !isGuideLikeContentItem(item));
+
+  if (placeItems.length > 0) {
+    lines.push('Spisesteder jeg ville startet med:');
     lines.push('');
-  });
+
+    placeItems.slice(0, 6).forEach((item: any) => {
+      const title = item?.title || 'Ukjent restaurant';
+      const summary = cleanTravelSummary(item?.summary);
+
+      lines.push(`• ${title}${summary ? ` – ${summary}` : ''}`);
+    });
+
+    lines.push('');
+  }
+
+  if (guideItems.length > 0 && placeItems.length < 4) {
+    lines.push('Flere tips fra anbefalingene våre:');
+    lines.push('');
+
+    guideItems.slice(0, 2).forEach((item: any) => {
+      const title = item?.title || 'Restaurantguide';
+      const summary = cleanTravelSummary(item?.summary || item?.body);
+
+      lines.push(`• ${title}${summary ? ` – ${summary}` : ''}`);
+    });
+
+    lines.push('');
+  }
+
+  lines.push(
+    'Har dere lyst på noe spesielt – for eksempel italiensk, pizza, thai/asiatisk, noe mer fancy, eller noe enkelt og barnevennlig?'
+  );
+  lines.push('');
+  lines.push(`Si gjerne når dere skal spise og hvor mange dere er, så kan jeg spisse anbefalingen litt mer. God tur til ${destinationLabel}! 🏔️`);
 
   return lines.join('\n');
 }
@@ -5487,36 +5571,35 @@ function buildDeterministicShoppingReply(
         ? concrete.slice(0, 6)
         : ranked.slice(0, 6);
 
+  const destinationLabel = getFriendlyDestinationLabelFromItems(preferred);
+
   if (preferred.length === 0) {
     return groceryOnly
-      ? 'Jeg fant dessverre ingen verifiserte dagligvarebutikker akkurat nå for denne destinasjonen.'
-      : 'Jeg fant dessverre ingen verifiserte shoppingforslag akkurat nå. Du kan gjerne prøve med destinasjon eller type shopping.';
+      ? `Hei! 😊\nJeg fant dessverre ingen konkrete dagligvarebutikker for ${destinationLabel} akkurat nå.`
+      : `Hei! 😊\nJeg fant dessverre ingen konkrete shoppingtips for ${destinationLabel} akkurat nå.`;
   }
 
   const lines: string[] = [
     groceryOnly
-      ? 'Her er det jeg finner om dagligvarer for denne destinasjonen:'
-      : 'Her er noen verifiserte shoppingforslag fra BNO Travel:',
+      ? `Hei! 😊\nKlart det – her er dagligvarebutikkene jeg finner for ${destinationLabel}:`
+      : getFriendlyTravelIntro('shoppingtips', destinationLabel),
     '',
   ];
 
-  preferred.forEach((item: any, index: number) => {
-    lines.push(`${index + 1}. ${item?.title || (groceryOnly ? 'Dagligvarer' : 'Ukjent shoppingsted')}`);
+  preferred.forEach((item: any) => {
+    const title = item?.title || (groceryOnly ? 'Dagligvarer' : 'Butikk');
+    const summary = cleanTravelSummary(item?.summary);
 
-    if (item?.summary) {
-      lines.push(`- ${item.summary}`);
-    }
-
-    if (groceryOnly && item?.body) {
-      lines.push('');
-      lines.push(String(item.body).trim());
-    }
-
-    const suffix = formatContentLinkSuffix(item);
-    if (suffix) lines.push(`- ${suffix}`);
-
-    lines.push('');
+    lines.push(`• ${title}${summary ? ` – ${summary}` : ''}`);
   });
+
+  if (!groceryOnly) {
+    lines.push('');
+    lines.push('Er du ute etter noe spesielt – klær, sport, interiør, gaver, lokalmat eller noe praktisk til oppholdet?');
+  } else {
+    lines.push('');
+    lines.push('Tips: Sjekk gjerne åpningstider lokalt, spesielt på søndager, helligdager og i høysesong.');
+  }
 
   return lines.join('\n');
 }
@@ -5532,21 +5615,32 @@ function buildDeterministicActivityReply(
     messageRaw,
     history
   );
+
   const preferred = ranked.filter((item) => !isGuideLikeContentItem(item)).slice(0, 6);
+  const destinationLabel = getFriendlyDestinationLabelFromItems(preferred.length ? preferred : ranked);
 
   if (preferred.length === 0) {
-    return 'Jeg fant dessverre ingen verifiserte aktivitetsforslag akkurat nå.';
+    return (
+      `Hei! 😊\n` +
+      `Jeg fant dessverre ingen konkrete aktivitetstips for ${destinationLabel} akkurat nå.\n\n` +
+      `Prøv gjerne å spørre etter vinteraktiviteter, sommeraktiviteter, familievennlige ting å gjøre, spa eller turforslag.`
+    );
   }
 
-  const lines: string[] = ['Her er noen verifiserte aktivitetsforslag fra BNO Travel:', ''];
+  const lines: string[] = [
+    getFriendlyTravelIntro('aktivitetstips', destinationLabel),
+    '',
+  ];
 
-  preferred.forEach((item: any, index: number) => {
-    lines.push(`${index + 1}. ${item?.title || 'Ukjent aktivitet'}`);
-    if (item?.summary) lines.push(`- ${item.summary}`);
-    const suffix = formatContentLinkSuffix(item);
-    if (suffix) lines.push(`- ${suffix}`);
-    lines.push('');
+  preferred.forEach((item: any) => {
+    const title = item?.title || 'Aktivitet';
+    const summary = cleanTravelSummary(item?.summary);
+
+    lines.push(`• ${title}${summary ? ` – ${summary}` : ''}`);
   });
+
+  lines.push('');
+  lines.push('Vil dere ha noe rolig, familievennlig, aktivt, romantisk eller litt mer eventyrpreget? Da kan jeg snevre inn forslagene.');
 
   return lines.join('\n');
 }
