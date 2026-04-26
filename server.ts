@@ -3667,16 +3667,65 @@ function extractTravelHelperPackageDestinations(
   };
 }
 function mapTravelHelperAreaToContentDestinationSlug(area: string | null): string {
-  const normalized = String(area || '').trim().toLowerCase();
+  const raw = String(area || '').trim();
+
+  const normalized =
+    normalizeSmartDestinationSlug(raw) ||
+    raw
+      .toLowerCase()
+      .replace(/[?!.:,;]/g, ' ')
+      .replace(/\s+/g, '-')
+      .replace(/[^a-z0-9-]/g, '')
+      .replace(/-+/g, '-')
+      .replace(/^-|-$/g, '');
 
   if (!normalized) return 'global';
+
+  const aliasMap: Record<string, string> = {
+    // Norge
+    roros: 'roros',
+    'røros': 'roros',
+    tromso: 'tromso',
+    'tromsø': 'tromso',
+    alesund: 'alesund',
+    aalesund: 'alesund',
+    'ålesund': 'alesund',
+
+    // Sverige
+    salen: 'salen',
+    saelen: 'salen',
+    'sälen': 'salen',
+    goteborg: 'goteborg',
+    'gøteborg': 'goteborg',
+    goeteborg: 'goteborg',
+    malmo: 'malmo',
+    'malmö': 'malmo',
+
+    // Danmark
+    kobenhavn: 'copenhagen',
+    'københavn': 'copenhagen',
+    copenhagen: 'copenhagen',
+
+    // Italia
+    roma: 'rome',
+
+    // USA / sammensatte navn
+    'los-angeles': 'losangeles',
+    losangeles: 'losangeles',
+  };
+
+  if (aliasMap[normalized]) {
+    return aliasMap[normalized];
+  }
 
   if (
     normalized === 'trysil' ||
     normalized === 'trysil-sentrum' ||
     normalized === 'trysil-turistsenter' ||
     normalized === 'trysil-hoyfjellssenter' ||
-    normalized === 'trysilfjell-hytteomrade'
+    normalized === 'trysil-høyfjellssenter' ||
+    normalized === 'trysilfjell-hytteomrade' ||
+    normalized === 'trysilfjell-hytteområde'
   ) {
     return 'trysil';
   }
@@ -3684,25 +3733,18 @@ function mapTravelHelperAreaToContentDestinationSlug(area: string | null): strin
   if (
     normalized === 'stranda' ||
     normalized === 'sunnmorsalpene' ||
+    normalized === 'sunnmørsalpene' ||
     normalized === 'geiranger'
   ) {
     return 'stranda';
   }
 
-  if (normalized === 'salen') return 'salen';
-  if (normalized === 'oslo') return 'oslo';
-  if (normalized === 'london') return 'london';
-  if (normalized === 'amsterdam') return 'amsterdam';
-  if (normalized === 'copenhagen') return 'copenhagen';
-  if (normalized === 'stockholm') return 'stockholm';
-  if (normalized === 'losangeles') return 'losangeles';
-  if (normalized === 'miami') return 'miami';
-  if (normalized === 'paris') return 'paris';
-  if (normalized === 'rome') return 'rome';
-
-  return 'global';
+  // VIKTIG:
+  // Ikke fall tilbake til global for nye byer.
+  // Hvis Supabase har destination_slug = bergen, elverum, roros, oslo osv.,
+  // må vi returnere den sluggen direkte.
+  return normalized;
 }
-
 function extractTravelHelperAdults(messageRaw: string): number | null {
   const message = normalizeTravelHelperText(messageRaw);
 
@@ -5334,23 +5376,42 @@ function buildTripProposalContextText(proposal: TripProposal | null): string {
 }
 
 function inferDestinationLabel(destinationSlug: string): string {
+  const normalized = mapTravelHelperAreaToContentDestinationSlug(destinationSlug);
+
   const map: Record<string, string> = {
     trysil: 'Trysil',
     stranda: 'Stranda',
     salen: 'Sälen',
+    roros: 'Røros',
+    elverum: 'Elverum',
+    sogndal: 'Sogndal',
     oslo: 'Oslo',
+    bergen: 'Bergen',
+    trondheim: 'Trondheim',
+    stavanger: 'Stavanger',
+    tromso: 'Tromsø',
+    alesund: 'Ålesund',
     london: 'London',
     amsterdam: 'Amsterdam',
     copenhagen: 'København',
     stockholm: 'Stockholm',
+    goteborg: 'Göteborg',
+    malmo: 'Malmö',
     losangeles: 'Los Angeles',
     miami: 'Miami',
     paris: 'Paris',
     rome: 'Roma',
     dublin: 'Dublin',
-    global: 'Ukjent destinasjon',
+    global: 'destinasjonen',
   };
-  return map[destinationSlug] || destinationSlug || 'Ukjent destinasjon';
+
+  if (map[normalized]) return map[normalized];
+
+  return normalized
+    .split('-')
+    .filter(Boolean)
+    .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
+    .join(' ') || 'destinasjonen';
 }
 
 async function buildTripProposal(opts: {
@@ -6575,33 +6636,51 @@ const destinationSlug =
   .filter(Boolean)
   .join(' ');
 
+// 1) Først: søk på eksakt destinasjon, f.eks. trysil, bergen, elverum, roros.
 const smartItems = await searchTravelHelperContent({
   language: safeReplyLanguage === 'en' ? 'en' : 'nb',
   destination: destinationSlug,
   category,
   query: smartQuery,
-  limit: 20,
+  limit: 30,
 });
 
-if (smartItems.length > 0) {
-  contentItems.push(...smartItems);
-}
-if (inferredSmartCategory === 'grocery') {
-  const broadGroceryItems = await searchTravelHelperContent({
+contentItems.push(...smartItems);
+
+// 2) Deretter: bredt søk uten destinasjonsfilter.
+// Dette er viktig for innhold som ligger under destination_slug = norge/sverige,
+// men hvor byen ligger i slug, title, summary, body eller tags.
+const broadSmartItems = await searchTravelHelperContent({
+  language: safeReplyLanguage === 'en' ? 'en' : 'nb',
+  destination: null,
+  category,
+  query: smartQuery,
+  limit: 30,
+});
+
+contentItems.push(...broadSmartItems);
+
+// 3) Ekstra bredt for dagligvarer, fordi butikker ofte ligger som shopping
+// eller under norge/sverige selv om brukeren spør om en konkret by.
+if (inferredSmartCategory === 'grocery' || isGroceryQuestion(currentMessageText, inferredSmartCategory, safeHistory)) {
+  const groceryQuery = [
+    currentMessageText,
+    inferredSmartDestination,
+    destinationSlug,
+    'dagligvarer dagligvarebutikk matbutikk supermarked grocery groceries rema kiwi coop extra spar joker meny bunnpris',
+  ]
+    .filter(Boolean)
+    .join(' ');
+
+  const groceryBroadItems = await searchTravelHelperContent({
     language: safeReplyLanguage === 'en' ? 'en' : 'nb',
-    destination: destinationSlug,
+    destination: null,
     category: null,
-    query: [
-      currentMessageText,
-      destinationSlug,
-      'dagligvarer matbutikk matbutikker supermarked grocery groceries rema kiwi coop extra spar joker meny bunnpris',
-    ]
-      .filter(Boolean)
-      .join(' '),
-    limit: 30,
+    query: groceryQuery,
+    limit: 40,
   });
 
-  contentItems.push(...broadGroceryItems);
+  contentItems.push(...groceryBroadItems);
 }
 
           const fallbackItems = await getTravelHelperContent({
