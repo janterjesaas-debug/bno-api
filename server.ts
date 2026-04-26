@@ -5465,24 +5465,46 @@ function buildDeterministicShoppingReply(
   messageRaw: string,
   history: any[]
 ): string {
+  const groceryOnly = isGroceryQuestion(messageRaw, null, history);
+
+  const sourceItems = groceryOnly
+    ? (items || []).filter((item) => travelContentItemLooksLikeGrocery(item))
+    : (items || []);
+
   const ranked = filterAndRankTravelContentForSeason(
-    items || [],
+    sourceItems,
     'unknown',
     messageRaw,
     history
   );
+
   const concrete = ranked.filter((item) => !isGuideLikeContentItem(item));
   const preferred = concrete.length > 0 ? concrete.slice(0, 6) : ranked.slice(0, 6);
 
   if (preferred.length === 0) {
-    return 'Jeg fant dessverre ingen verifiserte shoppingforslag akkurat nå. Du kan gjerne prøve med destinasjon eller type shopping.';
+    return groceryOnly
+      ? 'Jeg fant dessverre ingen verifiserte dagligvarebutikker akkurat nå for denne destinasjonen.'
+      : 'Jeg fant dessverre ingen verifiserte shoppingforslag akkurat nå. Du kan gjerne prøve med destinasjon eller type shopping.';
   }
 
-  const lines: string[] = ['Her er noen verifiserte shoppingforslag fra BNO Travel:', ''];
+  const lines: string[] = [
+    groceryOnly
+      ? 'Her er dagligvareinformasjonen jeg finner for denne destinasjonen:'
+      : 'Her er noen verifiserte shoppingforslag fra BNO Travel:',
+    '',
+  ];
 
   preferred.forEach((item: any, index: number) => {
-    lines.push(`${index + 1}. ${item?.title || 'Ukjent shoppingsted'}`);
-    if (item?.summary) lines.push(`- ${item.summary}`);
+    lines.push(`${index + 1}. ${item?.title || (groceryOnly ? 'Dagligvarer' : 'Ukjent shoppingsted')}`);
+
+    if (item?.summary) {
+      lines.push(`- ${item.summary}`);
+    }
+
+    if (groceryOnly && item?.body) {
+      lines.push(`- ${item.body}`);
+    }
+
     const suffix = formatContentLinkSuffix(item);
     if (suffix) lines.push(`- ${suffix}`);
     lines.push('');
@@ -5870,18 +5892,25 @@ function buildSmartTravelContentContext(rows: any[]): string {
     '- Hvis brukeren spør om shopping eller dagligvarer, ikke bytt tema til overnatting eller fly.',
   ].join('\n');
 }
-function isGroceryQuestion(messageRaw: string, categoryRaw?: string | null): boolean {
-  const text = normalizeTravelHelperText(messageRaw);
+function isGroceryQuestion(
+  messageRaw: string,
+  categoryRaw?: string | null,
+  history: any[] = []
+): boolean {
+  const current = normalizeTravelHelperText(messageRaw);
+  const previous = normalizeTravelHelperText(getPreviousUserMessage(history));
+  const last = normalizeTravelHelperText(getLastUserMessage(history));
+  const combined = `${previous}\n${last}\n${current}`;
+
   const category = String(categoryRaw || '').trim().toLowerCase();
 
   return (
     category === 'grocery' ||
     /dagligvarer|dagligvarebutikk|dagligvarebutikker|matbutikk|matbutikker|supermarked|grocery|groceries|rema|kiwi|coop|meny|spar|joker|extra|bunnpris|naerbutikk|nærbutikk/.test(
-      text
+      combined
     )
   );
 }
-
 function travelContentItemLooksLikeGrocery(item: any): boolean {
   const category = String(item?.category || '').trim().toLowerCase();
 
@@ -6322,8 +6351,11 @@ app.post('/api/travel-helper', async (req, res) => {
   (item, index, arr) => arr.findIndex((x) => x?.slug === item?.slug) === index
 );
 
-const groceryOnly = isGroceryQuestion(currentMessageText, inferredSmartCategory);
-
+const groceryOnly = isGroceryQuestion(
+  currentMessageText,
+  inferredSmartCategory,
+  safeHistory
+);
 const categoryFilteredItems = groceryOnly
   ? deduped.filter((item) => travelContentItemLooksLikeGrocery(item))
   : deduped;
