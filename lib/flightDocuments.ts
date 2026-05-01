@@ -306,13 +306,22 @@ function addHeader(
   subtitle: string,
   logoImage?: any
 ) {
+  const titleSize = 24;
+  const titleSpacing = 24;
+  const generatedSpacing = 46;
+  const dividerSpacing = 68;
+  let titleY = TOP_Y - 58;
+
   if (logoImage) {
     const logoWidth = 105;
     const logoHeight = (logoImage.height / logoImage.width) * logoWidth;
+    const logoBottomY = TOP_Y - logoHeight + 6;
+
+    titleY = Math.min(titleY, logoBottomY - 22);
 
     page.drawImage(logoImage, {
       x: MARGIN_X,
-      y: TOP_Y - logoHeight + 6,
+      y: logoBottomY,
       width: logoWidth,
       height: logoHeight,
     });
@@ -370,15 +379,15 @@ function addHeader(
 
   page.drawText(title, {
     x: MARGIN_X,
-    y: TOP_Y - 58,
-    size: 24,
+    y: titleY,
+    size: titleSize,
     font: fonts.bold,
     color: BNO_DARK,
   });
 
   page.drawText(subtitle, {
     x: MARGIN_X,
-    y: TOP_Y - 82,
+    y: titleY - titleSpacing,
     size: 10,
     font: fonts.regular,
     color: MUTED,
@@ -391,21 +400,23 @@ function addHeader(
     )}`,
     {
       x: MARGIN_X,
-      y: TOP_Y - 104,
+      y: titleY - generatedSpacing,
       size: 9,
       font: fonts.regular,
       color: MUTED,
     }
   );
 
+  const dividerY = titleY - dividerSpacing;
+
   page.drawLine({
-    start: { x: MARGIN_X, y: TOP_Y - 126 },
-    end: { x: PAGE_WIDTH - MARGIN_X, y: TOP_Y - 126 },
+    start: { x: MARGIN_X, y: dividerY },
+    end: { x: PAGE_WIDTH - MARGIN_X, y: dividerY },
     thickness: 1,
     color: BORDER,
   });
 
-  return TOP_Y - 162;
+  return dividerY - 36;
 }
 
 function drawInfoBox(
